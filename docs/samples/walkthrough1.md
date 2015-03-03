@@ -22,9 +22,12 @@ cd node_modules\swagger-express-middleware\samples
 node sample1.js
 ````
 
-You should see a message telling you that the Swagger Pet Store is now running at http://localhost:8000. Open that link in your web browser, and you should see the following page:
+You should see a message telling you that the Swagger Pet Store is now running at [http://localhost:8000](http://localhost:8000). Open that link in your web browser, and you should see the following page:
 
 ![Screenshot](../img/samples.png)
+
+If you see that page, then you're ready to move-on to the next part of the walkthrough...
+
 
 -------------------------------------------------------------------------------------------------
 | &nbsp;                                        | Next: [JavaScript Walkthrough](javascript.md) |

@@ -15,7 +15,7 @@ This sample demonstrates the most simplistic usage of Swagger Express Middleware
 
 Swagger Pet Store Homepage
 --------------------------
-[Run the sample](walkthrough1.md#running-the-sample) and then browse to http://localhost:8000 in your web browser.  You should see the following page:
+[Run the sample](walkthrough1.md#running-the-sample) and then browse to [http://localhost:8000](http://localhost:8000) in your web browser.  You should see the following page:
 
 ![Screenshot](../img/samples.png)
 
