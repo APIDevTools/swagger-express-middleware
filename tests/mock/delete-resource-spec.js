@@ -467,7 +467,7 @@ describe('Edit Resource Mock', function() {
                                         Description: 'A photo of Fido',
                                         Photo: {
                                             fieldname: 'Photo',
-                                            originalname: '1mb.jpg',
+                                            originalname: '1MB.jpg',
                                             name: res2.body.Photo.name,
                                             encoding: '7bit',
                                             mimetype: 'image/jpeg',

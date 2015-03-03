@@ -62,7 +62,7 @@ describe('FileDataStore', function() {
         function(done) {
             var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users/JDoe/', 'orders', [{orderId: 12345}, {orderId: 45678}]);
-            var file = path.join(tempDir, 'users', 'JDoe.json');
+            var file = path.join(tempDir, 'users', 'jdoe.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);
@@ -76,7 +76,7 @@ describe('FileDataStore', function() {
         function(done) {
             var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users/JDoe/orders/1234/products', '4567', {productId: 4567});
-            var file = path.join(tempDir, 'users', 'JDoe', 'orders', '1234', 'products.json');
+            var file = path.join(tempDir, 'users', 'jdoe', 'orders', '1234', 'products.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);

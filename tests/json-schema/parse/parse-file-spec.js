@@ -114,7 +114,7 @@ describe('JSON Schema - parse file params', function() {
             express.use('/api/pets/fido/photos', env.spy(function(err, req, res, next) {
                 expect(err).to.be.an.instanceOf(Error);
                 expect(err.status).to.equal(400);
-                expect(err.message).to.contain('File "1mb.jpg" is only 683709 bytes. The minimum is 2000000 bytes');
+                expect(err.message).to.contain('File "1MB.jpg" is only 683709 bytes. The minimum is 2000000 bytes');
             }));
         }
     );
@@ -132,7 +132,7 @@ describe('JSON Schema - parse file params', function() {
             express.use('/api/pets/fido/photos', env.spy(function(err, req, res, next) {
                 expect(err).to.be.an.instanceOf(Error);
                 expect(err.status).to.equal(413);
-                expect(err.message).to.contain('File "6mb.jpg" is 5595095 bytes. The maximum is 5000000 bytes');
+                expect(err.message).to.contain('File "6MB.jpg" is 5595095 bytes. The maximum is 5000000 bytes');
             }));
         }
     );

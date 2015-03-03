@@ -637,7 +637,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file1",
                             mimetype: "image/jpeg",
                             name: req.files.file1.name,
-                            originalname: "1mb.jpg",
+                            originalname: "1MB.jpg",
                             path: req.files.file1.path,
                             size: 683709,
                             truncated: false
@@ -649,7 +649,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file2",
                             mimetype: "image/jpeg",
                             name: req.files.file2.name,
-                            originalname: "1mb.jpg",
+                            originalname: "1MB.jpg",
                             path: req.files.file2.path,
                             size: 683709,
                             truncated: false
@@ -698,7 +698,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file1",
                             mimetype: "image/jpeg",
                             name: req.files.file1.name,
-                            originalname: "1mb.jpg",
+                            originalname: "1MB.jpg",
                             path: req.files.file1.path,
                             size: 683709,
                             truncated: false
@@ -710,7 +710,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file2",
                             mimetype: "image/jpeg",
                             name: req.files.file2.name,
-                            originalname: "1mb.jpg",
+                            originalname: "1MB.jpg",
                             path: req.files.file2.path,
                             size: 683709,
                             truncated: false
@@ -743,7 +743,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file1",
                             mimetype: "image/jpeg",
                             name: req.files.file1.name,
-                            originalname: "1mb.jpg",
+                            originalname: "1MB.jpg",
                             path: req.files.file1.path,
                             size: 683709,
                             truncated: false
@@ -755,7 +755,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file2",
                             mimetype: "image/jpeg",
                             name: req.files.file2.name,
-                            originalname: "5mb.jpg",
+                            originalname: "5MB.jpg",
                             path: req.files.file2.path,
                             size: 4573123,
                             truncated: false
@@ -767,7 +767,7 @@ describe('RequestParser middleware', function() {
                             fieldname: "file3",
                             mimetype: "image/jpeg",
                             name: req.files.file3.name,
-                            originalname: "6mb.jpg",
+                            originalname: "6MB.jpg",
                             path: req.files.file3.path,
                             size: 5595095,
                             truncated: false

@@ -531,7 +531,7 @@ describe('Edit Collection Mock', function() {
                                     Description: 'A photo of Fido',
                                     Photo: {
                                         fieldname: 'Photo',
-                                        originalname: '1mb.jpg',
+                                        originalname: '1MB.jpg',
                                         name: res.body.Photo.name,
                                         encoding: '7bit',
                                         mimetype: 'image/jpeg',
@@ -850,10 +850,10 @@ describe('Edit Collection Mock', function() {
                             [method]('/api/pets/Fido/photos')
                             .field('Label', 'a, b, c')
                             .attach('Photo', env.files.oneMB)
-                            .expect('Location', '/api/pets/Fido/photos/1mb.jpg')
+                            .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
                             .end(env.checkResults(done, function(res) {
                                 supertest
-                                    .get('/api/pets/Fido/photos/1mb.jpg')
+                                    .get('/api/pets/Fido/photos/1MB.jpg')
                                     .expect(200)
                                     .end(env.checkResults(done, function(res) {
                                         expect(res.body).to.be.an.instanceOf(Buffer);
@@ -877,10 +877,10 @@ describe('Edit Collection Mock', function() {
                             [method]('/api/pets/Fido/photos')
                             .field('Label', 'Photo 1')
                             .attach('Photo', env.files.oneMB)
-                            .expect('Location', '/api/pets/Fido/photos/1mb.jpg')
+                            .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
                             .end(env.checkResults(done, function(res) {
                                 supertest
-                                    .get('/api/pets/Fido/photos/1mb.jpg')
+                                    .get('/api/pets/Fido/photos/1MB.jpg')
                                     .expect(200)
                                     .end(env.checkResults(done, function(res) {
                                         expect(res.body).to.be.an.instanceOf(Buffer);
@@ -909,7 +909,7 @@ describe('Edit Collection Mock', function() {
                             .field('Label', 'Photo 1')
                             .attach('Photo', env.files.oneMB)
                             .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).not.to.equal('/api/pets/Fido/photos/1mb.jpg');
+                                expect(res.headers.location).not.to.equal('/api/pets/Fido/photos/1MB.jpg');
                                 expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\w+\.jpg$/);
 
                                 supertest

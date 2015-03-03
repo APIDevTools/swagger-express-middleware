@@ -460,7 +460,7 @@ describe('Query Collection Mock', function() {
                                                 Description: 'A photo of Fido',
                                                 Photo: {
                                                     fieldname: 'Photo',
-                                                    originalname: '1mb.jpg',
+                                                    originalname: '1MB.jpg',
                                                     name: res.body[0].Photo.name,
                                                     encoding: '7bit',
                                                     mimetype: 'image/jpeg',
@@ -509,7 +509,7 @@ describe('Query Collection Mock', function() {
                                             // so we send back an array of file info
                                             expect(res.body).to.deep.equal([{
                                                 fieldname: 'Photo',
-                                                originalname: '1mb.jpg',
+                                                originalname: '1MB.jpg',
                                                 name: res.body[0].name,
                                                 encoding: '7bit',
                                                 mimetype: 'image/jpeg',
@@ -563,7 +563,7 @@ describe('Query Collection Mock', function() {
                                             // so we send back an array of file info
                                             expect(res.body).to.deep.equal([{
                                                 fieldname: 'Photo',
-                                                originalname: '1mb.jpg',
+                                                originalname: '1MB.jpg',
                                                 name: res.body[0].name,
                                                 encoding: '7bit',
                                                 mimetype: 'image/jpeg',

@@ -518,7 +518,7 @@ describe('ParamParser middleware', function() {
                             "fieldname": "Photo",
                             "mimetype": "image/jpeg",
                             "name": req.files.Photo.name,
-                            "originalname": "1mb.jpg",
+                            "originalname": "1MB.jpg",
                             "path": req.files.Photo.path,
                             "size": 683709,
                             "truncated": false
