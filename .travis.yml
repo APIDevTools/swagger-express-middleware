@@ -5,6 +5,6 @@ node_js:
   - "0.10"
 before_install:
   - npm install express   # old versions of node don't support "peerDependencies" in package.json
-  - ls -a -R -1
+  - ls -a -R -l           # recursive directory listing
 after_success:
   - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js

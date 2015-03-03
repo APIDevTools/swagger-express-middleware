@@ -128,10 +128,10 @@ var env = module.exports = {
         error: path.join(__dirname, 'files', 'external-refs', 'error.json'),
         pet: path.join(__dirname, 'files', 'pet'),
         text: path.join(__dirname, 'files', 'external-refs', 'dir', 'subdir', 'text.txt'),
-        zeroMB: path.join(__dirname, 'files', '0mb.jpg'),
-        oneMB: path.join(__dirname, 'files', '1mb.jpg'),
-        fiveMB: path.join(__dirname, 'files', '5mb.jpg'),
-        sixMB: path.join(__dirname, 'files', '6mb.jpg'),
+        zeroMB: path.join(__dirname, 'files', '0MB.jpg'),
+        oneMB: path.join(__dirname, 'files', '1MB.jpg'),
+        fiveMB: path.join(__dirname, 'files', '5MB.jpg'),
+        sixMB: path.join(__dirname, 'files', '6MB.jpg'),
         PDF: path.join(__dirname, 'files', 'File.pdf')
     },
 
