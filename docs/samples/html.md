@@ -5,7 +5,7 @@ Swagger Express Middleware
 Sample 1 Walkthrough
 --------------------------
 * [Walkthrough](walkthrough1.md)
-    + [Running the sample](walkthrough1.md#running-the-sample)
+    + [Running the sample](running.md)
     + [JavaScript Walkthrough](javascript.md)
     + __Swagger Pet Store Homepage__
     + [YAML Walkthrough](yaml.md)
@@ -13,7 +13,7 @@ Sample 1 Walkthrough
 
 Swagger Pet Store Homepage
 --------------------------
-[Run the sample](walkthrough1.md#running-the-sample) and then browse to [http://localhost:8000](http://localhost:8000) in your web browser.  You should see the following page:
+[Run the sample](running.md) and then browse to [http://localhost:8000](http://localhost:8000) in your web browser.  You should see the following page:
 
 ![Screenshot](../img/samples.png)
 

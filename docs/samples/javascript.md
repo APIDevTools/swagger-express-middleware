@@ -5,7 +5,7 @@ Swagger Express Middleware
 Sample 1 Walkthrough
 --------------------------
 * [Walkthrough](walkthrough1.md)
-    + [Running the sample](walkthrough1.md#running-the-sample)
+    + [Running the sample](running.md)
     + __JavaScript Walkthrough__
     + [Swagger Pet Store Homepage](html.md)
     + [YAML Walkthrough](yaml.md)
