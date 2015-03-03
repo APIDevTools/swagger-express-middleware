@@ -3,5 +3,8 @@ node_js:
   - "0.12"
   - "0.11"
   - "0.10"
+before_install:
+  - npm install express   # old versions of node don't support "peerDependencies" in package.json
+  - ls -a -R -1
 after_success:
   - cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js

@@ -2,6 +2,14 @@ Swagger Express Middleware
 ============================
 #### Swagger middleware and mocks for Express.js
 
+[![Build Status](https://img.shields.io/travis/BigstickCarpet/swagger-express-middleware.svg)](https://travis-ci.org/BigstickCarpet/swagger-express-middleware)
+[![Dependencies](https://img.shields.io/david/bigstickcarpet/swagger-express-middleware.svg)](https://david-dm.org/bigstickcarpet/swagger-express-middleware)
+[![Code Climate Score](https://img.shields.io/codeclimate/github/BigstickCarpet/swagger-express-middleware.svg)](https://codeclimate.com/github/BigstickCarpet/swagger-express-middleware)
+[![Codacy Score](http://img.shields.io/codacy/6d686f916836433b9c013379fbe1052c.svg)](https://www.codacy.com/public/jamesmessinger/swagger-express-middleware)
+[![Coverage Status](https://img.shields.io/coveralls/BigstickCarpet/swagger-express-middleware.svg)](https://coveralls.io/r/BigstickCarpet/swagger-express-middleware)
+
+[![npm](http://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
+[![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
 
 Features
 --------------------------
