@@ -2,7 +2,7 @@
 
 var path       = require('path'),
     mkdirp     = require('mkdirp'),
-    rimraf     = require('rimraf'),
+    path       = require('path'),
     express    = require('express'),
     supertest  = require('supertest'),
     util       = require('../lib/helpers/util'),
@@ -25,6 +25,12 @@ process.env.WARN = 'off';
 var petStoreJSON = require('./files/petstore.json');
 
 var env = module.exports = {
+    /**
+     * Are we running on Windows?
+     */
+     isWindows: /^win/.test(process.platform),
+
+
     /**
      * The Swagger-Express-Middleware module.
      * @returns {createMiddleware}
@@ -99,19 +105,15 @@ var env = module.exports = {
 
 
     /**
-     * Creates the temp directory and returns its path.
+     * Creates the temp directory and returns its path to the callback.
      */
-    createTempDir: function() {
-        mkdirp.sync(env.files.tempDir);
-        return env.files.tempDir;
-    },
-
-
-    /**
-     * Deletes the temp directory.
-     */
-    deleteTempDir: function() {
-        rimraf.sync(env.files.tempDir);
+    createTempDir: function(done) {
+        setTimeout(function() {
+            var dirName = path.join(env.files.tempDir, new Date().toJSON().replace(/:/g, '-'));
+            mkdirp(dirName, function() {
+                done(dirName);
+            });
+        }, 10);
     },
 
 

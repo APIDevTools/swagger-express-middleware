@@ -9,10 +9,17 @@ var FileDataStore = env.swagger.FileDataStore;
     describe(DataStoreClass.name + ' class', function() {
         'use strict';
 
-        beforeEach(function() {
-            // Clear the temp dir before each test for the FileDataStore
-            env.deleteTempDir();
-            process.chdir(env.createTempDir());
+        beforeEach(function(done) {
+            if (DataStoreClass === FileDataStore) {
+                // Create a temp directory, and chdir to it
+                env.createTempDir(function(temp) {
+                    process.chdir(temp);
+                    done();
+                });
+            }
+            else {
+                done();
+            }
         });
 
         it('should inherit from DataStore',
@@ -154,10 +161,10 @@ var FileDataStore = env.swagger.FileDataStore;
             it('should merge with the existing resource array',
                 function(done) {
                     var dataStore = new DataStoreClass();
-                    var resource = new Resource('users', 'JDoe', [1, 'two', {number: 'three'}, 4, [5]]);
+                    var resource = new Resource('users', 'BSmith', [1, 'two', {number: 'three'}, 4, [5]]);
 
                     dataStore.saveResource(resource, function() {
-                        var updatedResource = new Resource('users', 'JDoe', ['one', 2, {three: true}]);
+                        var updatedResource = new Resource('users', 'BSmith', ['one', 2, {three: true}]);
 
                         dataStore.saveResource(updatedResource, function() {
                             dataStore.getResource(resource, function(err, retrieved) {

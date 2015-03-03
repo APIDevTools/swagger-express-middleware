@@ -52,7 +52,6 @@
     "istanbul": "^0.3.6",
     "mocha": "^2.1.0",
     "npm-check-updates": "^1.5.1",
-    "rimraf": "^2.2.8",
     "sinon": "^1.12.2",
     "supertest": "^0.15",
     "version-bump-prompt": "^1.0.1"

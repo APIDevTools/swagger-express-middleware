@@ -3,19 +3,21 @@ var fs = require('fs');
 var path = require('path');
 var Resource = env.swagger.Resource;
 var FileDataStore = env.swagger.FileDataStore;
+var tempDir;
 
 describe('FileDataStore', function() {
     'use strict';
 
-    beforeEach(function() {
-        // Clear the temp dir before each test
-        env.deleteTempDir();
-        env.createTempDir();
+    beforeEach(function(done) {
+        env.createTempDir(function(temp) {
+            tempDir = temp;
+            done();
+        });
     });
 
     it('can be passed a base directory',
         function(done) {
-            var dir = path.join(env.files.tempDir, 'foo', 'bar', 'baz');
+            var dir = path.join(tempDir, 'foo', 'bar', 'baz');
             var dataStore = new FileDataStore(dir);
             var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
             var file = path.join(dir, 'users.json');
@@ -30,9 +32,9 @@ describe('FileDataStore', function() {
 
     it('creates a nameless file for the root collection',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/', '/JDoe', {name: 'John Doe'});
-            var file = path.join(env.files.tempDir, '.json');
+            var file = path.join(tempDir, '.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);
@@ -44,9 +46,9 @@ describe('FileDataStore', function() {
 
     it('does not create any subdirectories if the collection is one level deep',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
-            var file = path.join(env.files.tempDir, 'users.json');
+            var file = path.join(tempDir, 'users.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);
@@ -58,9 +60,9 @@ describe('FileDataStore', function() {
 
     it('creates a single subdirectory if the collection is two levels deep',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users/JDoe/', 'orders', [{orderId: 12345}, {orderId: 45678}]);
-            var file = path.join(env.files.tempDir, 'users', 'JDoe.json');
+            var file = path.join(tempDir, 'users', 'JDoe.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);
@@ -72,9 +74,9 @@ describe('FileDataStore', function() {
 
     it('creates a multiple subdirectories for deeper collection paths',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users/JDoe/orders/1234/products', '4567', {productId: 4567});
-            var file = path.join(env.files.tempDir, 'users', 'JDoe', 'orders', '1234', 'products.json');
+            var file = path.join(tempDir, 'users', 'JDoe', 'orders', '1234', 'products.json');
 
             dataStore.saveResource(resource, function(err, retrieved) {
                 if (err) return done(err);
@@ -86,7 +88,7 @@ describe('FileDataStore', function() {
 
     it('returns an error if the file cannot be opened',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
 
             var stub = sinon.stub(fs, 'readFile', function(path, opts, callback) {
@@ -124,7 +126,7 @@ describe('FileDataStore', function() {
 
     it('returns an error if the file cannot be saved',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
 
             // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
@@ -159,7 +161,7 @@ describe('FileDataStore', function() {
 
     it('returns an error if the directory cannot be created',
         function(done) {
-            var dataStore = new FileDataStore(env.files.tempDir);
+            var dataStore = new FileDataStore(tempDir);
             var resource = new Resource('/users/JDoe/orders', '12345', {orderId: 12345});
 
             // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`

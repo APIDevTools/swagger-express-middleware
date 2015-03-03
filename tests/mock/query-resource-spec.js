@@ -535,7 +535,7 @@ describe('Query Resource Mock', function() {
 
                                 supertest
                                     [method](res1.headers.location)
-                                    .expect('Content-Length', 87)
+                                    .expect('Content-Length', env.isWindows ? 95 : 87)      // CRLF vs LF
                                     .expect('Content-Type', 'text/plain; charset=UTF-8')
 
                                     // The filename is set to the basename of the URL by default
@@ -548,7 +548,7 @@ describe('Query Resource Mock', function() {
                                         }
                                         else {
                                             expect(res2.body).to.be.empty;
-                                            expect(res2.text).to.have.lengthOf(87);
+                                            expect(res2.text).to.have.lengthOf(env.isWindows ? 95 : 87);    // CRLF vs LF
                                         }
                                         done();
                                     }));
