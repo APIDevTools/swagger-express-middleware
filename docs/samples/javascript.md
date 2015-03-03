@@ -15,7 +15,7 @@ This sample demonstrates the most simplistic usage of Swagger Express Middleware
 
 JavaScript Walkthrough
 --------------------------
-Ok, now that you have the sample running, let's look at the source code.  Open up [sample1.js](sample1.js) and lets see what it's doing.
+Ok, now that you have the sample running, let's look at the source code.  Open up [sample1.js](../../samples/sample1.js) and lets see what it's doing.
 
 ### Debug Logging
 After a few comments, the first line of real code is...

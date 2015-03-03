@@ -15,7 +15,7 @@ This sample demonstrates the most simplistic usage of Swagger Express Middleware
 
 Running the sample
 --------------------------
-To run the sample, you'll need to `cd` to the `samples` directory and then run [../../samples/sample1.js](sample1.js) in Node.  Here's how to do that:
+To run the sample, you'll need to `cd` to the `samples` directory and then run [sample1.js](../../samples/sample1.js) in Node.  Here's how to do that:
 
 ````bash
 cd node_modules\swagger-express-middleware\samples
