@@ -1,4 +1,4 @@
-Swagger Express Middleware
+Swagger Express Middleware Samples
 ============================
 
 ![Screenshot](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/img/samples.png)
