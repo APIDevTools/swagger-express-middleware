@@ -38,5 +38,5 @@ Swagger Pet Store Homepage
 
 
 -------------------------------------------------------------------------------------------------
-| Prev: [JavaScript Walkthrough](javascript.md) | Next: [YAML Walkthrough](yaml.md)             |
+| Back: [JavaScript Walkthrough](javascript.md) | Next: [YAML Walkthrough](yaml.md)             |
 |:----------------------------------------------|----------------------------------------------:|

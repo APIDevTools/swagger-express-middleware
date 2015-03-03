@@ -36,5 +36,5 @@ Open up [PetStore.yaml](../../samples/PetStore.yaml) and lets see how all this m
 
 
 -------------------------------------------------------------------------------------------------
-| Prev: [Swagger Pet Store Homepage](html.md)   | &nbsp;                                        |
+| Back: [Swagger Pet Store Homepage](html.md)   | &nbsp;                                        |
 |:----------------------------------------------|----------------------------------------------:|

@@ -34,7 +34,7 @@ If you're already familiar with Express.js, then the next few lines should be pr
 
 
 ### Middleware initialization
-The next few lines of code are where we really start working with Swagger Express Middleware.  The first line initializes the middleware by loading the [PetStore.yaml](PetStore.yaml) file.  For more details about this line, see the [documentation](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/README.md).
+The next few lines of code are where we really start working with Swagger Express Middleware.  The first line initializes the middleware by loading the [PetStore.yaml](../../samples/PetStore.yaml) file.  For more details about this line, see the [documentation](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/README.md).
 
 ````javascript
 middleware('PetStore.yaml', app, function(err, middleware) {
@@ -64,5 +64,5 @@ The next block of code is pretty standard for any Express app.  The [listen meth
 
 
 -------------------------------------------------------------------------------------------------
-| Prev: [Running the sample](walkthrough1.md)   | Next: [Swagger Pet Store Homepage](html.md)   |
+| Back: [Running the sample](walkthrough1.md)   | Next: [Swagger Pet Store Homepage](html.md)   |
 |:----------------------------------------------|----------------------------------------------:|
