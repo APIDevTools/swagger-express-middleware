@@ -105,7 +105,7 @@ var FileDataStore = env.swagger.FileDataStore;
                                 ms: false
                             }
                         },
-                        dob: new Date(1980, 5, 22),
+                        dob: new Date(Date.UTC(1980, 5, 22)),
                         age: 42,
                         favoriteColors: ['red', 'blue'],
                         address: {
@@ -124,7 +124,7 @@ var FileDataStore = env.swagger.FileDataStore;
                                     mrs: false
                                 }
                             },
-                            dob: new Date(2000, 1, 2),
+                            dob: new Date(Date.UTC(2000, 1, 2)),
                             age: 99,
                             favoriteColors: ['yellow']
                         });
@@ -142,7 +142,7 @@ var FileDataStore = env.swagger.FileDataStore;
                                             mrs: false
                                         }
                                     },
-                                    dob: '2000-02-02T06:00:00.000Z',
+                                    dob: '2000-02-02T00:00:00.000Z',
                                     age: 99,
                                     favoriteColors: ['yellow', 'blue'],
                                     address: {
