@@ -1,0 +1,30 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: external refs
+  description: This file includes $refs to external files
+basePath: /api/v2
+paths:
+  /pets:
+    post:
+      responses:
+        200:
+          description: references a file with no extension (and in a parent directory)
+          schema:
+            $ref: ../pet
+        300:
+          description: references a plain-text file
+          schema:
+            type: string
+            example:
+              $ref: dir/subdir/text.txt
+        400:
+          description: references a binary file
+          schema:
+            type: file
+            example:
+              $ref: ../1MB.jpg
+        default:
+          description: references the "error.json" file
+          schema:
+            $ref: error.json

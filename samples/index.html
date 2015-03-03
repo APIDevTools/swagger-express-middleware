@@ -1,0 +1,200 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Swagger Pet Store</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+                    <li><a href="api-docs">Swagger API (JSON)</a></li>
+                    <li><a href="api-docs/PetStore.yaml">Swagger API (YAML)</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="container">
+            <header class="jumbotron alert alert-info">
+                <h1>Swagger Pet Store</h1>
+
+                <p>
+                    This sample API is powered by the <a href="https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/mock.md">Swagger Express Middleware mock</a>
+                    in an otherwise empty Express application. There's no extra configuration, custom code, or third-party-middleware.
+                </p>
+                <p>
+                    <a href="https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/samples/walkthrough1.md" class="btn btn-info">Read the Walkthrough</a>
+                </p>
+            </header>
+
+            <form class="well">
+                <fieldset>
+                    <legend class="col-md-9 col-md-offset-2">Add/Edit a Pet</legend>
+
+                    <p class="col-md-7 col-md-offset-2">
+                        Use a tool like <a href="http://www.getpostman.com/">Postman</a> or <a href="http://curl.haxx.se/">curl</a>
+                        to perform more advanced operations.  See <a href="api-docs/PetStore.yaml">the full Swagger API</a>
+                        for all the operations available. And be sure to <a href="pets?type=dog">try</a>
+                        <a href="pets?tags=furry&tags=brown">a</a> <a href="pets?vet.address.state=CA">few</a>
+                        <a href="pets?type=dog&tags=big&vet.address.city=San%20Francisco">queries</a>.
+                    </p>
+
+                    <div class="col-md-7 col-md-offset-2">
+                        <div class="form-group">
+                            <textarea id="pet" name="pet" cols="60" rows="15" class="form-control"
+                                      onkeydown="updateUI()" onkeyup="updateUI()" onchange="updateUI()">{
+  "name": "Fido",
+  "type": "dog",
+  "dob": "2004-02-11",
+  "tags": ["brown","furry","big"],
+  "vet": {
+    "name": "Acme Veterinarian Clinic",
+    "address": {
+      "street": "123 Main St.",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": 94118
+    }
+  }
+}                            </textarea>
+                        </div>
+                    </div>
+                    <p>
+                        <span class="col-xs-6 col-sm-4 col-md-2">
+                            <button type="button" class="btn btn-success btn-block" onclick="savePet()">
+                                <i class="glyphicon glyphicon-ok"></i>
+                                Save <span class="pet-label">Fido</span>
+                            </button>
+                            &nbsp;
+                        </span>
+                        <span class="col-xs-6 col-sm-4 col-md-2">
+                            <button type="button" class="btn btn-danger btn-block" onclick="deletePet()">
+                                <i class="glyphicon glyphicon-remove"></i>
+                                Delete <span class="pet-label">Fido</span>
+                            </button>
+                            &nbsp;
+                        </span>
+                        <span class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-2">
+                            <a href="pets" class="btn btn-default btn-block">
+                                <i class="glyphicon glyphicon-list"></i>
+                                All Pets
+                            </a>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+
+            <form id="pet-photos-form" class="well" action="pets/Fido/photos" method="post" enctype="multipart/form-data" target="results" onsubmit="$('#results-modal').modal()">
+                <fieldset>
+                    <legend class="col-md-9 col-md-offset-2">Add Photos</legend>
+
+                    <p class="col-md-7 col-md-offset-2">
+                        You can also delete or view individual photos <a href="pets/Fido/photos/123456789">by their ID</a>.
+                        See <a href="api-docs/PetStore.yaml">the full Swagger API</a> for all the operations available.
+                    </p>
+
+                    <div class="col-sm-8 col-md-7 col-md-offset-2">
+                        <div class="form-group">
+                            <input id="photo" name="photo" type="file" accept="image/*" required class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="label">Name the photo</label><br />
+                            <input id="label" name="label" type="text" required class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description (optional)</label><br />
+                            <input id="description" name="description" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <p>
+                        <span class="col-sm-4 col-xs-6 col-md-2">
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="glyphicon glyphicon-camera"></i>
+                                Add Photo
+                            </button>
+                            &nbsp;
+                        </span>
+                        <span class="col-sm-4 col-xs-6 col-md-2">
+                            <a id="pet-photos-link" href="pets/Fido/photos" class="btn btn-default btn-block">
+                                <i class="glyphicon glyphicon-picture"></i>
+                                <span class="pet-label">Fido</span>'s Photos
+                            </a>
+                        </span>
+                    </p>
+                </fieldset>
+            </form>
+        </main>
+
+        <article id="results-modal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <header class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                        <h4 class="modal-title">Results</h4>
+                    </header>
+                    <iframe id="results" name="results" seamless class="modal-body" style="width: 100%; border: none"></iframe>
+                </div>
+            </div>
+        </article>
+
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script>
+            var pet;
+
+            function savePet() {
+                parsePet() && $.ajax({
+                    type: 'POST',
+                    url: 'pets',
+                    data: $('#pet').val(),
+                    contentType: 'application/json',
+                    dataType: 'text'
+                }).always(showModal);
+            }
+
+            function deletePet() {
+                parsePet() && $.ajax({
+                    type: 'DELETE',
+                    url: 'pets/' + pet.name,
+                    dataType: 'text'
+                }).always(showModal);
+            }
+
+            function updateUI() {
+                parsePet();
+                if (pet) {
+                    $('.pet-label').text(pet.name);
+                    $('.btn').removeAttr('disabled');
+                    $('#pet-photos-form').attr('action', 'pets/' + pet.name + '/photos');
+                    $('#pet-photos-link').attr('href', 'pets/' + pet.name + '/photos');
+                }
+                else {
+                    $('.pet-label').text('Pet');
+                    $('.btn').attr('disabled', 'disabled');
+                    $('#pet-photos-form').attr('action', '');
+                    $('#pet-photos-link').attr('href', '');
+                }
+            }
+
+            function parsePet() {
+                try {
+                    return pet = JSON.parse($('#pet').val());
+                }
+                catch (e) {
+                    pet = null;
+                }
+            }
+
+            function showModal(data) {
+                data = data.responseText || data || '&lt;&lt; empty response &gt;&gt;';
+                $('#results-modal').modal();
+                $('#results').contents().find('body').html(data);
+            }
+        </script>
+    </body>
+</html>

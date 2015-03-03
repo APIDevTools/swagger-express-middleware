@@ -1,0 +1,12 @@
+*~
+._*
+.DS_Store
+npm-debug.log
+/.idea
+/bower_components
+/coverage
+/docs
+/tests
+/node_modules
+/gulpfile.js
+/.*
