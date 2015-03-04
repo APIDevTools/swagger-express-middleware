@@ -1,3 +1,4 @@
+'use strict';
 /**************************************************************************************************
  * This sample demonstrates the most simplistic usage of Swagger-Express-Middleware.
  * It simply creates a new Express Application and adds all of the Swagger middleware

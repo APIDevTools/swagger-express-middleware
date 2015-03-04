@@ -1,3 +1,4 @@
+'use strict';
 /**************************************************************************************************
  * This sample demonstrates a few more advanced features of Swagger-Express-Middleware,
  * such as setting a few options, initializing the mock data store, and adding custom middleware logic.

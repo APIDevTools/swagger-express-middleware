@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Swagger middleware and mocks for Express",
   "keywords": [
     "express",
@@ -32,7 +32,7 @@
   },
   "engines": {
     "node": ">=0.10.36",
-    "npm": ">=2.0" 
+    "npm": ">=2.0"
   },
   "dependencies": {
     "body-parser": "^1.12.0",
