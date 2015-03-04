@@ -312,7 +312,12 @@ describe('Mock Content-Type header', function() {
 
         function isPhoto(res) {
             if (res.body instanceof Buffer) {
-                return _.isEqual(res.body, photoBuffer) ? false : 'Invalid buffer contents';
+                for (var i = 0; i < photoBuffer.length; i++) {
+                    if (res.body[i] !== photoBuffer[i]) {
+                        return 'Invalid buffer contents (starting at position #' + i + ')';
+                    }
+                };
+                return false;
             }
             else {
                 return (res.text === photoBuffer.toString()) ? false : 'Invalid file contents';

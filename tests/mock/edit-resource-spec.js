@@ -8,8 +8,14 @@ describe('Edit Resource Mock', function() {
 
             beforeEach(function() {
                 api = _.cloneDeep(env.parsed.petStore);
-                api.paths['/pets/{PetName}'][method] = api.paths['/pets/{PetName}'].patch;
-                api.paths['/pets/{PetName}/photos/{ID}'][method] = api.paths['/pets/{PetName}/photos'].post;
+
+                var operation = api.paths['/pets/{PetName}'].patch;
+                delete api.paths['/pets/{PetName}'].patch;
+                api.paths['/pets/{PetName}'][method] = operation;
+
+                operation = api.paths['/pets/{PetName}/photos'].post;
+                delete api.paths['/pets/{PetName}/photos'].post;
+                api.paths['/pets/{PetName}/photos/{ID}'][method] = operation;
             });
 
             afterEach(function() {
@@ -282,7 +288,7 @@ describe('Edit Resource Mock', function() {
                         supertest
                             [method]('/api/pets/Fido')
                             .set('Content-Type', 'application/octet-stream')
-                            .send(new Buffer('hello world'))
+                            .send(new Buffer('hello world').toString())
                             .expect('Content-Type', 'text/plain; charset=utf-8')
                             .expect(200, 'hello world')
                             .end(env.checkResults(done));
@@ -301,7 +307,7 @@ describe('Edit Resource Mock', function() {
                         supertest
                             [method]('/api/pets/Fido')
                             .set('Content-Type', 'application/octet-stream')
-                            .send(new Buffer('hello world'))
+                            .send(new Buffer('hello world').toString())
                             .expect('Content-Type', 'application/json; charset=utf-8')
                             .expect(200, {
                                 type: 'Buffer',

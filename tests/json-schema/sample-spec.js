@@ -2,6 +2,14 @@ var env        = require('../test-environment'),
     JsonSchema = require('../../lib/helpers/json-schema'),
     iterations = 100;
 
+// Some older versions of Node don't define these constants
+var MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;
+var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
+var MIN_VALUE = Number.MIN_VALUE || 5e-324;
+var MAX_VALUE = Number.MAX_VALUE || 1.7976931348623157e+308;
+var EPSILON = 2.220446049250313e-16;
+
+
 describe('JSON Schema sample data', function() {
     'use strict';
 
@@ -37,8 +45,8 @@ describe('JSON Schema sample data', function() {
                     expect(schema.sample())
                         .to.be.a('number')
                         .and.satisfy(Number.isFinite)
-                        .and.at.least(Number.MIN_VALUE)
-                        .and.at.most(Number.MAX_VALUE);
+                        .and.at.least(MIN_VALUE)
+                        .and.at.most(MAX_VALUE);
                 }
             }
         );
@@ -123,15 +131,15 @@ describe('JSON Schema sample data', function() {
                         .to.be.a('number')
                         .and.satisfy(Number.isFinite)
                         .and.satisfy(isWholeNumber)
-                        .and.at.least(Number.MIN_SAFE_INTEGER)
-                        .and.at.most(Number.MAX_SAFE_INTEGER);
+                        .and.at.least(MIN_SAFE_INTEGER)
+                        .and.at.most(MAX_SAFE_INTEGER);
                 }
             }
         );
 
         it('should generate a valid number above minimum',
             function() {
-                var min = Number.MAX_SAFE_INTEGER - 10;
+                var min = MAX_SAFE_INTEGER - 10;
                 var schema = new JsonSchema({type: 'integer', minimum: min});
                 for (var i = 0; i < iterations; i++) {
                     expect(schema.sample())
@@ -139,14 +147,14 @@ describe('JSON Schema sample data', function() {
                         .and.satisfy(Number.isFinite)
                         .and.satisfy(isWholeNumber)
                         .and.at.least(min)
-                        .and.at.most(Number.MAX_SAFE_INTEGER);
+                        .and.at.most(MAX_SAFE_INTEGER);
                 }
             }
         );
 
         it('should generate a valid number above exclusive minimum',
             function() {
-                var min = Number.MAX_SAFE_INTEGER - 10;
+                var min = MAX_SAFE_INTEGER - 10;
                 var schema = new JsonSchema({type: 'integer', minimum: min, exclusiveMinimum: true});
                 for (var i = 0; i < iterations; i++) {
                     expect(schema.sample())
@@ -154,21 +162,21 @@ describe('JSON Schema sample data', function() {
                         .and.satisfy(Number.isFinite)
                         .and.satisfy(isWholeNumber)
                         .and.above(min)
-                        .and.at.most(Number.MAX_SAFE_INTEGER);
+                        .and.at.most(MAX_SAFE_INTEGER);
                 }
             }
         );
 
         it('should generate a valid number below maximum',
             function() {
-                var max = Number.MIN_SAFE_INTEGER + 10;
+                var max = MIN_SAFE_INTEGER + 10;
                 var schema = new JsonSchema({type: 'integer', maximum: max});
                 for (var i = 0; i < iterations; i++) {
                     expect(schema.sample())
                         .to.be.a('number')
                         .and.satisfy(Number.isFinite)
                         .and.satisfy(isWholeNumber)
-                        .and.at.least(Number.MIN_SAFE_INTEGER)
+                        .and.at.least(MIN_SAFE_INTEGER)
                         .and.at.most(max);
                 }
             }
@@ -176,14 +184,14 @@ describe('JSON Schema sample data', function() {
 
         it('should generate a valid number below exclusive maximum',
             function() {
-                var max = Number.MIN_SAFE_INTEGER + 10;
+                var max = MIN_SAFE_INTEGER + 10;
                 var schema = new JsonSchema({type: 'integer', maximum: max, exclusiveMaximum: true});
                 for (var i = 0; i < iterations; i++) {
                     expect(schema.sample())
                         .to.be.a('number')
                         .and.satisfy(Number.isFinite)
                         .and.satisfy(isWholeNumber)
-                        .and.at.least(Number.MIN_SAFE_INTEGER)
+                        .and.at.least(MIN_SAFE_INTEGER)
                         .and.below(max);
                 }
             }

@@ -461,7 +461,7 @@ describe('Edit Collection Mock', function() {
                         supertest
                             [method]('/api/pets')
                             .set('Content-Type', 'text/plain')
-                            .send(new Buffer('hello world'))
+                            .send(new Buffer('hello world').toString())
                             .expect(201, 'hello world')
                             .expect('Location', '/api/pets/hello%20world')
                             .end(env.checkResults(done));
@@ -479,7 +479,7 @@ describe('Edit Collection Mock', function() {
                         supertest
                             [method]('/api/pets')
                             .set('Content-Type', 'application/octet-stream')
-                            .send(new Buffer('hello world'))
+                            .send(new Buffer('hello world').toString())
                             .expect(201, {
                                 type: 'Buffer',
                                 data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]

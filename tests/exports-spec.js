@@ -236,7 +236,14 @@ describe('Package exports', function() {
                 function throws() {
                     env.swagger.Resource('/users', 'jdoe', {name: 'John Doe'});
                 }
-                expect(throws).to.throw(Error);
+
+                if (env.nodeVersion >= 11) {
+                    expect(throws).to.throw(Error);
+                }
+                else {
+                    var resource = env.swagger.Resource('/users', 'jdoe', {name: 'John Doe'});
+                    expect(resource).to.be.undefined;
+                }
             }
         );
     });

@@ -31,6 +31,12 @@ var env = module.exports = {
      isWindows: /^win/.test(process.platform),
 
 
+     /**
+      * The Node minor/patch version, as a float
+      */
+    nodeVersion: parseFloat(process.version.match(/^v0\.(\d+\.\d+)$/)[1]),
+
+
     /**
      * The Swagger-Express-Middleware module.
      * @returns {createMiddleware}
