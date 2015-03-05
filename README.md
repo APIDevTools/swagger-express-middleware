@@ -76,7 +76,7 @@ Swagger Express Middleware comes two samples that use the [Swagger Pet Store API
 This sample demonstrates the most simplistic usage of Swagger Express Middleware. It simply creates a new Express Application and adds all of the Swagger middleware without changing any options, and without adding any custom middleware.
 
 * [Source Code](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/samples/sample1.js)
-* [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough1.md)
+* [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/running.md)
 
 
 #### Sample 2

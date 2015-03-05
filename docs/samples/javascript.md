@@ -12,7 +12,7 @@ Sample 1 Walkthrough
 
 JavaScript Walkthrough
 --------------------------
-Now that you have the sample [running](running.md), let's look at the source code.  Open up [sample1.js](../../samples/sample1.js) and lets see what it's doing.
+Now that you have the sample [running](running.md), it's time to look at the source code.  Open up [sample1.js](../../samples/sample1.js) and let's see what it's doing.
 
 ### Debug Logging
 After a few comments, the first line of real code is...

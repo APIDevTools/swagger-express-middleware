@@ -8,10 +8,7 @@ Sample 1
 This sample demonstrates the most simplistic usage of Swagger Express Middleware. It simply creates a new Express Application and adds all of the Swagger middleware without changing any options, and without adding any custom middleware.
 
 * [Source Code](sample1.js)
-* [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough1.md)
-    + [Running the sample](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/running.md)
-    + [JavaScript Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/javascript.md)
-    + [YAML Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/yaml.md)
+* [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/running.md)
 
 
 
@@ -21,7 +18,4 @@ This sample demonstrates a few more advanced features of Swagger Express Middlew
 
 * [Source Code](sample2.js)
 * [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough2.md)
-    + [Adding Mock Data](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough2.md#mock-data)
-    + [Customizing Options](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough2.md#customizing-options)
-    + [Custom Middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough2.md#custom-middleware)
 
