@@ -4,10 +4,9 @@ Swagger Express Middleware
 
 Sample 1 Walkthrough
 --------------------------
-* [Walkthrough](walkthrough1.md)
-    + [Running the sample](running.md)
-    + __JavaScript Walkthrough__
-    + [YAML Walkthrough](yaml.md)
+* [Running the sample](running.md)
+* __JavaScript Walkthrough__
+* [YAML Walkthrough](yaml.md)
 
 
 JavaScript Walkthrough

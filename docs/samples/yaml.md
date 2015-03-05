@@ -4,10 +4,9 @@ Swagger Express Middleware
 
 Sample 1 Walkthrough
 --------------------------
-* [Walkthrough](walkthrough1.md)
-    + [Running the sample](running.md)
-    + [JavaScript Walkthrough](javascript.md)
-    + __YAML Walkthrough__
+* [Running the sample](running.md)
+* [JavaScript Walkthrough](javascript.md)
+* __YAML Walkthrough__
 
 
 YAML Walkthrough
@@ -38,23 +37,33 @@ __TIP:__ This filtering functionality is provided by the [mock middleware](../mo
 
 __TIP:__ Notice that all the query parameters are only defined for the `GET` operation, along with a `&petFilters` [YAML anchor](https://en.wikipedia.org/wiki/YAML#Repeated_nodes). This allows us to save about 60 lines of duplicated code by simply referencing the anchor in the `DELETE` operation. 
 
-#### Response Codes
-The `GET /pets` and `DELETE /pets` operations both define a "default" response code rather than a specific HTTP status code such as [200](http://httpstatusdogs.com/200-ok).  Because of this, the [mock middleware](../mock.md) will return whichever response code makes the most sense.  For GET requests, this is always 200.  For DELETE requests, it is 200 or [204](http://httpstatusdogs.com/204-no-content), depending on whether or not the operation returns data.  In this case, the DELETE operation _does_ return data, so a 200 response code is used.
+##### Response Codes
+The `GET /pets` and `DELETE /pets` operations both define a "default" response code rather than a specific HTTP status code such as 200.  Because of this, the [mock middleware](../mock.md) will return whichever response code makes the most sense.  For GET requests, this is always 200.  For DELETE requests, it is [200 (OK)](http://httpstatusdogs.com/200-ok) or [204 (No Content)](http://httpstatusdogs.com/204-no-content), depending on whether or not the operation returns data.  In this case, the DELETE operation _does_ return data, so a 200 response code is used.
 
 
-#### Response Schema
+##### Response Schema
 The `GET /pets` and `DELETE /pets` operations both define a response schema that is an array of pets.  Because of this, the [mock middleware](../mock.md) will return the JSON data for all of the pets that match the filter critera.  If no pets match the criteria, or there are no pets at all, then an empty array is returned. 
 
 If the response schema was just a pet (rather than an array of pets), then the mock middleware would return the first matching pet.
 
 
-### Adding New Pets
-TODO
+##### Response Headers
+The `GET /pets` operation has a `Last-Modified` response header defined, so the [mock middleware](../mock.md) will automatically set this header correctly.  The middleware keeps track of when each object was last modified, so from the list of pets that match the filter criteria, it will set the header to the max modified date/time.
 
-#### Response Code
+
+### Adding New Pets
+The `POST /pets` operation lets you add new pets.  Each pet that you add gets its own URL.  For example, if you add the pet `{name: "Fido", type: "dog", age: 4}`, then you can later GET, PATCH, or DELETE this pet at [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido).  But how does this URL get created?  Why did it use the pet's `name` property rather than its `type` or `age`? 
+
+The [mock middleware](../mock.md) tries to determine your model's "key" field using a few different techniques, depending on data types.  For `object` types, such as our `pet` model, it first looks for common property names like `id`, `key`, `username`, `name`, etc.  If that doesn't work, then it looks for required properties in your JSON schema. If all else fails, then it just generates a random, unique value.
+
+##### Response Headers
+The `POST /pets` operation has a `Location` response header defined, so the [mock middleware](../mock.md) will automatically set this header to the URL that was created for the pet (using its "key" field).
+
+##### Response Code
+The response code for `POST /pets` will be [201 (Created)](http://httpstatusdogs.com/201-created), since that's defined in the API.
 
 #### Response Schema
-
+The response schema is a `pet` object, so the newly-created pet will be returned.  If the response schema was an array of pets, then all pets (including the new one) would be returned.
 
 
 ### Getting/Editing/Deleting a Pet
