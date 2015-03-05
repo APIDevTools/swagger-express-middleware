@@ -11,7 +11,6 @@ This sample demonstrates the most simplistic usage of Swagger Express Middleware
 * [Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/walkthrough1.md)
     + [Running the sample](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/running.md)
     + [JavaScript Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/javascript.md)
-    + [Swagger Pet Store Homepage](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/html.md)
     + [YAML Walkthrough](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/samples/yaml.md)
 
 

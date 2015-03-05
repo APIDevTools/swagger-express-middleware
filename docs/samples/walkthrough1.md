@@ -9,6 +9,5 @@ This sample demonstrates the most simplistic usage of Swagger Express Middleware
 * [Walkthrough](walkthrough1.md)
     + [Running the sample](running.md)
     + [JavaScript Walkthrough](javascript.md)
-    + [Swagger Pet Store Homepage](html.md)
     + [YAML Walkthrough](yaml.md)
 

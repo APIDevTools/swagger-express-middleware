@@ -7,7 +7,6 @@ Sample 1 Walkthrough
 * [Walkthrough](walkthrough1.md)
     + [Running the sample](running.md)
     + [JavaScript Walkthrough](javascript.md)
-    + [Swagger Pet Store Homepage](html.md)
     + __YAML Walkthrough__
 
 
@@ -34,5 +33,5 @@ Open up [PetStore.yaml](../../samples/PetStore.yaml) and lets see how all this m
 
 
 -------------------------------------------------------------------------------------------------
-| Back: [Swagger Pet Store Homepage](html.md)   | &nbsp;                                        |
+| Back: [JavaScript Walkthrough](javascript.md) | &nbsp;                                        |
 |:----------------------------------------------|----------------------------------------------:|

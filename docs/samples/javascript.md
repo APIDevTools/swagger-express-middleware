@@ -7,13 +7,12 @@ Sample 1 Walkthrough
 * [Walkthrough](walkthrough1.md)
     + [Running the sample](running.md)
     + __JavaScript Walkthrough__
-    + [Swagger Pet Store Homepage](html.md)
     + [YAML Walkthrough](yaml.md)
 
 
 JavaScript Walkthrough
 --------------------------
-Ok, now that you have the sample running, let's look at the source code.  Open up [sample1.js](../../samples/sample1.js) and lets see what it's doing.
+Now that you have the sample [running](running.md), let's look at the source code.  Open up [sample1.js](../../samples/sample1.js) and lets see what it's doing.
 
 ### Debug Logging
 After a few comments, the first line of real code is...
@@ -27,7 +26,7 @@ This simply sets the DEBUG environment variable to `swagger:middleware`, which t
 If you look at your terminal window, you should already see several lines of logging information, since you requested the root page of [http://localhost:8000](http://localhost:8000).  As you click links and buttons on this page, you should see more logging information.  If you encounter any errors during this walkthrough, check the terminal window to see what happened.
 
 
-### Express.js
+### Creating an Express Application
 If you're already familiar with Express.js, then the next few lines should be pretty familiar.  We `require('express')` and then create a new Express Application.   If this is new to you, then you might want to take some time to read the [Getting Started guide](http://expressjs.com/starter/hello-world.html) on the Express website.
 
 
@@ -59,8 +58,11 @@ As the comment says, you don't have to add _all_ of the Swagger middleware modul
 ### Starting the server
 The next block of code is pretty standard for any Express app.  The [listen method](http://expressjs.com/4x/api.html#app.listen) tells the server start listeing for requests on port 8000.  The callback function is called once the port has been opened and is ready to begin accepting requests.
 
+````javascript
+app.listen(8000, function() {
+````
 
 
 -------------------------------------------------------------------------------------------------
-| Back: [Running the sample](walkthrough1.md)   | Next: [Swagger Pet Store Homepage](html.md)   |
+| Back: [Running the Sample](running.md)        | Next: [YAML Walkthrough](yaml.md)             |
 |:----------------------------------------------|----------------------------------------------:|
