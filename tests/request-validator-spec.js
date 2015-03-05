@@ -581,23 +581,61 @@ describe('RequestValidator middleware', function() {
         );
     });
 
-    it('should throw an HTTP 413 if body content is sent and not allowed',
-        function(done) {
-            api.paths['/pets'].patch = api.paths['/pets'].get;
+    describe('http413', function() {
+        it('should throw an HTTP 413 if body content is sent and not allowed',
+            function(done) {
+                api.paths['/pets'].patch = api.paths['/pets'].get;
 
-            initTest();
+                initTest();
 
-            supertest
-                .patch('/api/pets')
-                .send({Name: 'Fido', Type: 'dog'})
-                .end(env.checkSpyResults(done));
+                supertest
+                    .patch('/api/pets')
+                    .send({Name: 'Fido', Type: 'dog'})
+                    .end(env.checkSpyResults(done));
 
-            express.use('/api/pets', env.spy(function(err, req, res, next) {
-                expect(err.status).to.equal(413);
-                expect(err.message).to.contain('PATCH /api/pets does not allow body content')
-            }));
-        }
-    );
+                express.use('/api/pets', env.spy(function(err, req, res, next) {
+                    expect(err.status).to.equal(413);
+                    expect(err.message).to.contain('PATCH /api/pets does not allow body content');
+                }));
+            }
+        );
+
+        it('should throw an HTTP 413 if a form field is sent and body content is not allowed',
+            function(done) {
+                api.paths['/pets'].post = api.paths['/pets'].get;
+
+                initTest();
+
+                supertest
+                    .post('/api/pets')
+                    .field('Foo', 'bar')
+                    .end(env.checkSpyResults(done));
+
+                express.use('/api/pets', env.spy(function(err, req, res, next) {
+                    expect(err.message).to.contain('POST /api/pets does not allow body content');
+                    expect(err.status).to.equal(413);
+                }));
+            }
+        );
+
+        it('should throw an HTTP 413 if a zero-byte file is sent and body content is not allowed',
+            function(done) {
+                api.paths['/pets'].put = api.paths['/pets'].get;
+
+                initTest();
+
+                supertest
+                    .put('/api/pets')
+                    .attach('Photo', env.files.zeroMB)
+                    .end(env.checkSpyResults(done));
+
+                express.use('/api/pets', env.spy(function(err, req, res, next) {
+                    expect(err.message).to.contain('PUT /api/pets does not allow body content');
+                    expect(err.status).to.equal(413);
+                }));
+            }
+        );
+    });
 
     describe('http415', function() {
         it('should NOT throw an HTTP 415 if optional body params are not specified',
