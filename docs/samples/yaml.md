@@ -88,25 +88,31 @@ The [mock middleware](../mock.md) treats `PUT` and `PATCH` operations slightly d
 ### Adding Photos
 Up to now, we've only been looking at operations that send and receive JSON data.  But the `POST /pets/{petName}/photos` operation breaks that trend.  It consumes `multipart/form-data`, consisting of two string parameters, an integer parameter, and our first file parameter.  
 
-The only required parameters are `label` and `photo`.  If you don't specify a value for the `description` parameter, then it will be left undefined.  If you don't specify a value for the `id` parameter, then the [mock middleware](../mock.md) will automatically set it to a random, unique value.  This is because the mock middleware uses the [same logic as before](#determining-the-primary-key) to determine that the `id` is the primary key for a photo. Whenever a primary key is not set, the mock middleware will set it.
+##### Auto-Generated IDs
+The `label` and `photo` parameters are required. `description` and `id` are optional.  If you don't specify a value for the `description` parameter, then it will be left undefined.  If you don't specify a value for the `id` parameter, then the [mock middleware](../mock.md) will automatically set it to a random, unique value.  This is because the mock middleware uses the [same logic as before](#determining-the-primary-key) to determine that the `id` is the primary key for a photo. Whenever a primary key is not set, the mock middleware will set it.
 
 ##### Min/Max File Size
 Notice that the `photo` parameter has a `minLength` and `maxLength` specified.  The [parse request middleware](../parseRequest.md) will return an [HTTP 400 (Bad Request)](http://httpstatusdogs.com/400-bad-request) error if the file is too small or too large.
 
-##### Response Schema
-TODO
-
 
 ### Listing Photos
-TODO
+The `POST` and `GET` operations both have an `object` response schema defined.  The properties of this schema correspond to the four parameters of the `POST` request.  The `photo` property is _not_ the raw binary image data, but rather an object containing information about the photo, such as file name, size, MIME type, etc.  We'll discuss [how to get the actual image](#returning-the-actual-image) a bit later.
 
 
-### Getting/Deleting a Photo
-TODO
+### Getting/Deleting a Photo by ID
+The `GET /pets/{petName}/photos/{id}` and `DELETE /pets/{petName}/photos/{id}` operations should seem pretty straightforward by now.  Just as before, the `{petName}` parameter corresponds to the pet's `name` property, and the `{id}` parameter corresponds to the photo's `id`. 
+
+##### Returning the Actual Image
+The `GET` operation has a new twist.  Rather than returning JSON data, it returns the actual image file that you uploaded.  This is accomplished by two things: First, the `produces` MIME types are all `image/*` rather than `application/json`, and second, the response schema is `type: file` rather than `type: object`.  Whenever the [mock middleware](../mock.md) encouters a `file` response schema, it will return the raw file data rather than the JSON object describing the file.
+
+__TIP:__ If the image file no longer exists on the server (such as if it has been deleted), then the mock middleware will return an [HTTP 410 (Gone)](http://httpstatusdogs.com/410-gone) response.
+
+##### Empty DELETE Response
+Notice that the `DELETE` operation does not have a response schema defined.  It simply has a `default` response code and that's all.  Because of this, the [mock middleware](../mock.md) will send an [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content) response rather than an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).
 
 
 ### Default/Example Responses
-TODO
+The very last thing in the [Swagger Pet Store API](../../samples/PetStore.yaml) is `GET /` operation.  This operation is what serves the HTML page that you see whenever you go to [http://localhost:8000](http://localhost:8000).   How does this work?   The Swagger 2.0 spec allows you to specify `default` and `example` values for response schemas, model schemas, and parameters, and Swagger Express Middleware will automatically use these values whenever no other value is available.  In this case, the response schema for the `GET /` operation has a `default` value that points to the [index.html](../../samples/index.html) file, so that file gets served as the response.  It doesn't have to be an HTML file though.  Any type of file would work, or you could include a literal default value such as: `default: "<h1>Hello World</h1>"` or `default: {title: "Hello World", message: "Welcome to the Swagger Pet Store"}`.   Of course, you'll want to make sure your `default` value and your `produces` MIME types match.
 
 
 -------------------------------------------------------------------------------------------------

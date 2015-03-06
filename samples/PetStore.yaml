@@ -342,6 +342,6 @@ paths:
         default:
           description: The Swagger Pet Store homepage :)
           schema:
-            type: string
+            type: file
             default:
               $ref: index.html
