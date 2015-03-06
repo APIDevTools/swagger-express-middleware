@@ -50,7 +50,33 @@ describe('Edit Resource Mock', function() {
                     }
                 );
 
-                it('should create a new resource using default values in the JSON schema',
+                it('should create a new resource at the specified URL, even if the primary key is different',
+                    function(done) {
+                        initTest();
+
+                        supertest
+                            [method]('/api/pets/Fido')              // <-- The URL is "Fido"
+                            .send({Name: 'Fluffy', Type: 'cat'})    // <-- The pet name is "Fluffy"
+                            .expect(200)
+                            .end(env.checkResults(done, function(res1) {
+
+                                // Verify that "/api/pets/Fido" was created
+                                supertest
+                                    .get('/api/pets/Fido')
+                                    .expect(200, {Name: 'Fluffy', Type: 'cat'})
+                                    .end(env.checkResults(done, function() {
+
+                                        // Verify that "/api/pets/Fluffy" was NOT created
+                                        supertest
+                                            .get('/api/pets/Fluffy')
+                                            .expect(404)
+                                            .end(done);
+                                    }));
+                            }));
+                    }
+                );
+
+                it('should create a new resource using default value in the JSON schema',
                     function(done) {
                         var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
                         petParam.required = false;
@@ -66,6 +92,28 @@ describe('Edit Resource Mock', function() {
                                 supertest
                                     .get('/api/pets/Fido')
                                     .expect(200, {Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown']})
+                                    .end(env.checkResults(done));
+                            }));
+                    }
+                );
+
+                it('should create a new resource using default property values in the JSON schema',
+                    function(done) {
+                        var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
+                        petParam.schema.required = [];
+                        petParam.schema.properties.Name.default = 'Fido';
+                        petParam.schema.properties.Type.default = 'dog';
+                        petParam.schema.properties.Tags.default = 'fluffy,brown';
+                        initTest();
+
+                        supertest
+                            [method]('/api/pets/Fido')
+                            .send({Age: 4})
+                            .expect(200)
+                            .end(env.checkResults(done, function(res1) {
+                                supertest
+                                    .get('/api/pets/Fido')
+                                    .expect(200, {Name: 'Fido', Type: 'dog', Age: 4, Tags: ['fluffy', 'brown']})
                                     .end(env.checkResults(done));
                             }));
                     }
@@ -93,6 +141,35 @@ describe('Edit Resource Mock', function() {
                                     .expect(200, {Name: 'Fido', Type: 'dog'})
                                     .end(env.checkResults(done));
                             }));
+                    }
+                );
+
+                /**
+                 * This test is different than the "merge vs. overwrite" tests that we do later for "PUT vs. PATCH".
+                 * Here, all we're doing is verifying that it doesn't create two resources with the same URL.
+                 */
+                it('should replace an existing resource at the URL',
+                    function(done) {
+                        // Create a pet at the URL "/api/pets/Fido"
+                        var dataStore = new env.swagger.MemoryDataStore();
+                        var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
+                        dataStore.saveResource(resource, function() {
+                            initTest();
+
+                            // Create another pet at the URL "/api/pets/Fido"
+                            supertest
+                                [method]('/api/pets/Fido')
+                                .send({Name: 'Fluffy', Type: 'cat'})
+                                .expect(200)
+                                .end(env.checkResults(done, function(res1) {
+
+                                    // Make sure there's only ONE "/api/pets/Fido" resource
+                                    supertest
+                                        .get('/api/pets')
+                                        .expect(200, [{Name: 'Fluffy', Type: 'cat'}])
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
