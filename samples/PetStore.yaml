@@ -202,6 +202,15 @@ paths:
               type: string
               description: The date/time that the pet was last modified
 
+    delete:
+      description: Deletes a single pet based on the name supplied
+      operationId: deletePet
+      responses:
+        default:
+          description: Returns the pet that was deleted
+          schema:
+            $ref: pet
+
     patch:
       description: Updates a pet by name
       parameters:
@@ -217,40 +226,9 @@ paths:
           schema:
             $ref: pet
 
-    delete:
-      description: Deletes a single pet based on the name supplied
-      operationId: deletePet
-      responses:
-        default:
-          description: Returns the pet that was deleted
-          schema:
-            $ref: pet
-
   /pets/{petName}/photos:
     parameters:
       - $ref: "#/parameters/petName"
-
-    get:
-      description: Get a list of the photos for a pet
-      responses:
-        200:
-          description: Returns the list of photos
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  format: int32
-                  description: The auto-generated photo ID
-                label:
-                  type: string
-                description:
-                  type: string
-                photo:
-                  type: object
-                  description: Information about the photo (size, file name, etc.)
 
     post:
       description: Upload a new pet photo
@@ -301,7 +279,29 @@ paths:
           headers:
             Location:
               type: string
-              description: The URL of the newly-added pet
+              description: The URL of the newly-added photo
+
+    get:
+      description: Get a list of the photos for a pet
+      responses:
+        200:
+          description: Returns the list of photos
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                  description: The auto-generated photo ID
+                label:
+                  type: string
+                description:
+                  type: string
+                photo:
+                  type: object
+                  description: Information about the photo (size, file name, etc.)
 
   /pets/{petName}/photos/{id}:
     parameters:
@@ -332,7 +332,7 @@ paths:
       operationId: deletePetPhoto
       responses:
         default:
-          description: The photo
+          description: The photo was deleted successfully
 
   /:
     get:
