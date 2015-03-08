@@ -22,7 +22,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
             var file = path.join(dir, 'users.json');
 
-            dataStore.saveResource(resource, function(err, retrieved) {
+            dataStore.save(resource, function(err, retrieved) {
                 if (err) return done(err);
                 expect(fs.existsSync(file)).to.be.true;
                 done();
@@ -36,7 +36,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/', '/JDoe', {name: 'John Doe'});
             var file = path.join(tempDir, '.json');
 
-            dataStore.saveResource(resource, function(err, retrieved) {
+            dataStore.save(resource, function(err, retrieved) {
                 if (err) return done(err);
                 expect(fs.existsSync(file)).to.be.true;
                 done();
@@ -50,7 +50,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
             var file = path.join(tempDir, 'users.json');
 
-            dataStore.saveResource(resource, function(err, retrieved) {
+            dataStore.save(resource, function(err, retrieved) {
                 if (err) return done(err);
                 expect(fs.existsSync(file)).to.be.true;
                 done();
@@ -64,7 +64,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users/JDoe/', 'orders', [{orderId: 12345}, {orderId: 45678}]);
             var file = path.join(tempDir, 'users', 'jdoe.json');
 
-            dataStore.saveResource(resource, function(err, retrieved) {
+            dataStore.save(resource, function(err, retrieved) {
                 if (err) return done(err);
                 expect(fs.existsSync(file)).to.be.true;
                 done();
@@ -78,7 +78,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users/JDoe/orders/1234/products', '4567', {productId: 4567});
             var file = path.join(tempDir, 'users', 'jdoe', 'orders', '1234', 'products.json');
 
-            dataStore.saveResource(resource, function(err, retrieved) {
+            dataStore.save(resource, function(err, retrieved) {
                 if (err) return done(err);
                 expect(fs.existsSync(file)).to.be.true;
                 done();
@@ -100,13 +100,13 @@ describe('FileDataStore', function() {
                 expect(data).to.be.undefined;
             }
 
-            dataStore.getResource(resource, function(err, data) {
+            dataStore.get(resource, function(err, data) {
                 assert(err, data);
 
-                dataStore.saveResource(resource, function(err, data) {
+                dataStore.save(resource, function(err, data) {
                     assert(err, data);
 
-                    dataStore.deleteResource(resource, function(err, data) {
+                    dataStore.delete(resource, function(err, data) {
                         assert(err, data);
 
                         dataStore.getCollection('users', function(err, data) {
@@ -130,7 +130,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
 
             // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
-            dataStore.saveResource(resource, function(err, data) {
+            dataStore.save(resource, function(err, data) {
                 if (err) return done(err);
 
                 var stub = sinon.stub(fs, 'writeFile', function(path, data, callback) {
@@ -142,10 +142,10 @@ describe('FileDataStore', function() {
                     expect(data).to.be.undefined;
                 }
 
-                dataStore.saveResource(resource, function(err, data) {
+                dataStore.save(resource, function(err, data) {
                     assert(err, data);
 
-                    dataStore.deleteResource(resource, function(err, data) {
+                    dataStore.delete(resource, function(err, data) {
                         assert(err, data);
 
                         dataStore.deleteCollection('users', function(err, data) {
@@ -165,7 +165,7 @@ describe('FileDataStore', function() {
             var resource = new Resource('/users/JDoe/orders', '12345', {orderId: 12345});
 
             // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
-            dataStore.saveResource(resource, function(err, data) {
+            dataStore.save(resource, function(err, data) {
                 if (err) return done(err);
 
                 var mkdirStub = sinon.stub(fs, 'mkdir', function(path, data, callback) {
@@ -181,10 +181,10 @@ describe('FileDataStore', function() {
                     expect(data).to.be.undefined;
                 }
 
-                dataStore.saveResource(resource, function(err, data) {
+                dataStore.save(resource, function(err, data) {
                     assert(err, data);
 
-                    dataStore.deleteResource(resource, function(err, data) {
+                    dataStore.delete(resource, function(err, data) {
                         assert(err, data);
 
                         dataStore.deleteCollection('users/JDoe/orders', function(err, data) {

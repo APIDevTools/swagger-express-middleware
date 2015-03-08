@@ -40,21 +40,18 @@ describe('Query Resource Mock', function() {
             it('should return only the requested resource',
                 function(done) {
                     dataStore = new env.swagger.MemoryDataStore();
-                    var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
-                    dataStore.saveResource(resource, function() {
-                        resource = new env.swagger.Resource('/api/pets', 'Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
-                            resource = new env.swagger.Resource('/api/pets', 'Polly', {Name: 'Polly', Type: 'bird'});
-                            dataStore.saveResource(resource, function() {
-                                initTest();
+                    var res1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                    var res2 = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                    var res3 = new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'});
 
-                                supertest
-                                    [method]('/api/pets/Fluffy')
-                                    .expect('Content-Length', 30)
-                                    .expect(200, isHead ? '' : {Name: 'Fluffy', Type: 'cat'})
-                                    .end(env.checkResults(done));
-                            });
-                        });
+                    dataStore.save(res1, res2, res3, function() {
+                        initTest();
+
+                        supertest
+                            [method]('/api/pets/Fluffy')
+                            .expect('Content-Length', 30)
+                            .expect(200, isHead ? '' : {Name: 'Fluffy', Type: 'cat'})
+                            .end(env.checkResults(done));
                     });
                 }
             );
@@ -63,8 +60,8 @@ describe('Query Resource Mock', function() {
                 function(done) {
                     delete api.paths['/pets/{PetName}'][method].responses[200].schema;
                     dataStore = new env.swagger.MemoryDataStore();
-                    var resource = new env.swagger.Resource('/api/pets', 'Fido', 'I am Fido');
-                    dataStore.saveResource(resource, function() {
+                    var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                    dataStore.save(resource, function() {
                         initTest();
 
                         supertest
@@ -81,8 +78,8 @@ describe('Query Resource Mock', function() {
             it('should return `res.body` if already set by other middleware',
                 function(done) {
                     dataStore = new env.swagger.MemoryDataStore();
-                    var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
-                    dataStore.saveResource(resource, function() {
+                    var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                    dataStore.save(resource, function() {
                         initTest(function(req, res, next) {
                             res.body = ['Not', 'the', 'response', 'you', 'expected'];
                             next();
@@ -152,8 +149,8 @@ describe('Query Resource Mock', function() {
                     };
 
                     dataStore = new env.swagger.MemoryDataStore();
-                    var resource = new env.swagger.Resource('/api/pets', 'Fido', 'I am fido');
-                    dataStore.saveResource(resource, function() {
+                    var resource = new env.swagger.Resource('/api/pets/Fido', 'I am fido');
+                    dataStore.save(resource, function() {
                         initTest();
 
                         // Wait 1 second, since the "Last-Modified" header is only precise to the second
@@ -188,7 +185,7 @@ describe('Query Resource Mock', function() {
             it('should return a 500 error if a DataStore error occurs',
                 function(done) {
                     dataStore = new env.swagger.MemoryDataStore();
-                    dataStore.__openResourceStore = function(collection, name, callback) {
+                    dataStore.__openDataStore = function(collection, callback) {
                         setImmediate(callback, new Error('Test Error'));
                     };
 
@@ -218,8 +215,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -238,8 +235,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', 'I am Fido');
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -258,8 +255,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', '');
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', '');
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -278,8 +275,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', 42.999);
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', 42.999);
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -299,8 +296,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -319,8 +316,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', new Buffer('hello world'));
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -338,8 +335,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', new Buffer('hello world'));
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -360,8 +357,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido');
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido');
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -383,8 +380,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido');
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido');
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -403,8 +400,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido');
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido');
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -422,8 +419,8 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', null);
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', null);
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest

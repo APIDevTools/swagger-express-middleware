@@ -322,8 +322,8 @@ describe('Mock response headers', function() {
 
                 initTest();
 
-                var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function(err) {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function(err) {
                     if (err) return done(err);
 
                     // Remove the milliseconds, since the Last-Modified header is only precise to the second

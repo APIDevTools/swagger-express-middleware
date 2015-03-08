@@ -16,7 +16,7 @@ describe('Resource class', function() {
             }
         );
 
-        it('can be called with just a collection path',
+        it('can be called with just a path',
             function() {
                 var resource = new env.swagger.Resource('/users/jdoe/orders');
 
@@ -40,7 +40,7 @@ describe('Resource class', function() {
             }
         );
 
-        it('can be called with just a single-depth collection path, with no slash',
+        it('can be called with just a single-depth path, with no slash',
             function() {
                 var resource = new env.swagger.Resource('users');
 
@@ -52,13 +52,27 @@ describe('Resource class', function() {
             }
         );
 
-        it('can be called with just a collection path and resource name',
+        it('can be called with just a path and data',
             function() {
-                var resource = new env.swagger.Resource('/users/jdoe/orders', '/12345');
+                var data = {orderId: 12345};
+                var resource = new env.swagger.Resource('/users/jdoe/orders/12345', data);
 
                 expect(resource.collection).to.equal('/users/jdoe/orders');
                 expect(resource.name).to.equal('/12345');
-                expect(resource.data).to.be.undefined;
+                expect(resource.data).to.equal(data);
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
+        it('can be called with just a path and a Resource',
+            function() {
+                var otherResource = new env.swagger.Resource('/foo/bar', {orderId: 12345});
+                var resource = new env.swagger.Resource('/users/jdoe/orders/12345', otherResource);
+
+                expect(resource.collection).to.equal('/users/jdoe/orders');
+                expect(resource.name).to.equal('/12345');
+                expect(resource.data).to.equal(otherResource.data);
                 expect(resource.createdOn).to.be.null;
                 expect(resource.modifiedOn).to.be.null;
             }
@@ -77,6 +91,19 @@ describe('Resource class', function() {
             }
         );
 
+        it('can be called with a collection path, resource name, and a Resource',
+            function() {
+                var otherResource = new env.swagger.Resource('/foo/bar', {orderId: 12345});
+                var resource = new env.swagger.Resource('/users/jdoe/orders', '/12345', otherResource);
+
+                expect(resource.collection).to.equal('/users/jdoe/orders');
+                expect(resource.name).to.equal('/12345');
+                expect(resource.data).to.equal(otherResource.data);
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
         it('should throw an error if the resource name contains slashes',
             function() {
                 function throws() {
@@ -88,6 +115,160 @@ describe('Resource class', function() {
         );
     });
 
+    describe('merge', function() {
+        it('merges data with the resource\'s existing data',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge({name: {first: 'Jane', middle: 'Alice'}, age: 42});
+
+                expect(resource.data).to.deep.equal({
+                    name: {first: 'Jane', middle: 'Alice', last: 'Doe'},
+                    age: 42
+                });
+            }
+        );
+
+        it('merges a Resource with the resource\'s existing data',
+            function() {
+                var res1 = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+                var res2 = new env.swagger.Resource('/people/BSmith', {
+                    name: {first: 'Bob'},
+                    age: 42
+                });
+
+                res1.merge(res2);
+
+                expect(res1.collection).to.equal('/users'); // <-- It does NOT merge the collection path
+                expect(res1.name).to.equal('/JDoe');        // <-- It does NOT merge the resource name
+                expect(res1.data).to.deep.equal({
+                    name: {first: 'Bob', last: 'Doe'},      // <-- It DOES merge the data
+                    age: 42
+                });
+            }
+        );
+
+        it('does not merge objects and arrays',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge(['a', 'b', 'c']);
+
+                expect(resource.data).to.be.an('array');
+                expect(resource.data).to.have.same.members(['a', 'b', 'c']);
+            }
+        );
+
+        it('does not merge strings and arrays',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', ['a', 'b', 'c']);
+
+                resource.merge('hello world');
+
+                expect(resource.data).to.equal('hello world');
+            }
+        );
+
+        it('replaces the resource\'s existing data with a number',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge(12345);
+
+                expect(resource.data).to.be.a('number');
+                expect(resource.data).to.deep.equal(12345);
+            }
+        );
+
+        it('replaces the resource\'s existing data with a date',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge(new Date(2000, 1, 2, 3, 4, 5, 6));
+
+                expect(resource.data).to.be.an.instanceOf(Date);
+                expect(resource.data).to.equalTime(new Date(2000, 1, 2, 3, 4, 5, 6));
+            }
+        );
+
+        it('replaces the resource\'s existing data with undefined',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge();
+
+                expect(resource.data).to.be.undefined;
+            }
+        );
+
+        it('replaces the resource\'s existing data with null',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', {
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                resource.merge(null);
+
+                expect(resource.data).to.be.null;
+            }
+        );
+
+        it('replaces undefined resource data with a value',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe');
+
+                resource.merge({
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                expect(resource.data).to.deep.equal({
+                    name: {first: 'John', last: 'Doe'}
+                });
+            }
+        );
+
+        it('replaces null resource data with a value',
+            function() {
+                var resource = new env.swagger.Resource('/users/JDoe', null);
+
+                resource.merge({
+                    name: {first: 'John', last: 'Doe'}
+                });
+
+                expect(resource.data).to.deep.equal({
+                    name: {first: 'John', last: 'Doe'}
+                });
+            }
+        );
+
+        it('updates the modifiedOn date',
+            function() {
+                var before = new Date(Date.now() - 5);  // 5 milliseconds ago
+                var resource = new env.swagger.Resource('/users/JDoe');
+                resource.createdOn = new Date(2000, 1, 2, 3, 4, 5, 6);
+                resource.modifiedOn = new Date(2006, 5, 4, 3, 2, 1, 0);
+
+                resource.merge();
+
+                expect(resource.createdOn).to.equalTime(new Date(2000, 1, 2, 3, 4, 5, 6));
+                expect(resource.modifiedOn).not.to.equalTime(new Date(2006, 5, 4, 3, 2, 1, 0));
+                expect(resource.modifiedOn).to.be.afterTime(before);
+            }
+        );
+    });
+
     var express = env.express();
     express.enable('strict routing');
     express.enable('case sensitive routing');
@@ -95,6 +276,8 @@ describe('Resource class', function() {
     var router = env.router();
     router.caseSensitive = true;
     router.strict = true;
+
+    var data = undefined;
 
     // The behavior should be the same for all of these configurations
     var configs = [
@@ -125,7 +308,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("", "")',
                 function() {
-                    var resource = new env.swagger.Resource('', '');
+                    var resource = new env.swagger.Resource('', '', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -141,7 +324,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("/", "")',
                 function() {
-                    var resource = new env.swagger.Resource('/', '');
+                    var resource = new env.swagger.Resource('/', '', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -149,7 +332,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("", "/")',
                 function() {
-                    var resource = new env.swagger.Resource('', '/');
+                    var resource = new env.swagger.Resource('', '/', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -157,7 +340,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("/", "/")',
                 function() {
-                    var resource = new env.swagger.Resource('', '/');
+                    var resource = new env.swagger.Resource('', '/', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -173,7 +356,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("//", "")',
                 function() {
-                    var resource = new env.swagger.Resource('//', '');
+                    var resource = new env.swagger.Resource('//', '', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -181,7 +364,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("", "//")',
                 function() {
-                    var resource = new env.swagger.Resource('', '//');
+                    var resource = new env.swagger.Resource('', '//', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -189,7 +372,7 @@ describe('Resource class', function() {
 
             it('should return the a single slash ("//", "//")',
                 function() {
-                    var resource = new env.swagger.Resource('//', '//');
+                    var resource = new env.swagger.Resource('//', '//', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/');
                 }
@@ -205,7 +388,7 @@ describe('Resource class', function() {
 
             it('should add a leading slash (two params)',
                 function() {
-                    var resource = new env.swagger.Resource('users/JDoe', 'orders/');
+                    var resource = new env.swagger.Resource('users/JDoe', 'orders/', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/users/JDoe/orders/');
                 }
@@ -221,7 +404,7 @@ describe('Resource class', function() {
 
             it('should NOT add a trailing slash (two params)',
                 function() {
-                    var resource = new env.swagger.Resource('users/JDoe/orders', '12345');
+                    var resource = new env.swagger.Resource('users/JDoe/orders', '12345', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/users/JDoe/orders/12345');
                 }
@@ -229,7 +412,7 @@ describe('Resource class', function() {
 
             it('should remove redundant slashes between collection and resource name',
                 function() {
-                    var resource = new env.swagger.Resource('/users/', '/JDoe/');
+                    var resource = new env.swagger.Resource('/users/', '/JDoe/', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/users/JDoe/');
                 }
@@ -245,7 +428,7 @@ describe('Resource class', function() {
 
             it('should return "/users/", even though the resource name is blank',
                 function() {
-                    var resource = new env.swagger.Resource('/users/', '');
+                    var resource = new env.swagger.Resource('/users/', '', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/users/');
                 }
@@ -253,7 +436,7 @@ describe('Resource class', function() {
 
             it('should return "/users/", even though the resource name is blank and the collection doesn\'t have a trailing slash',
                 function() {
-                    var resource = new env.swagger.Resource('/users', '');
+                    var resource = new env.swagger.Resource('/users', '', data);
                     var toString = resource[config.method](config.app || config.router);
                     expect(toString).to.equal('/users/');
                 }
@@ -264,7 +447,7 @@ describe('Resource class', function() {
     describe('valueOf (case-insensitive, non-strict)', function() {
         it('should return a case-insensitive, non-strict string',
             function() {
-                var resource = new env.swagger.Resource('/users', '/JDoe/');
+                var resource = new env.swagger.Resource('/users', '/JDoe/', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express);
                 expect(valueOf).to.equal('/users/jdoe');    // all-lowercase, no trailing slash
@@ -273,7 +456,7 @@ describe('Resource class', function() {
 
         it('should return a case-sensitive, non-strict string',
             function() {
-                var resource = new env.swagger.Resource('/users', '/JDoe/');
+                var resource = new env.swagger.Resource('/users', '/JDoe/', data);
                 var express = env.express();
                 express.enable('case sensitive routing');
                 var valueOf = resource.valueOf(express);
@@ -283,7 +466,7 @@ describe('Resource class', function() {
 
         it('should return a case-insensitive, strict string',
             function() {
-                var resource = new env.swagger.Resource('/users', '/JDoe/');
+                var resource = new env.swagger.Resource('/users', '/JDoe/', data);
                 var express = env.express();
                 express.enable('strict routing');
                 var valueOf = resource.valueOf(express);
@@ -293,7 +476,7 @@ describe('Resource class', function() {
 
         it('should return an empty string',
             function() {
-                var resource = new env.swagger.Resource('/', '//');
+                var resource = new env.swagger.Resource('/', '//', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express);
                 expect(valueOf).to.equal('');               // all-lowercase, no trailing slash
@@ -302,7 +485,7 @@ describe('Resource class', function() {
 
         it('should remove the trailing slash from the collection',
             function() {
-                var resource = new env.swagger.Resource('/Users/', '');
+                var resource = new env.swagger.Resource('/Users/', '', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express);
                 expect(valueOf).to.equal('/users');         // all-lowercase, no trailing slash
@@ -311,7 +494,7 @@ describe('Resource class', function() {
 
         it('should remove the trailing slash from the resource name',
             function() {
-                var resource = new env.swagger.Resource('/Users', '/');
+                var resource = new env.swagger.Resource('/Users', '/', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express);
                 expect(valueOf).to.equal('/users');         // all-lowercase, no trailing slash
@@ -320,7 +503,7 @@ describe('Resource class', function() {
 
         it('should remove the trailing slash from the collection and resource name',
             function() {
-                var resource = new env.swagger.Resource('/Users/', '/');
+                var resource = new env.swagger.Resource('/Users/', '/', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express);
                 expect(valueOf).to.equal('/users');         // all-lowercase, no trailing slash
@@ -329,7 +512,7 @@ describe('Resource class', function() {
 
         it('should remove the resource name and trailing slash (non-strict)',
             function() {
-                var resource = new env.swagger.Resource('/Users/', '/Jdoe/');
+                var resource = new env.swagger.Resource('/Users/', '/Jdoe/', data);
                 var express = env.express();
                 var valueOf = resource.valueOf(express, true);
                 expect(valueOf).to.equal('/users');         // all-lowercase, no trailing slash
@@ -338,7 +521,7 @@ describe('Resource class', function() {
 
         it('should remove the resource name and trailing slash (strict)',
             function() {
-                var resource = new env.swagger.Resource('/Users/', '/Jdoe/');
+                var resource = new env.swagger.Resource('/Users/', '/Jdoe/', data);
                 var express = env.express();
                 express.enable('strict routing');
                 var valueOf = resource.valueOf(express, true);
@@ -350,7 +533,7 @@ describe('Resource class', function() {
     describe('normalizeCollection', function() {
         it('should normalize the collection path',
             function() {
-                var resource = new env.swagger.Resource('users/jdoe/orders/', '/12345', 'foo');
+                var resource = new env.swagger.Resource('users/jdoe/orders/', '/12345', data);
 
                 expect(resource.collection).to.equal('/users/jdoe/orders');    // added leading slash, removed trailing slash
                 expect(resource.name).to.equal('/12345');
@@ -359,7 +542,7 @@ describe('Resource class', function() {
 
         it('should normalize an empty collection path',
             function() {
-                var resource = new env.swagger.Resource('', '/12345', 'foo');
+                var resource = new env.swagger.Resource('', '/12345', data);
 
                 expect(resource.collection).to.equal('');   // empty string = root
                 expect(resource.name).to.equal('/12345');
@@ -377,7 +560,7 @@ describe('Resource class', function() {
 
         it('should normalize a single-slash collection path',
             function() {
-                var resource = new env.swagger.Resource('/', '/12345', 'foo');
+                var resource = new env.swagger.Resource('/', '/12345', data);
 
                 expect(resource.collection).to.equal('');   // empty string = root
                 expect(resource.name).to.equal('/12345');
@@ -386,7 +569,7 @@ describe('Resource class', function() {
 
         it('should normalize a double-slash collection path',
             function() {
-                var resource = new env.swagger.Resource('//', '/12345', 'foo');
+                var resource = new env.swagger.Resource('//', '/12345', data);
 
                 expect(resource.collection).to.equal('');   // empty string = root
                 expect(resource.name).to.equal('/12345');
@@ -397,7 +580,7 @@ describe('Resource class', function() {
     describe('normalizeName', function() {
         it('should normalize the resource names',
             function() {
-                var resource = new env.swagger.Resource('users/jdoe/orders', '12345/', 'foo');
+                var resource = new env.swagger.Resource('users/jdoe/orders', '12345/', data);
 
                 expect(resource.collection).to.equal('/users/jdoe/orders');
                 expect(resource.name).to.equal('/12345/');                   // Added leading slash
@@ -406,7 +589,7 @@ describe('Resource class', function() {
 
         it('should normalize an empty resource name',
             function() {
-                var resource = new env.swagger.Resource('', '', 'foo');
+                var resource = new env.swagger.Resource('', '', data);
 
                 expect(resource.collection).to.equal('');    // empty string = root
                 expect(resource.name).to.equal('/');         // Added leading slash
@@ -415,7 +598,7 @@ describe('Resource class', function() {
 
         it('should normalize a single-slash resource name',
             function() {
-                var resource = new env.swagger.Resource('/users', '/', 'foo');
+                var resource = new env.swagger.Resource('/users', '/', data);
 
                 expect(resource.collection).to.equal('/users');
                 expect(resource.name).to.equal('/');             // good as-is
@@ -424,7 +607,7 @@ describe('Resource class', function() {
 
         it('should normalize a double-slash resource name',
             function() {
-                var resource = new env.swagger.Resource('/users', '//', 'foo');
+                var resource = new env.swagger.Resource('/users', '//', data);
 
                 expect(resource.collection).to.equal('/users');
                 expect(resource.name).to.equal('/');             // Removed one of the slashes

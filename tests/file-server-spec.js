@@ -26,7 +26,7 @@ describe('FileServer middleware', function() {
                     }
                 );
 
-                it('should not serve the fully-dereferenced JSON API if the path is falsy',
+                it('should not serve the fully-dereferenced JSON API if `dereferencedJsonPath` is falsy',
                     function(done) {
                         env.swagger(env.files.petStore, function(err, middleware) {
                             var express = env.express(middleware.files({dereferencedJsonPath: ''}));
@@ -39,10 +39,37 @@ describe('FileServer middleware', function() {
                     }
                 );
 
-                it('should use the path specified in the options',
+                it('should not serve the fully-dereferenced JSON API if `apiPath` is falsy',
+                    function(done) {
+                        env.swagger(env.files.petStore, function(err, middleware) {
+                            var express = env.express(middleware.files({apiPath: ''}));
+
+                            env.supertest(express)
+                                [method]('/')
+                                .expect(404)
+                                .end(done);
+                        });
+                    }
+                );
+
+                it('should use the path specified in `dereferencedJsonPath`',
                     function(done) {
                         env.swagger(env.files.petStore, function(err, middleware) {
                             var express = env.express(middleware.files({dereferencedJsonPath: '/my/custom/path'}));
+
+                            env.supertest(express)
+                                [method]('/my/custom/path')
+                                .expect('Content-Type', 'application/json; charset=utf-8')
+                                .expect(isHead ? '' : env.parsed.petStore)
+                                .end(env.checkResults(done));
+                        });
+                    }
+                );
+
+                it('should use the path specified in `apiPath`',
+                    function(done) {
+                        env.swagger(env.files.petStore, function(err, middleware) {
+                            var express = env.express(middleware.files({apiPath: '/my/custom/path'}));
 
                             env.supertest(express)
                                 [method]('/my/custom/path')
@@ -384,7 +411,7 @@ describe('FileServer middleware', function() {
                 it('should use the path specified in the options',
                     function(done) {
                         env.swagger(env.files.externalRefs, function(err, middleware) {
-                            var express = env.express(middleware.files({rawFilesPath: '/my/custom/path'}));
+                            var express = env.express(middleware.files({rawFilesPath: '/my/custom/path/'}));
 
                             env.supertest(express)
                                 [method]('/my/custom/path/external-refs.yaml')

@@ -123,8 +123,8 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -142,8 +142,8 @@ describe('Edit Collection Mock', function() {
                         arrayify();
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -160,8 +160,8 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -179,8 +179,8 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -286,7 +286,7 @@ describe('Edit Collection Mock', function() {
                 it('should return a 500 error if a DataStore open error occurs',
                     function(done) {
                         dataStore = new env.swagger.MemoryDataStore();
-                        dataStore.__openResourceStore = function(collection, name, callback) {
+                        dataStore.__openDataStore = function(collection, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 
@@ -307,7 +307,7 @@ describe('Edit Collection Mock', function() {
                 it('should return a 500 error if a DataStore update error occurs',
                     function(done) {
                         dataStore = new env.swagger.MemoryDataStore();
-                        dataStore.__updateResourceStore = function(collection, name, data, callback) {
+                        dataStore.__saveDataStore = function(collection, data, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 

@@ -30,8 +30,8 @@ describe('Mock Content-Type header', function() {
                 delete api.paths['/pets/{PetName}'].get.produces;
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -48,8 +48,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = [];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -66,8 +66,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['text/html', 'image/jpeg', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -84,8 +84,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['text/html', 'image/jpeg', 'application/json', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -102,8 +102,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['text/json', 'application/calendar+json', 'application/json', 'application/merge-patch+json'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -120,8 +120,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['text/html', 'image/jpeg', 'text/json', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -138,8 +138,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['text/html', 'image/jpeg', 'application/calendar+json', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -160,8 +160,8 @@ describe('Mock Content-Type header', function() {
                 delete api.paths['/pets/{PetName}'].get.produces;
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -179,8 +179,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = [];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -198,8 +198,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -217,8 +217,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'text/plain', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -236,8 +236,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'text/cache-manifest', 'text/html', 'text/xml', 'text/plain'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -255,8 +255,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'text/html', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -274,8 +274,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'text/xml', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -293,8 +293,8 @@ describe('Mock Content-Type header', function() {
                 api.paths['/pets/{PetName}'].get.produces = ['application/json', 'image/jpeg', 'application/xml', 'application/octet-stream'];
 
                 dataStore = new env.swagger.MemoryDataStore();
-                var resource = new env.swagger.Resource('/api/pets', '/Fido', 'I am Fido');
-                dataStore.saveResource(resource, function() {
+                var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -331,7 +331,7 @@ describe('Mock Content-Type header', function() {
 
                 dataStore = new env.swagger.MemoryDataStore();
                 var resource = new env.swagger.Resource('/api/pets/Fido/photos', '/12345', photoBuffer);
-                dataStore.saveResource(resource, function() {
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -350,7 +350,7 @@ describe('Mock Content-Type header', function() {
 
                 dataStore = new env.swagger.MemoryDataStore();
                 var resource = new env.swagger.Resource('/api/pets/Fido/photos', '/12345', photoBuffer);
-                dataStore.saveResource(resource, function() {
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -369,7 +369,7 @@ describe('Mock Content-Type header', function() {
 
                 dataStore = new env.swagger.MemoryDataStore();
                 var resource = new env.swagger.Resource('/api/pets/Fido/photos', '/12345', photoBuffer);
-                dataStore.saveResource(resource, function() {
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -388,7 +388,7 @@ describe('Mock Content-Type header', function() {
 
                 dataStore = new env.swagger.MemoryDataStore();
                 var resource = new env.swagger.Resource('/api/pets/Fido/photos', '/12345', photoBuffer);
-                dataStore.saveResource(resource, function() {
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest
@@ -407,7 +407,7 @@ describe('Mock Content-Type header', function() {
 
                 dataStore = new env.swagger.MemoryDataStore();
                 var resource = new env.swagger.Resource('/api/pets/Fido/photos', '/12345', photoBuffer);
-                dataStore.saveResource(resource, function() {
+                dataStore.save(resource, function() {
                     initTest();
 
                     supertest

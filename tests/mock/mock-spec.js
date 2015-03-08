@@ -140,7 +140,7 @@ describe('Mock middleware', function() {
                 .expect(201, '')
                 .end(env.checkResults(done, function() {
                     // Remove the item from the data store
-                    dataStore.deleteResource(new env.swagger.Resource('/api/pets', '/fido'), function() {
+                    dataStore.delete(new env.swagger.Resource('/api/pets/fido'), function() {
                         // Now this request will return nothing, because the resource is no longer in the data store
                         supertest
                             .get('/API/PETS')
@@ -179,7 +179,7 @@ describe('Mock middleware', function() {
                         .expect(200, [])
                         .end(env.checkResults(done, function() {
                             // Remove the item from the data store
-                            dataStore.deleteResource(new env.swagger.Resource('/api/pets', '/Fido'), function() {
+                            dataStore.delete(new env.swagger.Resource('/api/pets/Fido'), function() {
                                 // Now this request will return nothing, because the resource is no longer in the data store
                                 supertest
                                     .get('/api/pets')
@@ -207,8 +207,8 @@ describe('Mock middleware', function() {
             );
 
             // Add a resource to the data store
-            var resource = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-            dataStore.saveResource(resource, function() {
+            var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+            dataStore.save(resource, function() {
 
                 // Make sure the Mock middleware is using the data store
                 supertest
@@ -239,10 +239,10 @@ describe('Mock middleware', function() {
             );
 
             // Add different resources to each data store
-            var resource1 = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-            dataStore1.saveResource(resource1, function() {
-                var resource2 = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                dataStore2.saveResource(resource2, function() {
+            var resource1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+            dataStore1.save(resource1, function() {
+                var resource2 = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                dataStore2.save(resource2, function() {
 
                     // Make sure the Mock middleware is using data store #1
                     supertest
@@ -271,10 +271,10 @@ describe('Mock middleware', function() {
             );
 
             // Add different resources to each data store
-            var resource1 = new env.swagger.Resource('/api/pets', '/Fido', {Name: 'Fido', Type: 'dog'});
-            dataStore1.saveResource(resource1, function() {
-                var resource2 = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                dataStore2.saveResource(resource2, function() {
+            var resource1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+            dataStore1.save(resource1, function() {
+                var resource2 = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                dataStore2.save(resource2, function() {
 
                     // Switch to data store #2
                     express.set('mock data store', dataStore2);

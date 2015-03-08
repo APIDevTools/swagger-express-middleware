@@ -152,8 +152,8 @@ describe('Edit Resource Mock', function() {
                     function(done) {
                         // Create a pet at the URL "/api/pets/Fido"
                         var dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', 'Fido', {Name: 'Fido', Type: 'dog'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             // Create another pet at the URL "/api/pets/Fido"
@@ -203,8 +203,8 @@ describe('Edit Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema = {type: 'array', items: {type: 'object'}};
 
                         dataStore = new env.swagger.MemoryDataStore();
-                        var resource = new env.swagger.Resource('/api/pets', '/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-                        dataStore.saveResource(resource, function() {
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
                             initTest();
 
                             supertest
@@ -234,7 +234,7 @@ describe('Edit Resource Mock', function() {
                 it('should return a 500 error if a DataStore error occurs',
                     function(done) {
                         dataStore = new env.swagger.MemoryDataStore();
-                        dataStore.__updateResourceStore = function(collection, name, data, callback) {
+                        dataStore.__saveDataStore = function(collection, data, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 
@@ -556,7 +556,7 @@ describe('Edit Resource Mock', function() {
                 it('should return a 500 error if a DataStore error occurs',
                     function(done) {
                         dataStore = new env.swagger.MemoryDataStore();
-                        dataStore.__openResourceStore = function(collection, name, callback) {
+                        dataStore.__openDataStore = function(collection, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 
