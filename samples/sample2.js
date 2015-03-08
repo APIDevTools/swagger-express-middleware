@@ -7,28 +7,54 @@
 // Set the DEBUG environment variable to enable debug output of Swagger Middleware AND Swagger Parser
 process.env.DEBUG = 'swagger:*';
 
-var util       = require('util'),
-    path       = require('path'),
-    express    = require('express'),
-    middleware = require('swagger-express-middleware');
+var util            = require('util'),
+    path            = require('path'),
+    express         = require('express'),
+    middleware      = require('swagger-express-middleware'),
+    MemoryDataStore = middleware.MemoryDataStore,  // NOTE: There's also a FileDataStore class
+    Resource        = middleware.Resource;
 
 var app = express();
 
-// Create a custom data store, so we can access the mock data.
-// NOTE: there's also a FileDataStore, or create your own!
-var myDB = new middleware.MemoryDataStore();
-// TODO: Add some initial data
+middleware('PetStore.yaml', function(err, middleware) {
+    // Create a custom data store with some initial mock data
+    var myDB = new MemoryDataStore();
+    myDB.save(
+        new Resource('/pets/Lassie', {name: 'Lassie', type: 'dog', tags: ['brown', 'white']}),
+        new Resource('/pets/Clifford', {name: 'Clifford', type: 'dog', tags: ['red', 'big']}),
+        new Resource('/pets/Garfield', {name: 'Garfield', type: 'cat', tags: ['orange']}),
+        new Resource('/pets/Snoopy', {name: 'Snoopy', type: 'dog', tags: ['black', 'white']}),
+        new Resource('/pets/Hello%20Kitty', {name: 'Hello Kitty', type: 'cat', tags: ['white']})
+    );
 
-middleware('PetStore.yaml', app, function(err, middleware) {
-    app.use(
-        middleware.metadata(),
-        middleware.files({
-            // This has no effect, since the PetStore sample has no "basePath" set.
-            // But if it did, it would be prepended to the "/api-docs/" paths
-            useBasePath: true
-        }),
-        middleware.CORS(),
-        middleware.parseRequest({
+    // Enable Express' case-sensitive and strict options
+    // (so "/pets/Fido", "/pets/fido", and "/pets/fido/" are all different)
+    app.enable('case sensitive routing');
+    app.enable('strict routing');
+
+    // The metadata middleware will use the Express App's case-sensitivity and strict-routing settings
+    app.use(middleware.metadata(app));
+
+    app.use(middleware.files(
+        {
+            // Override the Express App's case-sensitive and strict settings for the files middleware
+            caseSensitive: false,
+            strict: false
+        },
+        {
+            // Serve the Swagger API from "/swagger/api" instead of "/api-docs"
+            apiPath: '/swagger/api',
+
+            // Disable serving the "PetStore.yaml" file
+            rawFilesPath: false
+        }
+    ));
+
+    app.use(middleware.parseRequest(
+        // The parseRequest middleware will use the Express App's
+        // case-sensitivity and strict-routing settings when parsing path parameters
+        app,
+        {
             // Configure the cookie parser to use secure cookies
             cookie: {
                 secret: 'MySuperSecureSecretKey'
@@ -43,20 +69,46 @@ middleware('PetStore.yaml', app, function(err, middleware) {
             multipart: {
                 dest: path.join(__dirname, 'photos')
             }
-        }),
+        }
+    ));
+
+    // These two middleware don't have any options (yet)
+    app.use(
+        middleware.CORS(),
         middleware.validateRequest()
     );
 
-    // Allow pets to be renamed
+    // Add custom middleware
     app.patch('/pets/:petName', function(req, res, next) {
-        // TODO: Delete the old pet resource
-        next();
+        if (req.body.name !== req.path.petName) {
+            // The pet's name has changed, so change its URL.
+            // Start by deleting the old resource
+            myDB.delete(new Resource(req.path), function(err, pet) {
+                if (pet) {
+                    // Merge the new data with the old data
+                    pet.merge(req.body);
+                }
+                else {
+                    pet = req.body;
+                }
+
+                // Save the pet with the new URL
+                myDB.save(new Resource('/pets', req.body.name, pet), function(err, pet) {
+                    // Send the response
+                    res.json(pet.data);
+                })
+            });
+        }
+        else {
+            next();
+        }
     });
 
-    // Add the Mock middleware last, and use our custom data store
-    app.use(middleware.mock(myDB));
+    // The mock middleware will use the Express App's case-sensitivity and strict-routing settings.
+    // It will also use our custom data store, which is already pre-populated with mock data
+    app.use(middleware.mock(app, myDB));
 
-    // Custom error handler that returns errors as HTML
+    // Add a custom error handler that returns errors as HTML
     app.use(function(err, req, res, next) {
         res.status(err.status);
         res.type('html');
