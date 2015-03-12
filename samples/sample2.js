@@ -96,7 +96,7 @@ middleware('PetStore.yaml', function(err, middleware) {
                 myDB.save(new Resource('/pets', req.body.name, pet), function(err, pet) {
                     // Send the response
                     res.json(pet.data);
-                })
+                });
             });
         }
         else {
