@@ -1,6 +1,9 @@
-Swagger Express Middleware
-============================
+| Documentation In Progress |
+|---------------------------|
+| Please bear with me.  I'm writing the documentation as quickly as I can.  Check back soon
 
+Swagger Express Middleware
+===========================
 
 Sample 2 Walkthrough
 --------------------------

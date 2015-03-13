@@ -30,7 +30,7 @@ If you're already familiar with Express.js, then the next few lines should be pr
 
 
 ### Middleware initialization
-The next few lines of code are where we really start working with Swagger Express Middleware.  The first line initializes the middleware by loading the [PetStore.yaml](../../samples/PetStore.yaml) file.  For more details about this line, see the [documentation](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/README.md).
+The next few lines of code are where we really start working with Swagger Express Middleware.  The first line initializes the middleware by loading the [PetStore.yaml](../../samples/PetStore.yaml) file.  For more details about this line, see the [createMiddleware function](../exports/createMiddleware.md) documentation.
 
 ````javascript
 middleware('PetStore.yaml', app, function(err, middleware) {
@@ -51,7 +51,7 @@ app.use(
 );
 ````
 
-As the comment says, you don't have to add _all_ of the Swagger middleware modules to your app.  You can choose just the ones you need, but you'll need to check the [documentation](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/README.md) because some of the middleware modules require other modules.  Also, many of the middleware modules have optional settings that you can use to customize their behavior.  Those are also covered in the documentation.
+As the comment says, you don't have to add _all_ of the Swagger middleware modules to your app.  You can choose just the ones you need, but you'll need to check the [documentation](../middleware/) because some of the middleware modules require other modules.  Also, many of the middleware modules have optional settings that you can use to customize their behavior.  Those are also covered in the documentation.
 
 
 ### Starting the server

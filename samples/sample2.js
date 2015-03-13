@@ -10,13 +10,15 @@ process.env.DEBUG = 'swagger:*';
 var util            = require('util'),
     path            = require('path'),
     express         = require('express'),
-    middleware      = require('swagger-express-middleware'),
-    MemoryDataStore = middleware.MemoryDataStore,  // NOTE: There's also a FileDataStore class
-    Resource        = middleware.Resource;
+    swagger         = require('swagger-express-middleware'),
+    Middleware      = swagger.Middleware,
+    MemoryDataStore = swagger.MemoryDataStore,
+    Resource        = swagger.Resource;
 
 var app = express();
+var middleware = new Middleware(app);
 
-middleware('PetStore.yaml', function(err, middleware) {
+middleware.init('PetStore.yaml', function(err, middleware) {
     // Create a custom data store with some initial mock data
     var myDB = new MemoryDataStore();
     myDB.save(
@@ -32,12 +34,11 @@ middleware('PetStore.yaml', function(err, middleware) {
     app.enable('case sensitive routing');
     app.enable('strict routing');
 
-    // The metadata middleware will use the Express App's case-sensitivity and strict-routing settings
-    app.use(middleware.metadata(app));
-
+    app.use(middleware.metadata());
     app.use(middleware.files(
         {
-            // Override the Express App's case-sensitive and strict settings for the files middleware
+            // Override the Express App's case-sensitive and strict-routing settings
+            // for the Files middleware.
             caseSensitive: false,
             strict: false
         },
@@ -51,9 +52,6 @@ middleware('PetStore.yaml', function(err, middleware) {
     ));
 
     app.use(middleware.parseRequest(
-        // The parseRequest middleware will use the Express App's
-        // case-sensitivity and strict-routing settings when parsing path parameters
-        app,
         {
             // Configure the cookie parser to use secure cookies
             cookie: {
@@ -104,9 +102,9 @@ middleware('PetStore.yaml', function(err, middleware) {
         }
     });
 
-    // The mock middleware will use the Express App's case-sensitivity and strict-routing settings.
-    // It will also use our custom data store, which is already pre-populated with mock data
-    app.use(middleware.mock(app, myDB));
+    // The mock middleware will use our custom data store, 
+    // which we already pre-populated with mock data
+    app.use(middleware.mock(myDB));
 
     // Add a custom error handler that returns errors as HTML
     app.use(function(err, req, res, next) {
