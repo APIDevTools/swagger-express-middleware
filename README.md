@@ -17,7 +17,7 @@ Features
 Swagger Express Middleware uses [Swagger-Parser](https://github.com/BigstickCarpet/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers. 
 
 * __Thoroughly tested__<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Every version of Swagger Express Middleware is tested across the past 3 versions of Node on Mac, Linux, and Windows.
+Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 public Google APIs](https://github.com/APIs-guru/api-models/tree/master/google).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node.
 
 * __[Mock middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/mock.md)__<br>
 __Fully-functional mock__ implementations for every operation in your API definition, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
