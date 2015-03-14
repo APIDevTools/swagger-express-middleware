@@ -23,15 +23,15 @@ module.exports = {
 
         var middleware = env.swagger(api, function(err) {
             if (err) done(err);
+
+            var supertest = env.supertest(express).post('/api/test');
+            if (value !== undefined) {
+                supertest.set(schema.name, value);
+            }
+            supertest.end(env.checkSpyResults(done));
         });
 
         var express = env.express(middleware.metadata(), middleware.parseRequest());
-
-        var supertest = env.supertest(express).post('/api/test');
-        if (value !== undefined) {
-            supertest.set(schema.name, value);
-        }
-        supertest.end(env.checkSpyResults(done));
 
         return express;
     }

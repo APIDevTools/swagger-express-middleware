@@ -1,19 +1,16 @@
-var env = require('../test-environment');
-var api, middleware, express, supertest, dataStore;
+var env    = require('../test-environment'),
+    helper = require('./test-helper');
 
 describe('Edit Collection Mock', function() {
     ['post', 'patch', 'put'].forEach(function(method) {
         describe(method.toUpperCase(), function() {
             'use strict';
 
+            var api;
             beforeEach(function() {
                 api = _.cloneDeep(env.parsed.petStore);
                 api.paths['/pets'][method] = api.paths['/pets'].post;
                 api.paths['/pets/{PetName}/photos'][method] = api.paths['/pets/{PetName}/photos'].post;
-            });
-
-            afterEach(function() {
-                api = middleware = express = supertest = dataStore = undefined;
             });
 
             // Modifies the "/pets" schema to allow an array of pets
@@ -25,96 +22,86 @@ describe('Edit Collection Mock', function() {
                 };
             }
 
-            function initTest(fns) {
-                express = express || env.express();
-                supertest = supertest || env.supertest(express);
-                middleware = middleware || env.swagger(api, express);
-                express.use(
-                    middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
-                    middleware.validateRequest(), fns || [], middleware.mock(dataStore)
-                );
-            }
-
             describe('Shared tests', function() {
                 it('should add a new resource to the collection',
                     function(done) {
-                        initTest();
-
-                        // Create a new pet
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(201, '')
-                            .end(env.checkResults(done, function() {
-                                // Retrieve the pet
-                                supertest
-                                    .get('/api/pets/Fido')
-                                    .expect(200, {Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            // Create a new pet
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, '')
+                                .end(env.checkResults(done, function() {
+                                    // Retrieve the pet
+                                    supertest
+                                        .get('/api/pets/Fido')
+                                        .expect(200, {Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should add multiple resources to the collection',
                     function(done) {
                         arrayify();
-                        initTest();
-
-                        // Create some new pets
-                        supertest
-                            [method]('/api/pets')
-                            .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
-                            .expect(201, '')
-                            .end(env.checkResults(done, function() {
-                                // Retrieve a pet by name
-                                supertest
-                                    .get('/api/pets/Fluffy')
-                                    .expect(200, {Name: 'Fluffy', Type: 'cat'})
-                                    .end(env.checkResults(done, function() {
-                                        // Retrieve all the pets
-                                        supertest
-                                            .get('/api/pets')
-                                            .expect(200, [
-                                                {Name: 'Fido', Type: 'dog'},
-                                                {Name: 'Fluffy', Type: 'cat'},
-                                                {Name: 'Polly', Type: 'bird'}
-                                            ])
-                                            .end(env.checkResults(done));
-                                    }));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            // Create some new pets
+                            supertest
+                                [method]('/api/pets')
+                                .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
+                                .expect(201, '')
+                                .end(env.checkResults(done, function() {
+                                    // Retrieve a pet by name
+                                    supertest
+                                        .get('/api/pets/Fluffy')
+                                        .expect(200, {Name: 'Fluffy', Type: 'cat'})
+                                        .end(env.checkResults(done, function() {
+                                            // Retrieve all the pets
+                                            supertest
+                                                .get('/api/pets')
+                                                .expect(200, [
+                                                    {Name: 'Fido', Type: 'dog'},
+                                                    {Name: 'Fluffy', Type: 'cat'},
+                                                    {Name: 'Polly', Type: 'bird'}
+                                                ])
+                                                .end(env.checkResults(done));
+                                        }));
+                                }));
+                        });
                     }
                 );
 
                 it('should add zero resources to the collection',
                     function(done) {
                         arrayify();
-                        initTest();
-
-                        // Save zero pets
-                        supertest
-                            [method]('/api/pets')
-                            .send([])
-                            .expect(201, '')
-                            .end(env.checkResults(done, function() {
-                                // Retrieve all the pets (empty array)
-                                supertest
-                                    .get('/api/pets')
-                                    .expect(200, [])
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            // Save zero pets
+                            supertest
+                                [method]('/api/pets')
+                                .send([])
+                                .expect(201, '')
+                                .end(env.checkResults(done, function() {
+                                    // Retrieve all the pets (empty array)
+                                    supertest
+                                        .get('/api/pets')
+                                        .expect(200, [])
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should not return data if not specified in the Swagger API',
                     function(done) {
                         delete api.paths['/pets'][method].responses[201].schema;
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(201, '')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, '')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -122,16 +109,16 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets')
-                                .send({Name: 'Fido', Type: 'dog'})
-                                .expect(201, {Name: 'Fido', Type: 'dog'})
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send({Name: 'Fido', Type: 'dog'})
+                                    .expect(201, {Name: 'Fido', Type: 'dog'})
+                                    .end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -141,16 +128,16 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
                         arrayify();
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets')
-                                .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
-                                .expect(201, {Name: 'Fido', Type: 'dog'})
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
+                                    .expect(201, {Name: 'Fido', Type: 'dog'})
+                                    .end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -159,16 +146,16 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets')
-                                .send({Name: 'Fido', Type: 'dog'})
-                                .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}])
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send({Name: 'Fido', Type: 'dog'})
+                                    .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}])
+                                    .end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -178,74 +165,74 @@ describe('Edit Collection Mock', function() {
                         arrayify();
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets')
-                                .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
-                                .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
+                                    .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
+                                    .end(env.checkResults(done));
+                            });
                         });
                     }
                 );
 
                 it('should set the "Location" HTTP header to new resource\'s URL',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(201, '')
-                            .expect('Location', '/api/pets/Fido')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, '')
+                                .expect('Location', '/api/pets/Fido')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
                 it('should set the "Location" HTTP header to the collection URL',
                     function(done) {
                         arrayify();
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
-                            .expect(201, '')
-                            .expect('Location', '/api/pets')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
+                                .expect(201, '')
+                                .expect('Location', '/api/pets')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
                 it('should set the "Location" HTTP header to the collection URL, even though it\'s empty',
                     function(done) {
                         arrayify();
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send([])
-                            .expect(201, '')
-                            .expect('Location', '/api/pets')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send([])
+                                .expect(201, '')
+                                .expect('Location', '/api/pets')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
                 it('should not set the "Location" HTTP header if not specified in the Swagger API (single object)',
                     function(done) {
                         delete api.paths['/pets'][method].responses[201].headers;
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(201, '')
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).to.be.undefined;
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, '')
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).to.be.undefined;
+                                    done();
+                                }));
+                        });
                     }
                 );
 
@@ -253,16 +240,16 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         delete api.paths['/pets'][method].responses[201].headers;
                         arrayify();
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
-                            .expect(201, '')
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).to.be.undefined;
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
+                                .expect(201, '')
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).to.be.undefined;
+                                    done();
+                                }));
+                        });
                     }
                 );
 
@@ -270,58 +257,60 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
 
-                        initTest(function(req, res, next) {
+                        function messWithTheBody(req, res, next) {
                             res.body = {message: 'Not the response you expected'};
                             next();
-                        });
+                        }
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(201, {message: 'Not the response you expected'})
-                            .end(env.checkResults(done));
+                        helper.initTest(messWithTheBody, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, {message: 'Not the response you expected'})
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
                 it('should return a 500 error if a DataStore open error occurs',
                     function(done) {
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         dataStore.__openDataStore = function(collection, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(500)
-                            .end(function(err, res) {
-                                if (err) return done(err);
-                                expect(res.text).to.contain('Error: Test Error');
-                                done();
-                            });
+                        helper.initTest(dataStore, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(500)
+                                .end(function(err, res) {
+                                    if (err) return done(err);
+                                    expect(res.text).to.contain('Error: Test Error');
+                                    done();
+                                });
+                        });
                     }
                 );
 
                 it('should return a 500 error if a DataStore update error occurs',
                     function(done) {
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         dataStore.__saveDataStore = function(collection, data, callback) {
                             setImmediate(callback, new Error('Test Error'));
                         };
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect(500)
-                            .end(function(err, res) {
-                                if (err) return done(err);
-                                expect(res.text).to.contain('Error: Test Error');
-                                done();
-                            });
+                        helper.initTest(dataStore, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(500)
+                                .end(function(err, res) {
+                                    if (err) return done(err);
+                                    expect(res.text).to.contain('Error: Test Error');
+                                    done();
+                                });
+                        });
                     }
                 );
             });
@@ -333,15 +322,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'string'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send('I am Fido')
-                            .expect(201, 'I am Fido')
-                            .expect('Location', '/api/pets/I%20am%20Fido')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send('I am Fido')
+                                .expect(201, 'I am Fido')
+                                .expect('Location', '/api/pets/I%20am%20Fido')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -351,15 +340,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'string'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send('')
-                            .expect(201, '')
-                            .expect('Location', '/api/pets/')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send('')
+                                .expect(201, '')
+                                .expect('Location', '/api/pets/')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -371,28 +360,28 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
                         api.paths['/pets/{PetName}'].get.produces = ['text/plain'];
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            var veryLongString = _.repeat('abcdefghijklmnopqrstuvwxyz', 5000);
 
-                        var veryLongString = _.repeat('abcdefghijklmnopqrstuvwxyz', 5000);
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send(veryLongString)
 
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send(veryLongString)
+                                // The full value should be returned
+                                .expect(201, veryLongString)
 
-                            // The full value should be returned
-                            .expect(201, veryLongString)
+                                // The resource URL should be truncated to 2000 characters, for compatibility with some browsers
+                                .expect('Location', '/api/pets/' + veryLongString.substring(0, 2000))
+                                .end(env.checkResults(done, function(res) {
 
-                            // The resource URL should be truncated to 2000 characters, for compatibility with some browsers
-                            .expect('Location', '/api/pets/' + veryLongString.substring(0, 2000))
-                            .end(env.checkResults(done, function(res) {
-
-                                // Verify that the full value was stored
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200, veryLongString)
-                                    .end(env.checkResults(done));
-                            }));
+                                    // Verify that the full value was stored
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200, veryLongString)
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -402,15 +391,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'number'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send('42.999')
-                            .expect(201, '42.999')
-                            .expect('Location', '/api/pets/42.999')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send('42.999')
+                                .expect(201, '42.999')
+                                .expect('Location', '/api/pets/42.999')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -420,15 +409,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'string', format: 'date'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send('2000-01-02')
-                            .expect(201, '2000-01-02')
-                            .expect('Location', '/api/pets/2000-01-02')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send('2000-01-02')
+                                .expect(201, '2000-01-02')
+                                .expect('Location', '/api/pets/2000-01-02')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -438,15 +427,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'string', format: 'date-time'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send('2000-01-02T03:04:05.006Z')
-                            .expect(201, '2000-01-02T03:04:05.006Z')
-                            .expect('Location', '/api/pets/2000-01-02T03%3A04%3A05.006Z')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send('2000-01-02T03:04:05.006Z')
+                                .expect(201, '2000-01-02T03:04:05.006Z')
+                                .expect('Location', '/api/pets/2000-01-02T03%3A04%3A05.006Z')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -456,15 +445,15 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'string'};
                         api.paths['/pets'][method].consumes = ['text/plain'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .send(new Buffer('hello world').toString())
-                            .expect(201, 'hello world')
-                            .expect('Location', '/api/pets/hello%20world')
-                            .end(env.checkResults(done));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .send(new Buffer('hello world').toString())
+                                .expect(201, 'hello world')
+                                .expect('Location', '/api/pets/hello%20world')
+                                .end(env.checkResults(done));
+                        });
                     }
                 );
 
@@ -474,22 +463,22 @@ describe('Edit Collection Mock', function() {
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
                         api.paths['/pets'][method].consumes = ['application/octet-stream'];
                         api.paths['/pets'][method].produces = ['text/plain'];
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'application/octet-stream')
-                            .send(new Buffer('hello world').toString())
-                            .expect(201, {
-                                type: 'Buffer',
-                                data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
-                            })
-                            .end(env.checkResults(done, function(res) {
-                                // The "Location" header should be set to an auto-generated value,
-                                // since a Buffer has no "name" field
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'application/octet-stream')
+                                .send(new Buffer('hello world').toString())
+                                .expect(201, {
+                                    type: 'Buffer',
+                                    data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+                                })
+                                .end(env.checkResults(done, function(res) {
+                                    // The "Location" header should be set to an auto-generated value,
+                                    // since a Buffer has no "name" field
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
+                                    done();
+                                }));
+                        });
                     }
                 );
 
@@ -499,71 +488,71 @@ describe('Edit Collection Mock', function() {
                         petParam.schema = {type: 'object'};
                         petParam.required = false;
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .set('Content-Type', 'text/plain')
-                            .expect(201, '')
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .set('Content-Type', 'text/plain')
+                                .expect(201, '')
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
+                                    done();
+                                }));
+                        });
                     }
                 );
 
                 it('should support multipart/form-data',
                     function(done) {
                         api.paths['/pets/{PetName}/photos'][method].responses[201].schema = {type: 'object'};
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.oneMB)
-                            .expect(201)
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
-                                expect(res.body).to.deep.equal({
-                                    ID: res.body.ID,
-                                    Label: 'Photo 1',
-                                    Description: 'A photo of Fido',
-                                    Photo: {
-                                        fieldname: 'Photo',
-                                        originalname: '1MB.jpg',
-                                        name: res.body.Photo.name,
-                                        encoding: '7bit',
-                                        mimetype: 'image/jpeg',
-                                        path: res.body.Photo.path,
-                                        extension: 'jpg',
-                                        size: 683709,
-                                        truncated: false,
-                                        buffer: null
-                                    }
-                                });
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.oneMB)
+                                .expect(201)
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
+                                    expect(res.body).to.deep.equal({
+                                        ID: res.body.ID,
+                                        Label: 'Photo 1',
+                                        Description: 'A photo of Fido',
+                                        Photo: {
+                                            fieldname: 'Photo',
+                                            originalname: '1MB.jpg',
+                                            name: res.body.Photo.name,
+                                            encoding: '7bit',
+                                            mimetype: 'image/jpeg',
+                                            path: res.body.Photo.path,
+                                            extension: 'jpg',
+                                            size: 683709,
+                                            truncated: false,
+                                            buffer: null
+                                        }
+                                    });
+                                    done();
+                                }));
+                        });
                     }
                 );
 
                 it('should support files',
                     function(done) {
                         api.paths['/pets/{PetName}/photos'][method].responses[201].schema = {type: 'file'};
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.oneMB)
-                            .expect(201)
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
-                                expect(res.body).to.be.an.instanceOf(Buffer);
-                                expect(res.body.length).to.equal(683709);
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.oneMB)
+                                .expect(201)
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
+                                    expect(res.body).to.be.an.instanceOf(Buffer);
+                                    expect(res.body.length).to.equal(683709);
+                                    done();
+                                }));
+                        });
                     }
                 );
             });
@@ -571,18 +560,18 @@ describe('Edit Collection Mock', function() {
             describe('Determining resource names (by property names)', function() {
                 it('should determine the resource name from "Name" properties in its schema',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/Fido')
-                            .end(env.checkResults(done, function() {
-                                supertest
-                                    .get('/api/pets/Fido')
-                                    .expect(200, {Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/Fido')
+                                .end(env.checkResults(done, function() {
+                                    supertest
+                                        .get('/api/pets/Fido')
+                                        .expect(200, {Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -590,43 +579,43 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         var schemaProps = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema.properties;
                         schemaProps.ID = {type: 'integer'};
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .end(env.checkResults(done, function(res) {
+                                    // An "ID" property should have been generated and used for the "Location" header
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .end(env.checkResults(done, function(res) {
-                                // An "ID" property should have been generated and used for the "Location" header
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
+                                    // Extract the ID from the "Location" HTTP header
+                                    var petID = parseInt(res.headers.location.match(/\d+$/)[0]);
+                                    expect(petID).not.to.satisfy(isNaN);
+                                    expect(petID).to.satisfy(isFinite);
 
-                                // Extract the ID from the "Location" HTTP header
-                                var petID = parseInt(res.headers.location.match(/\d+$/)[0]);
-                                expect(petID).not.to.satisfy(isNaN);
-                                expect(petID).to.satisfy(isFinite);
-
-                                // Verify that the ID property was set on the object
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                                    // Verify that the ID property was set on the object
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should determine the resource name from "Name" properties in its data, even if they\'re not in the schema',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({ID: 12345, Name: 'Fido', Type: 'dog'})   // <--- "ID" is not in the schema. "Name" is.
-                            .expect('Location', '/api/pets/12345')          // <--- "ID" is used instead of "Name"
-                            .end(env.checkResults(done, function() {
-                                supertest
-                                    .get('/api/pets/12345')
-                                    .expect(200, {ID: 12345, Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({ID: 12345, Name: 'Fido', Type: 'dog'})   // <--- "ID" is not in the schema. "Name" is.
+                                .expect('Location', '/api/pets/12345')          // <--- "ID" is used instead of "Name"
+                                .end(env.checkResults(done, function() {
+                                    supertest
+                                        .get('/api/pets/12345')
+                                        .expect(200, {ID: 12345, Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -634,26 +623,26 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         var schemaProps = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema.properties;
                         schemaProps.ID = {type: 'string', format: 'byte'};
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .end(env.checkResults(done, function(res) {
+                                    // An "ID" property should have been generated and used for the "Location" header
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d{1,3}$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .end(env.checkResults(done, function(res) {
-                                // An "ID" property should have been generated and used for the "Location" header
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d{1,3}$/);
+                                    // Extract the ID from the "Location" HTTP header
+                                    var petID = parseInt(res.headers.location.match(/\d+$/)[0]);
+                                    expect(petID).not.to.satisfy(isNaN);
+                                    expect(petID).to.satisfy(isFinite);
 
-                                // Extract the ID from the "Location" HTTP header
-                                var petID = parseInt(res.headers.location.match(/\d+$/)[0]);
-                                expect(petID).not.to.satisfy(isNaN);
-                                expect(petID).to.satisfy(isFinite);
-
-                                // Verify that the ID property was set on the object
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                                    // Verify that the ID property was set on the object
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -661,41 +650,41 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         var schemaProps = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema.properties;
                         schemaProps.ID = {type: 'boolean'};
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .end(env.checkResults(done, function(res) {
+                                    // An "ID" property should have been generated and used for the "Location" header
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/(true|false)$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .end(env.checkResults(done, function(res) {
-                                // An "ID" property should have been generated and used for the "Location" header
-                                expect(res.headers.location).to.match(/^\/api\/pets\/(true|false)$/);
+                                    // Extract the ID from the "Location" HTTP header
+                                    var petID = res.headers.location.match(/(true|false)$/)[0] === 'true';
 
-                                // Extract the ID from the "Location" HTTP header
-                                var petID = res.headers.location.match(/(true|false)$/)[0] === 'true';
-
-                                // Verify that the ID property was set on the object
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                                    // Verify that the ID property was set on the object
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should use a "boolean" property in the data as the resource name',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({ID: false, Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/false')
-                            .end(env.checkResults(done, function() {
-                                supertest
-                                    .get('/api/pets/false')
-                                    .expect(200, {ID: false, Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({ID: false, Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/false')
+                                .end(env.checkResults(done, function() {
+                                    supertest
+                                        .get('/api/pets/false')
+                                        .expect(200, {ID: false, Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -708,18 +697,18 @@ describe('Edit Collection Mock', function() {
                         };
                         api.paths['/pets/{PetName}'].get.responses[200].schema.properties = schemaProps;
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/2005-11-09')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/2005-11-09')
-                                    .expect(200, {Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/2005-11-09')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/2005-11-09')
+                                        .expect(200, {Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -731,57 +720,59 @@ describe('Edit Collection Mock', function() {
                             format: 'date-time'
                         };
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/2005-11-09T08%3A07%3A06.005Z')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/2005-11-09T08%3A07%3A06.005Z')
-                                    .expect(200, {key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/2005-11-09T08%3A07%3A06.005Z')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/2005-11-09T08%3A07%3A06.005Z')
+                                        .expect(200, {key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should use a Date property in the data as the resource name',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({code: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)), Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
-                            .end(env.checkResults(done, function() {
-                                supertest
-                                    .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
-                                    .expect(200, {code: '2000-02-02T03:04:05.006Z', Name: 'Fido', Type: 'dog'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({code: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)), Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                                .end(env.checkResults(done, function() {
+                                    supertest
+                                        .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                                        .expect(200, {code: '2000-02-02T03:04:05.006Z', Name: 'Fido', Type: 'dog'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
                 it('should use a Date property that was added by other middleware as the resource name',
                     function(done) {
-                        initTest(function(req, res, next) {
+                        function messWithTheBody(req, res, next) {
                             if (req.method === method.toUpperCase()) {
                                 req.body.Id = new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6));
                             }
                             next();
-                        });
+                        }
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Name: 'Fido', Type: 'dog'})
-                            .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
-                                    .expect(200, {Name: 'Fido', Type: 'dog', Id: '2000-02-02T03:04:05.006Z'})
-                                    .end(env.checkResults(done));
-                            }));
+                        helper.initTest(messWithTheBody, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                                        .expect(200, {Name: 'Fido', Type: 'dog', Id: '2000-02-02T03:04:05.006Z'})
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
 
@@ -792,21 +783,21 @@ describe('Edit Collection Mock', function() {
                         petParam.schema.required = ['Name'];
                         api.paths['/pets'].get.responses[200].schema.items = petParam.schema;
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'})   // <-- Neither "ID" nor "Name" is a valid resource name
+                                .end(env.checkResults(done, function(res) {
+                                    // A resource name was auto-generated, since ID and Name weren't valid
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'})   // <-- Neither "ID" nor "Name" is a valid resource name
-                            .end(env.checkResults(done, function(res) {
-                                // A resource name was auto-generated, since ID and Name weren't valid
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
-
-                                // Verify that the object remained unchanged
-                                supertest
-                                    .get('/api/pets')
-                                    .expect(200, [{ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'}])
-                                    .end(env.checkResults(done));
-                            }));
+                                    // Verify that the object remained unchanged
+                                    supertest
+                                        .get('/api/pets')
+                                        .expect(200, [{ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'}])
+                                        .end(env.checkResults(done));
+                                }));
+                        });
                     }
                 );
             });
@@ -815,23 +806,23 @@ describe('Edit Collection Mock', function() {
                 it('should use the first required property as the resource name',
                     function(done) {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .attach('Photo', env.files.oneMB)
-                            .expect('Location', '/api/pets/Fido/photos/Photo%201')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/Fido/photos/Photo%201')
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.be.an.instanceOf(Buffer);
-                                        expect(res.body.length).to.equal(683709);
-                                        done();
-                                    }));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .attach('Photo', env.files.oneMB)
+                                .expect('Location', '/api/pets/Fido/photos/Photo%201')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/Fido/photos/Photo%201')
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.be.an.instanceOf(Buffer);
+                                            expect(res.body.length).to.equal(683709);
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -844,23 +835,23 @@ describe('Edit Collection Mock', function() {
                             type: 'string'
                         };
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'a, b, c')
-                            .attach('Photo', env.files.oneMB)
-                            .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/Fido/photos/1MB.jpg')
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.be.an.instanceOf(Buffer);
-                                        expect(res.body.length).to.equal(683709);
-                                        done();
-                                    }));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'a, b, c')
+                                .attach('Photo', env.files.oneMB)
+                                .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/Fido/photos/1MB.jpg')
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.be.an.instanceOf(Buffer);
+                                            expect(res.body.length).to.equal(683709);
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
             });
@@ -871,23 +862,23 @@ describe('Edit Collection Mock', function() {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
                         _.find(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'Label'}).required = false;
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .attach('Photo', env.files.oneMB)
-                            .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
-                            .end(env.checkResults(done, function(res) {
-                                supertest
-                                    .get('/api/pets/Fido/photos/1MB.jpg')
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.be.an.instanceOf(Buffer);
-                                        expect(res.body.length).to.equal(683709);
-                                        done();
-                                    }));
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .attach('Photo', env.files.oneMB)
+                                .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
+                                .end(env.checkResults(done, function(res) {
+                                    supertest
+                                        .get('/api/pets/Fido/photos/1MB.jpg')
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.be.an.instanceOf(Buffer);
+                                            expect(res.body.length).to.equal(683709);
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -896,31 +887,33 @@ describe('Edit Collection Mock', function() {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
                         _.find(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'Label'}).required = false;
 
-                        initTest(function(req, res, next) {
+                        function messWithTheBody(req, res, next) {
                             if (req.method === method.toUpperCase()) {
                                 // Mimic the filename not being included in the Content-Disposition header
                                 req.files.Photo.originalname = null;
                             }
                             next();
+                        }
+
+                        helper.initTest(messWithTheBody, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .attach('Photo', env.files.oneMB)
+                                .end(env.checkResults(done, function(res) {
+                                    expect(res.headers.location).not.to.equal('/api/pets/Fido/photos/1MB.jpg');
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\w+\.jpg$/);
+
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.be.an.instanceOf(Buffer);
+                                            expect(res.body.length).to.equal(683709);
+                                            done();
+                                        }));
+                                }));
                         });
-
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .attach('Photo', env.files.oneMB)
-                            .end(env.checkResults(done, function(res) {
-                                expect(res.headers.location).not.to.equal('/api/pets/Fido/photos/1MB.jpg');
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\w+\.jpg$/);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.be.an.instanceOf(Buffer);
-                                        expect(res.body.length).to.equal(683709);
-                                        done();
-                                    }));
-                            }));
                     }
                 );
 
@@ -931,20 +924,20 @@ describe('Edit Collection Mock', function() {
                         _.find(params, {name: 'Label'}).required = false;
                         _.find(params, {name: 'Photo'}).required = false;
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .end(env.checkResults(done, function(res) {
+                                    // A resource name was auto-generated, since no file was uploaded
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .end(env.checkResults(done, function(res) {
-                                // A resource name was auto-generated, since no file was uploaded
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(410)
-                                    .end(done);
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(410)
+                                        .end(done);
+                                }));
+                        });
                     }
                 );
 
@@ -956,20 +949,20 @@ describe('Edit Collection Mock', function() {
                         _.find(params, {name: 'Photo'}).required = false;
                         api.paths['/pets/{PetName}/photos'][method].consumes = ['text/plain'];
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .set('Content-Type', 'text/plain')
+                                .end(env.checkResults(done, function(res) {
+                                    // A resource name was auto-generated, since no file was uploaded
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .set('Content-Type', 'text/plain')
-                            .end(env.checkResults(done, function(res) {
-                                // A resource name was auto-generated, since no file was uploaded
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(410)
-                                    .end(done);
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(410)
+                                        .end(done);
+                                }));
+                        });
                     }
                 );
 
@@ -986,25 +979,25 @@ describe('Edit Collection Mock', function() {
                             type: 'file'
                         });
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .attach('Photo2', env.files.oneMB)       // <--- Only sending one file.  But there are 2 file params
+                                .end(env.checkResults(done, function(res) {
+                                    // A resource name was auto-generated, since there are multiple file params
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .attach('Photo2', env.files.oneMB)       // <--- Only sending one file.  But there are 2 file params
-                            .end(env.checkResults(done, function(res) {
-                                // A resource name was auto-generated, since there are multiple file params
-                                expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\d+$/);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.be.an.instanceOf(Buffer);
-                                        expect(res.body.length).to.equal(683709);
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.be.an.instanceOf(Buffer);
+                                            expect(res.body.length).to.equal(683709);
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
             });
@@ -1015,17 +1008,17 @@ describe('Edit Collection Mock', function() {
                         // The schema is an empty object (no "name" properties)
                         _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema = {type: 'object'};
                         api.paths['/pets'][method].responses[201].schema = {type: 'object'};
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({age: 42, dob: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6))})  // <--- No "name" properties
-                            .expect(201, {age: 42, dob: '2000-02-02T03:04:05.006Z'})
-                            .end(env.checkResults(done, function(res) {
-                                // The "Location" header should be set to an auto-generated value
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({age: 42, dob: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6))})  // <--- No "name" properties
+                                .expect(201, {age: 42, dob: '2000-02-02T03:04:05.006Z'})
+                                .end(env.checkResults(done, function(res) {
+                                    // The "Location" header should be set to an auto-generated value
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
+                                    done();
+                                }));
+                        });
                     }
                 );
 
@@ -1035,30 +1028,30 @@ describe('Edit Collection Mock', function() {
                         var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
                         petParam.schema.required = [];
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" should have been generated, and used as the resource's URL
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" should have been generated, and used as the resource's URL
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
+                                    // Extract the pet's Name from the "Location" header
+                                    var petName = res.headers.location.match(/([^\/]+)$/)[0];
 
-                                // Extract the pet's Name from the "Location" header
-                                var petName = res.headers.location.match(/([^\/]+)$/)[0];
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.deep.equal({
-                                            Type: 'dog',
-                                            Age: 4,
-                                            Name: petName
-                                        });
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.deep.equal({
+                                                Type: 'dog',
+                                                Age: 4,
+                                                Name: petName
+                                            });
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -1067,27 +1060,27 @@ describe('Edit Collection Mock', function() {
                         // Make all data optional
                         var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
                         petParam.required = false;
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')      // <--- No data was sent at all
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" should have been generated, and used as the resource's URL
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
 
-                        supertest
-                            [method]('/api/pets')      // <--- No data was sent at all
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" should have been generated, and used as the resource's URL
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
+                                    // Extract the pet's Name from the "Location" header
+                                    var petName = res.headers.location.match(/([^\/]+)$/)[0];
 
-                                // Extract the pet's Name from the "Location" header
-                                var petName = res.headers.location.match(/([^\/]+)$/)[0];
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.deep.equal({
-                                            Name: petName   // <--- A "Name" property was generated and added to an empty object
-                                        });
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.deep.equal({
+                                                Name: petName   // <--- A "Name" property was generated and added to an empty object
+                                            });
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -1099,33 +1092,33 @@ describe('Edit Collection Mock', function() {
                         petParam.schema.properties.Name.type = 'integer';
                         api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" should have been generated, and used as the resource's URL
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" should have been generated, and used as the resource's URL
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
+                                    // Extract the pet's Name from the "Location" header
+                                    var petNameAsString = res.headers.location.match(/([^\/]+)$/)[0];
+                                    var petNameAsInteger = parseInt(petNameAsString);
+                                    expect(petNameAsInteger).not.to.satisfy(isNaN);
+                                    expect(petNameAsInteger).to.satisfy(isFinite);
 
-                                // Extract the pet's Name from the "Location" header
-                                var petNameAsString = res.headers.location.match(/([^\/]+)$/)[0];
-                                var petNameAsInteger = parseInt(petNameAsString);
-                                expect(petNameAsInteger).not.to.satisfy(isNaN);
-                                expect(petNameAsInteger).to.satisfy(isFinite);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.deep.equal({
-                                            Type: 'dog',
-                                            Age: 4,
-                                            Name: petNameAsInteger
-                                        });
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.deep.equal({
+                                                Type: 'dog',
+                                                Age: 4,
+                                                Name: petNameAsInteger
+                                            });
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -1138,33 +1131,33 @@ describe('Edit Collection Mock', function() {
                         petParam.schema.properties.Name.format = 'date';
                         api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" should have been generated, and used as the resource's URL
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d{4}-\d\d-\d\d$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" should have been generated, and used as the resource's URL
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d{4}-\d\d-\d\d$/);
+                                    // Extract the pet's Name from the "Location" header
+                                    var petNameAsString = res.headers.location.match(/([^\/]+)$/)[0];
+                                    var petNameAsDate = new Date(petNameAsString);
+                                    expect(petNameAsDate.valueOf()).not.to.satisfy(isNaN);
+                                    expect(petNameAsDate.valueOf()).to.satisfy(isFinite);
 
-                                // Extract the pet's Name from the "Location" header
-                                var petNameAsString = res.headers.location.match(/([^\/]+)$/)[0];
-                                var petNameAsDate = new Date(petNameAsString);
-                                expect(petNameAsDate.valueOf()).not.to.satisfy(isNaN);
-                                expect(petNameAsDate.valueOf()).to.satisfy(isFinite);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.deep.equal({
-                                            Type: 'dog',
-                                            Age: 4,
-                                            Name: petNameAsString
-                                        });
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.deep.equal({
+                                                Type: 'dog',
+                                                Age: 4,
+                                                Name: petNameAsString
+                                            });
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -1177,33 +1170,33 @@ describe('Edit Collection Mock', function() {
                         petParam.schema.properties.Name.format = 'date-time';
                         api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
 
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" should have been generated, and used as the resource's URL
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d{4}-\d\d-\d\dT\d\d\%3A\d\d\%3A\d\d\.\d\d\dZ$/);
 
-                        supertest
-                            [method]('/api/pets')
-                            .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" should have been generated, and used as the resource's URL
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d{4}-\d\d-\d\dT\d\d\%3A\d\d\%3A\d\d\.\d\d\dZ$/);
+                                    // Extract the pet's Name from the "Location" header
+                                    var petNameAsString = decodeURIComponent(res.headers.location.match(/([^\/]+)$/)[0]);
+                                    var petNameAsDate = new Date(petNameAsString);
+                                    expect(petNameAsDate.valueOf()).not.to.satisfy(isNaN);
+                                    expect(petNameAsDate.valueOf()).to.satisfy(isFinite);
 
-                                // Extract the pet's Name from the "Location" header
-                                var petNameAsString = decodeURIComponent(res.headers.location.match(/([^\/]+)$/)[0]);
-                                var petNameAsDate = new Date(petNameAsString);
-                                expect(petNameAsDate.valueOf()).not.to.satisfy(isNaN);
-                                expect(petNameAsDate.valueOf()).to.satisfy(isFinite);
-
-                                supertest
-                                    .get(res.headers.location)
-                                    .expect(200)
-                                    .end(env.checkResults(done, function(res) {
-                                        expect(res.body).to.deep.equal({
-                                            Type: 'dog',
-                                            Age: 4,
-                                            Name: petNameAsString
-                                        });
-                                        done();
-                                    }));
-                            }));
+                                    supertest
+                                        .get(res.headers.location)
+                                        .expect(200)
+                                        .end(env.checkResults(done, function(res) {
+                                            expect(res.body).to.deep.equal({
+                                                Type: 'dog',
+                                                Age: 4,
+                                                Name: petNameAsString
+                                            });
+                                            done();
+                                        }));
+                                }));
+                        });
                     }
                 );
 
@@ -1215,20 +1208,21 @@ describe('Edit Collection Mock', function() {
                         petParam.schema.properties.Name.type = 'array';
                         petParam.schema.properties.Name.items = {type: 'string'};
 
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets')
-                            .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
-                            .end(env.checkResults(done, function(res) {
-                                // A "Name" property should have been auto-generated, but it should NOT be an array
-                                expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
-                                done();
-                            }));
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
+                                .end(env.checkResults(done, function(res) {
+                                    // A "Name" property should have been auto-generated, but it should NOT be an array
+                                    expect(res.headers.location).to.match(/^\/api\/pets\/\d+$/);
+                                    done();
+                                }));
+                        });
                     }
                 );
             });
         });
     });
 });
+
 

@@ -1,15 +1,17 @@
-var env = require('../test-environment');
-var util = require('../../lib/helpers/util');
-var api, middleware, express, supertest, dataStore, isHead;
+var env    = require('../test-environment'),
+    util   = require('../../lib/helpers/util'),
+    helper = require('./test-helper');
 
 describe('Query Resource Mock', function() {
     ['head', 'options', 'get'].forEach(function(method) {
         describe(method.toUpperCase(), function() {
             'use strict';
 
+            var api, noBody, noHeaders;
             beforeEach(function() {
                 api = _.cloneDeep(env.parsed.petStore);
-                isHead = method === 'head';
+                noBody = method === 'head' || method === 'options';
+                noHeaders = method === 'options';
 
                 // Change the HTTP method of GET /pets/{PetName}
                 var operation = api.paths['/pets/{PetName}'].get;
@@ -22,36 +24,20 @@ describe('Query Resource Mock', function() {
                 api.paths['/pets/{PetName}/photos/{ID}'][method] = operation;
             });
 
-            afterEach(function() {
-                api = middleware = express = supertest = dataStore = undefined;
-            });
-
-            function initTest(fns) {
-                express = express || env.express();
-                supertest = supertest || env.supertest(express);
-                middleware = middleware || env.swagger(api, express);
-                express.use(middleware.metadata());
-                if (method !== 'options') express.use(middleware.CORS());
-                express.use(
-                    middleware.parseRequest(), middleware.validateRequest(), fns || [], middleware.mock(dataStore)
-                );
-            }
-
             it('should return only the requested resource',
                 function(done) {
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var res1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
                     var res2 = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
                     var res3 = new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'});
 
                     dataStore.save(res1, res2, res3, function() {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fluffy')
-                            .expect('Content-Length', 30)
-                            .expect(200, isHead ? '' : {Name: 'Fluffy', Type: 'cat'})
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            var request = supertest[method]('/api/pets/Fluffy');
+                            noHeaders || request.expect('Content-Length', 30);
+                            request.expect(200, noBody ? '' : {Name: 'Fluffy', Type: 'cat'});
+                            request.end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -59,37 +45,37 @@ describe('Query Resource Mock', function() {
             it('should not return anything if no response schema is specified in the Swagger API',
                 function(done) {
                     delete api.paths['/pets/{PetName}'][method].responses[200].schema;
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
                     dataStore.save(resource, function() {
-                        initTest();
-
-                        supertest
-                            [method]('/api/pets/Fido')
-                            .expect(200, '')
-                            .end(env.checkResults(done, function(res) {
+                        helper.initTest(dataStore, api, function(supertest) {
+                            var request = supertest[method]('/api/pets/Fido');
+                            request.expect(200, '');
+                            request.end(env.checkResults(done, function(res) {
                                 expect(res.headers['content-length']).to.be.undefined;
                                 done();
                             }));
+                        });
                     });
                 }
             );
 
             it('should return `res.body` if already set by other middleware',
                 function(done) {
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
                     dataStore.save(resource, function() {
-                        initTest(function(req, res, next) {
+                        function messWithTheBody(req, res, next) {
                             res.body = ['Not', 'the', 'response', 'you', 'expected'];
                             next();
-                        });
+                        }
 
-                        supertest
-                            [method]('/api/pets/Fido')
-                            .expect('Content-Length', 41)
-                            .expect(200, isHead ? '' : ['Not', 'the', 'response', 'you', 'expected'])
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, messWithTheBody, api, function(supertest) {
+                            var request = supertest[method]('/api/pets/Fido');
+                            noHeaders || request.expect('Content-Length', 41);
+                            request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
+                            request.end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -99,16 +85,17 @@ describe('Query Resource Mock', function() {
                     api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
                     api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
-                    initTest(function(req, res, next) {
+                    function messWithTheBody(req, res, next) {
                         res.body = ['Not', 'the', 'response', 'you', 'expected'];
                         next();
-                    });
+                    }
 
-                    supertest
-                        [method]('/api/pets/Fido')
-                        .expect('Content-Length', 41)
-                        .expect(200, isHead ? '' : ['Not', 'the', 'response', 'you', 'expected'])
-                        .end(env.checkResults(done));
+                    helper.initTest(messWithTheBody, api, function(supertest) {
+                        var request = supertest[method]('/api/pets/Fido');
+                        noHeaders || request.expect('Content-Length', 41);
+                        request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
+                        request.end(env.checkResults(done));
+                    });
                 }
             );
 
@@ -117,13 +104,12 @@ describe('Query Resource Mock', function() {
                     api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
                     api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
-                    initTest();
-
-                    supertest
-                        [method]('/api/pets/Fido')
-                        .expect('Content-Length', 31)
-                        .expect(200, isHead ? '' : {default: 'The default value'})
-                        .end(env.checkResults(done));
+                    helper.initTest(api, function(supertest) {
+                        var request = supertest[method]('/api/pets/Fido');
+                        noHeaders || request.expect('Content-Length', 31);
+                        request.expect(200, noBody ? '' : {default: 'The default value'});
+                        request.end(env.checkResults(done));
+                    });
                 }
             );
 
@@ -132,13 +118,12 @@ describe('Query Resource Mock', function() {
                     api.paths['/pets/{PetName}'][method].responses[200].schema.default = undefined;
                     api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
-                    initTest();
-
-                    supertest
-                        [method]('/api/pets/Fido')
-                        .expect('Content-Length', 31)
-                        .expect(200, isHead ? '' : {example: 'The example value'})
-                        .end(env.checkResults(done));
+                    helper.initTest(api, function(supertest) {
+                        var request = supertest[method]('/api/pets/Fido');
+                        noHeaders || request.expect('Content-Length', 31);
+                        request.expect(200, noBody ? '' : {example: 'The example value'});
+                        request.end(env.checkResults(done));
+                    });
                 }
             );
 
@@ -148,65 +133,65 @@ describe('Query Resource Mock', function() {
                         'Last-Modified': {type: 'string'}
                     };
 
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', 'I am fido');
                     dataStore.save(resource, function() {
-                        initTest();
-
-                        // Wait 1 second, since the "Last-Modified" header is only precise to the second
-                        setTimeout(function() {
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Length', 11)
-                                .expect('Last-Modified', util.rfc1123(resource.modifiedOn))
-                                .end(env.checkResults(done));
-                        }, 1000);
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Wait 1 second, since the "Last-Modified" header is only precise to the second
+                            setTimeout(function() {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Length', 11);
+                                noHeaders || request.expect('Last-Modified', util.rfc1123(resource.modifiedOn));
+                                request.end(env.checkResults(done));
+                            }, 1000);
+                        });
                     });
                 }
             );
 
-            it('should throw a 404 if the resource does not exist',
-                function(done) {
-                    initTest();
+            if (method !== 'options') {
+                it('should throw a 404 if the resource does not exist',
+                    function(done) {
+                        helper.initTest(api, function(supertest) {
+                            var request = supertest[method]('/api/pets/Fido');
+                            request.expect(404);
+                            request.end(function(err, res) {
+                                if (err) return done(err);
 
-                    supertest
-                        [method]('/api/pets/Fido')
-                        .expect(404)
-                        .end(function(err, res) {
-                            if (err) return done(err);
-
-                            // The content-length will vary slightly, depending on the stack trace
-                            expect(res.headers['content-length']).to.match(/^\d{3,4}$/);
-                            done();
+                                // The content-length will vary slightly, depending on the stack trace
+                                expect(res.headers['content-length']).to.match(/^\d{3,4}$/);
+                                done();
+                            });
                         });
-                }
-            );
+                    }
+                );
 
-            it('should return a 500 error if a DataStore error occurs',
-                function(done) {
-                    dataStore = new env.swagger.MemoryDataStore();
-                    dataStore.__openDataStore = function(collection, callback) {
-                        setImmediate(callback, new Error('Test Error'));
-                    };
+                it('should return a 500 error if a DataStore error occurs',
+                    function(done) {
+                        var dataStore = new env.swagger.MemoryDataStore();
+                        dataStore.__openDataStore = function(collection, callback) {
+                            setImmediate(callback, new Error('Test Error'));
+                        };
 
-                    initTest();
+                        helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                request.expect(500);
+                                request.end(function(err, res) {
+                                    if (err) return done(err);
 
-                    supertest
-                        [method]('/api/pets/Fido')
-                        .expect(500)
-                        .end(function(err, res) {
-                            if (err) return done(err);
+                                    // The content-length will vary slightly, depending on the stack trace
+                                    expect(res.headers['content-length']).to.match(/^\d{4,5}$/);
 
-                            // The content-length will vary slightly, depending on the stack trace
-                            expect(res.headers['content-length']).to.match(/^\d{4,5}$/);
-
-                            if (!isHead) {
-                                expect(res.text).to.contain('Error: Test Error');
+                                    if (!noBody) {
+                                        expect(res.text).to.contain('Error: Test Error');
+                                    }
+                                    done();
+                                });
                             }
-                            done();
-                        });
-                }
-            );
+                        );
+                    }
+                );
+            }
 
             describe('different data types', function() {
                 it('should return an object',
@@ -214,17 +199,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect('Content-Length', 28)
-                                .expect(200, isHead ? '' : {Name: 'Fido', Type: 'dog'})
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 28);
+                                request.expect(200, noBody ? '' : {Name: 'Fido', Type: 'dog'});
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -234,17 +218,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'text/plain; charset=utf-8')
-                                .expect('Content-Length', 9)
-                                .expect(200, isHead ? '' : 'I am Fido')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 9);
+                                request.expect(200, noBody ? '' : 'I am Fido');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -254,17 +237,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', '');
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'text/plain; charset=utf-8')
-                                .expect('Content-Length', '0')
-                                .expect(200, '')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', '0');
+                                request.expect(200, '');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -274,17 +256,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'number';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', 42.999);
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'text/plain; charset=utf-8')
-                                .expect('Content-Length', 6)
-                                .expect(200, isHead ? '' : '42.999')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 6);
+                                request.expect(200, noBody ? '' : '42.999');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -295,17 +276,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.format = 'date-time';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'text/plain; charset=utf-8')
-                                .expect('Content-Length', 24)
-                                .expect(200, isHead ? '' : '2000-02-02T03:04:05.006Z')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 24);
+                                request.expect(200, noBody ? '' : '2000-02-02T03:04:05.006Z');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -315,17 +295,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'text/plain; charset=utf-8')
-                                .expect('Content-Length', 11)
-                                .expect(200, isHead ? '' : 'hello world')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 11);
+                                request.expect(200, noBody ? '' : 'hello world');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -334,20 +313,19 @@ describe('Query Resource Mock', function() {
                     function(done) {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect('Content-Length', 69)
-                                .expect(200, isHead ? '' : {
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 69);
+                                request.expect(200, noBody ? '' : {
                                     type: 'Buffer',
                                     data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
-                                })
-                                .end(env.checkResults(done));
+                                });
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -356,19 +334,18 @@ describe('Query Resource Mock', function() {
                     function(done) {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido');
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json')
-                                .expect(200, '')
-                                .end(env.checkResults(done, function(res) {
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json');
+                                request.expect(200, '');
+                                request.end(env.checkResults(done, function(res) {
                                     expect(res.headers['content-length']).to.be.undefined;
                                     done();
                                 }));
+                            });
                         });
                     }
                 );
@@ -379,17 +356,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido');
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect('Content-Length', 31)
-                                .expect(200, isHead ? '' : {default: 'The default value'})
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 31);
+                                request.expect(200, noBody ? '' : {default: 'The default value'});
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -399,17 +375,16 @@ describe('Query Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido');
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect('Content-Length', 31)
-                                .expect(200, isHead ? '' : {example: 'The example value'})
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 31);
+                                request.expect(200, noBody ? '' : {example: 'The example value'});
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -418,17 +393,16 @@ describe('Query Resource Mock', function() {
                     function(done) {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-                        dataStore = new env.swagger.MemoryDataStore();
+                        var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', null);
                         dataStore.save(resource, function() {
-                            initTest();
-
-                            supertest
-                                [method]('/api/pets/Fido')
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect('Content-Length', 4)
-                                .expect(200, isHead ? '' : 'null')
-                                .end(env.checkResults(done));
+                            helper.initTest(dataStore, api, function(supertest) {
+                                var request = supertest[method]('/api/pets/Fido');
+                                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                noHeaders || request.expect('Content-Length', 4);
+                                request.expect(200, noBody ? '' : 'null');
+                                request.end(env.checkResults(done));
+                            });
                         });
                     }
                 );
@@ -438,21 +412,19 @@ describe('Query Resource Mock', function() {
                         // Set the response schemas to return the full multipart/form-data object
                         api.paths['/pets/{PetName}/photos'].post.responses[201].schema = {type: 'object'};
                         api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].schema.type = 'object';
-                        initTest();
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                .post('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.oneMB)
+                                .end(env.checkResults(done, function(res1) {
+                                    var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                        supertest
-                            .post('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.oneMB)
-                            .end(env.checkResults(done, function(res1) {
-                                var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
-
-                                supertest
-                                    [method]('/api/pets/Fido/photos/' + photoID)
-                                    .expect('Content-Type', 'application/json; charset=utf-8')
-                                    .end(env.checkResults(done, function(res2) {
-                                        if (isHead) {
+                                    var request = supertest[method]('/api/pets/Fido/photos/' + photoID);
+                                    noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
+                                    request.end(env.checkResults(done, function(res2) {
+                                        if (noBody) {
                                             expect(res2.body).to.be.empty;
                                             expect(res2.text).to.be.empty;
                                         }
@@ -477,29 +449,28 @@ describe('Query Resource Mock', function() {
                                         }
                                         done();
                                     }));
-                            }));
+                                }));
+                        });
                     }
                 );
 
                 it('should return a file',
                     function(done) {
-                        initTest();
-
-                        supertest
-                            .post('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.PDF)
-                            .end(env.checkResults(done, function(res1) {
-                                supertest
-                                    [method](res1.headers.location)
-                                    .expect('Content-Length', 263287)
-                                    .expect('Content-Type', 'application/pdf')
-                                    .end(env.checkResults(done, function(res2) {
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                .post('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.PDF)
+                                .end(env.checkResults(done, function(res1) {
+                                    var request = supertest[method](res1.headers.location);
+                                    noHeaders || request.expect('Content-Length', 263287);
+                                    noHeaders || request.expect('Content-Type', 'application/pdf');
+                                    request.end(env.checkResults(done, function(res2) {
                                         // It should NOT be an attachment
                                         expect(res2.headers['content-disposition']).to.be.undefined;
 
-                                        if (isHead) {
+                                        if (noBody) {
                                             expect(res2.body).to.be.empty;
                                             expect(res2.text).to.be.empty;
                                         }
@@ -509,7 +480,8 @@ describe('Query Resource Mock', function() {
                                         }
                                         done();
                                     }));
-                            }));
+                                }));
+                        });
                     }
                 );
 
@@ -520,26 +492,25 @@ describe('Query Resource Mock', function() {
                                 type: 'string'
                             }
                         };
-                        initTest();
 
-                        supertest
-                            .post('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.text)
-                            .end(env.checkResults(done, function(res1) {
-                                var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                .post('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.text)
+                                .end(env.checkResults(done, function(res1) {
+                                    var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                                supertest
-                                    [method](res1.headers.location)
-                                    .expect('Content-Length', env.isWindows ? 95 : 87)      // CRLF vs LF
-                                    .expect('Content-Type', 'text/plain; charset=UTF-8')
+                                    var request = supertest[method](res1.headers.location);
+                                    noHeaders || request.expect('Content-Length', env.isWindows ? 95 : 87);      // CRLF vs LF
+                                    noHeaders || request.expect('Content-Type', 'text/plain; charset=UTF-8');
 
                                     // The filename is set to the basename of the URL by default
-                                    .expect('Content-Disposition', 'attachment; filename="' + photoID + '"')
+                                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
 
-                                    .end(env.checkResults(done, function(res2) {
-                                        if (isHead) {
+                                    request.end(env.checkResults(done, function(res2) {
+                                        if (noBody) {
                                             expect(res2.body).to.be.empty;
                                             expect(res2.text).to.be.empty;
                                         }
@@ -549,7 +520,8 @@ describe('Query Resource Mock', function() {
                                         }
                                         done();
                                     }));
-                            }));
+                                }));
+                        });
                     }
                 );
 
@@ -561,24 +533,23 @@ describe('Query Resource Mock', function() {
                                 default: 'attachment; filename="MyCustomFileName.xyz"'
                             }
                         };
-                        initTest();
 
-                        supertest
-                            .post('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.PDF)
-                            .end(env.checkResults(done, function(res1) {
-                                supertest
-                                    [method](res1.headers.location)
-                                    .expect('Content-Length', 263287)
-                                    .expect('Content-Type', 'application/pdf')
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                .post('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.PDF)
+                                .end(env.checkResults(done, function(res1) {
+                                    var request = supertest[method](res1.headers.location);
+                                    noHeaders || request.expect('Content-Length', 263287);
+                                    noHeaders || request.expect('Content-Type', 'application/pdf');
 
                                     // The filename comes from the Swagger API
-                                    .expect('Content-Disposition', 'attachment; filename="MyCustomFileName.xyz"')
+                                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="MyCustomFileName.xyz"');
 
-                                    .end(env.checkResults(done, function(res2) {
-                                        if (isHead) {
+                                    request.end(env.checkResults(done, function(res2) {
+                                        if (noBody) {
                                             expect(res2.body).to.be.empty;
                                             expect(res2.text).to.be.empty;
                                         }
@@ -588,7 +559,8 @@ describe('Query Resource Mock', function() {
                                         }
                                         done();
                                     }));
-                            }));
+                                }));
+                        });
                     }
                 );
 
@@ -600,28 +572,33 @@ describe('Query Resource Mock', function() {
                                 default: 'attachment'   // <--- No filename was specified
                             }
                         };
-                        initTest();
 
-                        supertest
-                            .post('/api/pets/Fido/photos')
-                            .field('Label', 'Photo 1')
-                            .field('Description', 'A photo of Fido')
-                            .attach('Photo', env.files.oneMB)
-                            .end(env.checkResults(done, function(res1) {
-                                var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                .post('/api/pets/Fido/photos')
+                                .field('Label', 'Photo 1')
+                                .field('Description', 'A photo of Fido')
+                                .attach('Photo', env.files.oneMB)
+                                .end(env.checkResults(done, function(res1) {
+                                    var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                                supertest
-                                    [method](res1.headers.location)
-                                    .expect('Content-Length', 683709)
-                                    .expect('Content-Type', 'image/jpeg')
+                                    var request = supertest[method](res1.headers.location);
+                                    noHeaders || request.expect('Content-Length', 683709);
+                                    noHeaders || request.expect('Content-Type', 'image/jpeg');
 
                                     // The filename is the basename of the URL, since it wasn't specified in the Swagger API
-                                    .expect('Content-Disposition', 'attachment; filename="' + photoID + '"')
+                                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
 
-                                    .end(env.checkResults(done, function(res2) {
-                                        if (isHead) {
-                                            expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
+                                    request.end(env.checkResults(done, function(res2) {
+                                        if (noBody) {
                                             expect(res2.text).to.be.empty;
+
+                                            if (method === 'options') {
+                                                expect(res2.body).to.be.empty;
+                                            }
+                                            else {
+                                                expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
+                                            }
                                         }
                                         else {
                                             expect(res2.body).to.be.an.instanceOf(Buffer);
@@ -629,9 +606,10 @@ describe('Query Resource Mock', function() {
                                         }
                                         done();
                                     }));
-                            }));
-                    }
-                );
+                                }));
+                            }
+                        );
+                    });
             });
         });
     });

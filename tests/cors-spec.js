@@ -10,105 +10,110 @@ describe('CORS middleware', function() {
 
     it('should set CORS headers, even if no other middleware is used',
         function(done) {
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
     it('should set CORS headers, even if the Paths object is empty',
         function(done) {
-            var middleware = env.swagger(env.parsed.petStoreNoPaths);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(env.parsed.petStoreNoPaths, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
     it('should set CORS headers, even if the Path Items objects are empty',
         function(done) {
-            var middleware = env.swagger(env.parsed.petStoreNoPathItems);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(env.parsed.petStoreNoPathItems, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, POST');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, POST');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
     it('should set CORS headers, even if a parsing error occurs',
         function(done) {
-            var middleware = env.swagger(env.parsed.blank);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(env.parsed.blank, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets', env.spy(function(req, res, next) {
-                expect(req.swagger.api).to.be.null;
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets', env.spy(function(req, res, next) {
+                    expect(req.swagger.api).to.be.null;
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
     it('should echo back CORS headers by default',
         function(done) {
-            var middleware = env.swagger(env.parsed.petStoreNoPaths);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(env.parsed.petStoreNoPaths, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets')
-                .set('Origin', 'http://www.company.com')
-                .set('Access-Control-Request-Method', 'DELETE')
-                .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets')
+                    .set('Origin', 'http://www.company.com')
+                    .set('Access-Control-Request-Method', 'DELETE')
+                    .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://www.company.com');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('DELETE');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.equal('Origin');
-            }));
+                express.get('/api/pets', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://www.company.com');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('DELETE');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.equal('Origin');
+                }));
+            });
         }
     );
 
@@ -131,24 +136,25 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .set('Origin', 'http://www.company.com')
-                .set('Access-Control-Request-Method', 'DELETE')
-                .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .set('Origin', 'http://www.company.com')
+                    .set('Access-Control-Request-Method', 'DELETE')
+                    .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('99999');
-                expect(res.get('Vary')).to.be.equal('Origin');
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('99999');
+                    expect(res.get('Vary')).to.be.equal('Origin');
+                }));
+            });
         }
     );
 
@@ -181,24 +187,25 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .set('Origin', 'http://www.company.com')
-                .set('Access-Control-Request-Method', 'DELETE')
-                .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .set('Origin', 'http://www.company.com')
+                    .set('Access-Control-Request-Method', 'DELETE')
+                    .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('99999');
-                expect(res.get('Vary')).to.be.equal('Origin');
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('99999');
+                    expect(res.get('Vary')).to.be.equal('Origin');
+                }));
+            });
         }
     );
 
@@ -264,44 +271,46 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .set('Origin', 'http://www.company.com')
-                .set('Access-Control-Request-Method', 'DELETE')
-                .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .set('Origin', 'http://www.company.com')
+                    .set('Access-Control-Request-Method', 'DELETE')
+                    .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, OPTIONS');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('88888');
-                expect(res.get('Vary')).to.be.equal('Origin');
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, OPTIONS');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('88888');
+                    expect(res.get('Vary')).to.be.equal('Origin');
+                }));
+            });
         }
     );
 
     it('should set Access-Control-Allow-Methods to the methods that are allowed by the Swagger API',
         function(done) {
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
@@ -318,22 +327,23 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .set('Origin', 'http://company.com')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .set('Origin', 'http://company.com')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.be.undefined;
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('false');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.be.undefined;
+                }));
+            });
         }
     );
 
@@ -346,21 +356,22 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata(), middleware.CORS());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata(), middleware.CORS());
 
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .end(env.checkSpyResults(done));
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .end(env.checkSpyResults(done));
 
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.equal('Origin');
-            }));
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.equal('Origin');
+                }));
+            });
         }
     );
 
@@ -373,26 +384,27 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata());
-            express.use(function(req, res, next) {
-                res.set('Vary', 'Accept-Encoding, Authentication');
-                next();
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata());
+                express.use(function(req, res, next) {
+                    res.set('Vary', 'Accept-Encoding, Authentication');
+                    next();
+                });
+                express.use(middleware.CORS());
+
+                env.supertest(express)
+                    .get('/api/pets/Fido')
+                    .end(env.checkSpyResults(done));
+
+                express.get('/api/pets/:name', env.spy(function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
+                    expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
+                    expect(res.get('Access-Control-Allow-Headers')).to.equal('');
+                    expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
+                    expect(res.get('Access-Control-Max-Age')).to.equal('0');
+                    expect(res.get('Vary')).to.equal('Accept-Encoding, Authentication, Origin');
+                }));
             });
-            express.use(middleware.CORS());
-
-            env.supertest(express)
-                .get('/api/pets/Fido')
-                .end(env.checkSpyResults(done));
-
-            express.get('/api/pets/:name', env.spy(function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
-                expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
-                expect(res.get('Access-Control-Allow-Headers')).to.equal('');
-                expect(res.get('Access-Control-Allow-Credentials')).to.equal('true');
-                expect(res.get('Access-Control-Max-Age')).to.equal('0');
-                expect(res.get('Vary')).to.equal('Accept-Encoding, Authentication, Origin');
-            }));
         }
     );
 
@@ -425,71 +437,73 @@ describe('CORS middleware', function() {
                 }
             };
 
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata());
 
-            // This happens before the CORS middleware, so none of the headers are set
-            express.options('/api/pets/:name', function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Methods')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Headers')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Credentials')).to.be.undefined;
-                expect(res.get('Access-Control-Max-Age')).to.be.undefined;
-                expect(res.get('Vary')).to.be.undefined;
-                next();
-            });
+                // This happens before the CORS middleware, so none of the headers are set
+                express.options('/api/pets/:name', function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Methods')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Headers')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Credentials')).to.be.undefined;
+                    expect(res.get('Access-Control-Max-Age')).to.be.undefined;
+                    expect(res.get('Vary')).to.be.undefined;
+                    next();
+                });
 
-            express.use(middleware.CORS());
+                express.use(middleware.CORS());
 
-            env.supertest(express)
-                .options('/api/pets/Fido')
-                .expect(200)
-                .expect('Access-Control-Allow-Origin', 'http://some.company.net')
-                .expect('Access-Control-Allow-Methods', 'GET, HEAD')
-                .expect('Access-Control-Allow-Headers', '')
-                .expect('Access-Control-Allow-Credentials', 'true')
-                .expect('Access-Control-Max-Age', '99999')
-                .expect('Vary', 'Origin')
-                .end(done);
+                env.supertest(express)
+                    .options('/api/pets/Fido')
+                    .expect(200)
+                    .expect('Access-Control-Allow-Origin', 'http://some.company.net')
+                    .expect('Access-Control-Allow-Methods', 'GET, HEAD')
+                    .expect('Access-Control-Allow-Headers', '')
+                    .expect('Access-Control-Allow-Credentials', 'true')
+                    .expect('Access-Control-Max-Age', '99999')
+                    .expect('Vary', 'Origin')
+                    .end(done);
 
-            // This never gets called, because the CORS middleware already responded
-            express.options('/api/pets/:name', function(req, res, next) {
-                assert(false, 'This middleware should NOT get called');
+                // This never gets called, because the CORS middleware already responded
+                express.options('/api/pets/:name', function(req, res, next) {
+                    assert(false, 'This middleware should NOT get called');
+                });
             });
         }
     );
 
     it('should automatically respond to CORS preflight requests, even if they\'re not defined in the Swagger API',
         function(done) {
-            var middleware = env.swagger(api);
-            var express = env.express(middleware.metadata());
+            env.swagger(api, function(err, middleware) {
+                var express = env.express(middleware.metadata());
 
-            // This happens before the CORS middleware, so none of the headers are set
-            express.options('/api/pets/:name', function(req, res, next) {
-                expect(res.get('Access-Control-Allow-Origin')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Methods')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Headers')).to.be.undefined;
-                expect(res.get('Access-Control-Allow-Credentials')).to.be.undefined;
-                expect(res.get('Access-Control-Max-Age')).to.be.undefined;
-                expect(res.get('Vary')).to.be.undefined;
-                next();
-            });
+                // This happens before the CORS middleware, so none of the headers are set
+                express.options('/api/pets/:name', function(req, res, next) {
+                    expect(res.get('Access-Control-Allow-Origin')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Methods')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Headers')).to.be.undefined;
+                    expect(res.get('Access-Control-Allow-Credentials')).to.be.undefined;
+                    expect(res.get('Access-Control-Max-Age')).to.be.undefined;
+                    expect(res.get('Vary')).to.be.undefined;
+                    next();
+                });
 
-            express.use(middleware.CORS());
+                express.use(middleware.CORS());
 
-            env.supertest(express)
-                .options('/api/pets/Fido')
-                .expect(200)
-                .expect('Access-Control-Allow-Origin', '*')
-                .expect('Access-Control-Allow-Methods', 'GET, DELETE, PATCH')
-                .expect('Access-Control-Allow-Headers', '')
-                .expect('Access-Control-Allow-Credentials', 'false')
-                .expect('Access-Control-Max-Age', '0')
-                .end(done);
+                env.supertest(express)
+                    .options('/api/pets/Fido')
+                    .expect(200)
+                    .expect('Access-Control-Allow-Origin', '*')
+                    .expect('Access-Control-Allow-Methods', 'GET, DELETE, PATCH')
+                    .expect('Access-Control-Allow-Headers', '')
+                    .expect('Access-Control-Allow-Credentials', 'false')
+                    .expect('Access-Control-Max-Age', '0')
+                    .end(done);
 
-            // This never gets called, because the CORS middleware already responded
-            express.options('/api/pets/:name', function(req, res, next) {
-                assert(false, 'This middleware should NOT get called');
+                // This never gets called, because the CORS middleware already responded
+                express.options('/api/pets/:name', function(req, res, next) {
+                    assert(false, 'This middleware should NOT get called');
+                });
             });
         }
     );

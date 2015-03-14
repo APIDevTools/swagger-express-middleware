@@ -1,26 +1,13 @@
-var env = require('../test-environment');
-var api, middleware, express, supertest, dataStore;
+var env    = require('../test-environment'),
+    helper = require('./test-helper');
 
 describe('Mock Response', function() {
     'use strict';
 
+    var api;
     beforeEach(function() {
         api = _.cloneDeep(env.parsed.petStore);
     });
-
-    afterEach(function() {
-        api = middleware = express = supertest = dataStore = undefined;
-    });
-
-    function initTest(fns) {
-        express = express || env.express();
-        supertest = supertest || env.supertest(express);
-        middleware = middleware || env.swagger(api, express);
-        express.use(
-            middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
-            middleware.validateRequest(), fns || [], middleware.mock(dataStore)
-        );
-    }
 
     it('should use the 200 response, if it exists',
         function(done) {
@@ -33,12 +20,12 @@ describe('Mock Response', function() {
                 '400': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .get('/api/pets')
-                .expect(200)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .get('/api/pets')
+                    .expect(200)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -54,12 +41,12 @@ describe('Mock Response', function() {
                 '404': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .get('/api/pets')
-                .expect(201)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .get('/api/pets')
+                    .expect(201)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -74,12 +61,12 @@ describe('Mock Response', function() {
                 '400': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .get('/api/pets')
-                .expect(302)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .get('/api/pets')
+                    .expect(302)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -94,12 +81,12 @@ describe('Mock Response', function() {
                 '504': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .get('/api/pets')
-                .expect(101)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .get('/api/pets')
+                    .expect(101)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -114,12 +101,12 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .get('/api/pets')
-                .expect(200)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .get('/api/pets')
+                    .expect(200)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -134,13 +121,13 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .post('/api/pets')
-                .send({Name: 'Fido', Type: 'dog'})
-                .expect(201)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .post('/api/pets')
+                    .send({Name: 'Fido', Type: 'dog'})
+                    .expect(201)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -153,13 +140,13 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .post('/api/pets')
-                .send({Name: 'Fido', Type: 'dog'})
-                .expect(102)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .post('/api/pets')
+                    .send({Name: 'Fido', Type: 'dog'})
+                    .expect(102)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -175,13 +162,13 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .put('/api/pets')
-                .send({Name: 'Fido', Type: 'dog'})
-                .expect(201)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .put('/api/pets')
+                    .send({Name: 'Fido', Type: 'dog'})
+                    .expect(201)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -196,13 +183,13 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .put('/api/pets')
-                .send({Name: 'Fido', Type: 'dog'})
-                .expect(101)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .put('/api/pets')
+                    .send({Name: 'Fido', Type: 'dog'})
+                    .expect(101)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -217,12 +204,12 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .delete('/api/pets/Fido')
-                .expect(204)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .delete('/api/pets/Fido')
+                    .expect(204)
+                    .end(env.checkResults(done));
+            });
         }
     );
 
@@ -236,12 +223,12 @@ describe('Mock Response', function() {
                 '102': {description: ''}
             };
 
-            initTest();
-
-            supertest
-                .delete('/api/pets/Fido')
-                .expect(101)
-                .end(env.checkResults(done));
+            helper.initTest(api, function(supertest) {
+                supertest
+                    .delete('/api/pets/Fido')
+                    .expect(101)
+                    .end(env.checkResults(done));
+            });
         }
     );
 });

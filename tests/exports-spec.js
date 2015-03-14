@@ -42,6 +42,7 @@ describe('Package exports', function() {
     describe('exports.createMiddleware', function() {
         it('should work with the "new" operator',
             function(done) {
+                //noinspection JSPotentiallyInvalidConstructorUsage
                 var middleware = new env.swagger(env.parsed.petStore, function(err, mw) {
                     if (err) return done(err);
                     expect(mw).to.be.an.instanceOf(env.swagger.Middleware);

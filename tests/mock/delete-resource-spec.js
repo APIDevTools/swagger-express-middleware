@@ -1,63 +1,50 @@
-var env = require('../test-environment');
-var api, middleware, express, supertest, dataStore;
+var env    = require('../test-environment'),
+    helper = require('./test-helper');
 
 describe('Edit Resource Mock', function() {
     describe('DELETE', function() {
         'use strict';
 
+        var api;
         beforeEach(function() {
             api = _.cloneDeep(env.parsed.petStore);
         });
 
-        afterEach(function() {
-            api = middleware = express = supertest = dataStore = undefined;
-        });
-
-        function initTest(fns) {
-            express = express || env.express();
-            supertest = supertest || env.supertest(express);
-            middleware = middleware || env.swagger(api, express);
-            express.use(
-                middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
-                middleware.validateRequest(), fns || [], middleware.mock(dataStore)
-            );
-        }
-
         it('should delete a resource',
             function(done) {
-                initTest();
-
-                // Create a new pet
-                supertest
-                    .post('/api/pets')
-                    .send({Name: 'Fido', Type: 'dog'})
-                    .expect(201)
-                    .expect('Location', '/api/pets/Fido')
-                    .end(env.checkResults(done, function(res1) {
-                        // Delete the pet
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect(204, '')
-                            .end(env.checkResults(done, function(res2) {
-                                // Confirm that it was deleted
-                                supertest
-                                    .get('/api/pets/Fido')
-                                    .expect(404)
-                                    .end(done);
-                            }));
-                    }));
+                helper.initTest(api, function(supertest) {
+                    // Create a new pet
+                    supertest
+                        .post('/api/pets')
+                        .send({Name: 'Fido', Type: 'dog'})
+                        .expect(201)
+                        .expect('Location', '/api/pets/Fido')
+                        .end(env.checkResults(done, function(res1) {
+                            // Delete the pet
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect(204, '')
+                                .end(env.checkResults(done, function(res2) {
+                                    // Confirm that it was deleted
+                                    supertest
+                                        .get('/api/pets/Fido')
+                                        .expect(404)
+                                        .end(done);
+                                }));
+                        }));
+                });
             }
         );
 
         it('should delete a non-existent resource',
             function(done) {
-                initTest();
-
-                // Delete a pet that doesn't exist
-                supertest
-                    .delete('/api/pets/Fido')
-                    .expect(204, '')
-                    .end(env.checkResults(done));
+                helper.initTest(api, function(supertest) {
+                    // Delete a pet that doesn't exist
+                    supertest
+                        .delete('/api/pets/Fido')
+                        .expect(204, '')
+                        .end(env.checkResults(done));
+                });
             }
         );
 
@@ -68,20 +55,21 @@ describe('Edit Resource Mock', function() {
                     description: '200 response',
                     schema: {type: 'object'}
                 };
-                initTest();
 
-                // Create a new pet
-                supertest
-                    .post('/api/pets')
-                    .send({Name: 'Fido', Type: 'dog'})
-                    .expect(201)
-                    .end(env.checkResults(done, function(res1) {
-                        // Delete the pet
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect(200, {Name: 'Fido', Type: 'dog'})
-                            .end(env.checkResults(done));
-                    }));
+                helper.initTest(api, function(supertest) {
+                    // Create a new pet
+                    supertest
+                        .post('/api/pets')
+                        .send({Name: 'Fido', Type: 'dog'})
+                        .expect(201)
+                        .end(env.checkResults(done, function(res1) {
+                            // Delete the pet
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect(200, {Name: 'Fido', Type: 'dog'})
+                                .end(env.checkResults(done));
+                        }));
+                });
             }
         );
 
@@ -92,20 +80,21 @@ describe('Edit Resource Mock', function() {
                     description: '200 response',
                     schema: {type: 'object'}
                 };
-                initTest();
 
-                // Create a new pet
-                supertest
-                    .post('/api/pets')
-                    .send({Name: 'Fido', Type: 'dog'})
-                    .expect(201)
-                    .end(env.checkResults(done, function(res1) {
-                        // Delete the pet
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect(200, {Name: 'Fido', Type: 'dog'})
-                            .end(env.checkResults(done));
-                    }));
+                helper.initTest(api, function(supertest) {
+                    // Create a new pet
+                    supertest
+                        .post('/api/pets')
+                        .send({Name: 'Fido', Type: 'dog'})
+                        .expect(201)
+                        .end(env.checkResults(done, function(res1) {
+                            // Delete the pet
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect(200, {Name: 'Fido', Type: 'dog'})
+                                .end(env.checkResults(done));
+                        }));
+                });
             }
         );
 
@@ -113,20 +102,21 @@ describe('Edit Resource Mock', function() {
             function(done) {
                 // 204 responses cannot return data
                 api.paths['/pets/{PetName}'].delete.responses['204'].schema = {type: 'object'};
-                initTest();
 
-                // Create a new pet
-                supertest
-                    .post('/api/pets')
-                    .send({Name: 'Fido', Type: 'dog'})
-                    .expect(201)
-                    .end(env.checkResults(done, function(res1) {
-                        // Delete the pet
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect(204, '')
-                            .end(env.checkResults(done));
-                    }));
+                helper.initTest(api, function(supertest) {
+                    // Create a new pet
+                    supertest
+                        .post('/api/pets')
+                        .send({Name: 'Fido', Type: 'dog'})
+                        .expect(201)
+                        .end(env.checkResults(done, function(res1) {
+                            // Delete the pet
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect(204, '')
+                                .end(env.checkResults(done));
+                        }));
+                });
             }
         );
 
@@ -137,13 +127,14 @@ describe('Edit Resource Mock', function() {
                     description: '200 response',
                     schema: {type: 'object'}
                 };
-                initTest();
 
-                // Delete a non-existent pet
-                supertest
-                    .delete('/api/pets/Fido')
-                    .expect(200, '')        // <--- empty results
-                    .end(env.checkResults(done));
+                helper.initTest(api, function(supertest) {
+                    // Delete a non-existent pet
+                    supertest
+                        .delete('/api/pets/Fido')
+                        .expect(200, '')        // <--- empty results
+                        .end(env.checkResults(done));
+                });
             }
         );
 
@@ -156,24 +147,25 @@ describe('Edit Resource Mock', function() {
                 };
 
                 // Populate the collection
-                dataStore = new env.swagger.MemoryDataStore();
+                var dataStore = new env.swagger.MemoryDataStore();
                 var resources = [
                     new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
                     new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
                     new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
                 ];
                 dataStore.save(resources, function() {
-                    initTest();
 
-                    // Delete one of the pets
-                    supertest
-                        .delete('/api/pets/Fido')
-                        .expect(200, [
-                            // The deleted pet should NOT be returned.  Only the rest of the collection
-                            {Name: 'Fluffy', Type: 'cat'},
-                            {Name: 'Polly', Type: 'bird'}
-                        ])
-                        .end(env.checkResults(done));
+                    helper.initTest(dataStore, api, function(supertest) {
+                        // Delete one of the pets
+                        supertest
+                            .delete('/api/pets/Fido')
+                            .expect(200, [
+                                // The deleted pet should NOT be returned.  Only the rest of the collection
+                                {Name: 'Fluffy', Type: 'cat'},
+                                {Name: 'Polly', Type: 'bird'}
+                            ])
+                            .end(env.checkResults(done));
+                    });
                 });
             }
         );
@@ -186,13 +178,13 @@ describe('Edit Resource Mock', function() {
                     schema: {type: 'array', items: {type: 'object'}}
                 };
 
-                initTest();
-
-                // Delete a non-existent pet from an empty collection
-                supertest
-                    .delete('/api/pets/Fido')
-                    .expect(200, [])
-                    .end(env.checkResults(done));
+                helper.initTest(api, function(supertest) {
+                    // Delete a non-existent pet from an empty collection
+                    supertest
+                        .delete('/api/pets/Fido')
+                        .expect(200, [])
+                        .end(env.checkResults(done));
+                });
             }
         );
 
@@ -204,35 +196,37 @@ describe('Edit Resource Mock', function() {
                     schema: {type: 'object'}
                 };
 
-                initTest(function(req, res, next) {
+                function messWithTheBody(req, res, next) {
                     res.body = ['Not', 'the', 'response', 'you', 'expected'];
                     next();
-                });
+                }
 
-                supertest
-                    .delete('/api/pets/Fido')
-                    .expect(200, ['Not', 'the', 'response', 'you', 'expected'])
-                    .end(env.checkResults(done));
+                helper.initTest(messWithTheBody, api, function(supertest) {
+                    supertest
+                        .delete('/api/pets/Fido')
+                        .expect(200, ['Not', 'the', 'response', 'you', 'expected'])
+                        .end(env.checkResults(done));
+                });
             }
         );
 
         it('should return a 500 error if a DataStore error occurs',
             function(done) {
-                dataStore = new env.swagger.MemoryDataStore();
+                var dataStore = new env.swagger.MemoryDataStore();
                 dataStore.__openDataStore = function(collection, callback) {
                     setImmediate(callback, new Error('Test Error'));
                 };
 
-                initTest();
-
-                supertest
-                    .delete('/api/pets/Fido')
-                    .expect(500)
-                    .end(function(err, res) {
-                        if (err) return done(err);
-                        expect(res.text).to.contain('Error: Test Error');
-                        done();
-                    });
+                helper.initTest(dataStore, api, function(supertest) {
+                    supertest
+                        .delete('/api/pets/Fido')
+                        .expect(500)
+                        .end(function(err, res) {
+                            if (err) return done(err);
+                            expect(res.text).to.contain('Error: Test Error');
+                            done();
+                        });
+                });
             }
         );
 
@@ -247,17 +241,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a string resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', 'I am Fido');
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the string resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'text/plain; charset=utf-8')
-                            .expect(200, 'I am Fido')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the string resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'text/plain; charset=utf-8')
+                                .expect(200, 'I am Fido')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -272,17 +267,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create an empty string resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', '');
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the string resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'text/plain; charset=utf-8')
-                            .expect(200, '')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the string resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'text/plain; charset=utf-8')
+                                .expect(200, '')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -297,17 +293,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a number resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', 42.999);
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the number resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'text/plain; charset=utf-8')
-                            .expect(200, '42.999')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the number resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'text/plain; charset=utf-8')
+                                .expect(200, '42.999')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -322,17 +319,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a date resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the date resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'text/plain; charset=utf-8')
-                            .expect(200, '2000-02-02T03:04:05.006Z')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the date resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'text/plain; charset=utf-8')
+                                .expect(200, '2000-02-02T03:04:05.006Z')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -347,17 +345,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a Buffer resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the Buffer resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'text/plain; charset=utf-8')
-                            .expect(200, 'hello world')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the Buffer resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'text/plain; charset=utf-8')
+                                .expect(200, 'hello world')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -371,20 +370,21 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a Buffer resource
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the Buffer resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'application/json; charset=utf-8')
-                            .expect(200, {
-                                type: 'Buffer',
-                                data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
-                            })
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the Buffer resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'application/json; charset=utf-8')
+                                .expect(200, {
+                                    type: 'Buffer',
+                                    data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+                                })
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -398,17 +398,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a resource with no value
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido');
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the undefined resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'application/json')
-                            .expect(200, '')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the undefined resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'application/json')
+                                .expect(200, '')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -422,17 +423,18 @@ describe('Edit Resource Mock', function() {
                     };
 
                     // Create a resource with a null value
-                    dataStore = new env.swagger.MemoryDataStore();
+                    var dataStore = new env.swagger.MemoryDataStore();
                     var resource = new env.swagger.Resource('/api/pets/Fido', null);
                     dataStore.save(resource, function() {
-                        initTest();
 
-                        // Delete the null resource
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect('Content-Type', 'application/json; charset=utf-8')
-                            .expect(200, 'null')
-                            .end(env.checkResults(done));
+                        helper.initTest(dataStore, api, function(supertest) {
+                            // Delete the null resource
+                            supertest
+                                .delete('/api/pets/Fido')
+                                .expect('Content-Type', 'application/json; charset=utf-8')
+                                .expect(200, 'null')
+                                .end(env.checkResults(done));
+                        });
                     });
                 }
             );
@@ -444,43 +446,44 @@ describe('Edit Resource Mock', function() {
                         description: '200 response',
                         schema: {type: 'object'}
                     };
-                    initTest();
 
-                    // Save a pet photo (multipart/form-data)
-                    supertest
-                        .post('/api/pets/Fido/photos')
-                        .field('Label', 'Photo 1')
-                        .field('Description', 'A photo of Fido')
-                        .attach('Photo', env.files.oneMB)
-                        .expect(201)
-                        .end(env.checkResults(done, function(res1) {
+                    helper.initTest(api, function(supertest) {
+                        // Save a pet photo (multipart/form-data)
+                        supertest
+                            .post('/api/pets/Fido/photos')
+                            .field('Label', 'Photo 1')
+                            .field('Description', 'A photo of Fido')
+                            .attach('Photo', env.files.oneMB)
+                            .expect(201)
+                            .end(env.checkResults(done, function(res1) {
 
-                            // Delete the photo
-                            supertest
-                                .delete(res1.headers.location)
-                                .expect('Content-Type', 'application/json; charset=utf-8')
-                                .expect(200)
-                                .end(env.checkResults(done, function(res2) {
-                                    expect(res2.body).to.deep.equal({
-                                        ID: res2.body.ID,
-                                        Label: 'Photo 1',
-                                        Description: 'A photo of Fido',
-                                        Photo: {
-                                            fieldname: 'Photo',
-                                            originalname: '1MB.jpg',
-                                            name: res2.body.Photo.name,
-                                            encoding: '7bit',
-                                            mimetype: 'image/jpeg',
-                                            path: res2.body.Photo.path,
-                                            extension: 'jpg',
-                                            size: 683709,
-                                            truncated: false,
-                                            buffer: null
-                                        }
-                                    });
-                                    done();
-                                }));
-                        }));
+                                // Delete the photo
+                                supertest
+                                    .delete(res1.headers.location)
+                                    .expect('Content-Type', 'application/json; charset=utf-8')
+                                    .expect(200)
+                                    .end(env.checkResults(done, function(res2) {
+                                        expect(res2.body).to.deep.equal({
+                                            ID: res2.body.ID,
+                                            Label: 'Photo 1',
+                                            Description: 'A photo of Fido',
+                                            Photo: {
+                                                fieldname: 'Photo',
+                                                originalname: '1MB.jpg',
+                                                name: res2.body.Photo.name,
+                                                encoding: '7bit',
+                                                mimetype: 'image/jpeg',
+                                                path: res2.body.Photo.path,
+                                                extension: 'jpg',
+                                                size: 683709,
+                                                truncated: false,
+                                                buffer: null
+                                            }
+                                        });
+                                        done();
+                                    }));
+                            }));
+                    });
                 }
             );
 
@@ -491,31 +494,32 @@ describe('Edit Resource Mock', function() {
                         description: '200 response',
                         schema: {type: 'file'}
                     };
-                    initTest();
 
-                    // Save a pet photo (multipart/form-data)
-                    supertest
-                        .post('/api/pets/Fido/photos')
-                        .field('Label', 'Photo 1')
-                        .field('Description', 'A photo of Fido')
-                        .attach('Photo', env.files.oneMB)
-                        .expect(201)
-                        .end(env.checkResults(done, function(res1) {
+                    helper.initTest(api, function(supertest) {
+                        // Save a pet photo (multipart/form-data)
+                        supertest
+                            .post('/api/pets/Fido/photos')
+                            .field('Label', 'Photo 1')
+                            .field('Description', 'A photo of Fido')
+                            .attach('Photo', env.files.oneMB)
+                            .expect(201)
+                            .end(env.checkResults(done, function(res1) {
 
-                            // Delete the photo
-                            supertest
-                                .delete(res1.headers.location)
-                                .expect('Content-Type', 'image/jpeg')
-                                .expect(200)
-                                .end(env.checkResults(done, function(res2) {
-                                    // It should NOT be an attachment
-                                    expect(res2.headers['content-disposition']).to.be.undefined;
+                                // Delete the photo
+                                supertest
+                                    .delete(res1.headers.location)
+                                    .expect('Content-Type', 'image/jpeg')
+                                    .expect(200)
+                                    .end(env.checkResults(done, function(res2) {
+                                        // It should NOT be an attachment
+                                        expect(res2.headers['content-disposition']).to.be.undefined;
 
-                                    expect(res2.body).to.be.an.instanceOf(Buffer);
-                                    expect(res2.body.length).to.equal(683709);
-                                    done();
-                                }));
-                        }));
+                                        expect(res2.body).to.be.an.instanceOf(Buffer);
+                                        expect(res2.body.length).to.equal(683709);
+                                        done();
+                                    }));
+                            }));
+                    });
                 }
             );
 
@@ -535,31 +539,32 @@ describe('Edit Resource Mock', function() {
                             }
                         }
                     };
-                    initTest();
 
-                    // Save a pet photo (multipart/form-data)
-                    supertest
-                        .post('/api/pets/Fido/photos')
-                        .field('Label', 'Photo 1')
-                        .field('Description', 'A photo of Fido')
-                        .attach('Photo', env.files.oneMB)
-                        .expect(201)
-                        .end(env.checkResults(done, function(res1) {
-                            // Get the file name from the "Location" HTTP header
-                            var fileName = res1.headers.location.match(/\d+$/)[0];
+                    helper.initTest(api, function(supertest) {
+                        // Save a pet photo (multipart/form-data)
+                        supertest
+                            .post('/api/pets/Fido/photos')
+                            .field('Label', 'Photo 1')
+                            .field('Description', 'A photo of Fido')
+                            .attach('Photo', env.files.oneMB)
+                            .expect(201)
+                            .end(env.checkResults(done, function(res1) {
+                                // Get the file name from the "Location" HTTP header
+                                var fileName = res1.headers.location.match(/\d+$/)[0];
 
-                            // Delete the photo
-                            supertest
-                                .delete(res1.headers.location)
-                                .expect('Content-Type', 'image/jpeg')
-                                .expect(200)
-                                .expect('Content-Disposition', 'attachment; filename="' + fileName + '"')
-                                .end(env.checkResults(done, function(res2) {
-                                    expect(res2.body).to.be.an.instanceOf(Buffer);
-                                    expect(res2.body.length).to.equal(683709);
-                                    done();
-                                }));
-                        }));
+                                // Delete the photo
+                                supertest
+                                    .delete(res1.headers.location)
+                                    .expect('Content-Type', 'image/jpeg')
+                                    .expect(200)
+                                    .expect('Content-Disposition', 'attachment; filename="' + fileName + '"')
+                                    .end(env.checkResults(done, function(res2) {
+                                        expect(res2.body).to.be.an.instanceOf(Buffer);
+                                        expect(res2.body.length).to.equal(683709);
+                                        done();
+                                    }));
+                            }));
+                    });
                 }
             );
         });
