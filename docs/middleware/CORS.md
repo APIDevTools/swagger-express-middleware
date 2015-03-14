@@ -7,7 +7,7 @@ If you aren't familiar with how CORS works, then [here's a good explanation](htt
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](../../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ````javascript
 var util       = require('util');
