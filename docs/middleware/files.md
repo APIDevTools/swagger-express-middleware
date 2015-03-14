@@ -37,7 +37,7 @@ This is the function you call to create the Files middleware. All of its paramet
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
 An [Express Application](http://expressjs.com/4x/api.html#application) or [Router](http://expressjs.com/4x/api.html#router) that will be used to determine settings (such as case-sensitivity and strict routing).
 <br><br>
-All Swagger Express Middleware modules accept this optional first parameter. Rather than passing it to each middleware, you can just pass it to the [createMiddleware](../exports/createMiddleware.md) (as shown in the example above) and all middleware will use it.
+All Swagger Express Middleware modules accept this optional first parameter. Rather than passing it to each middleware, you can just pass it to the [createMiddleware function](../exports/createMiddleware.md) (as shown in the example above) and all middleware will use it.
 
 * __options__ (_optional_) - `object`<br>
 This parameter allows you to change the paths at which the files are served.  It is an object with the following properties:

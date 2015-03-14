@@ -5,7 +5,7 @@ Swagger Express Middleware exposes several JavaScript classes, but most of them 
 
 Example
 --------------------------
-All of the documentation examples use the `createMiddleware` function like this:
+All of the examples in these docs use the `createMiddleware` function like this:
 
 ````javascript
 var middleware = require('swagger-express-middleware');

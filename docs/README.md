@@ -14,8 +14,8 @@ Middleware
 API
 --------------------------
 * [__`createMiddleware`__ function](exports/createMiddleware.md)
-* [__`Middleware`__ class](Middleware.md)
-* [__`DataStore`__ abstract class](DataStore.md)
-* [__`MemoryDataStore`__ class](MemoryDataStore.md)
-* [__`FileDataStore`__ class](FileDataStore.md)
-* [__`Resource`__ class](Resource.md)
+* [__`Middleware`__ class](exports/Middleware.md)
+* [__`DataStore`__ abstract class](exports/DataStore.md)
+* [__`MemoryDataStore`__ class](exports/MemoryDataStore.md)
+* [__`FileDataStore`__ class](exports/FileDataStore.md)
+* [__`Resource`__ class](exports/Resource.md)

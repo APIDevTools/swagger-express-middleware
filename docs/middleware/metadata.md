@@ -17,19 +17,15 @@ middleware('PetStore.yaml', app, function(err, middleware) {
     // Add the Metadata middleware to the Express app
     app.use(middleware.metadata());
 
-    // Add your own custom middleware
-    app.get('/pets/:petName', displayMetadata);
-    app.get('/pets/:petName/photos/:id', displayMetadata);
-
-    // Use the Swagger metadata in your middleware
-    function displayMetadata(req, res, next) {
+    // Add middleware to display the Swagger metadata as HTML
+    app.use(function(req, res, next) {
         res.type('html');
-        res.send(util.format('%s has %d parameters: <br>%j', 
-            req.swagger.pathName, 
+        res.send(util.format('<h1>%s has %d parameters</h1><pre>%s</pre>',
+            req.swagger.pathName,
             req.swagger.params.length,
-            req.swagger.params
+            util.inspect(req.swagger.params)
         ));
-    }
+    });
 
     app.listen(8000, function() {
         console.log('Go to http://localhost:8000/pets/Fido/photos/12345');
@@ -37,7 +33,7 @@ middleware('PetStore.yaml', app, function(err, middleware) {
 });
 ````
 
-Run the above example and then browse to [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos/12345](http://localhost:8000/pets/Fido/photos/12345).  You will see different metadata for each path.
+Run the above example and then try browsing to [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos/12345](http://localhost:8000/pets/Fido/photos/12345).  You will see different metadata for each path.
 
 
 Options
@@ -48,7 +44,7 @@ This is the function you call to create the metadata middleware.
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
 An [Express Application](http://expressjs.com/4x/api.html#application) or [Router](http://expressjs.com/4x/api.html#router) that will be used to determine settings (such as case-sensitivity and strict routing).
 <br><br>
-All Swagger Express Middleware modules accept this optional first parameter. Rather than passing it to each middleware, you can just pass it to the [createMiddleware](../exports/createMiddleware.md) (as shown in the example above) and all middleware will use it.
+All Swagger Express Middleware modules accept this optional first parameter. Rather than passing it to each middleware, you can just pass it to the [createMiddleware function](../exports/createMiddleware.md) (as shown in the example above) and all middleware will use it.
 
 
 API
