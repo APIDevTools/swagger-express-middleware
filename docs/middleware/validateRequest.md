@@ -16,7 +16,7 @@ Example
 
 Options
 --------------------------
-### `middleware.validateRequest([router])`
+### `middleware.validateRequest(router)`
 This is the function you call to create the Validate Request middleware.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>

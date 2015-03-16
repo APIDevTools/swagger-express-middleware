@@ -1,3 +1,7 @@
+| Documentation In Progress |
+|---------------------------|
+| Please bear with me.  I'm writing the documentation as quickly as I can.  Check back soon
+
 CORS middleware
 ============================
 Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your Swagger API definition.

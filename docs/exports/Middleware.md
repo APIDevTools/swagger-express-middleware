@@ -7,7 +7,7 @@ __TIP:__ For most simple apps, you don't need to worry about the `Middleware` cl
 
 Constructor
 -----------------------
-### `Middleware([router])`
+### `Middleware(router)`
 This is the constructor for the Middleware class.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
@@ -18,7 +18,7 @@ __NOTE:__ If you don't specify this parameter, then the default Express routing 
 
 Methods
 -----------------------
-### `init([swagger, callback])`
+### `init(swagger, callback)`
 Initializes the middleware with the given Swagger API. This method can be called again to re-initialize with a new or modified API.
 
 * __swagger__ (_optional_) - `string` or `object`<br>
@@ -27,20 +27,20 @@ The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a val
 * __callback__ (_optional_) - `function(err, middleware)`<br>
 A callback function that will be called once the Swagger API is fully parsed, dereferenced, and validated. The second parameter is the same `Middleware` object.
 
-### `files([router, options])`
+### `files(router, options)`
 This method creates a new [Files middleware](../middleware/files.md) instance.
 
-### `metadata([router])`
+### `metadata(router)`
 This method creates a new [Metadata middleware](../middleware/metadata.md) instance.
 
-### `CORS([router])`
+### `CORS(router)`
 This method creates a new [CORS middleware](../middleware/CORS.md) instance.
 
-### `parseRequest([router, options])`
+### `parseRequest(router, options)`
 This method creates a new [Parse Request middleware](../middleware/parseRequest.md) instance.
 
-### `validateRequest([router])`
+### `validateRequest(router)`
 This method creates a new [Validate Request middleware](../middleware/validateRequest.md) instance.
 
-### `mock([router, dataStore])`
+### `mock(router, dataStore)`
 This method creates a new [Mock middleware](../middleware/mock.md) instance.

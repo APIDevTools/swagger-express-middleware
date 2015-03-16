@@ -16,7 +16,7 @@ Example
 
 Options
 --------------------------
-### `middleware.mock([router, dataStore])`
+### `middleware.mock(router, dataStore)`
 This is the function you call to create the Mock middleware.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>

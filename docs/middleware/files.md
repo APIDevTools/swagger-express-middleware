@@ -31,7 +31,7 @@ Run the above example and then browse to [http://localhost:8000/api-docs/](http:
 
 Options
 --------------------------
-### `middleware.files([router, options])`
+### `middleware.files(router, options)`
 This is the function you call to create the Files middleware. All of its parameters are optional.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>

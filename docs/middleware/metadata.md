@@ -38,7 +38,7 @@ Run the above example and then try browsing to [http://localhost:8000/pets/Fido]
 
 Options
 --------------------------
-### `middleware.metadata([router])`
+### `middleware.metadata(router)`
 This is the function you call to create the metadata middleware.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>

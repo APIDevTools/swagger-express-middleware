@@ -37,7 +37,7 @@ For a complete example of this second pattern, see [Sample 2](../../samples/samp
 
 API
 ----------------------
-### `createMiddleware([swagger, router, callback])`
+### `createMiddleware(swagger, router, callback)`
 The `createMiddleware` function is the main export of Swagger Express Middleware &mdash; it's what you get when you `require('swagger-express-middleware')`.  It's just a convenience function that creates a [Middleware](Middleware.md) object and calls its [init method](Middleware.md#initswagger-callback).
 
 * __swagger__ (_optional_) - `string` or `object`<br>

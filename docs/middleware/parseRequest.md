@@ -16,7 +16,7 @@ Example
 
 Options
 --------------------------
-### `middleware.parseRequest([router, options])`
+### `middleware.parseRequest(router, options)`
 This is the function you call to create the Parse Request middleware.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
