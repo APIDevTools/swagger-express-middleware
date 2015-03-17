@@ -1,7 +1,3 @@
-| Documentation In Progress |
-|---------------------------|
-| Please bear with me.  I'm writing the documentation as quickly as I can.  Check back soon
-
 CORS middleware
 ============================
 Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your Swagger API definition.
@@ -45,6 +41,46 @@ Dependencies
 The CORS middleware requires the [Metadata middleware](metadata.md) to come before it in the middleware pipeline (as shown in the example above).
 
 
-Behavior
+How CORS headers are set
 --------------------------
-TODO
+The CORS middleware automatically sets the following HTTP headers on _every_ request:
+
+| Header Name                        | Value Assigned 
+|:-----------------------------------|:-----------------
+| `Access-Control-Allow-Origin`      | If the HTTP request includes an `Origin` header, then that value is echoed back; otherwise, a wildcard (`*`) is sent.
+| `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your Swagger API, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
+| `Access-Control-Allow-Headers`     | If the HTTP request includes an `Access-Control-Request-Headers` header, then that value is echoed back; otherwise, an empty value is returned.
+| `Access-Control-Allow-Max-Age`     | This header is always set to zero, which means CORS preflight requests will not be cached.  This is especially useful for development/debugging, but you may want to set it to a higher value for production.
+| `Access-Control-Allow-Credentials` | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>__NOTE:__ This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
+| `Vary`                             | If the `Access-Control-Allow-Origin` is _not_ a wildcard, then `Origin` is added to the `Vary` response header.<br><br>__NOTE:__ This behavior is required by the CORS spec. It indicates to clients that server responses will differ based on the value of the `Origin` request header.
+
+
+### Customizing CORS headers
+As shown above, the CORS middleware tries to determine the best value for each CORS header based on the HTTP request from the client and the structure of your Swagger API, but you can override the value for any header if you want.
+
+To override a header's value, just specify a `default` value in your Swagger API.  You can do this for a specific operation, or for an entire path by using the `options` operation.  For example, in the following Swagger API, the `Access-Control-Allow-Headers` and `Access-Control-Allow-Origin` headers have been customized for all operations on the "_/pets/{petName}_" path, and the `Access-Control-Max-Age` header has been customized only for the `get` operation.
+
+````yaml
+/pets/{petName}:
+  options:
+    responses:
+      default:
+        description: CORS headers for all operations
+        headers:
+          Access-Control-Allow-Origin:
+            type: string
+            default: http://www.company.com
+          Access-Control-Allow-Headers:
+            type: string
+            default: X-UA-Compatible, X-XSS-Protection
+
+  get:
+    responses:
+      default:
+        description: CORS header for this operation
+        headers:
+          Access-Control-Max-Age:
+            type: number
+            default: 60
+````
+

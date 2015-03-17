@@ -1,6 +1,6 @@
 | Documentation In Progress |
 |---------------------------|
-| Please bear with me.  I'm writing the documentation as quickly as I can.  Check back soon
+| Please bear with me.  I'm writing the documentation as quickly as I can.  For now, please [read the Sample 1 walkthrough](../samples/yaml.md) for an overview of the Mock middleware's behavior.
 
 Mock middleware
 ============================
