@@ -95,6 +95,7 @@ paths:
           description: Filters pets by type (dog, cat, or bird)
           required: false
           type: string
+          enum: [cat, dog, bird]
         - name: age
           in: query
           description: Filters pets by age
