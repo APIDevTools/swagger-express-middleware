@@ -9,6 +9,13 @@ Sample 1 Walkthrough
 * [YAML Walkthrough](yaml.md)
 
 
+Overview
+--------------------------
+This sample demonstrates the most simplistic usage of Swagger Express Middleware. It simply creates a new Express Application and adds all of the Swagger middleware without changing any options, and without adding any custom middleware.
+
+This sample also demonstrates a __fully-functional mock__ without any custom middleware or logic.
+
+
 Run the Sample
 --------------------------
 To run the sample, you'll need to `cd` to the `samples` directory and then run [sample1.js](../../samples/sample1.js) in Node.  Here's how to do that:

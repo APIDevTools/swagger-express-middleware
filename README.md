@@ -17,10 +17,10 @@ Features
 Swagger Express Middleware uses [Swagger-Parser](https://github.com/BigstickCarpet/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers. 
 
 * __Thoroughly tested__<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 public Google APIs](https://github.com/APIs-guru/api-models/tree/master/google).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node.
+Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 public Google APIs](https://github.com/APIs-guru/api-models/tree/master/google).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
 
 * __[Mock middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/mock.md)__<br>
-__Fully-functional mock__ implementations for every operation in your API definition, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
+__Fully-functional mock__ implementations for every operation in your API, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
 * __[Metadata middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/metadata.md)__<br>
 Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.swagger`.
@@ -93,9 +93,11 @@ Contributing
 --------------------------
 I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/BigstickCarpet/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/BigstickCarpet/swagger-express-middleware/pulls).  Use JSHint to make sure your code passes muster.  (see [.jshintrc](.jshintrc)).
 
-Here are some things currently on the to-do list:
+Here are some things currently on the __to-do list__:
 
 * __Response validation__ - The plan is to add code that intercepts calls to `res.send()` and validates the response against the Swagger API.
+
+* __Security middleware__ - The [Metadata middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/metadata.md) already exposes security metadata for each request, and the [Validate Request middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/validateRequest.md) does some very basic authentication checks, but any _real_ authentication/authorization logic currently requries the developer to write custom middleware.  It'll be dead-simple to implement `basic` and `apiKey` authentication.  `oauth2` might be a bit more complicated, but still doable.
 
 * __XML Support__ - You can already use XML with Swagger Express Middleware, but it simply gets parsed as a string.  You get no schema validation or automatic parsing.  Now that Swagger 2.0 [officially supports XML](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#xmlObject), I intend to add support for XML with the same features as JSON.
 
