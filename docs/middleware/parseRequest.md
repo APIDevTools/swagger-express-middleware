@@ -16,7 +16,6 @@ var middleware = require('swagger-express-middleware');
 var app        = express();
 
 middleware('PetStore.yaml', app, function(err, middleware) {
-    // Add the Metadata and Parse Request middleware to the Express app
     app.use(middleware.metadata());
     app.use(middleware.parseRequest());
 
@@ -34,20 +33,22 @@ middleware('PetStore.yaml', app, function(err, middleware) {
 });
 ````
 
-Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets).  You'll see all the parsed query params for the `/pets` path in the [PetStore.yaml](../../samples/PetStore.yaml).  Now try adding some query parameters to the URL and see how those params get parsed.  Here are some examples to try:
+Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets).  You'll see all the parsed query params for the `/pets` path in the [PetStore.yaml](../../samples/PetStore.yaml).  Now try adding some query parameters to the URL and see how those params get parsed.  
 
-__Valid Params:__
+Here are some sample links to try:
 
-* [Parsed integer](http://localhost:8000/pets?age=4)
-* [Parsed enumeration](http://localhost:8000/pets?type=dog)
-* [Parsed array](http://localhost:8000/pets?tags=fluffy&tags=furry)
-* [Parsed Date (in UTC)](http://localhost:8000/pets?dob=2005-04-25)
+__Valid:__
 
-__Invalid Params:__
+* [integer param](http://localhost:8000/pets?age=4)
+* [enumeration param](http://localhost:8000/pets?type=dog)
+* [array param](http://localhost:8000/pets?tags=fluffy&tags=furry)
+* [date param (in UTC)](http://localhost:8000/pets?dob=2005-04-25)
 
-* [The "age" param is an integer, not a float](http://localhost:8000/pets?age=4.5)
-* [The "type" param must be "cat", "dog", or "bird"](http://localhost:8000/pets?type=fish)
-* [The "dob" param is not a properly-formatted date](http://localhost:8000/pets?dob=2005/05/04)
+__Invalid:__
+
+* ["age" param is an integer, not a float](http://localhost:8000/pets?age=4.5)
+* ["type" param must be "cat", "dog", or "bird"](http://localhost:8000/pets?type=fish)
+* ["dob" param is not a properly-formatted date](http://localhost:8000/pets?dob=2005/05/04)
 
 
 Options

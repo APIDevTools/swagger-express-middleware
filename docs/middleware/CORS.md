@@ -16,7 +16,6 @@ var middleware = require('swagger-express-middleware');
 var app        = express();
 
 middleware('PetStore.yaml', app, function(err, middleware) {
-    // Add the Metadata and CORS middleware to the Express app
     app.use(middleware.metadata());
     app.use(middleware.CORS());
 
