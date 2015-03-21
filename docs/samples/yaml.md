@@ -58,7 +58,7 @@ The `GET /pets` operation has a `Last-Modified` response header defined, so the 
 The `POST /pets` operation lets you add new pets.  Each pet that you add gets its own URL.  For example, if you add the pet `{name: "Fido", type: "dog", age: 4}`, then you can later GET, PATCH, or DELETE this pet at [/pets/Fido](http://localhost:8000/pets/Fido).  But how does this URL get created?  Why did it use the pet's `name` property rather than its `type` or `age`? 
 
 ##### Determining the primary key
-The [Mock middleware](../middleware/mock.md) tries to determine your model's primary key using a few different techniques, depending on data types.  For `object` types, such as our `pet` model, it first looks for common property names like `id`, `key`, `username`, `name`, etc.  If that doesn't work, then it looks for required properties in your JSON schema. If all else fails, then it just generates a random, unique value.
+The [Mock middleware](../middleware/mock.md) tries to determine your model's primary key using [a few different techniques](../middleware/mock.md#how-primary-keys-are-determined), depending on data types.  For `object` types, such as our `pet` model, it first looks for common property names like `id`, `key`, `username`, `name`, etc.  If that doesn't work, then it looks for required properties in your JSON schema. If all else fails, then it just generates a random, unique value.
 
 ##### Response Headers
 The `POST /pets` operation has a `Location` response header defined, so the [Mock middleware](../middleware/mock.md) will automatically set this header to the URL that was created for the pet (using its primary key).
