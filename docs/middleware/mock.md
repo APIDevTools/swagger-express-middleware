@@ -2,12 +2,31 @@ Mock middleware
 ============================
 __Fully-functional mock__ implementations for every operation in your API, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
-__NOTE:__ The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible Swagger API.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the default mock behavior at any level of granularity you want.
+__NOTE:__ The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible Swagger API.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the [default behavior](#default-behavior) with your own [custom behavior](#customizing-behavior).
 
 
 Examples
 --------------------------
 For some examples (and explanations) of the Mock middleware in action, see the [Sample 1 walkthrough](../samples/running.md) and [Sample 2 walkthrough](../samples/walkthrough2.md).
+
+````javascript
+var express = require('express');
+var middleware = require('swagger-express-middleware');
+
+var app = express();
+
+middleware('PetStore.yaml', app, function(err, middleware) {
+    app.use(
+        middleware.metadata(),
+        middleware.parseRequest(),
+        middleware.validateRequest(),
+        middleware.mock()
+    );
+
+    app.listen(8000, function() {
+        console.log('POST some data to http://localhost:8000/pets');
+    });
+````
 
 
 Options
@@ -108,20 +127,70 @@ Swagger Express Middleware uses [Multer](https://github.com/expressjs/multer) to
 
 
 ##### How primary keys are determined
-Todo
+Every [REST resource](http://restful-api-design.readthedocs.org/en/latest/resources.html) is uniquely identified by a URL.  When resources are created by a `PUT`, `PATCH`, or `POST` to a _resource_ path (such as _/pets/{petName}_), the resource's URL is obvious. `PUT /pets/Fido` creates a resource at _/pets/Fido_.   
+
+But when resources are created by a `PUT`, `PATCH`, or `POST` to a _collection_ path (such as _/pets_), the Mock middleware needs to determine the resource URL.  It does this by trying to determine the primary key of the data model.  This consists of the following logic, _in order_.  As soon as a primary key is found, the rest of the steps are skipped.
+
+1. __Data type__<br>
+If your data is a simple data type, such as a string, number, boolean, or date, then the value itself is the primary key.
+
+2. __Property names__<br>
+If your data model is an object, then the Mock middleware will look for any property that is usually a primary key, such as `id`, `key`, `code`, `number`, `num`, `nbr`, `username`, `name`, etc.  If the data has more than one of these properties, then it chooses the one that is most likely to be the primary key (for example, it will choose `id` over `name`). Also, it will ignore any properties that aren't simple data types (string, number, boolean, or date).
+
+3. __Required properties__<br>
+If your Swagger API specifies any required properties for your data model, then the Mock middleware will use the _first_ required property that is a simple data type (string, number, boolean, or date).
+
+4. __File name__<br>
+If the operation has a _single_ file parameter, then the file name is used as the primary key.
+
+If a primary key is found, then it is used as the resource's URL.  If the primary key property has no value, then a random, unique value is generated for it, according to the property's data type.  If _no_ primary key is found at all, then a random value is generated and used as the resource's URL.
+
+For an example of all this in action, see the [Sample 1 walkthrough](../samples/running.md).  When you `POST` to the the _/pets_ path, the pet's `name` property is used for the resource URL (e.g. _/pets/Fido_).   When you `POST` a photo to the _/pets/{petName}/photos_ path, the `id` parameter is used as the resource URL (e.g. _/pets/Fido/photos/12345_).  But the `id` parameter is optional, so if you don't specify it, then a random, unique ID is generated.
 
 
 ### 3) Send the response
-Todo
+The final step to the Mock middleware is sending a response back to the client.  It uses your Swagger API definition to determine the status code, headers, and content-type of the response.
 
 ### How the status code is set
-Todo
+Each operation in your Swagger API can have multiple responses defined &mdash; one for each HTTP status code, plus a "default" response.  If you define any 2XX or 3XX responses, then the Mock middleware will use the lowest one as the status code.  If you only have a "default" response defined, then it will use HTTP status code that is most appropriate.  For `POST` and `PUT` operations, it will use [HTTP 201 (Created)](http://httpstatusdogs.com/201-created).  For `DELETE` operations that have no response schema, it will use [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content).  For everything else, it uses an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).
+
+__NOTE:__ If your Swagger API doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
+
+__TIP:__ If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the Swagger API. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
+
 
 ### How response headers are set
-Todo
+If your Swagger API includes response headers, then the Mock middleware will set them.  If you specify a `default` value for the header, then that value will be used.  If you _don't_ specify a `default`, then the Mock middleware will set the value as follows:
+
+* `Last-Modified`<br>
+Is set to the date/time that the resource was last modified.
+
+* `Location`<br>
+Is set to the resource's URL.  This is especially useful when POSTing new resources to a collection path, since it lets the client know the URL of the newly-created resource.
+
+* `Content-Disposition`<br>
+Is set to `attachment` with a file name that corresponds to the resource URL.
+
+* `Set-Cookie`<br>
+Sets a cookie named "_swagger_" with a random, unique value.  If the "_swagger_" cookie already exists, then its existing value is used instead.  This makes it easy to use `Set-Cookie` in your API for cookie-based tokens.
+
+* __Anything else__<br>
+A random value is generated, based on the data type of the header.
+
+__TIP:__ You can set response headers yourself using custom middleware.  The Mock middleware won't set any headers that already have values.
+
 
 ### How the content-type is set
-Todo
+The response body and `Conent-Type` header are determined by the response schema in your Swagger API.  If there is no response schema at all, then an empty response is sent.  If there _is_ a response schema then its `type` property determines what is sent.
+
+* `object` or `array`<br>
+The response body is sent as JSON.  The `Content-Type` header is set to `application/json` unless your API includes a different JSON MIME type in the `produces` list (such as `text/json`, `application/x-web-app-manifest+json`, etc.)
+
+* `file`<br>
+The file contents are sent as the response body, and the `Content-Type` header is determined by the file type.  If `res.body` is a [Buffer](https://nodejs.org/api/buffer.html#buffer_class_buffer) object, then the buffer contents are sent as the response body, and the `Content-Type` header is set to `application/octet-stream` unless your API includes a different MIME type in the `produces` list.
+
+* __Anything else__<br>
+The response body is sent as plain text, and the `Content-Type` header is set to `text/plain` unless your API includes a different MIME type in the `produces` list (such as `text/html`, `text/css`, `application/xml`, etc.)
 
 
 Customizing Behavior
@@ -171,7 +240,7 @@ app.use(middleware.mock());
 
 
 ### Modifying the response
-Just like you can modify the [Request object](http://expressjs.com/4x/api.html#request) in your own middleware, you can also modify the [Response object](http://expressjs.com/4x/api.html#response).  If you set the `res.body` property, the Mock middleware will send that value as the response rather than whatever it would normally send.  Of course, you could also just send your own response using [`res.send()`](http://expressjs.com/4x/api.html#res.send), but that would end the request, so the Mock middleware would never run.  Using `res.body` allows the Mock middleware to run, so it can do all the other things it does, such as updating the [DataStore](../exports/DataStore.md), setting response headers, setting the status code, etc.
+Just like you can modify the [Request object](http://expressjs.com/4x/api.html#request) in your own middleware, you can also modify the [Response object](http://expressjs.com/4x/api.html#response).  For example, you can use [`res.set()`](http://expressjs.com/4x/api.html#res.set) to set response headers, and [`res.status()`](http://expressjs.com/4x/api.html#res.status) to set the status code.  You can also set the `res.body` property, which will make the Mock middleware send that value as the response rather than whatever it would normally send.  Of course, you could also just send your own response using [`res.send()`](http://expressjs.com/4x/api.html#res.send), but that would end the request, so the Mock middleware would never run.  Using `res.body` allows the Mock middleware to run, so it can do all the other things it does, such as updating the [DataStore](../exports/DataStore.md), setting response headers, setting the status code, etc.
 
 Here's an example of using `res.body` to customize the response:
 
