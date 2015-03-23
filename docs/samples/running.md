@@ -49,7 +49,7 @@ The form at the bottom of the page lets you add pet photos. Use the file-picker 
 
 You can click the "_Photos_" button to view all the photo data for the current pet.  This is _not_ the actual images, just the JSON data, such as file names, sizes, MIME types, etc.  However, you'll see that each image is assigned a unique `id` property.  You can use this ID to view an individual photo (e.g. [http://localhost:8000/pets/Fido/photos/123456789](http://localhost:8000/pets/Fido/photos/123456789))
 
-__TIP:__ So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](../../samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md).
+__TIP:__ So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](../../samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md#how-primary-keys-are-determined).
 
 
 ### More Advanced Stuff

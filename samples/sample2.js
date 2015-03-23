@@ -78,7 +78,7 @@ middleware.init('PetStore.yaml', function(err) {
 
     // Add custom middleware
     app.patch('/pets/:petName', function(req, res, next) {
-        if (req.body.name !== req.path.petName) {
+        if (req.body.name !== req.params.petName) {
             // The pet's name has changed, so change its URL.
             // Start by deleting the old resource
             myDB.delete(new Resource(req.path), function(err, pet) {

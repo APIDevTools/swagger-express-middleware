@@ -78,7 +78,7 @@ Since the pet is determined by the `{petName}` property, the `GET` and `DELETE` 
 ##### Changing a Pet's Name
 Let's say you have this pet: `{name: "Fido", type: "dog"}` at the URL [/pets/Fido](http://localhost:8000/pets/Fido), and you decide you want to change Fido's name to "Fluffy".  So, you send a `PATCH` request to [/pets/Fido](http://localhost:8000/pets/Fido) with the data `{name: "Fluffy", type: "dog"}`.  Presto! Fido is now Fluffy.  Except for one thing: Fluffy's URL is still [/pets/Fido](http://localhost:8000/pets/Fido), _not_ [/pets/Fluffy](http://localhost:8000/pets/Fluffy).  Why is that?
 
-Even though the [Mock middleware](../middleware/mock.md) is _pretty sure_ the URL _should_ be [/pets/Fluffy](http://localhost:8000/pets/Fluffy), it will do exactly what you told it to do, which is to save the new pet data to the URL you specified. But what if you _really_ want the URL to change whenever a pet's name changes?  That's a perfect situation for some custom middleware logic, which we cover in the [Sample 2 Walkthrough](walkthrough2.md).
+Even though the [Mock middleware](../middleware/mock.md) is _pretty sure_ the URL _should_ be [/pets/Fluffy](http://localhost:8000/pets/Fluffy), it will do exactly what you told it to do, which is to save the new pet data to the URL you specified. But what if you _really_ want the URL to change whenever a pet's name changes?  That's a perfect situation for some custom middleware logic, which we cover in the [Sample 2 Walkthrough](walkthrough2.md#custom-middleware).
 
 
 ##### PUT vs PATCH
