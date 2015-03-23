@@ -28,7 +28,7 @@ var app        = express();
 var middleware = new Middleware(app);
 
 // Call its init method
-middleware.init('PetStore.yaml', function(err, middleware) { 
+middleware.init('PetStore.yaml', function(err) { 
     ... 
 });
 ````

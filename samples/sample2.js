@@ -18,7 +18,7 @@ var util            = require('util'),
 var app = express();
 var middleware = new Middleware(app);
 
-middleware.init('PetStore.yaml', function(err, middleware) {
+middleware.init('PetStore.yaml', function(err) {
     // Create a custom data store with some initial mock data
     var myDB = new MemoryDataStore();
     myDB.save(
@@ -102,7 +102,7 @@ middleware.init('PetStore.yaml', function(err, middleware) {
         }
     });
 
-    // The mock middleware will use our custom data store, 
+    // The mock middleware will use our custom data store,
     // which we already pre-populated with mock data
     app.use(middleware.mock(myDB));
 
