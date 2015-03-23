@@ -197,6 +197,7 @@ describe('FileServer middleware', function() {
 
                             express.enable('strict routing');
                             express.enable('case sensitive routing');
+
                             env.supertest(express)
                                 [method]('/API/Custom/Path.json/')
                                 .expect(404)
@@ -211,6 +212,29 @@ describe('FileServer middleware', function() {
                                         .expect(isHead ? '' : env.parsed.petStore)
                                         .end(env.checkResults(done));
                                 })
+                        });
+                    }
+                );
+
+                it('should use routing options instead of the Express app\'s settings',
+                    function(done) {
+                        env.swagger(env.files.petStore, function(err, middleware) {
+                            var express = env.express();
+                            express.use(middleware.files(
+                                // These settings will be used instead of the Express App's settings
+                                {caseSensitive: false, strict: false},
+                                {useBasePath: true, dereferencedJsonPath: '/custom/path.json'}
+                            ));
+
+                            // The Express App is case-sensitive and strict
+                            express.enable('strict routing');
+                            express.enable('case sensitive routing');
+
+                            env.supertest(express)
+                                [method]('/API/Custom/Path.json/')
+                                .expect('Content-Type', 'application/json; charset=utf-8')
+                                .expect(isHead ? '' : env.parsed.petStore)
+                                .end(env.checkResults(done));
                         });
                     }
                 );
@@ -560,6 +584,30 @@ describe('FileServer middleware', function() {
                                         .expect(equalsFile(env.files.text))
                                         .end(env.checkResults(done));
                                 })
+                        });
+                    }
+                );
+
+                it('should use routing options instead of the Express app\'s settings',
+                    function(done) {
+                        env.swagger(env.files.externalRefs, function(err, middleware) {
+                            var express = env.express();
+                            express.use(middleware.files(
+                                // These settings will be used instead of the Express App's settings
+                                {caseSensitive: false, strict: false},
+                                {useBasePath: true, rawFilesPath: '/custom/path.json'}
+                            ));
+
+                            // The Express App is case-sensitive and strict
+                            express.enable('strict routing');
+                            express.enable('case sensitive routing');
+
+                            env.supertest(express)
+                                [method]('/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/')
+                                .expect('Content-Type', 'text/plain; charset=UTF-8')
+                                .expect(200)
+                                .expect(equalsFile(env.files.text))
+                                .end(env.checkResults(done));
                         });
                     }
                 );

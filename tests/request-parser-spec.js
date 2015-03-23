@@ -4,6 +4,113 @@ var env = require('./test-environment'),
 describe('RequestParser middleware', function() {
     'use strict';
 
+    describe('method signatures', function() {
+        it('can be called without any params',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express(middleware.parseRequest());
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=bar')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.cookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+
+        it('can be called with just an Express app',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express();
+                    express.use(middleware.parseRequest(express));
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=bar')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.cookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+
+        it('can be called with just routing options',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express(middleware.parseRequest({caseSensitive: true, secret: 'abc123'}));
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=bar')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.cookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+
+        it('can be called with just options',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express(middleware.parseRequest({cookie: {secret: 'abc123'}}));
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=s:bar.CKdPoAAwvsKHtjP3qio0u5RrpawK0QNu4BEPo6Q9Xnc;.B5BBtOd35cgISpDmk10UtZJsUYLsKQ2q0oAHzn4Ui7g')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.signedCookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+
+        it('can be called with an Express app and options',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express();
+                    express.use(middleware.parseRequest(express, {cookie: {secret: 'abc123'}}));
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=s:bar.CKdPoAAwvsKHtjP3qio0u5RrpawK0QNu4BEPo6Q9Xnc;.B5BBtOd35cgISpDmk10UtZJsUYLsKQ2q0oAHzn4Ui7g')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.signedCookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+
+        it('can be called with a routing options and options',
+            function(done) {
+                env.swagger(env.parsed.petStore, function(err, middleware) {
+                    var express = env.express(middleware.parseRequest({caseSensitive: true}, {cookie: {secret: 'abc123'}}));
+
+                    env.supertest(express)
+                        .post('/foo')
+                        .set('Cookie', 'foo=s:bar.CKdPoAAwvsKHtjP3qio0u5RrpawK0QNu4BEPo6Q9Xnc;.B5BBtOd35cgISpDmk10UtZJsUYLsKQ2q0oAHzn4Ui7g')
+                        .end(env.checkSpyResults(done));
+
+                    express.post('/foo', env.spy(function(req, res, next) {
+                        expect(req.signedCookies).to.deep.equal({foo: 'bar'});
+                    }));
+                });
+            }
+        );
+    });
+
+
     describe('Cookie parser', function() {
         it('should parse unsigned cookies',
             function(done) {

@@ -66,6 +66,28 @@ describe('PathParser middleware', function() {
         }
     );
 
+    it('should parse path params using the Express app of the Middleware class, even if routing options are specified',
+        function(done) {
+            // The Express app is passed to the Middleware class
+            var express = env.express();
+            env.swagger(env.parsed.petStore, express, function(err, middleware) {
+                express.use(middleware.metadata());                                 // <--- The Express app is NOT passed to the Metadata class
+                express.use(middleware.parseRequest({caseSensitive: true}, {}));    // <--- The Express app is NOT passed to the PathParser class
+
+                env.supertest(express)
+                    .get('/api/pets/Fido/photos/12345')
+                    .end(env.checkSpyResults(done));
+
+                express.get('/api/pets/:PetName/photos/:ID', env.spy(function(req, res, next) {
+                    expect(req.params).to.deep.equal({
+                        PetName: 'Fido',
+                        ID: 12345
+                    });
+                }));
+            });
+        }
+    );
+
     it('should parse path params that are overridden by an operation',
         function(done) {
             var api = _.cloneDeep(env.parsed.petStore);
