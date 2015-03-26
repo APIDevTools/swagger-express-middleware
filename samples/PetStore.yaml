@@ -34,6 +34,7 @@ definitions:
         $ref: veterinarian
       tags:
         type: array
+        uniqueItems: true
         items:
           type: string
           minLength: 1
@@ -89,6 +90,7 @@ paths:
           type: array
           items:
             type: string
+          uniqueItems: true
           collectionFormat: csv
         - name: type
           in: query

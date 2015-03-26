@@ -99,7 +99,7 @@ describe('Util methods', function() {
     });
     
     describe('util.newError', function() {
-        it('can be called with just a message',
+         it('can be called with just a message',
             function() {
                 var err = util.newError('testing 1, 2, 3');
                 expect(err).to.be.an.instanceOf(Error);
@@ -145,8 +145,9 @@ describe('Util methods', function() {
                 NewErrorWithStackTrace();
                 expect(err).to.be.an.instanceOf(Error);
                 expect(err.status).to.equal(500);
-                expect(err.message).to.match(/^500 Error: testing 1, 2, 3 \nSyntaxError: Test Error/);
-                expect(err.message).to.contain('at NewErrorWithStackTrace');
+                expect(err.message).to.equal('500 Error: testing 1, 2, 3 \nTest Error');
+                expect(err.stack).to.match(/^500 Error: testing 1, 2, 3 \nTest Error \nSyntaxError: Test Error/);
+                expect(err.stack).to.contain('at NewErrorWithStackTrace');
             }
         );
 
@@ -160,8 +161,9 @@ describe('Util methods', function() {
                 NewErrorWithStackTrace();
                 expect(err).to.be.an.instanceOf(Error);
                 expect(err.status).to.equal(500);
-                expect(err.message).to.match(/^500 Error: testing 1, 2, "3" \nTypeError: Test Error/);
-                expect(err.message).to.contain('at NewErrorWithStackTrace');
+                expect(err.message).to.equal('500 Error: testing 1, 2, "3" \nTest Error');
+                expect(err.stack).to.match(/^500 Error: testing 1, 2, "3" \nTest Error \nTypeError: Test Error/);
+                expect(err.stack).to.contain('at NewErrorWithStackTrace');
             }
         );
 
@@ -175,8 +177,9 @@ describe('Util methods', function() {
                 NewErrorWithStackTrace();
                 expect(err).to.be.an.instanceOf(Error);
                 expect(err.status).to.equal(404);
-                expect(err.message).to.match(/^404 Error: testing 1, 2, "3" \nTypeError: Test Error/);
-                expect(err.message).to.contain('at NewErrorWithStackTrace');
+                expect(err.message).to.equal('404 Error: testing 1, 2, "3" \nTest Error');
+                expect(err.stack).to.match(/^404 Error: testing 1, 2, "3" \nTest Error \nTypeError: Test Error/);
+                expect(err.stack).to.contain('at NewErrorWithStackTrace');
             }
         );
     });

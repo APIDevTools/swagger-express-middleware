@@ -205,6 +205,63 @@ describe('Edit Resource Mock', function() {
                     }
                 );
 
+                it('should return the saved resource if the Swagger API schema is a wrapped object',
+                    function(done) {
+                        // Wrap the "pet" definition in an envelope object
+                        api.paths['/pets/{PetName}'][method].responses[200].schema = {
+                            type: 'object',
+                            properties: {
+                                code: {type: 'integer', default: 42},
+                                message: {type: 'string', default: 'hello world'},
+                                error: {type: 'object'},
+                                result: _.cloneDeep(api.definitions.pet)
+                            }
+                        };
+
+                        helper.initTest(api, function(supertest) {
+                            supertest
+                                [method]('/api/pets/Fido')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
+                                .end(env.checkResults(done));
+                        });
+                    }
+                );
+
+                it('should return the whole collection if the Swagger API schema is a wrapped array',
+                    function(done) {
+                        // Wrap the "pet" definition in an envelope object
+                        api.paths['/pets/{PetName}'][method].responses[200].schema = {
+                            type: 'object',
+                            properties: {
+                                code: {type: 'integer', default: 42},
+                                message: {type: 'string', default: 'hello world'},
+                                error: {type: 'object'},
+                                result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
+                            }
+                        };
+
+                        var dataStore = new env.swagger.MemoryDataStore();
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets/Fido')
+                                    .send({Name: 'Fido', Type: 'dog'})
+                                    .expect(200, {
+                                        code: 42,
+                                        message: 'hello world',
+                                        result: [
+                                            {Name: 'Fluffy', Type: 'cat'},
+                                            {Name: 'Fido', Type: 'dog'}
+                                        ]
+                                    })
+                                    .end(env.checkResults(done));
+                            });
+                        });
+                    }
+                );
+
                 it('should return `res.body` if already set by other middleware',
                     function(done) {
                         function messWithTheBody(req, res, next) {

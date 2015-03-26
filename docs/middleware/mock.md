@@ -63,7 +63,7 @@ The Mock middleware's behavior varies greatly depending on the HTTP request and 
 ### 1) Determine if it's a collection or resource operation
 Two fundamental concepts in RESTful API are [resources and collections](http://restful-api-design.readthedocs.org/en/latest/resources.html).  Put simply, resources are the _things_ in your API &mdash; the users, the products, the orders, etc. &mdash; and collections are _groups_ of those things &mdash; all the products in your database, all the orders for a user, etc.  Every REST operation is either operating on a resource or a collection of resources, so the first thing the Mock middleware does is determine which one.
 
-To determine this, it first looks for a `GET` or `HEAD` operation that has a response schema.  If the response schema is an `array`, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](../../samples/PetStore.yaml) has five paths defined: 
+To determine this, it compares the _response_ schema of your `GET` or `HEAD` operation to the _request_ schema of your `POST`, `PUT`, or `PATCH` operation.  If the response schema is an `array`, or an `object` with an `array` property that matches your request schema, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](../../samples/PetStore.yaml) has five paths defined: 
 
 * __/pets__<br>
 Has a `get` operation with an `array` response schema, therefore it's a collection path. You can `get` multiple pets from the collection, `delete` multiple pets from the collection, and `post` a new pet to the collection.

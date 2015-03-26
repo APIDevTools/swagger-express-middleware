@@ -3,7 +3,7 @@ var env    = require('../test-environment'),
     helper = require('./test-helper');
 
 describe('Query Collection Mock', function() {
-    ['head', 'get', 'options'].forEach(function(method) {
+    ['head', 'options', 'get'].forEach(function(method) {
         describe(method.toUpperCase(), function() {
             'use strict';
 
@@ -83,6 +83,45 @@ describe('Query Collection Mock', function() {
                                     data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
                                 }
                             ]);
+                            request.end(env.checkResults(done));
+                        });
+                    });
+                }
+            );
+
+            it('should return a wrapped array of all items in the collection',
+                function(done) {
+                    // Wrap the "pet" definition in an envelope object
+                    api.paths['/pets'][method].responses[200].schema = {
+                        type: 'object',
+                        properties: {
+                            code: {type: 'integer', default: 42},
+                            message: {type: 'string', default: 'hello world'},
+                            error: {type: 'object'},
+                            result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
+                        }
+                    };
+
+                    var dataStore = new env.swagger.MemoryDataStore();
+                    var res1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                    var res2 = new env.swagger.Resource('/api/pets/String', 'I am Fido');
+                    var res3 = new env.swagger.Resource('/api/pets/Buffer', new Buffer('hello world'));
+                    dataStore.save(res1, res2, res3, function() {
+                        helper.initTest(dataStore, api, function(supertest) {
+                            var request = supertest[method]('/api/pets');
+                            noHeaders || request.expect('Content-Length', 157);
+                            request.expect(200, noBody ? '' : {
+                                code: 42,
+                                message: 'hello world',
+                                result: [
+                                    {Name: 'Fido', Type: 'dog'},
+                                    'I am Fido',
+                                    {
+                                        type: 'Buffer',
+                                        data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+                                    }
+                                ]
+                            });
                             request.end(env.checkResults(done));
                         });
                     });

@@ -42,6 +42,35 @@ describe('Query Resource Mock', function() {
                 }
             );
 
+            it('should return a wrapped resource',
+                function(done) {
+                    // Wrap the "pet" definition in an envelope object
+                    api.paths['/pets/{PetName}'][method].responses[200].schema = {
+                        type: 'object',
+                        properties: {
+                            code: {type: 'integer', default: 42},
+                            message: {type: 'string', default: 'hello world'},
+                            error: {type: 'object'},
+                            result: _.cloneDeep(api.definitions.pet)
+                        }
+                    };
+
+                    var dataStore = new env.swagger.MemoryDataStore();
+                    var res1 = new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
+                    var res2 = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                    var res3 = new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'});
+
+                    dataStore.save(res1, res2, res3, function() {
+                        helper.initTest(dataStore, api, function(supertest) {
+                            var request = supertest[method]('/api/pets/Fluffy');
+                            noHeaders || request.expect('Content-Length', 75);
+                            request.expect(200, noBody ? '' : {code: 42, message: 'hello world', result: {Name: 'Fluffy', Type: 'cat'}});
+                            request.end(env.checkResults(done));
+                        });
+                    });
+                }
+            );
+
             it('should not return anything if no response schema is specified in the Swagger API',
                 function(done) {
                     delete api.paths['/pets/{PetName}'][method].responses[200].schema;

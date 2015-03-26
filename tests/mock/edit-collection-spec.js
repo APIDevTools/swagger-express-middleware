@@ -2,7 +2,7 @@ var env    = require('../test-environment'),
     helper = require('./test-helper');
 
 describe('Edit Collection Mock', function() {
-    ['post', 'patch', 'put'].forEach(function(method) {
+    ['patch', 'put', 'post'].forEach(function(method) {
         describe(method.toUpperCase(), function() {
             'use strict';
 
@@ -142,6 +142,34 @@ describe('Edit Collection Mock', function() {
                     }
                 );
 
+                it('should return the first new resource if the Swagger API schema is a wrapped object',
+                    function(done) {
+                        // Wrap the "pet" definition in an envelope object
+                        api.paths['/pets'][method].responses[201].schema = {
+                            type: 'object',
+                            properties: {
+                                code: {type: 'integer', default: 42},
+                                message: {type: 'string', default: 'hello world'},
+                                error: {type: 'object'},
+                                result: _.cloneDeep(api.definitions.pet)
+                            }
+                        };
+                        arrayify();
+
+                        var dataStore = new env.swagger.MemoryDataStore();
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
+                                    .expect(201, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
+                                    .end(env.checkResults(done));
+                            });
+                        });
+                    }
+                );
+
                 it('should return the whole collection (including the new resource) if the Swagger API schema is an array',
                     function(done) {
                         api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
@@ -175,6 +203,61 @@ describe('Edit Collection Mock', function() {
                                     .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                                     .end(env.checkResults(done));
                             });
+                        });
+                    }
+                );
+
+                it('should return the whole collection (including the new resources) if the Swagger API schema is a wrapped array',
+                    function(done) {
+                        // Wrap the "pet" definition in an envelope object
+                        api.paths['/pets'][method].responses[201].schema = {
+                            type: 'object',
+                            properties: {
+                                code: {type: 'integer', default: 42},
+                                message: {type: 'string', default: 'hello world'},
+                                error: {type: 'object'},
+                                result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
+                            }
+                        };
+                        arrayify();
+
+                        var dataStore = new env.swagger.MemoryDataStore();
+                        var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
+                        dataStore.save(resource, function() {
+                            helper.initTest(dataStore, api, function(supertest) {
+                                supertest
+                                    [method]('/api/pets')
+                                    .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
+                                    .expect(201, {
+                                        code: 42,
+                                        message: 'hello world',
+                                        result: [
+                                            {Name: 'Fluffy', Type: 'cat'},
+                                            {Name: 'Fido', Type: 'dog'},
+                                            {Name: 'Polly',Type: 'bird'}
+                                        ]
+                                    })
+                                    .end(env.checkResults(done));
+                            });
+                        });
+                    }
+                );
+
+                it('should return `res.body` if already set by other middleware',
+                    function(done) {
+                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
+
+                        function messWithTheBody(req, res, next) {
+                            res.body = {message: 'Not the response you expected'};
+                            next();
+                        }
+
+                        helper.initTest(messWithTheBody, api, function(supertest) {
+                            supertest
+                                [method]('/api/pets')
+                                .send({Name: 'Fido', Type: 'dog'})
+                                .expect(201, {message: 'Not the response you expected'})
+                                .end(env.checkResults(done));
                         });
                     }
                 );
@@ -249,25 +332,6 @@ describe('Edit Collection Mock', function() {
                                     expect(res.headers.location).to.be.undefined;
                                     done();
                                 }));
-                        });
-                    }
-                );
-
-                it('should return `res.body` if already set by other middleware',
-                    function(done) {
-                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
-
-                        function messWithTheBody(req, res, next) {
-                            res.body = {message: 'Not the response you expected'};
-                            next();
-                        }
-
-                        helper.initTest(messWithTheBody, api, function(supertest) {
-                            supertest
-                                [method]('/api/pets')
-                                .send({Name: 'Fido', Type: 'dog'})
-                                .expect(201, {message: 'Not the response you expected'})
-                                .end(env.checkResults(done));
                         });
                     }
                 );

@@ -73,12 +73,52 @@ describe('Edit Resource Mock', function() {
             }
         );
 
-        it('should return the deleted resource if the Swagger API schema is an object',
+        it('should return the remaining resources in the collection if the Swagger API schema is an array',
             function(done) {
-                // Create a 200 response to return the deleted pet
+                // Create a 200 response to return all pets in the collection
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'object'}
+                    schema: {type: 'array', items: {type: 'object'}}
+                };
+
+                // Populate the collection
+                var dataStore = new env.swagger.MemoryDataStore();
+                var resources = [
+                    new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
+                    new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
+                    new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
+                ];
+                dataStore.save(resources, function() {
+
+                    helper.initTest(dataStore, api, function(supertest) {
+                        // Delete one of the pets
+                        supertest
+                            .delete('/api/pets/Fido')
+                            .expect(200, [
+                                // The deleted pet should NOT be returned.  Only the rest of the collection
+                                {Name: 'Fluffy', Type: 'cat'},
+                                {Name: 'Polly', Type: 'bird'}
+                            ])
+                            .end(env.checkResults(done));
+                    });
+                });
+            }
+        );
+
+        it('should return the deleted resource if the Swagger API schema is a wrapped object',
+            function(done) {
+                // Wrap the "pet" definition in an envelope object
+                api.paths['/pets/{PetName}'].delete.responses['200'] = {
+                    description: '200 response',
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            code: {type: 'integer', default: 42},
+                            message: {type: 'string', default: 'hello world'},
+                            error: {type: 'object'},
+                            result: _.cloneDeep(api.definitions.pet)
+                        }
+                    }
                 };
 
                 helper.initTest(api, function(supertest) {
@@ -91,9 +131,53 @@ describe('Edit Resource Mock', function() {
                             // Delete the pet
                             supertest
                                 .delete('/api/pets/Fido')
-                                .expect(200, {Name: 'Fido', Type: 'dog'})
+                                .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
                                 .end(env.checkResults(done));
                         }));
+                });
+            }
+        );
+
+        it('should return the remaining resources in the collection if the Swagger API schema is a wrapped array',
+            function(done) {
+                // Wrap the "pet" definition in an envelope object
+                api.paths['/pets/{PetName}'].delete.responses['200'] = {
+                    description: '200 response',
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            code: {type: 'integer', default: 42},
+                            message: {type: 'string', default: 'hello world'},
+                            error: {type: 'object'},
+                            result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
+                        }
+                    }
+                };
+
+                // Populate the collection
+                var dataStore = new env.swagger.MemoryDataStore();
+                var resources = [
+                    new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
+                    new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
+                    new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
+                ];
+                dataStore.save(resources, function() {
+
+                    helper.initTest(dataStore, api, function(supertest) {
+                        // Delete one of the pets
+                        supertest
+                            .delete('/api/pets/Fido')
+                            .expect(200, {
+                                code: 42,
+                                message: 'hello world',
+                                result: [
+                                    // The deleted pet should NOT be returned.  Only the rest of the collection
+                                    {Name: 'Fluffy', Type: 'cat'},
+                                    {Name: 'Polly', Type: 'bird'}
+                                ]
+                            })
+                            .end(env.checkResults(done));
+                    });
                 });
             }
         );
@@ -138,39 +222,7 @@ describe('Edit Resource Mock', function() {
             }
         );
 
-        it('should return the remaining resources in the collection if the Swagger API schema is an array',
-            function(done) {
-                // Create a 200 response to return all pets in the collection
-                api.paths['/pets/{PetName}'].delete.responses['200'] = {
-                    description: '200 response',
-                    schema: {type: 'array', items: {type: 'object'}}
-                };
-
-                // Populate the collection
-                var dataStore = new env.swagger.MemoryDataStore();
-                var resources = [
-                    new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
-                    new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
-                    new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
-                ];
-                dataStore.save(resources, function() {
-
-                    helper.initTest(dataStore, api, function(supertest) {
-                        // Delete one of the pets
-                        supertest
-                            .delete('/api/pets/Fido')
-                            .expect(200, [
-                                // The deleted pet should NOT be returned.  Only the rest of the collection
-                                {Name: 'Fluffy', Type: 'cat'},
-                                {Name: 'Polly', Type: 'bird'}
-                            ])
-                            .end(env.checkResults(done));
-                    });
-                });
-            }
-        );
-
-        it('should return an empty collection if the Swagger API schema is an array',
+        it('should return an empty collection if nothing was deleted, even if the Swagger API schema is an array',
             function(done) {
                 // Create a 200 response to return all pets in the collection
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {

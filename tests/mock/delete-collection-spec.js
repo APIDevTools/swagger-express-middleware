@@ -103,6 +103,83 @@ describe('Query Collection Mock', function() {
             }
         );
 
+        it('should return the deleted resources if the Swagger API schema is a wrapped array',
+            function(done) {
+                // Wrap the "pet" definition in an envelope object
+                api.paths['/pets'].delete.responses[200].schema = {
+                    type: 'object',
+                    properties: {
+                        code: {type: 'integer', default: 42},
+                        message: {type: 'string', default: 'hello world'},
+                        error: {type: 'object'},
+                        result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
+                    }
+                };
+
+                var dataStore = new env.swagger.MemoryDataStore();
+                var resources = [
+                    new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
+                    new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
+                    new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
+                ];
+                dataStore.save(resources, function() {
+
+                    helper.initTest(dataStore, api, function(supertest) {
+                        supertest
+                            .delete('/api/pets')
+                            .expect(200, {
+                                code: 42,
+                                message: 'hello world',
+                                result: [
+                                    {Name: 'Fido', Type: 'dog'},
+                                    {Name: 'Fluffy', Type: 'cat'},
+                                    {Name: 'Polly', Type: 'bird'}
+                                ]
+                            })
+                            .end(env.checkResults(done));
+                    });
+                });
+            }
+        );
+
+        it('should return the first deleted resource if the Swagger API schema is a wrapped object',
+            function(done) {
+                // Wrap the "pet" definition in an envelope object
+                api.paths['/pets'].delete.responses[200].schema = {
+                    type: 'object',
+                    properties: {
+                        code: {type: 'integer', default: 42},
+                        message: {type: 'string', default: 'hello world'},
+                        error: {type: 'object'},
+                        result: _.cloneDeep(api.definitions.pet)
+                    }
+                };
+
+                var dataStore = new env.swagger.MemoryDataStore();
+                var resources = [
+                    new env.swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'}),
+                    new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'}),
+                    new env.swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'})
+                ];
+                dataStore.save(resources, function() {
+
+                    helper.initTest(dataStore, api, function(supertest) {
+                        supertest
+                            .delete('/api/pets')
+                            .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
+                            .end(env.checkResults(done, function() {
+                                // Verify that all resources were deleted
+                                dataStore.getCollection('/api/pets', function(err, resources) {
+                                    if (err) return done(err);
+                                    expect(resources).to.have.lengthOf(0);
+                                    done();
+                                });
+                            }));
+                    });
+                });
+            }
+        );
+
         it('should not return the deleted resources on a 204 response, even if the Swagger API schema is an array',
             function(done) {
                 api.paths['/pets'].delete.responses[204] = api.paths['/pets'].delete.responses[200];
