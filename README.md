@@ -8,6 +8,7 @@ Swagger Express Middleware
 [![Codacy Score](http://img.shields.io/codacy/011f89f6f0dd46e5b9b5d3662a51213d.svg)](https://www.codacy.com/public/jamesmessinger/swagger-express-middleware)
 [![Coverage Status](https://img.shields.io/coveralls/BigstickCarpet/swagger-express-middleware.svg)](https://coveralls.io/r/BigstickCarpet/swagger-express-middleware)
 
+[![Downloads](https://img.shields.io/npm/dm/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
 [![npm](http://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
 [![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
 
@@ -17,7 +18,7 @@ Features
 Swagger Express Middleware uses [Swagger-Parser](https://github.com/BigstickCarpet/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers. 
 
 * __Thoroughly tested__<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 public Google APIs](https://github.com/APIs-guru/api-models/tree/master/google).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
+Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 Google APIs](https://github.com/APIs-guru/api-models/tree/master/google).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
 
 * __[Mock middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/mock.md)__<br>
 __Fully-functional mock__ implementations for every operation in your API, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
