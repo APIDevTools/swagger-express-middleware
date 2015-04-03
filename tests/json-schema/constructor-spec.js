@@ -4,13 +4,33 @@ var env        = require('../test-environment'),
 describe('JSON Schema constructor', function() {
     'use strict';
 
-    it('should throw an error if the schema is empty',
+    it('should throw an error if the schema is missing',
+        function() {
+            function createMissingSchema() {
+                new JsonSchema();
+            }
+
+            expect(createMissingSchema).to.throw('Missing JSON schema');
+        }
+    );
+
+    it('should throw an error if the schema is null',
+        function() {
+            function createNullSchema() {
+                new JsonSchema(null);
+            }
+
+            expect(createNullSchema).to.throw('Missing JSON schema');
+        }
+    );
+
+    it('should not throw an error if the schema is empty',
         function() {
             function createEmptySchema() {
                 new JsonSchema({});
             }
 
-            expect(createEmptySchema).to.throw('Missing JSON schema');
+            expect(createEmptySchema).not.to.throw();
         }
     );
 
@@ -24,7 +44,7 @@ describe('JSON Schema constructor', function() {
         }
     );
 
-    it('should throw an error if the schema type is missing',
+    it('should not throw an error if the schema type is missing',
         function() {
             function missingType() {
                 new JsonSchema({
@@ -36,7 +56,7 @@ describe('JSON Schema constructor', function() {
                 });
             }
 
-            expect(missingType).to.throw('Invalid JSON schema type: undefined');
+            expect(missingType).not.to.throw();
         }
     );
 });

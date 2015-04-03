@@ -53,7 +53,7 @@ describe('Edit Resource Mock', function() {
                 // Create a 200 response to return the deleted pet
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'object'}
+                    schema: {}
                 };
 
                 helper.initTest(api, function(supertest) {
@@ -78,7 +78,7 @@ describe('Edit Resource Mock', function() {
                 // Create a 200 response to return all pets in the collection
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'array', items: {type: 'object'}}
+                    schema: {type: 'array', items: {}}
                 };
 
                 // Populate the collection
@@ -111,11 +111,10 @@ describe('Edit Resource Mock', function() {
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
                     schema: {
-                        type: 'object',
                         properties: {
                             code: {type: 'integer', default: 42},
                             message: {type: 'string', default: 'hello world'},
-                            error: {type: 'object'},
+                            error: {},
                             result: _.cloneDeep(api.definitions.pet)
                         }
                     }
@@ -144,11 +143,10 @@ describe('Edit Resource Mock', function() {
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
                     schema: {
-                        type: 'object',
                         properties: {
                             code: {type: 'integer', default: 42},
                             message: {type: 'string', default: 'hello world'},
-                            error: {type: 'object'},
+                            error: {},
                             result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
                         }
                     }
@@ -185,7 +183,7 @@ describe('Edit Resource Mock', function() {
         it('should not return the deleted resource on a 204 response, even if the Swagger API schema is an object',
             function(done) {
                 // 204 responses cannot return data
-                api.paths['/pets/{PetName}'].delete.responses['204'].schema = {type: 'object'};
+                api.paths['/pets/{PetName}'].delete.responses['204'].schema = {};
 
                 helper.initTest(api, function(supertest) {
                     // Create a new pet
@@ -209,7 +207,7 @@ describe('Edit Resource Mock', function() {
                 // Create a 200 response to return the deleted pet
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'object'}
+                    schema: {}
                 };
 
                 helper.initTest(api, function(supertest) {
@@ -227,7 +225,7 @@ describe('Edit Resource Mock', function() {
                 // Create a 200 response to return all pets in the collection
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'array', items: {type: 'object'}}
+                    schema: {type: 'array', items: {}}
                 };
 
                 helper.initTest(api, function(supertest) {
@@ -245,7 +243,7 @@ describe('Edit Resource Mock', function() {
                 // Create a 200 response to return the deleted pet
                 api.paths['/pets/{PetName}'].delete.responses['200'] = {
                     description: '200 response',
-                    schema: {type: 'object'}
+                    schema: {}
                 };
 
                 function messWithTheBody(req, res, next) {
@@ -418,7 +416,7 @@ describe('Edit Resource Mock', function() {
                     // Create a 200 response to return a Buffer
                     api.paths['/pets/{PetName}'].delete.responses['200'] = {
                         description: '200 response',
-                        schema: {type: 'object'}
+                        schema: {}
                     };
 
                     // Create a Buffer resource
@@ -446,7 +444,7 @@ describe('Edit Resource Mock', function() {
                     // Create a 200 response to return an object
                     api.paths['/pets/{PetName}'].delete.responses['200'] = {
                         description: '200 response',
-                        schema: {type: 'object'}
+                        schema: {}
                     };
 
                     // Create a resource with no value
@@ -471,7 +469,7 @@ describe('Edit Resource Mock', function() {
                     // Create a 200 response to return an object
                     api.paths['/pets/{PetName}'].delete.responses['200'] = {
                         description: '200 response',
-                        schema: {type: 'object'}
+                        schema: {}
                     };
 
                     // Create a resource with a null value
@@ -496,7 +494,7 @@ describe('Edit Resource Mock', function() {
                     // Create a 200 response to return an object
                     api.paths['/pets/{PetName}/photos/{ID}'].delete.responses[200] = {
                         description: '200 response',
-                        schema: {type: 'object'}
+                        schema: {}
                     };
 
                     helper.initTest(api, function(supertest) {

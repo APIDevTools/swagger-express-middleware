@@ -48,7 +48,6 @@
 
   definitions:
     pet:
-      type: object
       required:
         - Name
         - Type
@@ -76,7 +75,6 @@
             minLength: 1
 
     veterinarian:
-      type: object
       required:
         - Name
       properties:
@@ -87,7 +85,6 @@
           $ref: address
 
     address:
-      type: object
       required:
         - Street
         - City
@@ -111,7 +108,6 @@
           maximum: 99999
 
     error:
-      type: object
       required:
         - Code
         - Message
@@ -323,7 +319,6 @@
             schema:
               type: array
               items:
-                type: object
                 properties:
                   ID:
                     type: integer
@@ -333,7 +328,6 @@
                   Description:
                     type: string
                   Photo:
-                    type: object
                     description: information about the photo (size, file name, etc.)
 
       post:

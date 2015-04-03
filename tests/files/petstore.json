@@ -64,7 +64,6 @@
   },
   "definitions": {
     "pet": {
-      "type": "object",
       "required": [
         "Name",
         "Type"
@@ -91,7 +90,6 @@
           ]
         },
         "Address": {
-          "type": "object",
           "required": [
             "Street",
             "City",
@@ -121,7 +119,6 @@
           }
         },
         "Vet": {
-          "type": "object",
           "required": [
             "Name"
           ],
@@ -131,7 +128,6 @@
               "minLength": 1
             },
             "Address": {
-              "type": "object",
               "required": [
                 "Street",
                 "City",
@@ -172,7 +168,6 @@
       }
     },
     "veterinarian": {
-      "type": "object",
       "required": [
         "Name"
       ],
@@ -182,7 +177,6 @@
           "minLength": 1
         },
         "Address": {
-          "type": "object",
           "required": [
             "Street",
             "City",
@@ -214,7 +208,6 @@
       }
     },
     "address": {
-      "type": "object",
       "required": [
         "Street",
         "City",
@@ -244,7 +237,6 @@
       }
     },
     "error": {
-      "type": "object",
       "required": [
         "Code",
         "Message"
@@ -258,7 +250,6 @@
           "type": "string"
         },
         "Pet": {
-          "type": "object",
           "required": [
             "Name",
             "Type"
@@ -285,7 +276,6 @@
               ]
             },
             "Address": {
-              "type": "object",
               "required": [
                 "Street",
                 "City",
@@ -315,7 +305,6 @@
               }
             },
             "Vet": {
-              "type": "object",
               "required": [
                 "Name"
               ],
@@ -325,7 +314,6 @@
                   "minLength": 1
                 },
                 "Address": {
-                  "type": "object",
                   "required": [
                     "Street",
                     "City",
@@ -479,7 +467,6 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "object",
                 "required": [
                   "Name",
                   "Type"
@@ -506,7 +493,6 @@
                     ]
                   },
                   "Address": {
-                    "type": "object",
                     "required": [
                       "Street",
                       "City",
@@ -536,7 +522,6 @@
                     }
                   },
                   "Vet": {
-                    "type": "object",
                     "required": [
                       "Name"
                     ],
@@ -546,7 +531,6 @@
                         "minLength": 1
                       },
                       "Address": {
-                        "type": "object",
                         "required": [
                           "Street",
                           "City",
@@ -591,7 +575,6 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "type": "object",
               "required": [
                 "Code",
                 "Message"
@@ -605,7 +588,6 @@
                   "type": "string"
                 },
                 "Pet": {
-                  "type": "object",
                   "required": [
                     "Name",
                     "Type"
@@ -632,7 +614,6 @@
                       ]
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -662,7 +643,6 @@
                       }
                     },
                     "Vet": {
-                      "type": "object",
                       "required": [
                         "Name"
                       ],
@@ -672,7 +652,6 @@
                           "minLength": 1
                         },
                         "Address": {
-                          "type": "object",
                           "required": [
                             "Street",
                             "City",
@@ -743,7 +722,6 @@
             "description": "Pet to add to the store",
             "required": true,
             "schema": {
-              "type": "object",
               "required": [
                 "Name",
                 "Type"
@@ -770,7 +748,6 @@
                   ]
                 },
                 "Address": {
-                  "type": "object",
                   "required": [
                     "Street",
                     "City",
@@ -800,7 +777,6 @@
                   }
                 },
                 "Vet": {
-                  "type": "object",
                   "required": [
                     "Name"
                   ],
@@ -810,7 +786,6 @@
                       "minLength": 1
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -868,7 +843,6 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "type": "object",
               "required": [
                 "Code",
                 "Message"
@@ -882,7 +856,6 @@
                   "type": "string"
                 },
                 "Pet": {
-                  "type": "object",
                   "required": [
                     "Name",
                     "Type"
@@ -909,7 +882,6 @@
                       ]
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -939,7 +911,6 @@
                       }
                     },
                     "Vet": {
-                      "type": "object",
                       "required": [
                         "Name"
                       ],
@@ -949,7 +920,6 @@
                           "minLength": 1
                         },
                         "Address": {
-                          "type": "object",
                           "required": [
                             "Street",
                             "City",
@@ -1018,7 +988,6 @@
           "200": {
             "description": "pet response",
             "schema": {
-              "type": "object",
               "required": [
                 "Name",
                 "Type"
@@ -1045,7 +1014,6 @@
                   ]
                 },
                 "Address": {
-                  "type": "object",
                   "required": [
                     "Street",
                     "City",
@@ -1075,7 +1043,6 @@
                   }
                 },
                 "Vet": {
-                  "type": "object",
                   "required": [
                     "Name"
                   ],
@@ -1085,7 +1052,6 @@
                       "minLength": 1
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1129,7 +1095,6 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "type": "object",
               "required": [
                 "Code",
                 "Message"
@@ -1143,7 +1108,6 @@
                   "type": "string"
                 },
                 "Pet": {
-                  "type": "object",
                   "required": [
                     "Name",
                     "Type"
@@ -1170,7 +1134,6 @@
                       ]
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1200,7 +1163,6 @@
                       }
                     },
                     "Vet": {
-                      "type": "object",
                       "required": [
                         "Name"
                       ],
@@ -1210,7 +1172,6 @@
                           "minLength": 1
                         },
                         "Address": {
-                          "type": "object",
                           "required": [
                             "Street",
                             "City",
@@ -1282,7 +1243,6 @@
             "description": "The updated pet info",
             "required": true,
             "schema": {
-              "type": "object",
               "required": [
                 "Name",
                 "Type"
@@ -1309,7 +1269,6 @@
                   ]
                 },
                 "Address": {
-                  "type": "object",
                   "required": [
                     "Street",
                     "City",
@@ -1339,7 +1298,6 @@
                   }
                 },
                 "Vet": {
-                  "type": "object",
                   "required": [
                     "Name"
                   ],
@@ -1349,7 +1307,6 @@
                       "minLength": 1
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1395,7 +1352,6 @@
           "200": {
             "description": "pet response",
             "schema": {
-              "type": "object",
               "required": [
                 "Name",
                 "Type"
@@ -1422,7 +1378,6 @@
                   ]
                 },
                 "Address": {
-                  "type": "object",
                   "required": [
                     "Street",
                     "City",
@@ -1452,7 +1407,6 @@
                   }
                 },
                 "Vet": {
-                  "type": "object",
                   "required": [
                     "Name"
                   ],
@@ -1462,7 +1416,6 @@
                       "minLength": 1
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1506,7 +1459,6 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "type": "object",
               "required": [
                 "Code",
                 "Message"
@@ -1520,7 +1472,6 @@
                   "type": "string"
                 },
                 "Pet": {
-                  "type": "object",
                   "required": [
                     "Name",
                     "Type"
@@ -1547,7 +1498,6 @@
                       ]
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1577,7 +1527,6 @@
                       }
                     },
                     "Vet": {
-                      "type": "object",
                       "required": [
                         "Name"
                       ],
@@ -1587,7 +1536,6 @@
                           "minLength": 1
                         },
                         "Address": {
-                          "type": "object",
                           "required": [
                             "Street",
                             "City",
@@ -1655,7 +1603,6 @@
           "default": {
             "description": "unexpected error",
             "schema": {
-              "type": "object",
               "required": [
                 "Code",
                 "Message"
@@ -1669,7 +1616,6 @@
                   "type": "string"
                 },
                 "Pet": {
-                  "type": "object",
                   "required": [
                     "Name",
                     "Type"
@@ -1696,7 +1642,6 @@
                       ]
                     },
                     "Address": {
-                      "type": "object",
                       "required": [
                         "Street",
                         "City",
@@ -1726,7 +1671,6 @@
                       }
                     },
                     "Vet": {
-                      "type": "object",
                       "required": [
                         "Name"
                       ],
@@ -1736,7 +1680,6 @@
                           "minLength": 1
                         },
                         "Address": {
-                          "type": "object",
                           "required": [
                             "Street",
                             "City",
@@ -1800,7 +1743,6 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "object",
                 "properties": {
                   "ID": {
                     "type": "integer",
@@ -1813,7 +1755,6 @@
                     "type": "string"
                   },
                   "Photo": {
-                    "type": "object",
                     "description": "information about the photo (size, file name, etc.)"
                   }
                 }

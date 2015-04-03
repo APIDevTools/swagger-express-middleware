@@ -189,7 +189,7 @@ describe('Edit Resource Mock', function() {
 
                 it('should return the whole collection if the Swagger API schema is an array',
                     function(done) {
-                        api.paths['/pets/{PetName}'][method].responses[200].schema = {type: 'array', items: {type: 'object'}};
+                        api.paths['/pets/{PetName}'][method].responses[200].schema = {type: 'array', items: {}};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
@@ -209,11 +209,10 @@ describe('Edit Resource Mock', function() {
                     function(done) {
                         // Wrap the "pet" definition in an envelope object
                         api.paths['/pets/{PetName}'][method].responses[200].schema = {
-                            type: 'object',
                             properties: {
                                 code: {type: 'integer', default: 42},
                                 message: {type: 'string', default: 'hello world'},
-                                error: {type: 'object'},
+                                error: {},
                                 result: _.cloneDeep(api.definitions.pet)
                             }
                         };
@@ -232,11 +231,10 @@ describe('Edit Resource Mock', function() {
                     function(done) {
                         // Wrap the "pet" definition in an envelope object
                         api.paths['/pets/{PetName}'][method].responses[200].schema = {
-                            type: 'object',
                             properties: {
                                 code: {type: 'integer', default: 42},
                                 message: {type: 'string', default: 'hello world'},
-                                error: {type: 'object'},
+                                error: {},
                                 result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
                             }
                         };
@@ -308,7 +306,7 @@ describe('Edit Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
-                        petParam.schema = {type: 'object'};
+                        petParam.schema = {};
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets/Fido')
@@ -406,7 +404,7 @@ describe('Edit Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
 
                         var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
-                        petParam.schema = {type: 'object'};
+                        petParam.schema = {};
                         api.paths['/pets/{PetName}'][method].consumes = ['application/octet-stream'];
                         api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
                         helper.initTest(api, function(supertest) {
@@ -426,7 +424,7 @@ describe('Edit Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
-                        petParam.schema = {type: 'object'};
+                        petParam.schema = {};
                         api.paths['/pets/{PetName}'][method].consumes = ['application/octet-stream'];
                         helper.initTest(api, function(supertest) {
                             supertest
@@ -448,7 +446,7 @@ describe('Edit Resource Mock', function() {
                         api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
                         var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
-                        petParam.schema = {type: 'object'};
+                        petParam.schema = {};
                         petParam.required = false;
                         helper.initTest(api, function(supertest) {
                             supertest
@@ -463,7 +461,7 @@ describe('Edit Resource Mock', function() {
 
                 it('should return multipart/form-data',
                     function(done) {
-                        api.paths['/pets/{PetName}/photos/{ID}'][method].responses[201].schema = {type: 'object'};
+                        api.paths['/pets/{PetName}/photos/{ID}'][method].responses[201].schema = {};
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets/Fido/photos/12345')
@@ -520,6 +518,7 @@ describe('Edit Resource Mock', function() {
 
                 it('should return a file attachment',
                     function(done) {
+                        _.find(api.paths['/pets/{PetName}/photos/{ID}'].parameters, {name: 'ID'}).type = 'string';
                         api.paths['/pets/{PetName}/photos/{ID}'][method].responses[201].schema = {type: 'file'};
                         api.paths['/pets/{PetName}/photos/{ID}'][method].responses[201].headers = {
                             'content-disposition': {

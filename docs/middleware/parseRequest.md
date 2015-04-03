@@ -88,29 +88,17 @@ Finally, if everything is valid, then the HTTP request values are converted to t
 
 
 ### Phase 3 - Path parsing
-Swagger path parameters (called "route parameters" in Express) require special handling in Express.  They can't be parsed like other parameter types, because Express uses special [route param middleware](http://expressjs.com/4x/api.html#app.param) to parse them.  Also, each [Application](http://expressjs.com/4x/api.html#application) and [Router](http://expressjs.com/4x/api.html#router) has its own route param middleware, so if you use nested routers in your project, then you need to re-parse the route in each router.
+Path parameters get parsed in the third phase. Swagger and Express both support path parameters, but they use slightly different syntax.  For example, the Swagger path `/pets/{name}/photos/{id}` is equivalent to the Express path `/pets/:name/photos/:id`. Express automatically parses all path parameters as _strings_ and stores them on the [`req.params`](http://expressjs.com/4x/api.html#req.params) object. The Parse Request middleware parses path parameters according to the data type specified in your Swagger API, and updates `req.params` accordingly. 
 
-Fortunately, Swagger Express Middleware makes this very simple.  If you pass your Express app/router to the [createMiddleware() function](../exports/createMiddleware.md) (as shown in all the examples in these docs), then the Parse Request middleware will automatically register route param middleware with your app/router.  This is the recommended approach, since it also allows Swagger Express Middleware to detect your app's [settings](http://expressjs.com/4x/api.html#app.set), such as case-sensitivity and strict-routing.
+#### Tricky Behavior with `req.params`
+##### TLDR
+`req.params` is a special object in Express, and it has some very non-intuitive behavior.  Use `req.pathParams` instead, which will always work consistently.
 
-But what if you have multiple nested routers?  Well... that depends.  Do those nested routers need the path parameters to be parsed?  If not, then you don't need to do anything.  All the _other_ parameters (query, body, headers, etc.) will still be parsed in those nested routers.  Just not the _path_ parameters.  But, if you _do_ need the path parameters to be parsed in your nested routers, then simply add the Parse Request middleware to those routers.  But when you do, be sure to pass the router to the [middleware.parseRequest()](#middlewareparserequestrouter-options) function, so it can register the route param middleware.  Here's an example of that:
+##### Details
+The `req.params` object is a special object in Express and its properties can only be set by special [param callback functions](http://expressjs.com/4x/api.html#app.param).  Fortunately, Swagger Express Middleware makes this very simple.  If you pass your Express app/router to the [createMiddleware() function](../exports/createMiddleware.md) (as shown in all the examples in these docs), then the Parse Request middleware will automatically register param callbacks with your app/router.  This is the recommended approach, since it also allows Swagger Express Middleware to detect your app's [settings](http://expressjs.com/4x/api.html#app.set), such as case-sensitivity and strict-routing.
 
-````javascript
-var express    = require('express');
-var middleware = require('swagger-express-middleware');
-var app        = express();
+Every [Application](http://expressjs.com/4x/api.html#application) and [Router](http://expressjs.com/4x/api.html#router) has its own separate param callbacks, so if you use nested routers in your project, then you need to add the param callbacks to each router.  This means you need to add the Parse Request middleware to every nested router in your app if you want to use `req.params` in those nested routers.
 
-// Passing the app to the `createMiddleware` function
-middleware('PetStore.yaml', app, function(err, middleware) {
+Param callbacks run before _each_ middleware in your app.  But only if that middleware is bound to a path, and only if that path has parameters.  So if you register middleware without a path (e.g. `app.use(myMiddleware)`) then `req.params` will be empty for that middleware.  If you register middleware with a path (e.g. `app.use("/users/:id", myMiddleware)`), then `req.params` will have a property for each path parameter (`id` in this example).  Thus, `req.params` changes as it moves through the middleware pipeline, and you can't guarantee that a property which existed in one middleware still exists in a later middleware.
 
-    // Don't need to pass the app to these, because they'll use the one passed above
-    app.use(middleware.metadata());    
-    app.use(middleware.parseRequest());
-
-    var myNestedRouter = express.Router();
-    app.use(myNestedRouter);
-    
-    // Passing myNestedRouter to the parseRequest middleware,
-    myNestedRouter.use(middleware.parseRequest(myNestedRouter));
-});
-````
-
+Fortunately, there's an easy way to avoid all of these little "gotchas" with `req.params`.  The Parse Request middlweare also stores the parsed path parameters on the `req.pathParams` object.  The `req.pathParams` object doesn't have any special behavior.  It's just a normal property on the [Request object](http://expressjs.com/4x/api.html#req).  You don't need to register any param callback functions.  You don't need to add redundant middleware to every nested router in your app.  And the object will be the same in all of your middleware, regardless of how the middleware was registered or whether your Express parameters are named the same as your Swagger parameters.

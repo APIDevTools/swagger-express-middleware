@@ -18,6 +18,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: '12345'   // <--- Note that this is a string, not a number
                     });
+                    expect(req.pathParams).to.be.undefined;
                 }));
             });
         }
@@ -39,6 +40,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -61,6 +63,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -83,6 +86,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -112,6 +116,7 @@ describe('PathParser middleware', function() {
                         PetName: true,
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -137,6 +142,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido the "wonder" dog',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -182,6 +188,7 @@ describe('PathParser middleware', function() {
                         timeParam: new Date('1900-08-14T02:04:55.987-03:00'),
                         boolParam: true
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -219,14 +226,22 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                     next();
                 }));
 
                 // The path params ARE NOT parsed for Router1, because it's NOT using the `parseRequest` middleware
                 router1.get('/api/pets/:PetName/photos/:ID', env.spy(function(req, res, next) {
+                    // req.params is NOT parsed
                     expect(req.params).to.deep.equal({
                         PetName: 'Fido',
                         ID: '12345'
+                    });
+
+                    // req.pathParams IS parsed
+                    expect(req.pathParams).to.deep.equal({
+                        PetName: 'Fido',
+                        ID: 12345
                     });
                     next();
                 }));
@@ -237,6 +252,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                     next();
                 }));
 
@@ -246,6 +262,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -264,7 +281,8 @@ describe('PathParser middleware', function() {
                     .end(env.checkSpyResults(done));
 
                 express.get('/api/pets', env.spy(function(req, res, next) {
-                    expect(req.params).to.be.empty;
+                    expect(req.params).to.be.an('object').and.empty;
+                    expect(req.pathParams).to.be.an('object').and.empty;
                 }));
             });
         }
@@ -284,7 +302,14 @@ describe('PathParser middleware', function() {
 
                 // This middleware is NOT parameterized, so `req.params` will NOT be set
                 express.get('/api/pets/Fido/photos/12345', env.spy(function(req, res, next) {
-                    expect(req.params).to.be.empty;
+                    // req.params is empty, because Express doesn't know about any path parameters
+                    expect(req.params).to.be.an('object').and.empty;
+
+                    // req.pathParams is parsed, because Swagger knows about path params
+                    expect(req.pathParams).to.deep.equal({
+                        PetName: 'Fido',
+                        ID: 12345
+                    });
                 }));
             });
         }
@@ -307,6 +332,12 @@ describe('PathParser middleware', function() {
                     expect(req.params).to.deep.equal({
                         param1: 'Fido',
                         param2: '12345'
+                    });
+
+                    // req.pathParams properties match Swagger param names and data types
+                    expect(req.pathParams).to.deep.equal({
+                        PetName: 'Fido',
+                        ID: 12345
                     });
                 }));
             });
@@ -338,6 +369,7 @@ describe('PathParser middleware', function() {
                         PetName: 'Fido',
                         ID: 12345
                     });
+                    expect(req.pathParams).to.deep.equal(req.params);
                 }));
             });
         }
@@ -359,9 +391,11 @@ describe('PathParser middleware', function() {
                     assert(false, 'This middleware should NOT get called');
                 }));
 
-                // This is error-handler middleware, but it doesn't get called because the path can't be parsed
+                // This is path-specific error-handler middleware, so it catches the error
                 express.use('/api/pets/:PetName/photos/:ID', env.spy(function(err, req, res, next) {
-                    assert(false, 'This middleware should NOT get called');
+                    expect(err).to.be.an.instanceOf(Error);
+                    expect(err.message).to.contain('"52.5" is not a properly-formatted whole number');
+                    next(err);
                 }));
 
                 // This is catch-all error-handler middleware, so it catches the error
@@ -402,6 +436,7 @@ describe('PathParser middleware', function() {
                             PetName: 'Fido',
                             ID: '12345'
                         });
+                        expect(req.pathParams).to.be.undefined;
                         next();
                     }
                     else {
@@ -410,6 +445,7 @@ describe('PathParser middleware', function() {
                             PetName: 'Fido',
                             ID: 12345
                         });
+                        expect(req.pathParams).to.deep.equal(req.params);
                     }
                 }));
             });
@@ -446,6 +482,7 @@ describe('PathParser middleware', function() {
                             PetName: '98.765',
                             ID: 12345
                         });
+                        expect(req.pathParams).to.deep.equal(req.params);
                         next();
                     }
                     else {
@@ -454,6 +491,7 @@ describe('PathParser middleware', function() {
                             PetName: 98.765,
                             ID: 12345
                         });
+                        expect(req.pathParams).to.deep.equal(req.params);
                     }
                 }));
             });
@@ -499,6 +537,7 @@ describe('PathParser middleware', function() {
                             PetName: 'Fido',
                             ID: 12345
                         });
+                        expect(req.pathParams).to.deep.equal(req.params);
                         next();
                     }
                     else {
@@ -507,6 +546,9 @@ describe('PathParser middleware', function() {
                             PetName: 'Fido',
                             ID: '12345'
                         });
+
+                        // req.pathParams is empty because there are no longer any Swagger path params
+                        expect(req.pathParams).to.be.an('object').and.empty;
                     }
                 }));
             });

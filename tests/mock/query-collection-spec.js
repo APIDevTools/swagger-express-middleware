@@ -93,11 +93,10 @@ describe('Query Collection Mock', function() {
                 function(done) {
                     // Wrap the "pet" definition in an envelope object
                     api.paths['/pets'][method].responses[200].schema = {
-                        type: 'object',
                         properties: {
                             code: {type: 'integer', default: 42},
                             message: {type: 'string', default: 'hello world'},
-                            error: {type: 'object'},
+                            error: {},
                             result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
                         }
                     };
@@ -397,7 +396,7 @@ describe('Query Collection Mock', function() {
 
                 it('should return a Buffer (as JSON)',
                     function(done) {
-                        api.paths['/pets'][method].responses[200].schema.items = {type: 'object'};
+                        api.paths['/pets'][method].responses[200].schema.items = {};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
@@ -418,7 +417,7 @@ describe('Query Collection Mock', function() {
 
                 it('should return a null value',
                     function(done) {
-                        api.paths['/pets'][method].responses[200].schema.items = {type: 'object'};
+                        api.paths['/pets'][method].responses[200].schema.items = {};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fido');

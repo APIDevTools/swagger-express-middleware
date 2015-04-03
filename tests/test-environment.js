@@ -215,7 +215,7 @@ var env = module.exports = {
                 }
 
                 if (spy.called) {
-                    next();
+                    next(spy.firstCall.args[0]);
                 }
                 else {
                     res.sendStatus(env.testPassed);

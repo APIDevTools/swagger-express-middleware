@@ -76,7 +76,7 @@ describe('Query Collection Mock', function() {
 
         it('should return the first deleted resource if the Swagger API schema is an object',
             function(done) {
-                api.paths['/pets'].delete.responses[200].schema = {type: 'object'};
+                api.paths['/pets'].delete.responses[200].schema = {};
 
                 var dataStore = new env.swagger.MemoryDataStore();
                 var resources = [
@@ -107,7 +107,6 @@ describe('Query Collection Mock', function() {
             function(done) {
                 // Wrap the "pet" definition in an envelope object
                 api.paths['/pets'].delete.responses[200].schema = {
-                    type: 'object',
                     properties: {
                         code: {type: 'integer', default: 42},
                         message: {type: 'string', default: 'hello world'},
@@ -146,7 +145,6 @@ describe('Query Collection Mock', function() {
             function(done) {
                 // Wrap the "pet" definition in an envelope object
                 api.paths['/pets'].delete.responses[200].schema = {
-                    type: 'object',
                     properties: {
                         code: {type: 'integer', default: 42},
                         message: {type: 'string', default: 'hello world'},
@@ -223,7 +221,7 @@ describe('Query Collection Mock', function() {
 
         it('should return nothing if nothing was deleted and the Swagger API schema is an object',
             function(done) {
-                api.paths['/pets'].delete.responses[200].schema = {type: 'object'};
+                api.paths['/pets'].delete.responses[200].schema = {};
 
                 helper.initTest(api, function(supertest) {
                     supertest
@@ -454,9 +452,7 @@ describe('Query Collection Mock', function() {
                         description: '200 response',
                         schema: {
                             type: 'array',
-                            items: {
-                                type: 'object'
-                            }
+                            items: {}
                         }
                     };
 
@@ -487,9 +483,7 @@ describe('Query Collection Mock', function() {
                         description: '200 response',
                         schema: {
                             type: 'array',
-                            items: {
-                                type: 'object'
-                            }
+                            items: {}
                         }
                     };
 
@@ -517,9 +511,7 @@ describe('Query Collection Mock', function() {
                         description: '200 response',
                         schema: {
                             type: 'array',
-                            items: {
-                                type: 'object'
-                            }
+                            items: {}
                         }
                     };
 
@@ -547,9 +539,7 @@ describe('Query Collection Mock', function() {
                         description: '200 response',
                         schema: {
                             type: 'array',
-                            items: {
-                                type: 'object'
-                            }
+                            items: {}
                         }
                     };
 

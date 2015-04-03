@@ -508,7 +508,6 @@ describe('JSON Schema sample data', function() {
                 var schema = new JsonSchema({
                     type: 'array',
                     items: {
-                        type: 'object',
                         properties: {
                             name: {
                                 type: 'string'
@@ -536,7 +535,6 @@ describe('JSON Schema sample data', function() {
         it('should generate a valid object',
             function() {
                 var schema = new JsonSchema({
-                    type: 'object',
                     properties: {
                         name: {
                             type: 'string',
@@ -568,10 +566,8 @@ describe('JSON Schema sample data', function() {
         it('should generate nested objects',
             function() {
                 var schema = new JsonSchema({
-                    type: 'object',
                     properties: {
                         nested: {
-                            type: 'object',
                             properties: {
                                 name: {
                                     type: 'string'
@@ -591,12 +587,10 @@ describe('JSON Schema sample data', function() {
         it('should generate deeply nested objects',
             function() {
                 var schema = new JsonSchema({
-                    type: 'object',
                     properties: {
                         names: {
                             type: 'array',
                             items: {
-                                type: 'object',
                                 properties: {
                                     first: {
                                         type: 'string'
@@ -625,7 +619,6 @@ describe('JSON Schema sample data', function() {
         it('should generate an empty object',
             function() {
                 var schema = new JsonSchema({
-                    type: 'object',
                     properties: {}
                 });
                 for (var i = 0; i < iterations; i++) {

@@ -107,7 +107,7 @@ describe('Edit Collection Mock', function() {
 
                 it('should return the new resource if the Swagger API schema is an object',
                     function(done) {
-                        api.paths['/pets'][method].responses[201].schema = {type: 'object'};
+                        api.paths['/pets'][method].responses[201].schema = {};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
@@ -125,7 +125,7 @@ describe('Edit Collection Mock', function() {
 
                 it('should return the first new resource if the Swagger API schema is an object',
                     function(done) {
-                        api.paths['/pets'][method].responses[201].schema = {type: 'object'};
+                        api.paths['/pets'][method].responses[201].schema = {};
                         arrayify();
 
                         var dataStore = new env.swagger.MemoryDataStore();
@@ -146,11 +146,10 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         // Wrap the "pet" definition in an envelope object
                         api.paths['/pets'][method].responses[201].schema = {
-                            type: 'object',
                             properties: {
                                 code: {type: 'integer', default: 42},
                                 message: {type: 'string', default: 'hello world'},
-                                error: {type: 'object'},
+                                error: {},
                                 result: _.cloneDeep(api.definitions.pet)
                             }
                         };
@@ -172,7 +171,7 @@ describe('Edit Collection Mock', function() {
 
                 it('should return the whole collection (including the new resource) if the Swagger API schema is an array',
                     function(done) {
-                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
+                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {}};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
@@ -191,7 +190,7 @@ describe('Edit Collection Mock', function() {
                 it('should return the whole collection (including the new resources) if the Swagger API schema is an array',
                     function(done) {
                         arrayify();
-                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
+                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {}};
 
                         var dataStore = new env.swagger.MemoryDataStore();
                         var resource = new env.swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
@@ -211,11 +210,10 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         // Wrap the "pet" definition in an envelope object
                         api.paths['/pets'][method].responses[201].schema = {
-                            type: 'object',
                             properties: {
                                 code: {type: 'integer', default: 42},
                                 message: {type: 'string', default: 'hello world'},
-                                error: {type: 'object'},
+                                error: {},
                                 result: {type: 'array', items: _.cloneDeep(api.definitions.pet)}
                             }
                         };
@@ -245,7 +243,7 @@ describe('Edit Collection Mock', function() {
 
                 it('should return `res.body` if already set by other middleware',
                     function(done) {
-                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {type: 'object'}};
+                        api.paths['/pets'][method].responses[201].schema = {type: 'array', items: {}};
 
                         function messWithTheBody(req, res, next) {
                             res.body = {message: 'Not the response you expected'};
@@ -523,8 +521,8 @@ describe('Edit Collection Mock', function() {
 
                 it('should support Buffers (as JSON)',
                     function(done) {
-                        _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema = {type: 'object'};
-                        api.paths['/pets'][method].responses[201].schema = {type: 'object'};
+                        _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema = {};
+                        api.paths['/pets'][method].responses[201].schema = {};
                         api.paths['/pets'][method].consumes = ['application/octet-stream'];
                         api.paths['/pets'][method].produces = ['text/plain'];
                         helper.initTest(api, function(supertest) {
@@ -549,9 +547,9 @@ describe('Edit Collection Mock', function() {
                 it('should support undefined values',
                     function(done) {
                         var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-                        petParam.schema = {type: 'object'};
+                        petParam.schema = {};
                         petParam.required = false;
-                        api.paths['/pets'][method].responses[201].schema = {type: 'object'};
+                        api.paths['/pets'][method].responses[201].schema = {};
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets')
@@ -567,7 +565,7 @@ describe('Edit Collection Mock', function() {
 
                 it('should support multipart/form-data',
                     function(done) {
-                        api.paths['/pets/{PetName}/photos'][method].responses[201].schema = {type: 'object'};
+                        api.paths['/pets/{PetName}/photos'][method].responses[201].schema = {};
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets/Fido/photos')
@@ -870,6 +868,8 @@ describe('Edit Collection Mock', function() {
                 it('should use the first required property as the resource name',
                     function(done) {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
+                        _.find(api.paths['/pets/{PetName}/photos/{ID}'].parameters, {name: 'ID'}).type = 'string';
+
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets/Fido/photos')
@@ -893,6 +893,7 @@ describe('Edit Collection Mock', function() {
                 it('should NOT use object or array properties as the resource name',
                     function(done) {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
+                        _.find(api.paths['/pets/{PetName}/photos/{ID}'].parameters, {name: 'ID'}).type = 'string';
                         var labelParam = _.find(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'Label'});
                         labelParam.type = 'array';
                         labelParam.items = {
@@ -925,6 +926,7 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
                         _.find(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'Label'}).required = false;
+                        _.find(api.paths['/pets/{PetName}/photos/{ID}'].parameters, {name: 'ID'}).type = 'string';
 
                         helper.initTest(api, function(supertest) {
                             supertest
@@ -950,6 +952,7 @@ describe('Edit Collection Mock', function() {
                     function(done) {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
                         _.find(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'Label'}).required = false;
+                        _.find(api.paths['/pets/{PetName}/photos/{ID}'].parameters, {name: 'ID'}).type = 'string';
 
                         function messWithTheBody(req, res, next) {
                             if (req.method === method.toUpperCase()) {
@@ -1070,8 +1073,8 @@ describe('Edit Collection Mock', function() {
                 it('should generate a unique ID if no "Name" property can be determined',
                     function(done) {
                         // The schema is an empty object (no "name" properties)
-                        _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema = {type: 'object'};
-                        api.paths['/pets'][method].responses[201].schema = {type: 'object'};
+                        _.find(api.paths['/pets'][method].parameters, {name: 'PetData'}).schema = {};
+                        api.paths['/pets'][method].responses[201].schema = {};
                         helper.initTest(api, function(supertest) {
                             supertest
                                 [method]('/api/pets')

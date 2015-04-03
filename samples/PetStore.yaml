@@ -11,7 +11,6 @@ produces:
 
 definitions:
   pet:
-    type: object
     required:
       - name
       - type
@@ -40,7 +39,6 @@ definitions:
           minLength: 1
 
   veterinarian:
-    type: object
     required:
       - name
     properties:
@@ -51,7 +49,6 @@ definitions:
         $ref: address
 
   address:
-    type: object
     properties:
       street:
         type: string
@@ -266,7 +263,6 @@ paths:
         default:
           description: Returns the photo information
           schema:
-            type: object
             properties:
               id:
                 type: integer
@@ -292,7 +288,6 @@ paths:
           schema:
             type: array
             items:
-              type: object
               properties:
                 id:
                   type: integer
