@@ -1014,7 +1014,7 @@ describe('Edit Collection Mock', function() {
                         _.remove(api.paths['/pets/{PetName}/photos'][method].parameters, {name: 'ID'});
                         _.find(params, {name: 'Label'}).required = false;
                         _.find(params, {name: 'Photo'}).required = false;
-                        api.paths['/pets/{PetName}/photos'][method].consumes = ['text/plain'];
+                        api.paths['/pets/{PetName}/photos'][method].consumes = ['text/plain', 'multipart/form-data'];
 
                         helper.initTest(api, function(supertest) {
                             supertest
