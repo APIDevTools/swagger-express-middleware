@@ -104,7 +104,7 @@
           pattern: "^[A-Z]+$"
         ZipCode:
           type: integer
-          mininum: 10000
+          minimum: 10000
           maximum: 99999
 
     error:
