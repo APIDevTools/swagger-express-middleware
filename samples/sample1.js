@@ -14,18 +14,18 @@ var middleware = require('swagger-express-middleware');
 var app = express();
 
 middleware('PetStore.yaml', app, function(err, middleware) {
-    // Add all the Swagger Express Middleware, or just the ones you need.
-    // NOTE: Some of these accept optional options (omitted here for brevity)
-    app.use(
-        middleware.metadata(),
-        middleware.files(),
-        middleware.CORS(),
-        middleware.parseRequest(),
-        middleware.validateRequest(),
-        middleware.mock()
-    );
+  // Add all the Swagger Express Middleware, or just the ones you need.
+  // NOTE: Some of these accept optional options (omitted here for brevity)
+  app.use(
+    middleware.metadata(),
+    middleware.files(),
+    middleware.CORS(),
+    middleware.parseRequest(),
+    middleware.validateRequest(),
+    middleware.mock()
+  );
 
-    app.listen(8000, function() {
-        console.log('The Swagger Pet Store is now running at http://localhost:8000');
-    });
+  app.listen(8000, function() {
+    console.log('The Swagger Pet Store is now running at http://localhost:8000');
+  });
 });
