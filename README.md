@@ -7,6 +7,7 @@ Swagger Express Middleware
 [![Code Climate Score](https://img.shields.io/codeclimate/github/BigstickCarpet/swagger-express-middleware.svg)](https://codeclimate.com/github/BigstickCarpet/swagger-express-middleware)
 [![Codacy Score](http://img.shields.io/codacy/011f89f6f0dd46e5b9b5d3662a51213d.svg)](https://www.codacy.com/public/jamesmessinger/swagger-express-middleware)
 [![Coverage Status](https://img.shields.io/coveralls/BigstickCarpet/swagger-express-middleware.svg)](https://coveralls.io/r/BigstickCarpet/swagger-express-middleware)
+[![Inline docs](http://inch-ci.org/github/BigstickCarpet/swagger-express-middleware.svg?branch=master&style=shields)](http://inch-ci.org/github/BigstickCarpet/swagger-express-middleware)
 
 [![Downloads](https://img.shields.io/npm/dm/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
 [![npm](http://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
