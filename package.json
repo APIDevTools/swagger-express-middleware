@@ -22,7 +22,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "jshint . --verbose && jscs . --verbose",
-    "start": "cd sample && node sample1.js",
+    "start": "cd samples && node sample2.js",
     "test": "istanbul cover _mocha -- --timeout 15000 --recursive tests",
     "mocha": "mocha --timeout 15000 --recursive tests",
     "update-deps": "npm-check-updates -u && npm update",

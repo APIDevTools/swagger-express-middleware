@@ -93,18 +93,29 @@ This sample demonstrates a few more advanced features of Swagger Express Middlew
 
 Contributing
 --------------------------
-I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/BigstickCarpet/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/BigstickCarpet/swagger-express-middleware/pulls).  Use JSHint to make sure your code passes muster.  (see [.jshintrc](.jshintrc)).
+I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/BigstickCarpet/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/BigstickCarpet/swagger-express-middleware/pulls).
 
-Here are some things currently on the __to-do list__:
+#### Building/Testing
+To build/test the project locally on your computer:
 
-* __Response validation__ - The plan is to add code that intercepts calls to `res.send()` and validates the response against the Swagger API.
+1. __Clone this repo__<br>
+`git clone https://github.com/BigstickCarpet/swagger-express-middleware.git`
 
-* __Security middleware__ - The [Metadata middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/metadata.md) already exposes security metadata for each request, and the [Validate Request middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/validateRequest.md) does some very basic authentication checks, but any _real_ authentication/authorization logic currently requries the developer to write custom middleware.  It'll be dead-simple to implement `basic` and `apiKey` authentication.  `oauth2` might be a bit more complicated, but still doable.
+2. __Install all dependencies__ (including dev dependencies)<br>
+`npm install`
 
-* __XML Support__ - You can already use XML with Swagger Express Middleware, but it simply gets parsed as a string.  You get no schema validation or automatic parsing.  Now that Swagger 2.0 [officially supports XML](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#xmlObject), I intend to add support for XML with the same features as JSON.
+3. __Run the build script__<br>
+`npm run build`
+
+4. __Run the unit tests__<br>
+`npm test` (tests + code coverage)<br>
+`npm run mocha` (just the tests)
+
+5. __Run the sample app__<br>
+`npm start`
 
 
 License
 --------------------------
-Swagger-Server is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+Swagger-Express-Middleware is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
 
