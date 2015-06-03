@@ -6,196 +6,210 @@ var FileDataStore = env.swagger.FileDataStore;
 var tempDir;
 
 describe('FileDataStore', function() {
-    'use strict';
+  'use strict';
 
-    beforeEach(function(done) {
-        env.createTempDir(function(temp) {
-            tempDir = temp;
-            done();
-        });
+  beforeEach(function(done) {
+    env.createTempDir(function(temp) {
+      tempDir = temp;
+      done();
     });
+  });
 
-    it('can be passed a base directory',
-        function(done) {
-            var dir = path.join(tempDir, 'foo', 'bar', 'baz');
-            var dataStore = new FileDataStore(dir);
-            var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
-            var file = path.join(dir, 'users.json');
+  it('can be passed a base directory',
+    function(done) {
+      var dir = path.join(tempDir, 'foo', 'bar', 'baz');
+      var dataStore = new FileDataStore(dir);
+      var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
+      var file = path.join(dir, 'users.json');
 
-            dataStore.save(resource, function(err, retrieved) {
-                if (err) return done(err);
-                expect(fs.existsSync(file)).to.be.true;
-                done();
-            });
+      dataStore.save(resource, function(err, retrieved) {
+        if (err) {
+          return done(err);
         }
-    );
+        expect(fs.existsSync(file)).to.be.true;
+        done();
+      });
+    }
+  );
 
-    it('creates a nameless file for the root collection',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/', '/JDoe', {name: 'John Doe'});
-            var file = path.join(tempDir, '.json');
+  it('creates a nameless file for the root collection',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/', '/JDoe', {name: 'John Doe'});
+      var file = path.join(tempDir, '.json');
 
-            dataStore.save(resource, function(err, retrieved) {
-                if (err) return done(err);
-                expect(fs.existsSync(file)).to.be.true;
-                done();
-            });
+      dataStore.save(resource, function(err, retrieved) {
+        if (err) {
+          return done(err);
         }
-    );
+        expect(fs.existsSync(file)).to.be.true;
+        done();
+      });
+    }
+  );
 
-    it('does not create any subdirectories if the collection is one level deep',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
-            var file = path.join(tempDir, 'users.json');
+  it('does not create any subdirectories if the collection is one level deep',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users', '/JDoe', {name: 'John Doe'});
+      var file = path.join(tempDir, 'users.json');
 
-            dataStore.save(resource, function(err, retrieved) {
-                if (err) return done(err);
-                expect(fs.existsSync(file)).to.be.true;
-                done();
-            });
+      dataStore.save(resource, function(err, retrieved) {
+        if (err) {
+          return done(err);
         }
-    );
+        expect(fs.existsSync(file)).to.be.true;
+        done();
+      });
+    }
+  );
 
-    it('creates a single subdirectory if the collection is two levels deep',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users/JDoe/', 'orders', [{orderId: 12345}, {orderId: 45678}]);
-            var file = path.join(tempDir, 'users', 'jdoe.json');
+  it('creates a single subdirectory if the collection is two levels deep',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users/JDoe/', 'orders', [{orderId: 12345}, {orderId: 45678}]);
+      var file = path.join(tempDir, 'users', 'jdoe.json');
 
-            dataStore.save(resource, function(err, retrieved) {
-                if (err) return done(err);
-                expect(fs.existsSync(file)).to.be.true;
-                done();
-            });
+      dataStore.save(resource, function(err, retrieved) {
+        if (err) {
+          return done(err);
         }
-    );
+        expect(fs.existsSync(file)).to.be.true;
+        done();
+      });
+    }
+  );
 
-    it('creates a multiple subdirectories for deeper collection paths',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users/JDoe/orders/1234/products', '4567', {productId: 4567});
-            var file = path.join(tempDir, 'users', 'jdoe', 'orders', '1234', 'products.json');
+  it('creates a multiple subdirectories for deeper collection paths',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users/JDoe/orders/1234/products', '4567', {productId: 4567});
+      var file = path.join(tempDir, 'users', 'jdoe', 'orders', '1234', 'products.json');
 
-            dataStore.save(resource, function(err, retrieved) {
-                if (err) return done(err);
-                expect(fs.existsSync(file)).to.be.true;
-                done();
-            });
+      dataStore.save(resource, function(err, retrieved) {
+        if (err) {
+          return done(err);
         }
-    );
+        expect(fs.existsSync(file)).to.be.true;
+        done();
+      });
+    }
+  );
 
-    it('returns an error if the file cannot be opened',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
+  it('returns an error if the file cannot be opened',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
 
-            var stub = sinon.stub(fs, 'readFile', function(path, opts, callback) {
-                setImmediate(callback, new Error('Test Error'));
-            });
+      var stub = sinon.stub(fs, 'readFile', function(path, opts, callback) {
+        setImmediate(callback, new Error('Test Error'));
+      });
 
-            function assert(err, data) {
-                expect(err).to.be.an.instanceOf(Error);
-                expect(data).to.be.undefined;
-            }
+      function assert(err, data) {
+        expect(err).to.be.an.instanceOf(Error);
+        expect(data).to.be.undefined;
+      }
 
-            dataStore.get(resource, function(err, data) {
+      dataStore.get(resource, function(err, data) {
+        assert(err, data);
+
+        dataStore.save(resource, function(err, data) {
+          assert(err, data);
+
+          dataStore.delete(resource, function(err, data) {
+            assert(err, data);
+
+            dataStore.getCollection('users', function(err, data) {
+              assert(err, data);
+
+              dataStore.deleteCollection('users', function(err, data) {
                 assert(err, data);
-
-                dataStore.save(resource, function(err, data) {
-                    assert(err, data);
-
-                    dataStore.delete(resource, function(err, data) {
-                        assert(err, data);
-
-                        dataStore.getCollection('users', function(err, data) {
-                            assert(err, data);
-
-                            dataStore.deleteCollection('users', function(err, data) {
-                                assert(err, data);
-                                stub.restore();
-                                done();
-                            });
-                        });
-                    });
-                });
+                stub.restore();
+                done();
+              });
             });
+          });
+        });
+      });
+    }
+  );
+
+  it('returns an error if the file cannot be saved',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
+
+      // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
+      dataStore.save(resource, function(err, data) {
+        if (err) {
+          return done(err);
         }
-    );
 
-    it('returns an error if the file cannot be saved',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users', 'JDoe', {name: 'John Doe'});
+        var stub = sinon.stub(fs, 'writeFile', function(path, data, callback) {
+          setImmediate(callback, new Error('Test Error'));
+        });
 
-            // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
-            dataStore.save(resource, function(err, data) {
-                if (err) return done(err);
+        function assert(err, data) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(data).to.be.undefined;
+        }
 
-                var stub = sinon.stub(fs, 'writeFile', function(path, data, callback) {
-                    setImmediate(callback, new Error('Test Error'));
-                });
+        dataStore.save(resource, function(err, data) {
+          assert(err, data);
 
-                function assert(err, data) {
-                    expect(err).to.be.an.instanceOf(Error);
-                    expect(data).to.be.undefined;
-                }
+          dataStore.delete(resource, function(err, data) {
+            assert(err, data);
 
-                dataStore.save(resource, function(err, data) {
-                    assert(err, data);
-
-                    dataStore.delete(resource, function(err, data) {
-                        assert(err, data);
-
-                        dataStore.deleteCollection('users', function(err, data) {
-                            assert(err, data);
-                            stub.restore();
-                            done();
-                        });
-                    });
-                });
+            dataStore.deleteCollection('users', function(err, data) {
+              assert(err, data);
+              stub.restore();
+              done();
             });
+          });
+        });
+      });
+    }
+  );
+
+  it('returns an error if the directory cannot be created',
+    function(done) {
+      var dataStore = new FileDataStore(tempDir);
+      var resource = new Resource('/users/JDoe/orders', '12345', {orderId: 12345});
+
+      // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
+      dataStore.save(resource, function(err, data) {
+        if (err) {
+          return done(err);
         }
-    );
 
-    it('returns an error if the directory cannot be created',
-        function(done) {
-            var dataStore = new FileDataStore(tempDir);
-            var resource = new Resource('/users/JDoe/orders', '12345', {orderId: 12345});
+        var mkdirStub = sinon.stub(fs, 'mkdir', function(path, data, callback) {
+          setImmediate(callback, new Error('Test Error'));
+        });
 
-            // Save the resource successfully first, so we can accurately test `delete` and `deleteCollection`
-            dataStore.save(resource, function(err, data) {
-                if (err) return done(err);
+        var statStub = sinon.stub(fs, 'stat', function(path, callback) {
+          setImmediate(callback, new Error('Test Error'));
+        });
 
-                var mkdirStub = sinon.stub(fs, 'mkdir', function(path, data, callback) {
-                    setImmediate(callback, new Error('Test Error'));
-                });
+        function assert(err, data) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(data).to.be.undefined;
+        }
 
-                var statStub = sinon.stub(fs, 'stat', function(path, callback) {
-                    setImmediate(callback, new Error('Test Error'));
-                });
+        dataStore.save(resource, function(err, data) {
+          assert(err, data);
 
-                function assert(err, data) {
-                    expect(err).to.be.an.instanceOf(Error);
-                    expect(data).to.be.undefined;
-                }
+          dataStore.delete(resource, function(err, data) {
+            assert(err, data);
 
-                dataStore.save(resource, function(err, data) {
-                    assert(err, data);
-
-                    dataStore.delete(resource, function(err, data) {
-                        assert(err, data);
-
-                        dataStore.deleteCollection('users/JDoe/orders', function(err, data) {
-                            assert(err, data);
-                            mkdirStub.restore();
-                            statStub.restore();
-                            done();
-                        });
-                    });
-                });
+            dataStore.deleteCollection('users/JDoe/orders', function(err, data) {
+              assert(err, data);
+              mkdirStub.restore();
+              statStub.restore();
+              done();
             });
-        }
-    );
+          });
+        });
+      });
+    }
+  );
 });
