@@ -573,7 +573,6 @@ describe('RequestMetadata middleware', function() {
               params: [],
               security: []
             });
-            next();
           }
           else {
             // req.swagger DOES get populated on the second request, because the API is now valid

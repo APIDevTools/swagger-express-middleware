@@ -758,32 +758,32 @@ describe('RequestParser middleware', function() {
             .post('/foo')
             .set('Content-Type', 'multipart/form-data')
             .attach('file1', env.files.oneMB, '1MB.jpg')
-            .attach('file2', env.files.oneMB, '1MB.xyz')
+            .attach('file2', env.files.oneMB, 'MyFile.foobar')
             .end(env.checkSpyResults(done));
 
           express.post('/foo', env.spy(function(req, res, next) {
             expect(req.body).to.deep.equal({});
             expect(req.files).to.deep.equal({
-              "file1": {
+              'file1': {
                 buffer: null,
-                encoding: "7bit",
-                extension: "jpg",
-                fieldname: "file1",
-                mimetype: "image/jpeg",
+                encoding: '7bit',
+                extension: 'jpg',
+                fieldname: 'file1',
+                mimetype: 'image/jpeg',
                 name: req.files.file1.name,
-                originalname: "1MB.jpg",
+                originalname: '1MB.jpg',
                 path: req.files.file1.path,
                 size: 683709,
                 truncated: false
               },
-              "file2": {
+              'file2': {
                 buffer: null,
-                encoding: "7bit",
-                extension: "jpg",
-                fieldname: "file2",
-                mimetype: "image/jpeg",
+                encoding: '7bit',
+                extension: 'foobar',
+                fieldname: 'file2',
+                mimetype: 'false',
                 name: req.files.file2.name,
-                originalname: "1MB.jpg",
+                originalname: 'MyFile.foobar',
                 path: req.files.file2.path,
                 size: 683709,
                 truncated: false
@@ -807,7 +807,7 @@ describe('RequestParser middleware', function() {
             .field('biz', '42')
             .field('biz', '43')
             .field('biz', '44')
-            .attach('file2', env.files.oneMB, '1MB.xyz')
+            .attach('file2', env.files.oneMB, 'MyFile.foobar')
             .field('baz[5]', 'A')
             .field('baz[0]', 'B')
             .field('baz[2]', 'C')
@@ -826,26 +826,26 @@ describe('RequestParser middleware', function() {
               }
             });
             expect(req.files).to.deep.equal({
-              "file1": {
+              'file1': {
                 buffer: null,
-                encoding: "7bit",
-                extension: "jpg",
-                fieldname: "file1",
-                mimetype: "image/jpeg",
+                encoding: '7bit',
+                extension: 'jpg',
+                fieldname: 'file1',
+                mimetype: 'image/jpeg',
                 name: req.files.file1.name,
-                originalname: "1MB.jpg",
+                originalname: '1MB.jpg',
                 path: req.files.file1.path,
                 size: 683709,
                 truncated: false
               },
-              "file2": {
+              'file2': {
                 buffer: null,
-                encoding: "7bit",
-                extension: "jpg",
-                fieldname: "file2",
-                mimetype: "image/jpeg",
+                encoding: '7bit',
+                extension: 'foobar',
+                fieldname: 'file2',
+                mimetype: 'false',
                 name: req.files.file2.name,
-                originalname: "1MB.jpg",
+                originalname: 'MyFile.foobar',
                 path: req.files.file2.path,
                 size: 683709,
                 truncated: false

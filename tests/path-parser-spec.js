@@ -441,7 +441,6 @@ describe('PathParser middleware', function() {
               ID: '12345'
             });
             expect(req.pathParams).to.be.undefined;
-            next();
           }
           else {
             // Path params DO get parsed on the second request, because the API is now valid
@@ -489,7 +488,6 @@ describe('PathParser middleware', function() {
               ID: 12345
             });
             expect(req.pathParams).to.deep.equal(req.params);
-            next();
           }
           else {
             // The "name" parameter is defined as a number on the second request
@@ -546,7 +544,6 @@ describe('PathParser middleware', function() {
               ID: 12345
             });
             expect(req.pathParams).to.deep.equal(req.params);
-            next();
           }
           else {
             // The parameters no longer exist on the second request, so they're not parsed
