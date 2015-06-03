@@ -1,0 +1,12 @@
+{
+  "@bigstickcarpet/generator-npm": {
+    "env": {
+      "node": true,
+      "browser": false,
+      "yeoman": false,
+      "cordova": false
+    },
+    "githubUsername": "BigstickCarpet",
+    "tests": true
+  }
+}
