@@ -28,6 +28,18 @@ describe('Resource class', function() {
             }
         );
 
+        it('can be called with a non-string path',
+            function() {
+                var resource = new env.swagger.Resource(12345);
+
+                expect(resource.collection).to.equal('');
+                expect(resource.name).to.equal('/12345');
+                expect(resource.data).to.be.undefined;
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
         it('can be called with just a single-depth collection path',
             function() {
                 var resource = new env.swagger.Resource('/users');
@@ -65,6 +77,19 @@ describe('Resource class', function() {
             }
         );
 
+        it('can be called with a non-string path and data',
+            function() {
+                var data = {orderId: 12345};
+                var resource = new env.swagger.Resource(12345, data);
+
+                expect(resource.collection).to.equal('');
+                expect(resource.name).to.equal('/12345');
+                expect(resource.data).to.equal(data);
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
         it('can be called with just a path and a Resource',
             function() {
                 var otherResource = new env.swagger.Resource('/foo/bar', {orderId: 12345});
@@ -85,6 +110,32 @@ describe('Resource class', function() {
 
                 expect(resource.collection).to.equal('/users/jdoe/orders');
                 expect(resource.name).to.equal('/12345');
+                expect(resource.data).to.equal(data);
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
+        it('can be called with a non-string collection path, resource name, and data',
+            function() {
+                var data = {orderId: 12345};
+                var resource = new env.swagger.Resource(12345, '/67890', data);
+
+                expect(resource.collection).to.equal('/12345');
+                expect(resource.name).to.equal('/67890');
+                expect(resource.data).to.equal(data);
+                expect(resource.createdOn).to.be.null;
+                expect(resource.modifiedOn).to.be.null;
+            }
+        );
+
+        it('can be called with a non-string collection path, non-string resource name, and data',
+            function() {
+                var data = {orderId: 12345};
+                var resource = new env.swagger.Resource(12345, 67890, data);
+
+                expect(resource.collection).to.equal('/12345');
+                expect(resource.name).to.equal('/67890');
                 expect(resource.data).to.equal(data);
                 expect(resource.createdOn).to.be.null;
                 expect(resource.modifiedOn).to.be.null;
