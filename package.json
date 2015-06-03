@@ -25,7 +25,7 @@
     "test": "istanbul cover _mocha -- --timeout 15000 --recursive tests",
     "mocha": "mocha --timeout 15000 --recursive tests",
     "update-deps": "npm-check-updates -u && npm update",
-    "release": "npm run update-deps && npm test && bump --prompt --tag --push --all && npm publish",
+    "release": "npm run update-deps && npm run build && npm test && bump --prompt --tag --push --all && npm publish",
     "start": "cd samples && node sample2.js"
   },
   "repository": {
