@@ -179,7 +179,7 @@ var env = module.exports = {
     /**
      * HTTP response code for successful tests
      */
-    testPassed: 599,
+    testPassed: 299,
 
     /**
      * HTTP response code for failed tests
