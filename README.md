@@ -16,7 +16,7 @@ Swagger Express Middleware
 Features
 --------------------------
 * __Supports Swagger 2.0 specs in JSON or YAML__ <br>
-Swagger Express Middleware uses [Swagger-Parser](https://github.com/BigstickCarpet/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers. 
+Swagger Express Middleware uses [Swagger-Parser](https://github.com/BigstickCarpet/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers.
 
 * __Thoroughly tested__<br>
 Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 Google APIs](https://github.com/APIs-guru/api-models/tree/master/googleapis.com).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
@@ -26,7 +26,7 @@ __Fully-functional mock__ implementations for every operation in your API, inclu
 
 * __[Metadata middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/metadata.md)__<br>
 Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.swagger`.
-	
+
 * __[Parse Request middleware](https://github.com/BigstickCarpet/swagger-express-middleware/blob/master/docs/middleware/parseRequest.md)__<br>
 Parses incoming requests and converts everything into the correct data types, according to your Swagger API definition.
 
@@ -47,7 +47,7 @@ Install using [NPM](https://docs.npmjs.com/getting-started/what-is-npm).
 ````bash
 npm install swagger-express-middleware
 ````
-Then use it in your [Node.js](http://nodejs.org/) script like this: 
+Then use it in your [Node.js](http://nodejs.org/) script like this:
 
 ````javascript
 var express = require('express');
@@ -60,8 +60,8 @@ middleware('PetStore.yaml', app, function(err, middleware) {
     // NOTE: Some of these accept optional options (omitted here for brevity)
     app.use(
         middleware.metadata(),
-        middleware.files(),
         middleware.CORS(),
+        middleware.files(),
         middleware.parseRequest(),
         middleware.validateRequest(),
         middleware.mock()

@@ -18,8 +18,8 @@ middleware('PetStore.yaml', app, function(err, middleware) {
   // NOTE: Some of these accept optional options (omitted here for brevity)
   app.use(
     middleware.metadata(),
-    middleware.files(),
     middleware.CORS(),
+    middleware.files(),
     middleware.parseRequest(),
     middleware.validateRequest(),
     middleware.mock()

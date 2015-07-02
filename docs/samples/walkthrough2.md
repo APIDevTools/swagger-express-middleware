@@ -30,14 +30,14 @@ In Sample 1, we used the [createMiddleware](../exports/createMiddleware.md) func
 
 ````javascript
 // Call the createMiddleware function (aliased as "middleware")
-middleware('PetStore.yaml', app, function(err, middleware) { 
+middleware('PetStore.yaml', app, function(err, middleware) {
 ````
 
 The `createMiddleware` function is a helper function that simplifies your code a bit.  But in Sample 2, we're _not_ using it so we can show you what's going on under the hood.  When you call the `createMiddleware` function, it creates a new [Middleware](../exports/Middleware.md) object and calls its [`init()` method](../exports/Middleware.md#initswagger-callback).  That's exactly what we're doing in Sample 2:
 
 ````javascript
 var middleware = new Middleware(app);
-middleware.init('PetStore.yaml', function(err) { 
+middleware.init('PetStore.yaml', function(err) {
 ````
 
 There is no functional difference between these two syntaxes.  It's just a matter of personal taste.
@@ -60,7 +60,7 @@ myDB.save(
 
 ...
 
-// The mock middleware will use our custom data store, 
+// The mock middleware will use our custom data store,
 // which we already pre-populated with mock data
 app.use(middleware.mock(myDB));
 ````
@@ -75,7 +75,7 @@ var data = [
     {collection: '/pets', name: '/Snoopy', data: {name: 'Snoopy', type: 'dog'}},
     {collection: '/pets', name: '/Hello%20Kitty', data: {name: 'Hello Kitty', type: 'cat'}}
 ];
-    
+
 var myDB = new MemoryDataStore();
 myDB.save(Resource.parse(data));
 ````
@@ -83,7 +83,7 @@ myDB.save(Resource.parse(data));
 
 Case-Sensitive and Strict Routing
 --------------------------
-By default Express is case-insensitive and is not strict about whether paths have a trailing slash, but in this sample, we've changed both of those settings using the [`app.set()` method](http://expressjs.com/4x/api.html#app.set).  
+By default Express is case-insensitive and is not strict about whether paths have a trailing slash, but in this sample, we've changed both of those settings using the [`app.set()` method](http://expressjs.com/4x/api.html#app.set).
 
 ````javascript
 app.enable('case sensitive routing');
@@ -113,15 +113,15 @@ In Sample 1, we didn't set any middleware options.  We just accepted the default
 ````javascript
 app.use(
     middleware.metadata(),
-    middleware.files(),
     middleware.CORS(),
+    middleware.files(),
     middleware.parseRequest(),
     middleware.validateRequest(),
     middleware.mock()
 );
 ````
 
-In Sample 2, we've customized the [Files middleware](../middleware/files.md) and [Parse Request middleware](../middleware/parseRequest.md) a bit.  
+In Sample 2, we've customized the [Files middleware](../middleware/files.md) and [Parse Request middleware](../middleware/parseRequest.md) a bit.
 
 ````javascript
 app.use(middleware.files(
@@ -165,7 +165,7 @@ As for the [Parse Request middleware](../middleware/parseRequest.md), we've set 
 
 Custom Middleware
 --------------------------
-In addition to all the Swagger Express Middleware modules, Sample 2 also includes a couple custom middleware functions.  
+In addition to all the Swagger Express Middleware modules, Sample 2 also includes a couple custom middleware functions.
 
 ### Changing a Pet's Name
 In Sample 1, we pointed out that when you change a pet's name, it's [URL stays the same](../samples/yaml.md#changing-a-pets-name), since the URL for each resource is assigned when the resource is _first created_.  Well, in Sample 2, we've fixed that issue:
@@ -205,7 +205,7 @@ The [`DataStore.delete()`](../exports/DataStore.md#deleteresource1-resource2--ca
 
 But first... the `PATCH` operation is supposed to _merge_ the new data with the old data.  That way, you don't have re-send the _entire_ pet data every time you update a pet.  So, if the `delete()` method returned a pet resource, then we call the [`Resource.merge()`](../exports/Resource.md#mergeother) method to merge-in the new data.
 
-Now that the old pet URL is deleted, and the new data is merged with the old data, we're ready to save the data as a new pet (with a new URL).  We create a new [Resource](../exports/Resource.md) object, using the three-parameter constructor that allows us to specify the collection path ("_/pets_"), the resource name ("_Fluffy_"), and the resource data.  
+Now that the old pet URL is deleted, and the new data is merged with the old data, we're ready to save the data as a new pet (with a new URL).  We create a new [Resource](../exports/Resource.md) object, using the three-parameter constructor that allows us to specify the collection path ("_/pets_"), the resource name ("_Fluffy_"), and the resource data.
 
 Finally, we pass this new `Resource` object to the [`DataStore.save()`](../exports/DataStore.md#saveresource1-resource2--callback) method, which is another asynchronous method. In the callback function, we send the newly-saved pet data back to the client as JSON.  Note that we don't call the `next()` function here, since sending a response terminates the request.
 
