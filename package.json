@@ -22,8 +22,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "jshint . --verbose && jscs . --verbose",
-    "test": "istanbul cover _mocha -- --bail --timeout 15000 --recursive tests",
-    "mocha": "mocha --bail --timeout 15000 --recursive tests",
+    "test": "istanbul cover _mocha -- --bail --recursive tests",
+    "mocha": "mocha --bail --recursive tests",
     "upgrade": "npm-check-updates -u && npm update",
     "release": "npm run upgrade && npm run build && npm test && bump --prompt --tag --push --all && npm publish",
     "start": "cd samples && node sample2.js"
