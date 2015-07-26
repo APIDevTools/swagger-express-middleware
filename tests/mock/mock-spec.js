@@ -52,7 +52,14 @@ describe('Mock middleware', function() {
 
         express.get('/api/pets', env.spy(function(req, res, next) {
           expect(req.swagger).to.deep.equal({
-            api: null,
+            api: {
+              "swagger": "2.0",
+              "info": {
+                "title": "Test Swagger",
+                "version": "1.0"
+              },
+              "paths": {}
+            },
             pathName: '',
             path: null,
             operation: null,

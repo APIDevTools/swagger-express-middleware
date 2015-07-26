@@ -566,7 +566,14 @@ describe('RequestMetadata middleware', function() {
           if (++counter === 1) {
             // req.swagger doesn't get populated on the first request, because the API is invalid
             expect(req.swagger).to.deep.equal({
-              api: null,
+              api: {
+                "swagger": "2.0",
+                "info": {
+                  "title": "Test Swagger",
+                  "version": "1.0"
+                },
+                "paths": {}
+              },
               pathName: '',
               path: null,
               operation: null,
