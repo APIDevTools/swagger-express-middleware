@@ -28,9 +28,9 @@ definitions:
         type: string
         enum: [cat, dog, bird]
       address:
-        $ref: address
+        $ref: "#/definitions/address"
       vet:
-        $ref: veterinarian
+        $ref: "#/definitions/veterinarian"
       tags:
         type: array
         uniqueItems: true
@@ -46,7 +46,7 @@ definitions:
         type: string
         minLength: 1
       address:
-        $ref: address
+        $ref: "#/definitions/address"
 
   address:
     properties:
@@ -147,7 +147,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: pet
+              $ref: "#/definitions/pet"
           headers:
             last-modified:
               type: string
@@ -163,7 +163,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: pet
+              $ref: "#/definitions/pet"
 
     post:
       description: Creates a new pet in the store
@@ -174,12 +174,12 @@ paths:
           description: The pet to add to the store
           required: true
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
       responses:
         201:
           description: Returns the newly-added pet
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
           headers:
             Location:
               type: string
@@ -196,7 +196,7 @@ paths:
         default:
           description: Returns the pet data
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
           headers:
             last-modified:
               type: string
@@ -209,7 +209,7 @@ paths:
         default:
           description: Returns the pet that was deleted
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
 
     patch:
       description: Updates a pet by name
@@ -219,12 +219,12 @@ paths:
           description: The updated pet info
           required: true
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
       responses:
         default:
           description: Returns the updated pet data
           schema:
-            $ref: pet
+            $ref: "#/definitions/pet"
 
   /pets/{petName}/photos:
     parameters:
@@ -342,4 +342,4 @@ paths:
           schema:
             type: file
             default:
-              $ref: index.html
+              $ref: "index.html"

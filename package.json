@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "0.4.7",
+  "version": "1.0.0-alpha.0",
   "description": "Swagger middleware and mocks for Express",
   "keywords": [
     "express",
@@ -25,7 +25,8 @@
     "test": "istanbul cover _mocha -- --bail --recursive tests",
     "mocha": "mocha --bail --recursive tests",
     "upgrade": "npm-check-updates -u && npm update",
-    "release": "npm run upgrade && npm run build && npm test && bump --prompt --tag --push --all && npm publish",
+    "bump": "bump --prerelease --tag --push --all",
+    "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish --tag alpha",
     "start": "cd samples && node sample2.js"
   },
   "repository": {
@@ -54,7 +55,7 @@
     "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
     "multer": "^0.1.8",
-    "swagger-parser": "^2.5.0",
+    "swagger-parser": "^3.0.0-alpha",
     "tv4": "^1.1.12",
     "type-is": "^1.6.4"
   },

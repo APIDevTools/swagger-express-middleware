@@ -65,9 +65,9 @@
           type: string
           enum: [cat, dog, bird]
         Address:
-          $ref: address
+          $ref: "#/definitions/address"
         Vet:
-          $ref: veterinarian
+          $ref: "#/definitions/veterinarian"
         Tags:
           type: array
           items:
@@ -82,7 +82,7 @@
           type: string
           minLength: 1
         Address:
-          $ref: address
+          $ref: "#/definitions/address"
 
     address:
       required:
@@ -118,7 +118,7 @@
         Message:
           type: string
         Pet:
-          $ref: pet
+          $ref: "#/definitions/pet"
 
   parameters:
     petName:
@@ -206,11 +206,11 @@
             schema:
               type: array
               items:
-                $ref: pet
+                $ref: "#/definitions/pet"
           default:
             description: unexpected error
             schema:
-              $ref: error
+              $ref: "#/definitions/error"
 
       post:
         description: Creates a new pet in the store.
@@ -227,7 +227,7 @@
             description: Pet to add to the store
             required: true
             schema:
-              $ref: pet
+              $ref: "#/definitions/pet"
         responses:
           201:
             description: pet response
@@ -240,7 +240,7 @@
           default:
             description: unexpected error
             schema:
-              $ref: error
+              $ref: "#/definitions/error"
 
     /pets/{PetName}:
       parameters:
@@ -258,11 +258,11 @@
           200:
             description: pet response
             schema:
-              $ref: pet
+              $ref: "#/definitions/pet"
           default:
             description: unexpected error
             schema:
-              $ref: error
+              $ref: "#/definitions/error"
 
       patch:
         description: Updates a pet by name
@@ -281,16 +281,16 @@
             description: The updated pet info
             required: true
             schema:
-              $ref: pet
+              $ref: "#/definitions/pet"
         responses:
           200:
             description: pet response
             schema:
-              $ref: pet
+              $ref: "#/definitions/pet"
           default:
             description: unexpected error
             schema:
-              $ref: error
+              $ref: "#/definitions/error"
 
       delete:
         description: deletes a single pet based on the name supplied
@@ -305,7 +305,7 @@
           default:
             description: unexpected error
             schema:
-              $ref: error
+              $ref: "#/definitions/error"
 
     /pets/{PetName}/photos:
       parameters:
