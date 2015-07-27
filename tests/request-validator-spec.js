@@ -97,6 +97,7 @@ describe('RequestValidator middleware', function() {
       function(done) {
         env.swagger(env.files.blank, function(err, middleware) {
           express = env.express(middleware.metadata(), middleware.parseRequest(), middleware.validateRequest());
+          supertest = env.supertest(express);
 
           supertest
             .post('/api/pets')
@@ -104,7 +105,7 @@ describe('RequestValidator middleware', function() {
 
           express.use('/api/pets', env.spy(function(err, req, res, next) {
             expect(err.status).to.equal(500);
-            expect(err.message).to.contain('Error parsing file');
+            expect(err.message).to.contain('blank.yaml\" is not a valid JSON Schema');
           }));
         });
       });
