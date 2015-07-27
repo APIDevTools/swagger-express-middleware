@@ -25,7 +25,7 @@ describe('JSON Schema - parse array params', function() {
     }
   );
 
-  it.only('should parse space-separated array params',
+  it('should parse space-separated array params',
     function(done) {
       var schema = {
         type: 'array',
