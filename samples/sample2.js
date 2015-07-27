@@ -18,7 +18,7 @@ var util            = require('util'),
 var app = express();
 var middleware = new Middleware(app);
 
-middleware.init('PetStore.yaml', function(err) {
+middleware.init(path.join(__dirname, 'PetStore.yaml'), function(err) {
   // Create a custom data store with some initial mock data
   var myDB = new MemoryDataStore();
   myDB.save(

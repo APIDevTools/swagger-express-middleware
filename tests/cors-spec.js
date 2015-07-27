@@ -81,7 +81,6 @@ describe('CORS middleware', function() {
           .end(env.checkSpyResults(done));
 
         express.get('/api/pets', env.spy(function(req, res, next) {
-          expect(req.swagger.api).to.be.null;
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');

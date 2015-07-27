@@ -146,7 +146,7 @@ var env = module.exports = {
    * Parsed Swagger specs.
    */
   parsed: {
-    blank: {swagger: '2.0', info: {}, paths: {}},
+    blank: {swagger: '2.0', info: { title: "Test Swagger", version: "1.0"}, paths: {}},
     petStore: petStoreJSON,
     petStoreNoBasePath: _.omit(petStoreJSON, 'basePath'),
     petStoreNoPaths: (function() {
