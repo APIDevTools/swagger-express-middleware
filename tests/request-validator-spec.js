@@ -75,24 +75,17 @@ describe('RequestValidator middleware', function() {
     }
   );
 
+  it('should throw an error if the API is invalid',
+    function(done) {
+      api = env.parsed.petsPostOperation;
+      initTest(function(err, middleware) {
+        expect(err.message).to.contain('The object is not a valid Swagger API definition');
+        done();
+      });
+    }
+  );
+
   describe('http500', function() {
-    it('should throw an error if the API is invalid',
-      function(done) {
-        api = env.parsed.petsPostOperation;
-        initTest(function(err, middleware) {
-
-          supertest
-            .post('/api/pets')
-            .end(env.checkSpyResults(done));
-
-          express.use('/api/pets', env.spy(function(err, req, res, next) {
-            expect(err.status).to.equal(500);
-            expect(err.message).to.contain('The object is not a valid Swagger API definition');
-          }));
-        });
-      }
-    );
-
     it('should throw an error if a parsing error occurs',
       function(done) {
         env.swagger(env.files.blank, function(err, middleware) {
