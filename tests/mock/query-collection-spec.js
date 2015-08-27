@@ -3,7 +3,7 @@ var env    = require('../test-environment'),
     helper = require('./test-helper');
 
 describe('Query Collection Mock', function() {
-  ['head', 'options', 'get'].forEach(function(method) {
+  ['get', 'head', 'options'].forEach(function(method) {
     describe(method.toUpperCase(), function() {
       'use strict';
 
@@ -174,6 +174,32 @@ describe('Query Collection Mock', function() {
             var request = supertest[method]('/api/pets');
             noHeaders || request.expect('Content-Length', 43);
             request.expect(200, noBody ? '' : {message: 'Not the response you expected'});
+            request.end(env.checkResults(done));
+          });
+        }
+      );
+
+      it('should return the default value instead of an empty array',
+        function(done) {
+          api.paths['/pets'][method].responses[200].schema.default = ['The default value'];
+
+          helper.initTest(api, function(supertest) {
+            var request = supertest[method]('/api/pets');
+            noHeaders || request.expect('Content-Length', 21);
+            request.expect(200, noBody ? '' : ['The default value']);
+            request.end(env.checkResults(done));
+          });
+        }
+      );
+
+      it('should return the example value instead of an empty array',
+        function(done) {
+          api.paths['/pets'][method].responses[200].schema.example = ['The example value'];
+
+          helper.initTest(api, function(supertest) {
+            var request = supertest[method]('/api/pets');
+            noHeaders || request.expect('Content-Length', 21);
+            request.expect(200, noBody ? '' : ['The example value']);
             request.end(env.checkResults(done));
           });
         }

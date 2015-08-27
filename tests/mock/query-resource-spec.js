@@ -128,7 +128,7 @@ describe('Query Resource Mock', function() {
         }
       );
 
-      it('should not return the default value instead of a 404',
+      it('should return the default value instead of a 404',
         function(done) {
           api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
           api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
@@ -142,9 +142,8 @@ describe('Query Resource Mock', function() {
         }
       );
 
-      it('should not return the example value instead of a 404',
+      it('should return the example value instead of a 404',
         function(done) {
-          api.paths['/pets/{PetName}'][method].responses[200].schema.default = undefined;
           api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
           helper.initTest(api, function(supertest) {
