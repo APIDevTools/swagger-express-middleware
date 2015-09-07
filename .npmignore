@@ -1,12 +1,8 @@
-*~
-._*
-.DS_Store
+**/*~
+**/._*
+**/.DS_Store
 npm-debug.log
 /.idea
-/bower_components
 /coverage
-/docs
 /tests
-/node_modules
-/gulpfile.js
 /.*

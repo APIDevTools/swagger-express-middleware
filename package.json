@@ -21,12 +21,14 @@
   "homepage": "https://github.com/BigstickCarpet/swagger-express-middleware",
   "main": "lib/index.js",
   "scripts": {
-    "build": "jshint . --verbose && jscs . --verbose",
-    "test": "istanbul cover _mocha -- --bail --recursive tests",
-    "mocha": "mocha --bail --recursive tests",
-    "upgrade": "npm-check-updates -u && npm update",
+    "lint": "jshint . --verbose && jscs . --verbose",
+    "build": "npm run lint",
+    "mocha": "mocha --bail --recursive tests/fixtures tests/specs",
+    "istanbul": "istanbul cover _mocha --dir coverage/node -- --bail --recursive tests/fixtures tests/specs",
+    "test": "npm run istanbul",
+    "upgrade": "ncu --upgradeAll && npm update",
     "bump": "bump --prerelease --tag --push --all",
-    "release": "npm run build && npm test && npm run bump && npm publish --tag alpha",
+    "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish",
     "start": "cd samples && node sample2.js"
   },
   "repository": {
@@ -34,19 +36,19 @@
     "url": "https://github.com/BigstickCarpet/swagger-express-middleware.git"
   },
   "devDependencies": {
-    "istanbul": "^0.3.19",
-    "coveralls": "^2.11.4",
-    "mocha": "^2.3.1",
+    "basic-auth": "^1.0.3",
     "chai": "^3.2.0",
-    "sinon": "^1.16.1",
+    "chai-datetime": "^1.4.0",
+    "coveralls": "^2.11.4",
+    "express": "^4.13.3",
+    "istanbul": "^0.3.19",
     "jscs": "^2.1.1",
     "jshint": "^2.8.0",
+    "mocha": "^2.3.1",
     "npm-check-updates": "^2.2.0",
-    "version-bump-prompt": "^1.5.1",
-    "basic-auth": "^1.0.3",
-    "chai-datetime": "^1.4.0",
-    "express": "^4.13.3",
-    "supertest": "^1.1"
+    "sinon": "^1.16.1",
+    "supertest": "^1.1.0",
+    "version-bump-prompt": "^1.5.1"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
