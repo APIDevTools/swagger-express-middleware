@@ -118,11 +118,11 @@ exports.checkSpyResults = function(done) {
     else if (res.status !== exports.testPassed) {
       var serverError;
       if (res.error) {
-        serverError = util.newError('%s\n%s', res.error.message,
+        serverError = new Error(res.error.message +
           _.unescape(res.error.text).replace(/<br>/g, '\n').replace(/&nbsp;/g, ' '));
       }
       else {
-        serverError = util.newError('The test failed, but no server error was returned');
+        serverError = new Error('The test failed, but no server error was returned');
       }
       done(serverError);
     }
