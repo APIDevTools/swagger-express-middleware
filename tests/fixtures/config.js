@@ -16,5 +16,5 @@ beforeEach(function() {
   this.currentTest.timeout(15000);
 
   // Almost all of our tests take ~200 ms, since they're simulating full round-trips
-  this.currentTest.slow(1000);
+  this.currentTest.slow(2000);
 });
