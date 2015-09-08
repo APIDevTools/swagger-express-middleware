@@ -44,7 +44,7 @@
     "istanbul": "^0.3.19",
     "jscs": "^2.1.1",
     "jshint": "^2.8.0",
-    "mocha": "^2.3.1",
+    "mocha": "^2.3.2",
     "npm-check-updates": "^2.2.0",
     "sinon": "^1.16.1",
     "supertest": "^1.1.0",
@@ -59,7 +59,8 @@
     "multer": "^0.1.8",
     "ono": "^1.0.22",
     "swagger-methods": "^1.0.0",
-    "swagger-parser": "^3.0.0-alpha.6",
+    "swagger-parser": "^3.0.0-alpha.7",
+    "tmp": "0.0.27",
     "tv4": "^1.2.5",
     "type-is": "^1.6.8"
   },
