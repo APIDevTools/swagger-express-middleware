@@ -56,8 +56,9 @@
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
-    "multer": "^1.0.3",
+    "multer": "^0.1.8",
     "ono": "^1.0.22",
+    "swagger-methods": "^1.0.0",
     "swagger-parser": "^3.0.0-alpha.6",
     "tv4": "^1.2.5",
     "type-is": "^1.6.8"
