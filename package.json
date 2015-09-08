@@ -26,7 +26,7 @@
     "mocha": "mocha --bail --recursive tests/fixtures tests/specs",
     "istanbul": "istanbul cover _mocha --dir coverage/node -- --bail --recursive tests/fixtures tests/specs",
     "test": "npm run istanbul",
-    "upgrade": "ncu --upgradeAll && npm update",
+    "upgrade": "ncu \"/(!multer)/\" --upgradeAll && npm update",
     "bump": "bump --prerelease --tag --push --all",
     "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish",
     "start": "cd samples && node sample2.js"
