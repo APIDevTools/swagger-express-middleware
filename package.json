@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "Swagger middleware and mocks for Express",
   "keywords": [
     "express",
