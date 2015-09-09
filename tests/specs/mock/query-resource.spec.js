@@ -381,7 +381,10 @@ describe('Query Resource Mock', function() {
                 noHeaders || request.expect('Content-Type', 'application/json');
                 request.expect(200, '');
                 request.end(helper.checkResults(done, function(res) {
-                  expect(res.headers['content-length']).to.be.undefined;
+                  expect(res.headers['content-length']).to.satisfy(function(contentLength) {
+                    // This is the difference between returning an empty array vs. nothing at all
+                    return contentLength === undefined || contentLength === '0';
+                  });
                   done();
                 }));
               });
