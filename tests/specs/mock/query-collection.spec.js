@@ -160,7 +160,7 @@ describe('Query Collection Mock', function() {
             request.end(helper.checkResults(done, function(res) {
               expect(res.headers['content-length']).to.satisfy(function(contentLength) {
                 // This is the difference between returning an empty array vs. nothing at all
-                return contentLength === undefined || contentLength === 0;
+                return contentLength === undefined || contentLength === '0';
               });
               done();
             }));
