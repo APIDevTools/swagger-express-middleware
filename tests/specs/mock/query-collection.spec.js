@@ -782,6 +782,26 @@ describe('Query Collection Mock', function() {
           }
         );
 
+        it('should not filter by properties that are defined in the Swagger API but not in the response',
+          function(done) {
+
+            api.paths['/pets'][method].parameters.push({
+              name: 'page',
+              in: 'query',
+              description: 'Pagination index',
+              required: false,
+              type: 'integer',
+            });
+
+            helper.initTest(dataStore, api, function(supertest) {
+              var request = supertest[method]('/api/pets?page=2&Name=Lassie&Vet.Address.Street=123%20First%20St.');
+              noHeaders || request.expect('Content-Length', 1033);
+              request.expect(200, noBody ? '' : allPets);
+              request.end(helper.checkResults(done));
+            });
+          }
+        );
+
         it('should only filter by properties that are defined in the Swagger API',
           function(done) {
             helper.initTest(dataStore, api, function(supertest) {
