@@ -190,8 +190,8 @@ describe('PathParser middleware', function() {
             intParam: -951,
             floatParam: 1576.179145671859,
             byteParam: 255,
-            dateParam: new Date('2010-11-04'),
-            timeParam: new Date('1900-08-14T02:04:55.987-03:00'),
+            dateParam: '2010-11-04',
+            timeParam: '1900-08-14T02:04:55.987-03:00',
             boolParam: true
           });
           expect(req.pathParams).to.deep.equal(req.params);

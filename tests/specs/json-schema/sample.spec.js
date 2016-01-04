@@ -265,84 +265,6 @@ describe('JSON Schema sample data', function() {
         }
       }
     );
-
-    it('should generate a valid date above minimum',
-      function() {
-        var min = new Date();
-        min.setUTCMilliseconds(0);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
-          expect(date).to.be.an.instanceOf(Date);
-          expect(date.valueOf()).to.be.at.least(min.valueOf());
-        }
-      }
-    );
-
-    it('should generate a valid date above exclusive minimum',
-      function() {
-        var min = new Date();
-        min.setUTCMilliseconds(0);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, exclusiveMinimum: true});
-        for (var i = 0; i < iterations; i++) {
-          expect(schema.sample())
-            .to.be.an.instanceOf(Date)
-            .and.afterTime(min);
-        }
-      }
-    );
-
-    it('should generate a valid date below maximum',
-      function() {
-        var max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
-        var schema = new JsonSchema({type: 'string', format: 'date-time', maximum: max});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
-          expect(date).to.be.an.instanceOf(Date);
-          expect(date.valueOf()).to.be.at.most(max.valueOf());
-        }
-      }
-    );
-
-    it('should generate a valid date below exclusive maximum',
-      function() {
-        var max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
-        var schema = new JsonSchema({type: 'string', format: 'date-time', maximum: max, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
-          expect(schema.sample())
-            .to.be.an.instanceOf(Date)
-            .and.beforeTime(max);
-        }
-      }
-    );
-
-    it('should generate a valid date within min/max',
-      function() {
-        var min = new Date(2008, 5, 27, 15, 32, 17, 100);
-        var max = new Date(2008, 5, 27, 15, 32, 17, 200);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, maximum: max});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
-          expect(date).to.be.an.instanceOf(Date);
-          expect(date.valueOf()).to.be.at.least(min.valueOf());
-          expect(date.valueOf()).to.be.at.most(max.valueOf());
-        }
-      }
-    );
-
-    it('should generate a valid date within exclusive min/max',
-      function() {
-        var min = new Date(2008, 5, 27, 15, 32, 17, 100);
-        var max = new Date(2008, 5, 27, 15, 32, 17, 200);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, maximum: max, exclusiveMinimum: true, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
-          expect(schema.sample())
-            .to.be.an.instanceOf(Date)
-            .and.afterTime(min)
-            .and.beforeTime(max);
-        }
-      }
-    );
   });
 
   describe('sampleString', function() {
@@ -406,32 +328,6 @@ describe('JSON Schema sample data', function() {
           expect(array).to.be.an('array');
           array.forEach(function(item) {
             expect(item).to.be.a('number').at.least(1).and.at.most(10);
-          });
-        }
-      }
-    );
-
-    it('should generate an array of minItems',
-      function() {
-        var min = new Date(1995, 6, 18, 12, 30, 45, 0);
-        var max = new Date(1995, 6, 18, 12, 30, 45, 10);
-        var schema = new JsonSchema({
-          type: 'array',
-          minItems: 25,
-          items: {
-            type: 'string',
-            format: 'date-time',
-            minimum: min,
-            exclusiveMinimum: true,
-            maximum: max,
-            exclusiveMaximum: true
-          }
-        });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
-          expect(array).to.be.an('array').with.length.at.least(25);
-          array.forEach(function(item) {
-            expect(item).to.be.an.instanceOf(Date).afterTime(min).beforeTime(max);
           });
         }
       }

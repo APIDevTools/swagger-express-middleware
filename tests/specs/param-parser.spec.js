@@ -318,7 +318,7 @@ describe('ParamParser middleware', function() {
     it('should throw an HTTP 411 error if the Content-Length header is required and is missing',
       function(done) {
         var api = _.cloneDeep(files.parsed.petStore);
-        api.paths['/pets'].post.parameters.push({
+        api.paths['/pets'].get.parameters.push({
           in: 'header',
           name: 'Content-Length',
           required: true,
@@ -329,7 +329,7 @@ describe('ParamParser middleware', function() {
           var express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
-            .post('/api/pets')
+            .get('/api/pets')
             .end(helper.checkSpyResults(done));
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {

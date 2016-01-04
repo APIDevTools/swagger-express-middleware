@@ -11,17 +11,13 @@ describe('JSON Schema - parse date params', function() {
     function(done) {
       var schema = {
         type: 'string',
-        format: 'date',
-        minimum: new Date(Date.UTC(2010, 0, 1)),
-        exclusiveMinimum: true,
-        maximum: '2010-12-31',
-        exclusiveMaximum: false
+        format: 'date'
       };
 
       var express = helper.parse(schema, '2010-12-31', done);
 
       express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('2010-12-31'));
+        expect(req.header('Test')).to.equal('2010-12-31');
       }));
     }
   );
@@ -52,23 +48,7 @@ describe('JSON Schema - parse date params', function() {
       var express = helper.parse(schema, undefined, done);
 
       express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('1990-09-13'));
-      }));
-    }
-  );
-
-  it('should parse the default Date value if no value is specified',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        default: new Date('1995-08-24')
-      };
-
-      var express = helper.parse(schema, undefined, done);
-
-      express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('1995-08-24'));
+        expect(req.header('Test')).to.equal('1990-09-13');
       }));
     }
   );
@@ -84,7 +64,7 @@ describe('JSON Schema - parse date params', function() {
       var express = helper.parse(schema, '', done);
 
       express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('2020-01-31'));
+        expect(req.header('Test')).to.equal('2020-01-31');
       }));
     }
   );
@@ -171,148 +151,6 @@ describe('JSON Schema - parse date params', function() {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.status).to.equal(400);
         expect(err.message).to.contain('String is too long (10 chars), maximum 5');
-      }));
-    }
-  );
-
-  it('should throw an error if the value is above the maximum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        maximum: '2009-08-12'
-      };
-
-      var express = helper.parse(schema, '2009-08-13', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.contain('is greater than maximum');
-      }));
-    }
-  );
-
-  it('should NOT throw an error if the value is equal to the maximum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        maximum: '2009-08-12'
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('2009-08-12'));
-      }));
-    }
-  );
-
-  it('should throw an error if the value is equal the exclusive maximum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        maximum: '2009-08-12',
-        exclusiveMaximum: true
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.contain('is equal to exclusive maximum');
-      }));
-    }
-  );
-
-  it('should throw an error if the maximum is not valid',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        maximum: '2009-15-27'
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(500);
-        expect(err.message).to.contain('The "maximum" value in the Swagger API is invalid ("2009-15-27")');
-      }));
-    }
-  );
-
-  it('should throw an error if the value is below the minimum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        minimum: '2009-08-12'
-      };
-
-      var express = helper.parse(schema, '2009-08-11', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.contain('is less than minimum');
-      }));
-    }
-  );
-
-  it('should NOT throw an error if the value is equal to the minimum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        minimum: '2009-08-12'
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.post('/api/test', helper.spy(function(req, res, next) {
-        expect(req.header('Test')).to.equalTime(new Date('2009-08-12'));
-      }));
-    }
-  );
-
-  it('should throw an error if the value is equal the exclusive minimum',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        minimum: '2009-08-12',
-        exclusiveMinimum: true
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.contain('is equal to exclusive minimum');
-      }));
-    }
-  );
-
-  it('should throw an error if the minimum is not valid',
-    function(done) {
-      var schema = {
-        type: 'string',
-        format: 'date',
-        minimum: '2009-15-27'
-      };
-
-      var express = helper.parse(schema, '2009-08-12', done);
-
-      express.use('/api/test', helper.spy(function(err, req, res, next) {
-        expect(err).to.be.an.instanceOf(Error);
-        expect(err.status).to.equal(500);
-        expect(err.message).to.contain('The "minimum" value in the Swagger API is invalid ("2009-15-27")');
       }));
     }
   );
