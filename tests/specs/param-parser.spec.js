@@ -330,6 +330,7 @@ describe('ParamParser middleware', function() {
 
           helper.supertest(express)
             .post('/api/pets')
+            .unset('Content-Length')
             .end(helper.checkSpyResults(done));
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {
