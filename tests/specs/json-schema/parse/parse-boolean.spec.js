@@ -76,7 +76,7 @@ describe('JSON Schema - parse boolean params', function() {
       express.use('/api/test', helper.spy(function(err, req, res, next) {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.status).to.equal(400);
-        expect(err.message).to.contain('Invalid type: string (expected boolean)');
+        expect(err.message).to.contain('Expected type boolean but found type string');
       }));
     }
   );
@@ -92,7 +92,7 @@ describe('JSON Schema - parse boolean params', function() {
       express.use('/api/test', helper.spy(function(err, req, res, next) {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.status).to.equal(400);
-        expect(err.message).to.contain('Invalid type: string (expected boolean)');
+        expect(err.message).to.contain('Expected type boolean but found type string');
       }));
     }
   );

@@ -90,7 +90,7 @@ describe('Edit Resource Mock', function() {
         it('should create a new resource using default property values in the JSON schema',
           function(done) {
             var petParam = _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
             petParam.schema.properties.Name.default = 'Fido';
             petParam.schema.properties.Type.default = 'dog';
             petParam.schema.properties.Tags.default = 'fluffy,brown';
@@ -561,7 +561,8 @@ describe('Edit Resource Mock', function() {
 
         it('should overwrite the existing resource rather than merging it',
           function(done) {
-            _.find(api.paths['/pets/{PetName}'].put.parameters, {name: 'PetData'}).schema.properties.Vet.required = [];
+            var schema = _.find(api.paths['/pets/{PetName}'].put.parameters, {name: 'PetData'}).schema
+            delete schema.properties.Vet.required;
             helper.initTest(api, function(supertest) {
               supertest
                 .put('/api/pets/Fido')
@@ -641,7 +642,8 @@ describe('Edit Resource Mock', function() {
 
         it('should merge the new resource with the existing resource',
           function(done) {
-            _.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'}).schema.properties.Vet.required = [];
+            var schema =_.find(api.paths['/pets/{PetName}'][method].parameters, {name: 'PetData'}).schema
+            delete schema.properties.Vet.required;
 
             helper.initTest(api, function(supertest) {
               supertest

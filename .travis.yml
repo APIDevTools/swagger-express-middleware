@@ -8,6 +8,8 @@ matrix:
     - node_js: 0.10
     - node_js: 0.11
     - node_js: 0.12
+    - node_js: 4
+    - node_js: 5
 branches:
   only:
     - master            # only run CI on the master branch

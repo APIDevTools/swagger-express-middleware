@@ -1100,7 +1100,7 @@ describe('Edit Collection Mock', function() {
           function(done) {
             // Make "Name" property optional
             var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
 
             helper.initTest(api, function(supertest) {
               supertest
@@ -1162,7 +1162,7 @@ describe('Edit Collection Mock', function() {
           function(done) {
             // Make the "Name" property optional, and an integer
             var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
             petParam.schema.properties.Name.type = 'integer';
             api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
 
@@ -1200,7 +1200,7 @@ describe('Edit Collection Mock', function() {
           function(done) {
             // Make the "Name" property optional, and an integer
             var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
             petParam.schema.properties.Name.type = 'string';
             petParam.schema.properties.Name.format = 'date';
             api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
@@ -1239,7 +1239,7 @@ describe('Edit Collection Mock', function() {
           function(done) {
             // Make the "Name" property optional, and an integer
             var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
             petParam.schema.properties.Name.type = 'string';
             petParam.schema.properties.Name.format = 'date-time';
             api.paths['/pets/{PetName}'].get.responses[200].schema = petParam.schema;
@@ -1278,7 +1278,7 @@ describe('Edit Collection Mock', function() {
           function(done) {
             // Make the "Name" property optional, and an integer
             var petParam = _.find(api.paths['/pets'][method].parameters, {name: 'PetData'});
-            petParam.schema.required = [];
+            delete petParam.schema.required;
             petParam.schema.properties.Name.type = 'array';
             petParam.schema.properties.Name.items = {type: 'string'};
 
