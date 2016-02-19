@@ -46,8 +46,8 @@ middleware.init(path.join(__dirname, 'PetStore.yaml'), function(err) {
       // Serve the Swagger API from "/swagger/api" instead of "/api-docs"
       apiPath: '/swagger/api',
 
-      // Disable serving the "PetStore.yaml" file
-      rawFilesPath: false
+      // Serve the "PetStore.yaml" file from "/swagger/api" instead of "/api-docs"
+      rawFilesPath: '/swagger/api'
     }
   ));
 
