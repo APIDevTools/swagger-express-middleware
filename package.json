@@ -45,6 +45,7 @@
     "jscs": "^2.1.1",
     "jshint": "^2.8.0",
     "mocha": "^2.3.2",
+    "node-mocks-http": "^1.5.1",
     "npm-check-updates": "^2.2.0",
     "sinon": "^1.16.1",
     "supertest": "^1.1.0",
