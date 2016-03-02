@@ -9,6 +9,7 @@ exports.createSemanticResponse = createSemanticResponse;
 exports.createUnexpectedRequestHandler = createUnexpectedRequestHandler;
 exports.DummyDataStore = DummyDataStore;
 exports.dummyRouter = dummyRouter;
+exports.dummyExpressApp = dummyExpressApp;
 exports.expectNoResponse = expectNoResponse;
 
 function createRequest () {
@@ -48,6 +49,21 @@ function createUnexpectedRequestHandler (callback) {
   };
 }
 
+function dummyExpressApp () {
+
+}
+
+dummyExpressApp.param = function () {
+};
+dummyExpressApp.get = function () {
+};
+dummyExpressApp.set = function () {
+};
+dummyExpressApp.enabled = function () {
+};
+dummyExpressApp.disabled = function () {
+};
+
 function dummyRouter () {
 
 }
@@ -66,7 +82,7 @@ function expectNoResponse (response, callback) {
 DummyDataStore.prototype = Object.create(DataStore.prototype);
 DummyDataStore.prototype.constructor = DummyDataStore;
 
-function DummyDataStore() {
+function DummyDataStore () {
 
 }
 
