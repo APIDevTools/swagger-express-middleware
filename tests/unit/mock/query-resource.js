@@ -133,7 +133,6 @@ describe('Mock middleware query resource', function () {
         });
 
         it('should not overwrite res.body', function (done) {
-          //dataStore.save(new Resource(request.path, {any: 'thing'}));
           response.swagger.schema = {
             default: 'my default value',
             example: 'my example value'
