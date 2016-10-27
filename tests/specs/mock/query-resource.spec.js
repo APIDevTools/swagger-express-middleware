@@ -412,25 +412,6 @@ describe('Query Resource Mock', function() {
           }
         );
 
-        it('should return the example value instead of undefined',
-          function(done) {
-            api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
-            api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
-
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
-                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 31);
-                request.expect(200, noBody ? '' : {example: 'The example value'});
-                request.end(helper.checkResults(done));
-              });
-            });
-          }
-        );
-
         it('should return a null value',
           function(done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
