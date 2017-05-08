@@ -24,7 +24,7 @@ Once you've got the sample running, browse to [http://localhost:8000](http://loc
 
 ![Screenshot](../img/samples.png)
 
-Alernate Syntax
+Alternate Syntax
 --------------------------
 In Sample 1, we used the [createMiddleware](../exports/createMiddleware.md) function to load the Swagger file and initialize the middleware.
 
