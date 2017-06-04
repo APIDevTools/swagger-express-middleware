@@ -518,7 +518,7 @@ describe('Query Resource Mock', function() {
                     }
                     else {
                       expect(res2.body).to.be.empty;
-                      expect(res2.text).to.have.lengthOf(258441);
+                      expect(res2.text).to.have.length.above(258000).and.below(259000);
                     }
                     done();
                   }));
@@ -597,7 +597,7 @@ describe('Query Resource Mock', function() {
                     }
                     else {
                       expect(res2.body).to.be.empty;
-                      expect(res2.text).to.have.lengthOf(258441);
+                      expect(res2.text).to.have.length.above(258000).and.below(259000);
                     }
                     done();
                   }));

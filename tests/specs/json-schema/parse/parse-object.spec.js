@@ -152,7 +152,7 @@ describe('JSON Schema - parse object params', function() {
         express.use('/api/pets/fido', helper.spy(function(err, req, res, next) {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.status).to.equal(400);
-          expect(err.message).to.contain('No enum match for: "kitty kat"');
+          expect(err.message).to.contain('No enum match for: kitty kat');
         }));
       });
     }
