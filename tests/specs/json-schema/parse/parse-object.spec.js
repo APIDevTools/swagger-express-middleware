@@ -33,6 +33,26 @@ describe('JSON Schema - parse object params', function() {
     }
   );
 
+  it('should parse a null object param',
+    function(done) {
+      swagger(api, function(err, middleware) {
+        var express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+        helper.supertest(express)
+          .patch('/api/pets/fido')
+          .send({Name: 'Fido', Type: 'dog', Address: undefined})
+          .end(helper.checkSpyResults(done));
+
+        express.patch('/api/pets/fido', helper.spy(function(req, res, next) {
+          expect(req.body).to.deep.equal({
+            Name: 'Fido',
+            Type: 'dog'
+          });
+        }));
+      });
+    }
+  );
+
   it('should parse an optional, unspecified object param',
     function(done) {
       petParam.required = false;
