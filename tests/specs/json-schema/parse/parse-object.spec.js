@@ -40,13 +40,14 @@ describe('JSON Schema - parse object params', function() {
 
         helper.supertest(express)
           .patch('/api/pets/fido')
-          .send({Name: 'Fido', Type: 'dog', Address: undefined})
+          .send({Name: 'Fido', Type: 'dog', Address: null})
           .end(helper.checkSpyResults(done));
 
         express.patch('/api/pets/fido', helper.spy(function(req, res, next) {
           expect(req.body).to.deep.equal({
             Name: 'Fido',
-            Type: 'dog'
+            Type: 'dog',
+            Address: null
           });
         }));
       });
