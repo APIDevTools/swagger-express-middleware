@@ -698,7 +698,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -719,7 +719,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -741,7 +741,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -762,7 +762,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -784,7 +784,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -805,7 +805,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
@@ -830,7 +830,7 @@ describe('RequestValidator middleware', function() {
         initTest(function(err, middleware) {
           supertest
             .post('/api/pets')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 

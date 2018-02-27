@@ -363,7 +363,7 @@ describe('FileServer middleware', function() {
 
               helper.supertest(express)
                 [method]('/api-docs/error.json')
-                .expect('Content-Type', 'application/json')
+                .expect('Content-Type', 'application/json; charset=UTF-8')
                 .expect(200)
                 .expect(equalsFile(files.paths.error))
                 .end(helper.checkResults(done));
@@ -493,7 +493,7 @@ describe('FileServer middleware', function() {
 
               helper.supertest(express)
                 [method]('/api/v2/my/custom/path/error.json')
-                .expect('Content-Type', 'application/json')
+                .expect('Content-Type', 'application/json; charset=UTF-8')
                 .expect(200)
                 .expect(equalsFile(files.paths.error))
                 .end(helper.checkResults(done));
@@ -508,13 +508,13 @@ describe('FileServer middleware', function() {
 
               helper.supertest(express)
                 [method]('/api-docs/error.json/')                               // <-- trailing slash
-                .expect('Content-Type', 'application/json')
+                .expect('Content-Type', 'application/json; charset=UTF-8')
                 .expect(200)
                 .expect(equalsFile(files.paths.error))
                 .end(helper.checkResults(done, function(res) {
                   helper.supertest(express)
                     [method]('/api-docs/error.json')                        // <-- no trailing slash
-                    .expect('Content-Type', 'application/json')
+                    .expect('Content-Type', 'application/json; charset=UTF-8')
                     .expect(200)
                     .expect(equalsFile(files.paths.error))
                     .end(helper.checkResults(done));

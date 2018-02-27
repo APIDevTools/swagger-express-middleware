@@ -75,7 +75,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
-                .set('Content-Type', 'application/json')
+                .set('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
@@ -124,7 +124,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(messWithTheBody, api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
-                .set('Content-Type', 'application/json')
+                .set('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
@@ -456,8 +456,8 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
-                .set('Content-Type', 'application/json')
-                .expect('Content-Type', 'application/json')
+                .set('Content-Type', 'application/json; charset=utf-8')
+                .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, '')
                 .end(helper.checkResults(done));
             });

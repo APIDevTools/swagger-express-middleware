@@ -378,7 +378,7 @@ describe('Query Resource Mock', function() {
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
                 var request = supertest[method]('/api/pets/Fido');
-                noHeaders || request.expect('Content-Type', 'application/json');
+                noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 request.expect(200, '');
                 request.end(helper.checkResults(done, function(res) {
                   expect(res.headers['content-length']).to.satisfy(function(contentLength) {

@@ -461,7 +461,7 @@ describe('Edit Resource Mock', function() {
               // Delete the undefined resource
               supertest
                 .delete('/api/pets/Fido')
-                .expect('Content-Type', 'application/json')
+                .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, '')
                 .end(helper.checkResults(done));
             });

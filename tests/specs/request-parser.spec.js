@@ -296,7 +296,7 @@ describe('RequestParser middleware', function() {
 
           helper.supertest(express)
             .post('/foo')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send(JSON.stringify(data))
             .end(helper.checkSpyResults(done));
 
@@ -373,7 +373,7 @@ describe('RequestParser middleware', function() {
 
           helper.supertest(express)
             .post('/foo')
-            .set('Content-Type', 'application/json')
+            .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"foo":"bar",not valid JSON')
             .end(helper.checkSpyResults(done));
 
