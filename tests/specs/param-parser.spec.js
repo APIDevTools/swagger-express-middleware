@@ -334,7 +334,7 @@ describe('ParamParser middleware', function() {
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {
             expect(err.status).to.equal(411);
-            expect(err.message).to.contain('Missing required header parameter "Content-Length"');
+            expect(err.message).to.contain('Missing required content-length value');
           }));
         });
       }

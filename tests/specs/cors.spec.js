@@ -21,7 +21,7 @@ describe('CORS middleware', function() {
           .get('/api/pets')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets', helper.spy(function(req, res, next) {
+        express.get('/api/pets', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -42,7 +42,7 @@ describe('CORS middleware', function() {
           .get('/api/pets')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets', helper.spy(function(req, res, next) {
+        express.get('/api/pets', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -63,7 +63,7 @@ describe('CORS middleware', function() {
           .get('/api/pets')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets', helper.spy(function(req, res, next) {
+        express.get('/api/pets', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, POST');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -84,7 +84,7 @@ describe('CORS middleware', function() {
           .get('/api/pets')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets', helper.spy(function(req, res, next) {
+        express.get('/api/pets', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -108,7 +108,7 @@ describe('CORS middleware', function() {
           .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets', helper.spy(function(req, res, next) {
+        express.get('/api/pets', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://www.company.com');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('DELETE');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
@@ -149,7 +149,7 @@ describe('CORS middleware', function() {
           .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
@@ -200,7 +200,7 @@ describe('CORS middleware', function() {
           .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://some.company.net');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, HEAD');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
@@ -284,7 +284,7 @@ describe('CORS middleware', function() {
           .set('Access-Control-Request-Headers', 'X-Foo-Bar, X-PINGOTHER')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, OPTIONS');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('X-Foo-Bar, X-PINGOTHER');
@@ -305,7 +305,7 @@ describe('CORS middleware', function() {
           .get('/api/pets/Fido')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -338,7 +338,7 @@ describe('CORS middleware', function() {
           .set('Origin', 'http://company.com')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('*');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -366,7 +366,7 @@ describe('CORS middleware', function() {
           .get('/api/pets/Fido')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
@@ -399,7 +399,7 @@ describe('CORS middleware', function() {
           .get('/api/pets/Fido')
           .end(helper.checkSpyResults(done));
 
-        express.get('/api/pets/:name', helper.spy(function(req, res, next) {
+        express.get('/api/pets/:name', helper.spy(function(req, res) {
           expect(res.get('Access-Control-Allow-Origin')).to.equal('http://company.com');
           expect(res.get('Access-Control-Allow-Methods')).to.equal('GET, DELETE, PATCH');
           expect(res.get('Access-Control-Allow-Headers')).to.equal('');
