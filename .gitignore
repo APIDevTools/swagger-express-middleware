@@ -9,3 +9,4 @@ npm-debug.log
 /.tmp
 /coverage
 /node_modules
+*.iml

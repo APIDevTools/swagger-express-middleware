@@ -14,6 +14,7 @@ describe('Mock middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets', helper.spy(function(req, res, next) {
@@ -33,6 +34,7 @@ describe('Mock middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets', helper.spy(function(req, res, next) {
@@ -52,6 +54,7 @@ describe('Mock middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets', helper.spy(function(req, res, next) {
@@ -90,6 +93,7 @@ describe('Mock middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets', helper.spy(function(req, res, next) {
@@ -122,6 +126,7 @@ describe('Mock middleware', function() {
 
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(201, '')
           .end(helper.checkResults(done, function() {
@@ -131,6 +136,7 @@ describe('Mock middleware', function() {
             // Now this request will return nothing, because the path is not a case-sensitive match
             supertest
               .get('/API/PETS')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [])
               .end(helper.checkResults(done));
           }));
@@ -152,6 +158,7 @@ describe('Mock middleware', function() {
 
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(201, '')
           .end(helper.checkResults(done, function() {
@@ -160,6 +167,7 @@ describe('Mock middleware', function() {
               // Now this request will return nothing, because the resource is no longer in the data store
               supertest
                 .get('/API/PETS')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(200, [])
                 .end(helper.checkResults(done));
             });
@@ -184,6 +192,7 @@ describe('Mock middleware', function() {
 
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(201, '')
           .end(helper.checkResults(done, function() {
@@ -193,6 +202,7 @@ describe('Mock middleware', function() {
             // Now this request will return nothing, because the path is not a case-sensitive match
             supertest
               .get('/API/PETS')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [])
               .end(helper.checkResults(done, function() {
                 // Remove the item from the data store
@@ -200,6 +210,7 @@ describe('Mock middleware', function() {
                   // Now this request will return nothing, because the resource is no longer in the data store
                   supertest
                     .get('/api/pets')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, [])
                     .end(helper.checkResults(done));
                 });
@@ -231,6 +242,7 @@ describe('Mock middleware', function() {
           // Make sure the Mock middleware is using the data store
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, [{Name: 'Fido', Type: 'dog'}])
             .end(helper.checkResults(done));
         });
@@ -266,6 +278,7 @@ describe('Mock middleware', function() {
             // Make sure the Mock middleware is using data store #1
             supertest
               .get('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [{Name: 'Fido', Type: 'dog'}])
               .end(helper.checkResults(done));
           });
@@ -302,6 +315,7 @@ describe('Mock middleware', function() {
             // Make sure the Mock middleware is using data store #2
             supertest
               .get('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [{Name: 'Fluffy', Type: 'cat'}])
               .end(helper.checkResults(done, function() {
 
@@ -311,6 +325,7 @@ describe('Mock middleware', function() {
                 // Make sure the Mock middleware is using data store #1
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [{Name: 'Fido', Type: 'dog'}])
                   .end(helper.checkResults(done));
               }));

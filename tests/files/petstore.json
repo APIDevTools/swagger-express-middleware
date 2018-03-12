@@ -33,9 +33,7 @@
       "petStoreApiKey": []
     },
     {
-      "petStoreOAuth": [
-        "view"
-      ]
+      "petStoreOAuth": []
     }
   ],
   "securityDefinitions": {
@@ -705,11 +703,7 @@
             "petStoreApiKey": []
           },
           {
-            "petStoreOAuth": [
-              "view",
-              "edit",
-              "create"
-            ]
+            "petStoreOAuth": []
           }
         ],
         "produces": [
@@ -1224,10 +1218,7 @@
             "petStoreApiKey": []
           },
           {
-            "petStoreOAuth": [
-              "view",
-              "edit"
-            ]
+            "petStoreOAuth": []
           }
         ],
         "produces": [
@@ -1589,11 +1580,7 @@
             "petStoreApiKey": []
           },
           {
-            "petStoreOAuth": [
-              "view",
-              "edit",
-              "delete"
-            ]
+            "petStoreOAuth": []
           }
         ],
         "responses": {
@@ -1771,11 +1758,7 @@
             "petStoreApiKey": []
           },
           {
-            "petStoreOAuth": [
-              "view",
-              "edit",
-              "create"
-            ]
+            "petStoreOAuth": []
           }
         ],
         "consumes": [
@@ -1864,11 +1847,7 @@
             "petStoreApiKey": []
           },
           {
-            "petStoreOAuth": [
-              "view",
-              "edit",
-              "delete"
-            ]
+            "petStoreOAuth": []
           }
         ],
         "responses": {

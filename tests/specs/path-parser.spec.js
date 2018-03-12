@@ -115,6 +115,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/true/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets/:PetName/photos/:ID', helper.spy(function(req, res, next) {
@@ -137,6 +138,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/Fido%20the%20%22wonder%22%20dog/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets/:PetName/photos/:ID', helper.spy(function(req, res, next) {
@@ -183,6 +185,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/-951/1576.179145671859/+255/2010-11-04/1900-08-14T02:04:55.987-03:00/true')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/:intParam/:floatParam/:byteParam/:dateParam/:timeParam/:boolParam', helper.spy(function(req, res, next) {
@@ -223,6 +226,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/Fido/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         // The path params ARE parsed for Router2, because it IS using the `parseRequest` middleware,
@@ -284,6 +288,7 @@ describe('PathParser middleware', function() {
         // This is NOT a parameterized path
         helper.supertest(express)
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.get('/api/pets', helper.spy(function(req, res, next) {
@@ -304,6 +309,7 @@ describe('PathParser middleware', function() {
         // This IS a parameterized path
         helper.supertest(express)
           .get('/api/pets/Fido/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         // This middleware is NOT parameterized, so `req.params` will NOT be set
@@ -330,6 +336,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/Fido/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         // This parameter names should be ":PetName" and ":ID", not ":param1" and ":param2"
@@ -366,6 +373,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/Fido/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .set('test', 'hello world')
           .end(helper.checkSpyResults(done));
 
@@ -390,6 +398,7 @@ describe('PathParser middleware', function() {
 
         helper.supertest(express)
           .get('/api/pets/Fido/photos/52.5')  // NOTE: 52.5 is invalid, because the param is an integer
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         // This is success middleware, so it doesn't get called
@@ -425,6 +434,7 @@ describe('PathParser middleware', function() {
         var counter = 0;
 
         supertest.get('/api/pets/Fido/photos/12345')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(function(err) {
             if (err) {
               return done(err);
@@ -433,6 +443,7 @@ describe('PathParser middleware', function() {
             // Load a valid API
             middleware.init(files.parsed.petStore, function(err, middleware) {
               supertest.get('/api/pets/Fido/photos/12345')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .end(helper.checkSpyResults(done));
             });
           });
@@ -480,6 +491,7 @@ describe('PathParser middleware', function() {
 
             middleware.init(api, function(err, middleware) {
               supertest.get('/api/pets/98.765/photos/12345')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .end(helper.checkSpyResults(done));
             });
           });
@@ -536,6 +548,7 @@ describe('PathParser middleware', function() {
 
             middleware.init(api, function(err, middleware) {
               supertest.get('/api/pets/Fido/photos/12345')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .end(helper.checkSpyResults(done));
             });
           });

@@ -48,6 +48,7 @@ describe('RequestValidator middleware', function() {
 
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .end(helper.checkSpyResults(done));
 
@@ -68,6 +69,7 @@ describe('RequestValidator middleware', function() {
 
         supertest
           .post('/some/path')     // <--- not under the "/api" basePath
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkSpyResults(done));
 
         express.use('/some/path', helper.spy(function(err, req, res, next) {
@@ -100,6 +102,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkSpyResults(done));
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {
@@ -121,7 +124,9 @@ describe('RequestValidator middleware', function() {
         var error = sinon.spy(function(err, req, res, next) {});
         express.use('/api/pets', helper.spy(error));
 
-        supertest.get('/api/pets')
+        supertest
+          .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(function(err) {
             if (err) {
               return done(err);
@@ -203,6 +208,23 @@ describe('RequestValidator middleware', function() {
               name: 'Aladdin',
               pass: 'open sesame'
             })
+          }));
+        });
+      }
+    );
+
+    it('should NOT throw an HTTP 401 if a Oauth2 authentication requirement is met',
+      function(done) {
+        var security = api.paths['/pets'].get.security = [{petStoreOAuth: []}];
+        initTest(function(err, middleware) {
+
+          supertest
+            .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
+            .end(helper.checkSpyResults(done));
+
+          express.get('/api/pets', helper.spy(function(req, res, next) {
+            expect(req.swagger.security).to.deep.equal(security);
           }));
         });
       }
@@ -682,6 +704,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkSpyResults(done));
 
           express.post('/api/pets', helper.spy(function(req, res, next) {
@@ -698,6 +721,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
@@ -719,6 +743,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
@@ -741,6 +766,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
@@ -762,6 +788,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
@@ -784,6 +811,7 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
@@ -805,13 +833,14 @@ describe('RequestValidator middleware', function() {
 
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {
             expect(err.status).to.equal(415);
-            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json"');
+            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({
@@ -830,13 +859,14 @@ describe('RequestValidator middleware', function() {
         initTest(function(err, middleware) {
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Content-Type', 'application/json; charset=utf-8')
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
           express.use('/api/pets', helper.spy(function(err, req, res, next) {
             expect(err.status).to.equal(415);
-            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json"');
+            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({

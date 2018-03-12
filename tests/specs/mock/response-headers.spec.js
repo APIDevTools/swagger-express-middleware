@@ -44,6 +44,7 @@ describe('Mock response headers', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect('Location', 'hello world')
           .expect('Last-Modified', 'hi there')
           .expect('Set-Cookie', 'foo=bar;biz=baz')
@@ -98,6 +99,7 @@ describe('Mock response headers', function() {
       helper.initTest(express, api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect('Location', 'foo')
           .expect('Last-Modified', 'bar')
           .expect('Set-Cookie', 'hello=world')
@@ -134,6 +136,7 @@ describe('Mock response headers', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .end(helper.checkResults(done, function(res) {
             var floatRegExp = /^-?\d+\.\d+(e[+-]\d+)$/;
             var integerRegExp = /^-?\d+$/;
@@ -157,6 +160,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect('Location', '/api/pets/Fido')
             .end(helper.checkResults(done));
@@ -175,6 +179,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect('Location', '/api/pets')
             .end(helper.checkResults(done));
         });
@@ -193,6 +198,7 @@ describe('Mock response headers', function() {
         helper.initTest(router2, api, function(supertest) {
           supertest
             .post('/nested/path/deeply/nested/path/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect('Location', '/nested/path/deeply/nested/path/api/pets/Fido')
             .end(helper.checkResults(done));
@@ -218,6 +224,7 @@ describe('Mock response headers', function() {
         helper.initTest(router2, api, function(supertest) {
           supertest
             .get('/nested/path/deeply/nested/path/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect('Location', '/nested/path/deeply/nested/path/api/pets')
             .end(helper.checkResults(done));
         });
@@ -230,6 +237,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .end(helper.checkResults(done, function(res) {
               expect(res.headers.location).to.be.undefined;
@@ -254,6 +262,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkResults(done, function(res) {
               var lastModified = new Date(res.headers['last-modified']);
               expect(lastModified).to.be.afterTime(before);
@@ -280,6 +289,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect(201)
             .end(helper.checkResults(done, function(res) {
@@ -290,6 +300,7 @@ describe('Mock response headers', function() {
               setTimeout(function() {
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .end(helper.checkResults(done, function(res) {
                     var lastModified = new Date(res.headers['last-modified']);
                     expect(lastModified).to.equalTime(dateCreated);
@@ -325,6 +336,7 @@ describe('Mock response headers', function() {
             setTimeout(function() {
               supertest
                 .get('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .end(helper.checkResults(done, function(res) {
                   var lastModified = new Date(res.headers['last-modified']);
                   expect(lastModified).to.equalTime(resource.modifiedOn);
@@ -341,6 +353,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkResults(done, function(res) {
               expect(res.headers['last-modified']).to.be.undefined;
               done();
@@ -361,6 +374,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect('Content-Disposition', 'attachment; filename="Fido"')
             .end(helper.checkResults(done));
@@ -378,6 +392,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect('Content-Disposition', 'attachment; filename="pets"')
             .end(helper.checkResults(done));
         });
@@ -402,6 +417,7 @@ describe('Mock response headers', function() {
         helper.initTest(router2, api, function(supertest) {
           supertest
             .get('/nested/path/deeply/nested/path/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect('Content-Disposition', 'attachment; filename="pets"')
             .end(helper.checkResults(done));
         });
@@ -413,6 +429,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkResults(done, function(res) {
               expect(res.headers['content-disposition']).to.be.undefined;
               done();
@@ -434,6 +451,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(helper.checkResults(done, function(res) {
               expect(res.headers['set-cookie']).to.have.lengthOf(1);
               expect(res.headers['set-cookie'][0]).to.match(/^swagger=random\d+/);
@@ -454,6 +472,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .set('Cookie', 'swagger=foo')
             .expect('Set-Cookie', 'swagger=foo; Path=/')
             .end(helper.checkResults(done));
@@ -478,6 +497,7 @@ describe('Mock response headers', function() {
         helper.initTest(express, api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect('Set-Cookie', 'myCookie=some%20value; Path=/')
             .end(helper.checkResults(done));
         });
@@ -489,6 +509,7 @@ describe('Mock response headers', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .get('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .end(function(err, res) {
               expect(res.headers['set-cookie']).to.be.undefined;
               done(err);

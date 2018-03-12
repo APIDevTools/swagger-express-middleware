@@ -26,6 +26,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/json; charset=utf-8')
               .expect(200, {Name: 'Fido', Type: 'dog'})
               .end(helper.checkResults(done));
@@ -45,6 +46,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/json; charset=utf-8')
               .expect(200, {Name: 'Fido', Type: 'dog'})
               .end(helper.checkResults(done));
@@ -64,6 +66,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/json; charset=utf-8')
               .expect(200, {Name: 'Fido', Type: 'dog'})
               .end(helper.checkResults(done));
@@ -83,6 +86,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/json; charset=utf-8')
               .expect(200, {Name: 'Fido', Type: 'dog'})
               .end(helper.checkResults(done));
@@ -102,6 +106,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/json; charset=utf-8')
               .expect(200, '{"Name":"Fido","Type":"dog"}')
               .end(helper.checkResults(done));
@@ -121,6 +126,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/json; charset=utf-8')
               .expect(200, '{"Name":"Fido","Type":"dog"}')
               .end(helper.checkResults(done));
@@ -140,6 +146,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/calendar+json; charset=utf-8')
               .expect(200, '{"Name":"Fido","Type":"dog"}')
               .end(helper.checkResults(done));
@@ -163,6 +170,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/plain; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -183,6 +191,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/plain; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -203,6 +212,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/plain; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -223,6 +233,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/plain; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -243,6 +254,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/cache-manifest; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -263,6 +275,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/html; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -283,6 +296,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/xml; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -303,6 +317,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/xml; charset=utf-8')
               .expect(200, 'I am Fido')
               .end(helper.checkResults(done));
@@ -341,6 +356,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido/photos/12345')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/octet-stream')
               .expect(200)
               .expect(isPhoto)
@@ -361,6 +377,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido/photos/12345')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/octet-stream')
               .expect(200)
               .expect(isPhoto)
@@ -381,6 +398,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido/photos/12345')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'text/plain; charset=utf-8')
               .expect(200)
               .expect(isPhoto)
@@ -401,6 +419,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido/photos/12345')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'application/octet-stream')
               .expect(200)
               .expect(isPhoto)
@@ -421,6 +440,7 @@ describe('Mock Content-Type header', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .get('/api/pets/Fido/photos/12345')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect('Content-Type', 'image/jpeg')
               .expect(200)
               .expect(isPhoto)

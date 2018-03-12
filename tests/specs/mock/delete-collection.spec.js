@@ -28,6 +28,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200)
               .end(helper.checkResults(done, function() {
                 // Verify that all resources were deleted
@@ -49,6 +50,7 @@ describe('Query Collection Mock', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .delete('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200)
             .end(helper.checkResults(done));
         });
@@ -68,6 +70,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [
                 {Name: 'Fido', Type: 'dog'},
                 {Name: 'Fluffy', Type: 'cat'},
@@ -94,6 +97,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, {Name: 'Fido', Type: 'dog'})
               .end(helper.checkResults(done, function() {
                 // Verify that all resources were deleted
@@ -133,6 +137,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, {
                 code: 42,
                 message: 'hello world',
@@ -171,6 +176,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
               .end(helper.checkResults(done, function() {
                 // Verify that all resources were deleted
@@ -203,6 +209,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(204, '')
               .end(helper.checkResults(done, function() {
                 // Verify that all resources were deleted
@@ -224,6 +231,7 @@ describe('Query Collection Mock', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .delete('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, [])
             .end(helper.checkResults(done));
         });
@@ -237,6 +245,7 @@ describe('Query Collection Mock', function() {
         helper.initTest(api, function(supertest) {
           supertest
             .delete('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, '')
             .end(helper.checkResults(done));
         });
@@ -253,6 +262,7 @@ describe('Query Collection Mock', function() {
         helper.initTest(messWithTheBody, api, function(supertest) {
           supertest
             .delete('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, {message: 'Not the response you expected'})
             .end(helper.checkResults(done));
         });
@@ -269,6 +279,7 @@ describe('Query Collection Mock', function() {
         helper.initTest(dataStore, api, function(supertest) {
           supertest
             .delete('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(500)
             .end(function(err, res) {
               if (err) {
@@ -294,6 +305,7 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(500)
               .end(function(err, res) {
                 if (err) {
@@ -330,6 +342,7 @@ describe('Query Collection Mock', function() {
               // Delete the string resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, ['I am Fido'])
                 .end(helper.checkResults(done));
@@ -360,6 +373,7 @@ describe('Query Collection Mock', function() {
               // Delete the string resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, [''])
                 .end(helper.checkResults(done));
@@ -390,6 +404,7 @@ describe('Query Collection Mock', function() {
               // Delete the number resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, [42.999])
                 .end(helper.checkResults(done));
@@ -421,6 +436,7 @@ describe('Query Collection Mock', function() {
               // Delete the date resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, ['2000-02-02'])
                 .end(helper.checkResults(done));
@@ -451,6 +467,7 @@ describe('Query Collection Mock', function() {
               // Delete the Buffer resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, ['hello world'])
                 .end(helper.checkResults(done));
@@ -479,6 +496,7 @@ describe('Query Collection Mock', function() {
               // Delete the Buffer resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, [
                   {
@@ -512,6 +530,7 @@ describe('Query Collection Mock', function() {
               // Delete the undefined resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, [null])    // <--- [undefined] is serialized as [null] in JSON
                 .end(helper.checkResults(done));
@@ -540,6 +559,7 @@ describe('Query Collection Mock', function() {
               // Delete the null resource
               supertest
                 .delete('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, [null])
                 .end(helper.checkResults(done));
@@ -563,6 +583,7 @@ describe('Query Collection Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -571,6 +592,7 @@ describe('Query Collection Mock', function() {
                 // Delete the photo
                 supertest
                   .delete('/api/pets/Fido/photos')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'application/json; charset=utf-8')
                   .expect(200)
                   .end(helper.checkResults(done, function(res2) {
@@ -617,6 +639,7 @@ describe('Query Collection Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -625,6 +648,7 @@ describe('Query Collection Mock', function() {
                 // Delete the photo
                 supertest
                   .delete('/api/pets/Fido/photos')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'application/json; charset=utf-8')
                   .expect(200)
                   .end(helper.checkResults(done, function(res2) {
@@ -679,6 +703,7 @@ describe('Query Collection Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -687,6 +712,7 @@ describe('Query Collection Mock', function() {
                 // Delete the photo
                 supertest
                   .delete('/api/pets/Fido/photos')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'application/json; charset=utf-8')
                   .expect(200)
 
@@ -759,11 +785,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Type=cat')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fluffy, Garfield])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fido, Polly, Lassie, Spot])
                   .end(helper.checkResults(done));
               }));
@@ -776,11 +804,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Age=4')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Spot])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Lassie, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -793,11 +823,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Tags=big')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Lassie, Spot])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -810,11 +842,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Tags=big,brown')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Lassie])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Spot, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -829,11 +863,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Tags=big|brown')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Lassie])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Spot, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -848,11 +884,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Tags=big%20brown')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Lassie])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Spot, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -865,11 +903,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Tags=big&Tags=brown')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Lassie])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Polly, Spot, Garfield])
                   .end(helper.checkResults(done));
               }));
@@ -882,11 +922,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Age=7&Type=cat&Tags=orange')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Garfield])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fido, Fluffy, Polly, Lassie, Spot])
                   .end(helper.checkResults(done));
               }));
@@ -899,11 +941,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Vet.Address.State=NY')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Polly, Lassie, Garfield])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Spot])
                   .end(helper.checkResults(done));
               }));
@@ -916,11 +960,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Vet.Address.State=NY&Vet.Address.City=New%20York')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Fido, Polly, Garfield])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fluffy, Lassie, Spot])
                   .end(helper.checkResults(done));
               }));
@@ -933,11 +979,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Name=Lassie&Vet.Address.Street=123%20First%20St.')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, allPets)
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [])
                   .end(helper.checkResults(done));
               }));
@@ -950,11 +998,13 @@ describe('Query Collection Mock', function() {
           helper.initTest(dataStore, api, function(supertest) {
             supertest
               .delete('/api/pets?Age=4&Name=Lassie&Vet.Name=Vet%202&Vet.Address.Street=123%20First%20St.')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [Spot])
               .end(helper.checkResults(done, function() {
                 // Verify that the right pets were deleted
                 supertest
                   .get('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect(200, [Fido, Fluffy, Polly, Lassie, Garfield])
                   .end(helper.checkResults(done));
               }));

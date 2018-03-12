@@ -26,6 +26,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(200)
           .end(helper.checkResults(done));
       });
@@ -47,6 +48,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(201)
           .end(helper.checkResults(done));
       });
@@ -67,6 +69,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(302)
           .end(helper.checkResults(done));
       });
@@ -87,6 +90,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(101)
           .end(helper.checkResults(done));
       });
@@ -107,6 +111,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(200)
           .end(helper.checkResults(done));
       });
@@ -127,6 +132,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(201)
           .end(helper.checkResults(done));
@@ -146,6 +152,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .post('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(102)
           .end(helper.checkResults(done));
@@ -168,6 +175,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .put('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(201)
           .end(helper.checkResults(done));
@@ -189,6 +197,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .put('/api/pets')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .send({Name: 'Fido', Type: 'dog'})
           .expect(101)
           .end(helper.checkResults(done));
@@ -210,6 +219,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .delete('/api/pets/Fido')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(204)
           .end(helper.checkResults(done));
       });
@@ -229,6 +239,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .delete('/api/pets/Fido')
+          .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
           .expect(101)
           .end(helper.checkResults(done));
       });

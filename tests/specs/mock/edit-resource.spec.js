@@ -28,11 +28,13 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown']})
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown']})
                     .end(helper.checkResults(done));
                 }));
@@ -45,6 +47,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')              // <-- The URL is "Fido"
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fluffy', Type: 'cat'})    // <-- The pet name is "Fluffy"
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
@@ -52,12 +55,14 @@ describe('Edit Resource Mock', function() {
                   // Verify that "/api/pets/Fido" was created
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fluffy', Type: 'cat'})
                     .end(helper.checkResults(done, function() {
 
                       // Verify that "/api/pets/Fluffy" was NOT created
                       supertest
                         .get('/api/pets/Fluffy')
+                        .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                         .expect(404)
                         .end(done);
                     }));
@@ -75,11 +80,13 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'application/json; charset=utf-8')
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown']})
                     .end(helper.checkResults(done));
                 }));
@@ -97,11 +104,13 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Age: 4})
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog', Age: 4, Tags: ['fluffy', 'brown']})
                     .end(helper.checkResults(done));
                 }));
@@ -125,10 +134,12 @@ describe('Edit Resource Mock', function() {
               supertest
                 [method]('/api/pets/Fido')
                 .set('Content-Type', 'application/json; charset=utf-8')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -150,6 +161,7 @@ describe('Edit Resource Mock', function() {
                 // Create another pet at the URL "/api/pets/Fido"
                 supertest
                   [method]('/api/pets/Fido')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fluffy', Type: 'cat'})
                   .expect(200)
                   .end(helper.checkResults(done, function(res1) {
@@ -157,6 +169,7 @@ describe('Edit Resource Mock', function() {
                     // Make sure there's only ONE "/api/pets/Fido" resource
                     supertest
                       .get('/api/pets')
+                      .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                       .expect(200, [{Name: 'Fluffy', Type: 'cat'}])
                       .end(helper.checkResults(done));
                   }));
@@ -171,6 +184,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(200, '')
                 .end(helper.checkResults(done));
@@ -183,6 +197,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(200, {Name: 'Fido', Type: 'dog'})
                 .end(helper.checkResults(done));
@@ -200,6 +215,7 @@ describe('Edit Resource Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets/Fido')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(200, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}])
                   .end(helper.checkResults(done));
@@ -223,6 +239,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
                 .end(helper.checkResults(done));
@@ -248,6 +265,7 @@ describe('Edit Resource Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets/Fido')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(200, {
                     code: 42,
@@ -273,6 +291,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(messWithTheBody, api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(200, ['Not', 'the', 'response', 'you', 'expected'])
                 .end(helper.checkResults(done));
@@ -290,6 +309,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets/Fido')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(500)
                   .end(function(err, res) {
@@ -315,6 +335,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, {Name: 'Fido', Type: 'dog'})
@@ -334,6 +355,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('I am Fido')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -354,6 +376,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -374,6 +397,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('42.999')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -395,6 +419,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('2000-01-02T03:04:05.006Z')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -415,6 +440,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'application/octet-stream')
                 .send(new Buffer('hello world').toString())
                 .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -434,6 +460,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'application/octet-stream')
                 .send(new Buffer('hello world').toString())
                 .expect('Content-Type', 'application/json; charset=utf-8')
@@ -456,6 +483,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'application/json; charset=utf-8')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, '')
@@ -470,6 +498,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos/12345')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
@@ -504,6 +533,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos/12345')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
@@ -533,6 +563,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
                 supertest
                   [method]('/api/pets/Fido/photos/Photo%20Of%20Fido.jpg')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .field('Label', 'Photo 1')
                   .field('Description', 'A photo of Fido')
                   .attach('Photo', files.paths.oneMB)
@@ -565,11 +596,13 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 .put('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown'], Vet: {Name: 'Vet Name'}})
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     .put('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .send({
                       Name: 'Fido', Type: 'cat', Tags: ['furry'], Vet: {
                         Address: {Street: '123 First St.', City: 'New York', State: 'NY', ZipCode: 12345}
@@ -619,6 +652,7 @@ describe('Edit Resource Mock', function() {
             helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   .put('/api/pets/Fido')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(500)
                   .end(function(err, res) {
@@ -646,11 +680,13 @@ describe('Edit Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog', Tags: ['fluffy', 'brown'], Vet: {Name: 'Vet Name'}})
                 .expect(200)
                 .end(helper.checkResults(done, function(res1) {
                   supertest
                     [method]('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .send({
                       Name: 'Fido', Type: 'cat', Tags: ['furry'], Vet: {
                         Address: {Street: '123 First St.', City: 'New York', State: 'NY', ZipCode: 12345}

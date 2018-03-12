@@ -24,7 +24,7 @@
   security:
     - petStoreBasic: []
       petStoreApiKey: []
-    - petStoreOAuth: [view]
+    - petStoreOAuth: []
 
   securityDefinitions:
     petStoreBasic:
@@ -218,7 +218,7 @@
         security:
           - petStoreBasic: []
             petStoreApiKey: []
-          - petStoreOAuth: [view, edit, create]
+          - petStoreOAuth: []
         produces:
           - application/json
         parameters:
@@ -269,7 +269,7 @@
         security:
           - petStoreBasic: []
             petStoreApiKey: []
-          - petStoreOAuth: [view, edit]
+          - petStoreOAuth: []
         produces:
           - application/json
           - application/xml
@@ -298,7 +298,7 @@
         security:
           - petStoreBasic: []
             petStoreApiKey: []
-          - petStoreOAuth: [view, edit, delete]
+          - petStoreOAuth: []
         responses:
           204:
             description: pet deleted
@@ -335,7 +335,7 @@
         security:
           - petStoreBasic: []
             petStoreApiKey: []
-          - petStoreOAuth: [view, edit, create]
+          - petStoreOAuth: []
         consumes:
           - multipart/form-data
         parameters:
@@ -393,7 +393,7 @@
         security:
           - petStoreBasic: []
             petStoreApiKey: []
-          - petStoreOAuth: [view, edit, delete]
+          - petStoreOAuth: []
         responses:
           204:
             description: the photo was deleted

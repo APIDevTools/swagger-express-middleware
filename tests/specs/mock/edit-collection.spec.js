@@ -32,12 +32,14 @@ describe('Edit Collection Mock', function() {
               // Create a new pet
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(201, '')
                 .end(helper.checkResults(done, function() {
                   // Retrieve the pet
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -52,17 +54,20 @@ describe('Edit Collection Mock', function() {
               // Create some new pets
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
                 .expect(201, '')
                 .end(helper.checkResults(done, function() {
                   // Retrieve a pet by name
                   supertest
                     .get('/api/pets/Fluffy')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fluffy', Type: 'cat'})
                     .end(helper.checkResults(done, function() {
                       // Retrieve all the pets
                       supertest
                         .get('/api/pets')
+                        .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                         .expect(200, [
                           {Name: 'Fido', Type: 'dog'},
                           {Name: 'Fluffy', Type: 'cat'},
@@ -82,12 +87,14 @@ describe('Edit Collection Mock', function() {
               // Save zero pets
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send([])
                 .expect(201, '')
                 .end(helper.checkResults(done, function() {
                   // Retrieve all the pets (empty array)
                   supertest
                     .get('/api/pets')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, [])
                     .end(helper.checkResults(done));
                 }));
@@ -101,6 +108,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(201, '')
                 .end(helper.checkResults(done));
@@ -118,6 +126,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(201, {Name: 'Fido', Type: 'dog'})
                   .end(helper.checkResults(done));
@@ -137,6 +146,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                   .expect(201, {Name: 'Fido', Type: 'dog'})
                   .end(helper.checkResults(done));
@@ -164,6 +174,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                   .expect(201, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
                   .end(helper.checkResults(done));
@@ -182,6 +193,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send({Name: 'Fido', Type: 'dog'})
                   .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}])
                   .end(helper.checkResults(done));
@@ -201,6 +213,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                   .expect(201, [{Name: 'Fluffy', Type: 'cat'}, {Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                   .end(helper.checkResults(done));
@@ -228,6 +241,7 @@ describe('Edit Collection Mock', function() {
               helper.initTest(dataStore, api, function(supertest) {
                 supertest
                   [method]('/api/pets')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Polly', Type: 'bird'}])
                   .expect(201, {
                     code: 42,
@@ -256,6 +270,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(messWithTheBody, api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(201, {message: 'Not the response you expected'})
                 .end(helper.checkResults(done));
@@ -268,6 +283,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(201, '')
                 .expect('Location', '/api/pets/Fido')
@@ -282,6 +298,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
                 .expect(201, '')
                 .expect('Location', '/api/pets')
@@ -296,6 +313,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send([])
                 .expect(201, '')
                 .expect('Location', '/api/pets')
@@ -310,6 +328,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(201, '')
                 .end(helper.checkResults(done, function(res) {
@@ -327,6 +346,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send([{Name: 'Fido', Type: 'dog'}, {Name: 'Fluffy', Type: 'cat'}, {Name: 'Polly', Type: 'bird'}])
                 .expect(201, '')
                 .end(helper.checkResults(done, function(res) {
@@ -347,6 +367,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(dataStore, api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(500)
                 .end(function(err, res) {
@@ -370,6 +391,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(dataStore, api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect(500)
                 .end(function(err, res) {
@@ -394,6 +416,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('I am Fido')
                 .expect(201, 'I am Fido')
@@ -412,6 +435,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('')
                 .expect(201, '')
@@ -434,6 +458,7 @@ describe('Edit Collection Mock', function() {
 
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send(veryLongString)
 
@@ -447,6 +472,7 @@ describe('Edit Collection Mock', function() {
                   // Verify that the full value was stored
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, veryLongString)
                     .end(helper.checkResults(done));
                 }));
@@ -463,6 +489,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('42.999')
                 .expect(201, '42.999')
@@ -481,6 +508,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('2000-01-02')
                 .expect(201, '2000-01-02')
@@ -499,6 +527,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send('2000-01-02T03:04:05.006Z')
                 .expect(201, '2000-01-02T03:04:05.006Z')
@@ -517,6 +546,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .send(new Buffer('hello world').toString())
                 .expect(201, 'hello world')
@@ -535,6 +565,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'application/octet-stream')
                 .send(new Buffer('hello world').toString())
                 .expect(201, {
@@ -560,6 +591,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .expect(201, '')
                 .end(helper.checkResults(done, function(res) {
@@ -576,6 +608,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
@@ -611,6 +644,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
@@ -632,11 +666,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/Fido')
                 .end(helper.checkResults(done, function() {
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -651,6 +687,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .end(helper.checkResults(done, function(res) {
                   // An "ID" property should have been generated and used for the "Location" header
@@ -664,6 +701,7 @@ describe('Edit Collection Mock', function() {
                   // Verify that the ID property was set on the object
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -676,11 +714,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({ID: 12345, Name: 'Fido', Type: 'dog'})   // <--- "ID" is not in the schema. "Name" is.
                 .expect('Location', '/api/pets/12345')          // <--- "ID" is used instead of "Name"
                 .end(helper.checkResults(done, function() {
                   supertest
                     .get('/api/pets/12345')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {ID: 12345, Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -695,6 +735,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .end(helper.checkResults(done, function(res) {
                   // An "ID" property should have been generated and used for the "Location" header
@@ -708,6 +749,7 @@ describe('Edit Collection Mock', function() {
                   // Verify that the ID property was set on the object
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -722,6 +764,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .end(helper.checkResults(done, function(res) {
                   // An "ID" property should have been generated and used for the "Location" header
@@ -733,6 +776,7 @@ describe('Edit Collection Mock', function() {
                   // Verify that the ID property was set on the object
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {ID: petID, Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -745,11 +789,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({ID: false, Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/false')
                 .end(helper.checkResults(done, function() {
                   supertest
                     .get('/api/pets/false')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {ID: false, Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -769,11 +815,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/2005-11-09')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/2005-11-09')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Key: '2005-11-09', Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -792,11 +840,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/2005-11-09T08%3A07%3A06.005Z')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/2005-11-09T08%3A07%3A06.005Z')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {key: '2005-11-09T08:07:06.005Z', Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -809,11 +859,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({code: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)), Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
                 .end(helper.checkResults(done, function() {
                   supertest
                     .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {code: '2000-02-02T03:04:05.006Z', Name: 'Fido', Type: 'dog'})
                     .end(helper.checkResults(done));
                 }));
@@ -833,11 +885,13 @@ describe('Edit Collection Mock', function() {
             helper.initTest(messWithTheBody, api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Name: 'Fido', Type: 'dog'})
                 .expect('Location', '/api/pets/2000-02-02T03%3A04%3A05.006Z')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/2000-02-02T03%3A04%3A05.006Z')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, {Name: 'Fido', Type: 'dog', Id: '2000-02-02T03:04:05.006Z'})
                     .end(helper.checkResults(done));
                 }));
@@ -855,6 +909,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'})   // <-- Neither "ID" nor "Name" is a valid resource name
                 .end(helper.checkResults(done, function(res) {
                   // A resource name was auto-generated, since ID and Name weren't valid
@@ -863,6 +918,7 @@ describe('Edit Collection Mock', function() {
                   // Verify that the object remained unchanged
                   supertest
                     .get('/api/pets')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200, [{ID: [1, 2, 3], Name: {fido: true}, Type: 'dog'}])
                     .end(helper.checkResults(done));
                 }));
@@ -880,12 +936,14 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .attach('Photo', files.paths.oneMB)
                 .expect('Location', '/api/pets/Fido/photos/Photo%201')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/Fido/photos/Photo%201')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.be.an.instanceOf(Buffer);
@@ -910,12 +968,14 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'a, b, c')
                 .attach('Photo', files.paths.oneMB)
                 .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/Fido/photos/1MB.jpg')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.be.an.instanceOf(Buffer);
@@ -938,12 +998,14 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .attach('Photo', files.paths.oneMB)
                 .expect('Location', '/api/pets/Fido/photos/1MB.jpg')
                 .end(helper.checkResults(done, function(res) {
                   supertest
                     .get('/api/pets/Fido/photos/1MB.jpg')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.be.an.instanceOf(Buffer);
@@ -972,6 +1034,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(messWithTheBody, api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .attach('Photo', files.paths.oneMB)
                 .end(helper.checkResults(done, function(res) {
@@ -980,6 +1043,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.be.an.instanceOf(Buffer);
@@ -1001,6 +1065,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .end(helper.checkResults(done, function(res) {
                   // A resource name was auto-generated, since no file was uploaded
@@ -1008,6 +1073,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(410)
                     .end(done);
                 }));
@@ -1026,6 +1092,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .set('Content-Type', 'text/plain')
                 .end(helper.checkResults(done, function(res) {
                   // A resource name was auto-generated, since no file was uploaded
@@ -1033,6 +1100,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(410)
                     .end(done);
                 }));
@@ -1056,6 +1124,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .attach('Photo2', files.paths.oneMB)       // <--- Only sending one file.  But there are 2 file params
                 .end(helper.checkResults(done, function(res) {
@@ -1064,6 +1133,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.be.an.instanceOf(Buffer);
@@ -1085,6 +1155,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({age: 42, dob: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6))})  // <--- No "name" properties
                 .expect(201, {age: 42, dob: '2000-02-02T03:04:05.006Z'})
                 .end(helper.checkResults(done, function(res) {
@@ -1105,6 +1176,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" should have been generated, and used as the resource's URL
@@ -1115,6 +1187,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.deep.equal({
@@ -1137,6 +1210,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')      // <--- No data was sent at all
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" should have been generated, and used as the resource's URL
                   expect(res.headers.location).to.match(/^\/api\/pets\/\w+$/);
@@ -1146,6 +1220,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.deep.equal({
@@ -1169,6 +1244,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" should have been generated, and used as the resource's URL
@@ -1182,6 +1258,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.deep.equal({
@@ -1208,6 +1285,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" should have been generated, and used as the resource's URL
@@ -1221,6 +1299,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.deep.equal({
@@ -1247,6 +1326,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" should have been generated, and used as the resource's URL
@@ -1260,6 +1340,7 @@ describe('Edit Collection Mock', function() {
 
                   supertest
                     .get(res.headers.location)
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(200)
                     .end(helper.checkResults(done, function(res) {
                       expect(res.body).to.deep.equal({
@@ -1285,6 +1366,7 @@ describe('Edit Collection Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 [method]('/api/pets')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .send({Type: 'dog', Age: 4})    // <--- The "Name" property isn't set
                 .end(helper.checkResults(done, function(res) {
                   // A "Name" property should have been auto-generated, but it should NOT be an array

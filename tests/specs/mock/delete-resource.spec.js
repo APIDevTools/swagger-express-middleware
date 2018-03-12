@@ -19,6 +19,7 @@ describe('Edit Resource Mock', function() {
           // Create a new pet
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect(201)
             .expect('Location', '/api/pets/Fido')
@@ -26,11 +27,13 @@ describe('Edit Resource Mock', function() {
               // Delete the pet
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(204, '')
                 .end(helper.checkResults(done, function(res2) {
                   // Confirm that it was deleted
                   supertest
                     .get('/api/pets/Fido')
+                    .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                     .expect(404)
                     .end(done);
                 }));
@@ -45,6 +48,7 @@ describe('Edit Resource Mock', function() {
           // Delete a pet that doesn't exist
           supertest
             .delete('/api/pets/Fido')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(204, '')
             .end(helper.checkResults(done));
         });
@@ -63,12 +67,14 @@ describe('Edit Resource Mock', function() {
           // Create a new pet
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect(201)
             .end(helper.checkResults(done, function(res1) {
               // Delete the pet
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(200, {Name: 'Fido', Type: 'dog'})
                 .end(helper.checkResults(done));
             }));
@@ -97,6 +103,7 @@ describe('Edit Resource Mock', function() {
             // Delete one of the pets
             supertest
               .delete('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, [
                 // The deleted pet should NOT be returned.  Only the rest of the collection
                 {Name: 'Fluffy', Type: 'cat'},
@@ -127,12 +134,14 @@ describe('Edit Resource Mock', function() {
           // Create a new pet
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect(201)
             .end(helper.checkResults(done, function(res1) {
               // Delete the pet
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(200, {code: 42, message: 'hello world', result: {Name: 'Fido', Type: 'dog'}})
                 .end(helper.checkResults(done));
             }));
@@ -168,6 +177,7 @@ describe('Edit Resource Mock', function() {
             // Delete one of the pets
             supertest
               .delete('/api/pets/Fido')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .expect(200, {
                 code: 42,
                 message: 'hello world',
@@ -192,12 +202,14 @@ describe('Edit Resource Mock', function() {
           // Create a new pet
           supertest
             .post('/api/pets')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .send({Name: 'Fido', Type: 'dog'})
             .expect(201)
             .end(helper.checkResults(done, function(res1) {
               // Delete the pet
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect(204, '')
                 .end(helper.checkResults(done));
             }));
@@ -217,6 +229,7 @@ describe('Edit Resource Mock', function() {
           // Delete a non-existent pet
           supertest
             .delete('/api/pets/Fido')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, '')        // <--- empty results
             .end(helper.checkResults(done));
         });
@@ -235,6 +248,7 @@ describe('Edit Resource Mock', function() {
           // Delete a non-existent pet from an empty collection
           supertest
             .delete('/api/pets/Fido')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, [])
             .end(helper.checkResults(done));
         });
@@ -257,6 +271,7 @@ describe('Edit Resource Mock', function() {
         helper.initTest(messWithTheBody, api, function(supertest) {
           supertest
             .delete('/api/pets/Fido')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(200, ['Not', 'the', 'response', 'you', 'expected'])
             .end(helper.checkResults(done));
         });
@@ -273,6 +288,7 @@ describe('Edit Resource Mock', function() {
         helper.initTest(dataStore, api, function(supertest) {
           supertest
             .delete('/api/pets/Fido')
+            .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
             .expect(500)
             .end(function(err, res) {
               if (err) {
@@ -304,6 +320,7 @@ describe('Edit Resource Mock', function() {
               // Delete the string resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
                 .expect(200, 'I am Fido')
                 .end(helper.checkResults(done));
@@ -330,6 +347,7 @@ describe('Edit Resource Mock', function() {
               // Delete the string resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
                 .expect(200, '')
                 .end(helper.checkResults(done));
@@ -356,6 +374,7 @@ describe('Edit Resource Mock', function() {
               // Delete the number resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
                 .expect(200, '42.999')
                 .end(helper.checkResults(done));
@@ -382,6 +401,7 @@ describe('Edit Resource Mock', function() {
               // Delete the date resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
                 .expect(200, '2000-02-02T03:04:05.006Z')
                 .end(helper.checkResults(done));
@@ -408,6 +428,7 @@ describe('Edit Resource Mock', function() {
               // Delete the Buffer resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'text/plain; charset=utf-8')
                 .expect(200, 'hello world')
                 .end(helper.checkResults(done));
@@ -433,6 +454,7 @@ describe('Edit Resource Mock', function() {
               // Delete the Buffer resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, {
                   type: 'Buffer',
@@ -461,6 +483,7 @@ describe('Edit Resource Mock', function() {
               // Delete the undefined resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, '')
                 .end(helper.checkResults(done));
@@ -486,6 +509,7 @@ describe('Edit Resource Mock', function() {
               // Delete the null resource
               supertest
                 .delete('/api/pets/Fido')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .expect(200, 'null')
                 .end(helper.checkResults(done));
@@ -506,6 +530,7 @@ describe('Edit Resource Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -515,6 +540,7 @@ describe('Edit Resource Mock', function() {
                 // Delete the photo
                 supertest
                   .delete(res1.headers.location)
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'application/json; charset=utf-8')
                   .expect(200)
                   .end(helper.checkResults(done, function(res2) {
@@ -554,6 +580,7 @@ describe('Edit Resource Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -563,6 +590,7 @@ describe('Edit Resource Mock', function() {
                 // Delete the photo
                 supertest
                   .delete(res1.headers.location)
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'image/jpeg')
                   .expect(200)
                   .end(helper.checkResults(done, function(res2) {
@@ -599,6 +627,7 @@ describe('Edit Resource Mock', function() {
             // Save a pet photo (multipart/form-data)
             supertest
               .post('/api/pets/Fido/photos')
+              .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
               .field('Label', 'Photo 1')
               .field('Description', 'A photo of Fido')
               .attach('Photo', files.paths.oneMB)
@@ -610,6 +639,7 @@ describe('Edit Resource Mock', function() {
                 // Delete the photo
                 supertest
                   .delete(res1.headers.location)
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .expect('Content-Type', 'image/jpeg')
                   .expect(200)
                   .expect('Content-Disposition', 'attachment; filename="' + fileName + '"')

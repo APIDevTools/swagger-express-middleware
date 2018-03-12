@@ -37,7 +37,7 @@ describe('Query Resource Mock', function() {
 
           dataStore.save(res1, res2, res3, function() {
             helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fluffy');
+              var request = supertest[method]('/api/pets/Fluffy').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
               noHeaders || request.expect('Content-Length', 30);
               request.expect(200, noBody ? '' : {Name: 'Fluffy', Type: 'cat'});
               request.end(helper.checkResults(done));
@@ -66,7 +66,7 @@ describe('Query Resource Mock', function() {
 
           dataStore.save(res1, res2, res3, function() {
             helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fluffy');
+              var request = supertest[method]('/api/pets/Fluffy').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
               noHeaders || request.expect('Content-Length', 75);
               request.expect(200, noBody ? '' : {code: 42, message: 'hello world', result: {Name: 'Fluffy', Type: 'cat'}});
               request.end(helper.checkResults(done));
@@ -82,7 +82,7 @@ describe('Query Resource Mock', function() {
           var resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
           dataStore.save(resource, function() {
             helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+              var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
               request.expect(200, '');
               request.end(helper.checkResults(done, function(res) {
                 expect(res.headers['content-length']).to.satisfy(function(contentLength) {
@@ -107,7 +107,7 @@ describe('Query Resource Mock', function() {
             }
 
             helper.initTest(dataStore, messWithTheBody, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+              var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
               noHeaders || request.expect('Content-Length', 41);
               request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
               request.end(helper.checkResults(done));
@@ -127,7 +127,7 @@ describe('Query Resource Mock', function() {
           }
 
           helper.initTest(messWithTheBody, api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+            var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
             noHeaders || request.expect('Content-Length', 41);
             request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
             request.end(helper.checkResults(done));
@@ -141,7 +141,7 @@ describe('Query Resource Mock', function() {
           api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
           helper.initTest(api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+            var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
             noHeaders || request.expect('Content-Length', 31);
             request.expect(200, noBody ? '' : {default: 'The default value'});
             request.end(helper.checkResults(done));
@@ -154,7 +154,7 @@ describe('Query Resource Mock', function() {
           api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
 
           helper.initTest(api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+            var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
             noHeaders || request.expect('Content-Length', 31);
             request.expect(200, noBody ? '' : {example: 'The example value'});
             request.end(helper.checkResults(done));
@@ -174,7 +174,7 @@ describe('Query Resource Mock', function() {
             helper.initTest(dataStore, api, function(supertest) {
               // Wait 1 second, since the "Last-Modified" header is only precise to the second
               setTimeout(function() {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Length', 11);
                 noHeaders || request.expect('Last-Modified', util.rfc1123(resource.modifiedOn));
                 request.end(helper.checkResults(done));
@@ -188,7 +188,7 @@ describe('Query Resource Mock', function() {
         it('should throw a 404 if the resource does not exist',
           function(done) {
             helper.initTest(api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+              var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
               request.expect(404);
               request.end(function(err, res) {
                 if (err) {
@@ -211,7 +211,7 @@ describe('Query Resource Mock', function() {
             };
 
             helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 request.expect(500);
                 request.end(function(err, res) {
                   if (err) {
@@ -242,7 +242,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 28);
                 request.expect(200, noBody ? '' : {Name: 'Fido', Type: 'dog'});
@@ -261,7 +261,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 9);
                 request.expect(200, noBody ? '' : 'I am Fido');
@@ -280,7 +280,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', '');
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', '0');
                 request.expect(200, '');
@@ -299,7 +299,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', 42.999);
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 6);
                 request.expect(200, noBody ? '' : '42.999');
@@ -319,7 +319,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 24);
                 request.expect(200, noBody ? '' : '2000-02-02T03:04:05.006Z');
@@ -338,7 +338,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 11);
                 request.expect(200, noBody ? '' : 'hello world');
@@ -356,7 +356,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 69);
                 request.expect(200, noBody ? '' : {
@@ -377,7 +377,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido');
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 request.expect(200, '');
                 request.end(helper.checkResults(done, function(res) {
@@ -402,7 +402,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido');
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 31);
                 request.expect(200, noBody ? '' : {default: 'The default value'});
@@ -421,7 +421,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido');
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 31);
                 request.expect(200, noBody ? '' : {example: 'The example value'});
@@ -439,7 +439,7 @@ describe('Query Resource Mock', function() {
             var resource = new swagger.Resource('/api/pets/Fido', null);
             dataStore.save(resource, function() {
               helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+                var request = supertest[method]('/api/pets/Fido').set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 4);
                 request.expect(200, noBody ? '' : 'null');
@@ -457,13 +457,14 @@ describe('Query Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
                 .end(helper.checkResults(done, function(res1) {
                   var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                  var request = supertest[method]('/api/pets/Fido/photos/' + photoID);
+                  var request = supertest[method]('/api/pets/Fido/photos/' + photoID).set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                   noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                   request.end(helper.checkResults(done, function(res2) {
                     if (noBody) {
@@ -501,11 +502,12 @@ describe('Query Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.PDF)
                 .end(helper.checkResults(done, function(res1) {
-                  var request = supertest[method](res1.headers.location);
+                  var request = supertest[method](res1.headers.location).set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                   noHeaders || request.expect('Content-Length', 263287);
                   noHeaders || request.expect('Content-Type', 'application/pdf');
                   request.end(helper.checkResults(done, function(res2) {
@@ -538,13 +540,14 @@ describe('Query Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.text)
                 .end(helper.checkResults(done, function(res1) {
                   var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                  var request = supertest[method](res1.headers.location);
+                  var request = supertest[method](res1.headers.location).set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                   noHeaders || request.expect('Content-Length', /^(95|87)$/);      // CRLF vs LF
                   noHeaders || request.expect('Content-Type', 'text/plain; charset=UTF-8');
 
@@ -579,11 +582,12 @@ describe('Query Resource Mock', function() {
             helper.initTest(api, function(supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
+                .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.PDF)
                 .end(helper.checkResults(done, function(res1) {
-                  var request = supertest[method](res1.headers.location);
+                  var request = supertest[method](res1.headers.location).set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                   noHeaders || request.expect('Content-Length', 263287);
                   noHeaders || request.expect('Content-Type', 'application/pdf');
 
@@ -618,13 +622,14 @@ describe('Query Resource Mock', function() {
             helper.initTest(api, function(supertest) {
                 supertest
                   .post('/api/pets/Fido/photos')
+                  .set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
                   .field('Label', 'Photo 1')
                   .field('Description', 'A photo of Fido')
                   .attach('Photo', files.paths.oneMB)
                   .end(helper.checkResults(done, function(res1) {
                     var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                    var request = supertest[method](res1.headers.location);
+                    var request = supertest[method](res1.headers.location).set('Authorization', 'Bearer QWxhZGRpbjpvcGVuIHNlc2FtZQ==');
                     noHeaders || request.expect('Content-Length', 683709);
                     noHeaders || request.expect('Content-Type', 'image/jpeg');
 
