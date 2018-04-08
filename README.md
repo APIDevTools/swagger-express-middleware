@@ -5,8 +5,7 @@ Swagger Express Middleware
 [![Build Status](https://api.travis-ci.org/BigstickCarpet/swagger-express-middleware.svg)](https://travis-ci.org/BigstickCarpet/swagger-express-middleware)
 [![Dependencies](https://david-dm.org/BigstickCarpet/swagger-express-middleware.svg)](https://david-dm.org/BigstickCarpet/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/BigstickCarpet/swagger-express-middleware/badge.svg?branch=master&service=github)](https://coveralls.io/r/BigstickCarpet/swagger-express-middleware)
-[![Code Climate Score](https://codeclimate.com/github/BigstickCarpet/swagger-express-middleware/badges/gpa.svg)](https://codeclimate.com/github/BigstickCarpet/swagger-express-middleware)
-[![Codacy Score](https://www.codacy.com/project/badge/011f89f6f0dd46e5b9b5d3662a51213d)](https://www.codacy.com/public/jamesmessinger/swagger-express-middleware)
+[![Codacy Score](https://api.codacy.com/project/badge/Grade/011f89f6f0dd46e5b9b5d3662a51213d)](https://www.codacy.com/public/jamesmessinger/swagger-express-middleware)
 [![Inline docs](http://inch-ci.org/github/BigstickCarpet/swagger-express-middleware.svg?branch=master&style=shields)](http://inch-ci.org/github/BigstickCarpet/swagger-express-middleware)
 
 [![npm](http://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
