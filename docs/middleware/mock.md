@@ -83,10 +83,10 @@ This is the root URL of the API.  It has a `get` operation with an `file` respon
 But what if your API has a path _without_ a `GET` operation?  Or what if your `GET` operation _doesn't_ have a response schema? In this case, the Mock middleware tries to guess whether it's a collection or resource path based on the path parameters.  If the final path segment contains a path parameter, then it's assumed to be a resource path; otherwise, it's a collection path.  For example, if the [Swagger Pet Store API](../../samples/PetStore.yaml) didn't have any `get` operations for any of its paths, then they would be categorized like this, based on their path parameters:
 
 * __Collections:__<br>
-`/pets`, `/pets/{petName}/photos`, and `/` (the root URL) would all be considered collection paths becasue they do not end with parameters.
+`/pets`, `/pets/{petName}/photos`, and `/` (the root URL) would all be considered collection paths because they do not end with parameters.
 
 * __Resources:__<br>
-`/pets/{petName}` and `/pets/{petName}/photos/{id}` would both be considered resource paths becasue they end with parameters.
+`/pets/{petName}` and `/pets/{petName}/photos/{id}` would both be considered resource paths because they end with parameters.
 
 __NOTE:__ This algorithm may be enhanced with additional logic over time.  If you have any ideas for ways to improve the algorithm, please [let me know](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
 
