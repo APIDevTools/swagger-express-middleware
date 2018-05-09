@@ -327,7 +327,7 @@ describe('DataStore', function() {
         it('should throw an error if not called with a Resource object',
           function() {
             function throws() {
-              dataStore.get(_.cloneDeep(new Resource()));
+              dataStore.get(JSON.parse(JSON.stringify(new Resource())));
             }
 
             var dataStore = new DataStoreClass();
@@ -577,7 +577,7 @@ describe('DataStore', function() {
         it('should throw an error if not called with a Resource object',
           function() {
             function throws() {
-              dataStore.save(_.cloneDeep(new Resource()));
+              dataStore.save(JSON.parse(JSON.stringify(new Resource())));
             }
 
             var dataStore = new DataStoreClass();
@@ -769,7 +769,7 @@ describe('DataStore', function() {
         it('should throw an error if not called with an array of Resources',
           function() {
             function throws() {
-              dataStore.save(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
+              dataStore.save(new Resource(), [new Resource(), JSON.parse(JSON.stringify(new Resource()))]);
             }
 
             var dataStore = new DataStoreClass();
@@ -966,7 +966,7 @@ describe('DataStore', function() {
         it('should throw an error if not called with a Resource object',
           function() {
             function throws() {
-              dataStore.delete(_.cloneDeep(new Resource()));
+              dataStore.delete(JSON.parse(JSON.stringify(new Resource())));
             }
 
             var dataStore = new DataStoreClass();
@@ -1131,7 +1131,7 @@ describe('DataStore', function() {
         it('should throw an error if not called with an array of Resources',
           function() {
             function throws() {
-              dataStore.delete(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
+              dataStore.delete(new Resource(), [new Resource(), JSON.parse(JSON.stringify(new Resource()))]);
             }
 
             var dataStore = new DataStoreClass();
