@@ -111,6 +111,13 @@ To build/test the project locally on your computer:
 4. **Run the sample app**<br>
 `npm start`
 
+OpenAPI 3 support
+--------------------------
+I need OpenAPI 3 support and will slowly be updating the code accordingly
+1) Parameters no longer have its type directly specified, this is no specified in a schema property.
+2) Update to latest swagger-parser
+
+
 
 License
 --------------------------
