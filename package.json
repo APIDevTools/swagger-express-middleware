@@ -1,7 +1,7 @@
 {
-  "name": "swagger-express-middleware",
-  "version": "1.0.0-alpha.12",
-  "description": "Swagger middleware and mocks for Express",
+  "name": "swagger-express-middleware3",
+  "version": "0.1.2",
+  "description": "Swagger middleware and mocks for Express for OpenAPI 3",
   "keywords": [
     "express",
     "swagger",
@@ -18,7 +18,7 @@
     "url": "http://bigstickcarpet.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/BigstickCarpet/swagger-express-middleware",
+  "homepage": "https://github.com/James-Messinger/swagger-express-middleware",
   "main": "lib/index.js",
   "scripts": {
     "lint": "jshint . --verbose && jscs . --verbose",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BigstickCarpet/swagger-express-middleware.git"
+    "url": "https://github.com/sedgewickmm18/swagger-express-middleware.git"
   },
   "devDependencies": {
     "basic-auth": "^1.0.3",
