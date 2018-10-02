@@ -1,5 +1,11 @@
-Swagger Express Middleware
+Swagger Express Middleware 3
 ============================
+
+This fork of the original Swagger Express Middleware has been created to implement OpenAPI 3 support
+
+Many Thanks to the original author: James Messinger
+
+
 #### Swagger middleware and mocks for Express.js
 
 [![Build Status](https://api.travis-ci.org/APIDevTools/swagger-express-middleware.svg)](https://travis-ci.org/APIDevTools/swagger-express-middleware)

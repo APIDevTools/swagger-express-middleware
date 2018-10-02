@@ -1,7 +1,7 @@
 {
-  "name": "swagger-express-middleware",
-  "version": "1.1.1",
-  "description": "Swagger middleware and mocks for Express",
+  "name": "swagger-express-middleware3",
+  "version": "0.1.2",
+  "description": "Swagger middleware and mocks for Express for OpenAPI 3",
   "keywords": [
     "express",
     "swagger",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/APIDevTools/swagger-express-middleware",
   "repository": {
     "type": "git",
-    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
+    "url": "https://github.com/sedgewickmm18/swagger-express-middleware.git"
   },
   "license": "MIT",
   "main": "lib/index.js",
