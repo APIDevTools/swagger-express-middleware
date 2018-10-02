@@ -86,7 +86,7 @@ describe('RequestValidator middleware', function () {
     function (done) {
       api = files.parsed.petsPostOperation;
       initTest(function (err) {
-        expect(err.message).to.contain('is not a valid Swagger API definition');
+        expect(err.message).to.contain('is not a valid Openapi API definition');
         done();
       });
     }
@@ -812,7 +812,7 @@ describe('RequestValidator middleware', function () {
 
           express.use('/api/pets', helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(415);
-            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json');
+            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json;');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({
@@ -837,7 +837,7 @@ describe('RequestValidator middleware', function () {
 
           express.use('/api/pets', helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(415);
-            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json');
+            expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json;');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({
