@@ -15,10 +15,10 @@
   ],
   "author": {
     "name": "James Messinger",
-    "url": "http://bigstickcarpet.com"
+    "url": "https://jamesmessinger.com"
   },
   "license": "MIT",
-  "homepage": "https://github.com/BigstickCarpet/swagger-express-middleware",
+  "homepage": "https://github.com/APIDevTools/swagger-express-middleware",
   "main": "lib/index.js",
   "scripts": {
     "lint": "jshint . --verbose && jscs . --verbose",
@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BigstickCarpet/swagger-express-middleware.git"
+    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
   },
   "devDependencies": {
     "basic-auth": "^1.0.3",

@@ -63,7 +63,7 @@ The Mock middleware's behavior varies greatly depending on the HTTP request and 
 ### 1) Determine if it's a collection or resource operation
 Two fundamental concepts in RESTful API are [resources and collections](http://restful-api-design.readthedocs.org/en/latest/resources.html).  Put simply, resources are the _things_ in your API &mdash; the users, the products, the orders, etc. &mdash; and collections are _groups_ of those things &mdash; all the products in your database, all the orders for a user, etc.  Every REST operation is either operating on a resource or a collection of resources, so the first thing the Mock middleware does is determine which one.
 
-To determine this, it compares the _response_ schema of your `GET` or `HEAD` operation to the _request_ schema of your `POST`, `PUT`, or `PATCH` operation.  If the response schema is an `array`, or an `object` with an `array` property that matches your request schema, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](../../samples/PetStore.yaml) has five paths defined: 
+To determine this, it compares the _response_ schema of your `GET` or `HEAD` operation to the _request_ schema of your `POST`, `PUT`, or `PATCH` operation.  If the response schema is an `array`, or an `object` with an `array` property that matches your request schema, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](../../samples/PetStore.yaml) has five paths defined:
 
 * __/pets__<br>
 Has a `get` operation with an `array` response schema, therefore it's a collection path. You can `get` multiple pets from the collection, `delete` multiple pets from the collection, and `post` a new pet to the collection.
@@ -88,25 +88,25 @@ But what if your API has a path _without_ a `GET` operation?  Or what if your `G
 * __Resources:__<br>
 `/pets/{petName}` and `/pets/{petName}/photos/{id}` would both be considered resource paths becasue they end with parameters.
 
-__NOTE:__ This algorithm may be enhanced with additional logic over time.  If you have any ideas for ways to improve the algorithm, please [let me know](https://github.com/BigstickCarpet/swagger-express-middleware/issues).
+__NOTE:__ This algorithm may be enhanced with additional logic over time.  If you have any ideas for ways to improve the algorithm, please [let me know](https://github.com/APIDevTools/swagger-express-middleware/issues).
 
 
 ### 2) Perform the corresponding action for the HTTP method
 This is where the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) happens.  Each HTTP method corresponds to a CRUD action, though the action varies depending on whether this is a resource operation or a collection operation.
 
 ##### Resources
-| HTTP Method | CRUD action 
+| HTTP Method | CRUD action
 |:------------|:-------------
 | `GET`       | Returns the resource.  If no data exists, then an [HTTP 404 (Not Found)](http://httpstatusdogs.com/404-not-found) error is sent.
 | `HEAD`      | The same as `GET`, except that only the HTTP headers are sent.  No body content is sent.
 | `POST`      | Creates or updates a resource.
-| `PATCH`     | The same as `POST`. 
+| `PATCH`     | The same as `POST`.
 | `PUT`       | The same as `PATCH`, except that when updating an existing resource, the old data is completely overwritten with the new data, rather than merging the data.
 | `DELETE`    | Delete the resource
 | `OPTIONS`   | `OPTIONS` is usually reserved for CORS preflight requests.  If you're _not_ using the [CORS middleware](CORS.md), then `OPTIONS` is treated the same as `GET`
 
 ##### Collections
-| HTTP Method | CRUD action 
+| HTTP Method | CRUD action
 |:------------|:-------------
 | `GET`       | Returns all resources in the collection.  If your API has `query` parameters, they can be used to filter the results (e.g. _/pets?age=4&type=dog_)
 | `HEAD`      | The same as `GET`, except that only the HTTP headers are sent.  No body content is sent.
@@ -127,7 +127,7 @@ Swagger Express Middleware uses [Multer](https://github.com/expressjs/multer) to
 
 
 ##### How primary keys are determined
-Every [REST resource](http://restful-api-design.readthedocs.org/en/latest/resources.html) is uniquely identified by a URL.  When resources are created by a `PUT`, `PATCH`, or `POST` to a _resource_ path (such as _/pets/{petName}_), the resource's URL is obvious. `PUT /pets/Fido` creates a resource at _/pets/Fido_.   
+Every [REST resource](http://restful-api-design.readthedocs.org/en/latest/resources.html) is uniquely identified by a URL.  When resources are created by a `PUT`, `PATCH`, or `POST` to a _resource_ path (such as _/pets/{petName}_), the resource's URL is obvious. `PUT /pets/Fido` creates a resource at _/pets/Fido_.
 
 But when resources are created by a `PUT`, `PATCH`, or `POST` to a _collection_ path (such as _/pets_), the Mock middleware needs to determine the resource URL.  It does this by trying to determine the primary key of the data model.  This consists of the following logic, _in order_.  As soon as a primary key is found, the rest of the steps are skipped.
 
@@ -252,7 +252,7 @@ app.post('/pets', function(req, res, next) {
         action: 'created',
         date: new Date()
     };
-    
+
     // Let the Mock middleware save the pet as usual
     next();
 });
@@ -263,7 +263,7 @@ app.use(middleware.mock());
 
 
 ### Manipulating the mock data store
-The Mock middleware uses a [DataStore](../exports/DataStore.md) object to get and save all of its data.  You can add, delete, or modify data in the data store to change how the Mock middleware behaves.  There's a great example of this in [Sample 2](../../samples/sample2.js).  It has a custom middleware function to detect when a pet's name changes.  When that happens, it deletes the old pet from the data store and creates a new pet resource at the new URL (since the pet's name is part of the URL).  
+The Mock middleware uses a [DataStore](../exports/DataStore.md) object to get and save all of its data.  You can add, delete, or modify data in the data store to change how the Mock middleware behaves.  There's a great example of this in [Sample 2](../../samples/sample2.js).  It has a custom middleware function to detect when a pet's name changes.  When that happens, it deletes the old pet from the data store and creates a new pet resource at the new URL (since the pet's name is part of the URL).
 
 See the [Sample 2 Walkthrough](../samples/walkthrough2.md) for a detailed explanation.
 
