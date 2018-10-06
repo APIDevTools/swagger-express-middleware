@@ -108,9 +108,8 @@ To build/test the project locally on your computer:
 3. **Run the build script**<br>
 `npm run build`
 
-4. **Run the unit tests**<br>
-`npm run mocha` (just the tests)<br>
-`npm test` (tests + code coverage)
+4. **Run the tests**<br>
+`npm test`
 
 5. **Run the sample app**<br>
 `npm start`

@@ -32,7 +32,7 @@
     "npm": ">=2.0"
   },
   "scripts": {
-    "lint": "jshint . --verbose && jscs . --verbose",
+    "lint": "eslint lib test/fixtures test/specs --fix",
     "build": "npm run lint",
     "mocha": "mocha --bail --recursive test/fixtures test/specs",
     "coverage": "istanbul cover _mocha -- --bail --recursive test/fixtures test/specs",
@@ -47,10 +47,10 @@
     "chai": "^3.2.0",
     "chai-datetime": "^1.4.0",
     "coveralls": "^2.11.4",
+    "eslint": "^5.6.1",
+    "eslint-config-modular": "^4.2.2",
     "express": "^4.13.3",
     "istanbul": "^0.3.19",
-    "jscs": "^2.1.1",
-    "jshint": "^2.8.0",
     "mocha": "^2.3.2",
     "npm-check": "^5.9.0",
     "sinon": "^1.16.1",
