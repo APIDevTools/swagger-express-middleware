@@ -33,13 +33,11 @@
   },
   "scripts": {
     "lint": "eslint lib test/fixtures test/specs --fix",
-    "build": "npm run lint",
-    "mocha": "mocha --bail --recursive test/fixtures test/specs",
+    "test": "mocha && npm run lint",
     "coverage": "istanbul cover _mocha -- --bail --recursive test/fixtures test/specs",
-    "test": "npm run istanbul",
     "upgrade": "npm-check -u",
-    "bump": "bump --prerelease --tag --push --all",
-    "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish",
+    "bump": "bump --prompt --tag --push --all",
+    "release": "npm run upgrade && npm test && npm run bump && npm publish",
     "start": "cd samples && node sample2.js"
   },
   "devDependencies": {

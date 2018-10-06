@@ -105,13 +105,10 @@ To build/test the project locally on your computer:
 2. **Install dependencies**<br>
 `npm install`
 
-3. **Run the build script**<br>
-`npm run build`
-
-4. **Run the tests**<br>
+3. **Run the tests**<br>
 `npm test`
 
-5. **Run the sample app**<br>
+4. **Run the sample app**<br>
 `npm start`
 
 
