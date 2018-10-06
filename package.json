@@ -17,9 +17,20 @@
     "name": "James Messinger",
     "url": "https://jamesmessinger.com"
   },
-  "license": "MIT",
   "homepage": "https://github.com/APIDevTools/swagger-express-middleware",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
+  },
+  "license": "MIT",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=0.10.36",
+    "npm": ">=2.0"
+  },
   "scripts": {
     "lint": "jshint . --verbose && jscs . --verbose",
     "build": "npm run lint",
@@ -30,10 +41,6 @@
     "bump": "bump --prerelease --tag --push --all",
     "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish",
     "start": "cd samples && node sample2.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
   },
   "devDependencies": {
     "basic-auth": "^1.0.3",
@@ -63,10 +70,6 @@
     "tmp": "0.0.27",
     "tv4": "^1.2.5",
     "type-is": "^1.6.8"
-  },
-  "engines": {
-    "node": ">=0.10.36",
-    "npm": ">=2.0"
   },
   "peerDependencies": {
     "express": "4.x"
