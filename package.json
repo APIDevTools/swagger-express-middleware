@@ -37,7 +37,7 @@
     "mocha": "mocha --bail --recursive test/fixtures test/specs",
     "coverage": "istanbul cover _mocha -- --bail --recursive test/fixtures test/specs",
     "test": "npm run istanbul",
-    "upgrade": "ncu \"/(!multer)/\" --upgradeAll && npm update",
+    "upgrade": "npm-check -u",
     "bump": "bump --prerelease --tag --push --all",
     "release": "npm run upgrade && npm run build && npm test && npm run bump && npm publish",
     "start": "cd samples && node sample2.js"
@@ -52,7 +52,7 @@
     "jscs": "^2.1.1",
     "jshint": "^2.8.0",
     "mocha": "^2.3.2",
-    "npm-check-updates": "^2.2.0",
+    "npm-check": "^5.9.0",
     "sinon": "^1.16.1",
     "supertest": "^1.1.0",
     "version-bump-prompt": "^1.5.1"
