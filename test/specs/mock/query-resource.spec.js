@@ -450,7 +450,7 @@ describe('Query Resource Mock', function () {
         );
 
         // This test hangs on Node 6 for some reason
-        if (process.version.substr(0, 2) === 'v6') {
+        if (process.version.substr(0, 2) !== 'v6') {
           it('should return multipart/form-data',
             function (done) {
               // Set the response schemas to return the full multipart/form-data object
