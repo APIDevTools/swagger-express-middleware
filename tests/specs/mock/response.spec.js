@@ -40,7 +40,6 @@ describe('Mock Response', function() {
         'default': {description: ''},
         '203': {description: ''},
         '201': {description: ''},
-        '201': {description: ''},
         '404': {description: ''}
       };
 
