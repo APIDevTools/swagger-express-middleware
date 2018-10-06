@@ -1,11 +1,9 @@
-let swagger = require('../../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../../fixtures/files'),
+'use strict';
+
+let expect = require('chai').expect,
     helper = require('./helper');
 
 describe('JSON Schema - parse number params', function () {
-  'use strict';
 
   it('should parse a valid number param',
     function (done) {
@@ -20,7 +18,7 @@ describe('JSON Schema - parse number params', function () {
 
       let express = helper.parse(schema, 16.5, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equal(16.5);
       }));
     }
@@ -34,7 +32,7 @@ describe('JSON Schema - parse number params', function () {
 
       let express = helper.parse(schema, undefined, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.be.undefined;
       }));
     }
@@ -49,7 +47,7 @@ describe('JSON Schema - parse number params', function () {
 
       let express = helper.parse(schema, undefined, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equal(3.402823e38);
       }));
     }
@@ -64,7 +62,7 @@ describe('JSON Schema - parse number params', function () {
 
       let express = helper.parse(schema, '', done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equal(-3.402823e38);
       }));
     }

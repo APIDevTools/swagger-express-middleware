@@ -1,12 +1,9 @@
-let swagger = require('../../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../../fixtures/files'),
+'use strict';
+
+let expect = require('chai').expect,
     helper = require('./helper');
 
 describe('JSON Schema - parse boolean params', function () {
-  'use strict';
-
   it('should parse a valid boolean param',
     function (done) {
       let schema = {

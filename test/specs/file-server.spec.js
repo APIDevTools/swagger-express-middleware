@@ -1,6 +1,7 @@
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
-    _ = require('lodash'),
     files = require('../fixtures/files'),
     helper = require('../fixtures/helper'),
     fs = require('fs'),
@@ -9,7 +10,6 @@ let swagger = require('../../'),
 describe('FileServer middleware', function () {
   ['head', 'get'].forEach(function (method) {
     describe(method.toUpperCase(), function () {
-      'use strict';
 
       beforeEach(function () {
         isHead = method === 'head';

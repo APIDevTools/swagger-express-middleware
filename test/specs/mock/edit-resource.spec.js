@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -7,7 +9,6 @@ let swagger = require('../../../'),
 describe('Edit Resource Mock', function () {
   ['put', 'patch', 'post'].forEach(function (method) {
     describe(method.toUpperCase(), function () {
-      'use strict';
 
       let api;
       beforeEach(function () {

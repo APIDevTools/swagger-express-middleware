@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -12,7 +14,6 @@ describe('DataStore', function () {
   // All of these tests should pass for all DataStore classes
   [FileDataStore, MemoryDataStore].forEach(function (DataStoreClass) {
     describe(DataStoreClass.name, function () {
-      'use strict';
 
       beforeEach(function (done) {
         if (DataStoreClass === FileDataStore) {
@@ -330,7 +331,7 @@ describe('DataStore', function () {
               dataStore.get(_.cloneDeep(new Resource()));
             }
 
-            var dataStore = new DataStoreClass();
+            let dataStore = new DataStoreClass();
             expect(throws).to.throw(Error, 'Expected a string or Resource object. Got a object instead.');
           }
         );
@@ -580,7 +581,7 @@ describe('DataStore', function () {
               dataStore.save(_.cloneDeep(new Resource()));
             }
 
-            var dataStore = new DataStoreClass();
+            let dataStore = new DataStoreClass();
             expect(throws).to.throw(Error, 'Expected a Resource object, but parameter 1 is a object.');
           }
         );
@@ -772,7 +773,7 @@ describe('DataStore', function () {
               dataStore.save(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
             }
 
-            var dataStore = new DataStoreClass();
+            let dataStore = new DataStoreClass();
             expect(throws).to.throw(Error, 'Expected a Resource object, but parameter 3 is a object.');
           }
         );
@@ -969,7 +970,7 @@ describe('DataStore', function () {
               dataStore.delete(_.cloneDeep(new Resource()));
             }
 
-            var dataStore = new DataStoreClass();
+            let dataStore = new DataStoreClass();
             expect(throws).to.throw(Error, 'Expected a Resource object, but parameter 1 is a object.');
           }
         );
@@ -1134,7 +1135,7 @@ describe('DataStore', function () {
               dataStore.delete(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
             }
 
-            var dataStore = new DataStoreClass();
+            let dataStore = new DataStoreClass();
             expect(throws).to.throw(Error, 'Expected a Resource object, but parameter 3 is a object.');
           }
         );

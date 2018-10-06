@@ -1,11 +1,9 @@
-let swagger = require('../../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../../fixtures/files'),
+'use strict';
+
+let expect = require('chai').expect,
     helper = require('./helper');
 
 describe('JSON Schema - parse date-time params', function () {
-  'use strict';
 
   it('should parse a valid date-time param',
     function (done) {
@@ -20,7 +18,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, '2010-12-31T23:59:59.999Z', done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('2010-12-31T23:59:59.999Z'));
       }));
     }
@@ -35,7 +33,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, undefined, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.be.undefined;
       }));
     }
@@ -51,7 +49,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, undefined, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('1990-09-13T12:00:00Z'));
       }));
     }
@@ -67,7 +65,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, undefined, done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('1995-08-24T15:30:45-06:30'));
       }));
     }
@@ -83,7 +81,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, '', done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('2020-01-31T05:05:05-05:05'));
       }));
     }
@@ -203,7 +201,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, '2009-08-12T00:00:00.000Z', done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('2009-08-12T00:00:00.000Z'));
       }));
     }
@@ -274,7 +272,7 @@ describe('JSON Schema - parse date-time params', function () {
 
       let express = helper.parse(schema, '2009-08-12T00:00:00.000Z', done);
 
-      express.post('/api/test', helper.spy(function (req, res, next) {
+      express.post('/api/test', helper.spy(function (req) {
         expect(req.header('Test')).to.equalTime(new Date('2009-08-12'));
       }));
     }

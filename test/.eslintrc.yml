@@ -4,3 +4,8 @@
 
 extends:
   - modular/test
+
+# Disable certain rules for tests
+rules:
+  no-new: off
+  no-unexpected-multiline: off

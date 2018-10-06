@@ -20,7 +20,7 @@ var middleware = new Middleware(app);
 
 middleware.init(path.join(__dirname, 'PetStore.yaml'), function(err) {
   // Create a custom data store with some initial mock data
-  var myDB = new MemoryDataStore();
+  let myDB = new MemoryDataStore();
   myDB.save(
     new Resource('/pets/Lassie', {name: 'Lassie', type: 'dog', tags: ['brown', 'white']}),
     new Resource('/pets/Clifford', {name: 'Clifford', type: 'dog', tags: ['red', 'big']}),

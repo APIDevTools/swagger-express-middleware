@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../'),
     helper = require('../../fixtures/helper'),
     util = require('../../../lib/helpers/util'),

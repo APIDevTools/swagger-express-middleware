@@ -1,3 +1,5 @@
+'use strict';
+
 let util = require('../../lib/helpers/util'),
     expect = require('chai').expect,
     sinon = require('sinon');
@@ -6,7 +8,6 @@ let util = require('../../lib/helpers/util'),
  * NOTE: The Util.js file isn't technically exported, but it IS used by other Swagger packages, so it needs to be tested
  */
 describe('Util methods', function () {
-  'use strict';
 
   describe('util.warn', function () {
     beforeEach(function () {
@@ -62,40 +63,40 @@ describe('Util methods', function () {
 
     it('can be called with just an error',
       function () {
-        function WarnWithStackTrace () {
+        function warnWithStackTrace () {
           util.warn(new RangeError('Test Error'));
         }
 
-        WarnWithStackTrace();
+        warnWithStackTrace();
         sinon.assert.calledOnce(console.warn);
         expect(console.warn.firstCall.args[0]).to.match(/^RangeError\: Test Error/);
-        expect(console.warn.firstCall.args[0]).to.contain('at WarnWithStackTrace');
+        expect(console.warn.firstCall.args[0]).to.contain('at warnWithStackTrace');
       }
     );
 
     it('can be called with an error and a message',
       function () {
-        function WarnWithStackTrace () {
+        function warnWithStackTrace () {
           util.warn(new SyntaxError('Test Error'), 'Testing 1, 2, 3');
         }
 
-        WarnWithStackTrace();
+        warnWithStackTrace();
         sinon.assert.calledOnce(console.warn);
         expect(console.warn.firstCall.args[0]).to.match(/^Testing 1, 2, 3 \nSyntaxError\: Test Error/);
-        expect(console.warn.firstCall.args[0]).to.contain('at WarnWithStackTrace');
+        expect(console.warn.firstCall.args[0]).to.contain('at warnWithStackTrace');
       }
     );
 
     it('can be called with an error, a message, and params',
       function () {
-        function WarnWithStackTrace () {
+        function warnWithStackTrace () {
           util.warn(new Error('Test Error'), 'Testing %s, %d, %j', 1, 2, '3');
         }
 
-        WarnWithStackTrace();
+        warnWithStackTrace();
         sinon.assert.calledOnce(console.warn);
         expect(console.warn.firstCall.args[0]).to.match(/^Testing 1, 2, "3" \nError\: Test Error/);
-        expect(console.warn.firstCall.args[0]).to.contain('at WarnWithStackTrace');
+        expect(console.warn.firstCall.args[0]).to.contain('at warnWithStackTrace');
       }
     );
   });

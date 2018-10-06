@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../../'),
     files = require('../../../fixtures/files'),
     helper = require('../../../fixtures/helper'),
@@ -39,7 +41,7 @@ exports.parse = function (schema, value, done) {
   });
 
   // The parseRequest middleware will pass the JSON schema and value to JsonSchema.parse()
-  var express = helper.express(middleware.metadata(), middleware.parseRequest());
+  let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
   return express;
 };

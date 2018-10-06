@@ -1,8 +1,6 @@
-let swagger = require('../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../fixtures/files'),
-    helper = require('../../fixtures/helper'),
+'use strict';
+
+let expect = require('chai').expect,
     JsonSchema = require('../../../lib/helpers/json-schema'),
     iterations = 100;
 
@@ -11,10 +9,8 @@ let MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;
 let MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
 let MIN_VALUE = Number.MIN_VALUE || 5e-324;
 let MAX_VALUE = Number.MAX_VALUE || 1.7976931348623157e+308;
-let EPSILON = 2.220446049250313e-16;
 
 describe('JSON Schema sample data', function () {
-  'use strict';
 
   describe('sampleNumber', function () {
     it('should generate a valid number',
@@ -633,4 +629,3 @@ describe('JSON Schema sample data', function () {
     );
   });
 });
-

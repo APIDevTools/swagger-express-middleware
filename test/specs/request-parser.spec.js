@@ -1,12 +1,12 @@
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
-    _ = require('lodash'),
     files = require('../fixtures/files'),
     helper = require('../fixtures/helper'),
     fs = require('fs');
 
 describe('RequestParser middleware', function () {
-  'use strict';
 
   describe('method signatures', function () {
     it('can be called without any params',

@@ -1,11 +1,10 @@
-let swagger = require('../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
+'use strict';
+
+let _ = require('lodash'),
     files = require('../../fixtures/files'),
     helper = require('./helper');
 
 describe('Mock Response', function () {
-  'use strict';
 
   let api;
   beforeEach(function () {

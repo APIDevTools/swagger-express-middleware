@@ -1,3 +1,6 @@
+/* eslint new-cap:off */
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -6,8 +9,6 @@ let swagger = require('../../'),
     api;
 
 describe('CORS middleware', function () {
-  'use strict';
-
   beforeEach(function () {
     api = _.cloneDeep(files.parsed.petStore);
   });

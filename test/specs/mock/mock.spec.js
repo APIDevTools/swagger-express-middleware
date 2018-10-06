@@ -1,11 +1,11 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
-    _ = require('lodash'),
     files = require('../../fixtures/files'),
     helper = require('./helper');
 
 describe('Mock middleware', function () {
-  'use strict';
 
   it('should do nothing if no other middleware is used',
     function (done) {

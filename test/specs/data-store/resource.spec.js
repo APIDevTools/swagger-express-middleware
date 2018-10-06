@@ -1,12 +1,10 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../fixtures/files'),
     helper = require('../../fixtures/helper');
 
 describe('Resource class', function () {
-  'use strict';
-
   describe('constructor', function () {
     it('can be called without any params',
       function () {

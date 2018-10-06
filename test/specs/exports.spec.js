@@ -1,10 +1,11 @@
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
     files = require('../fixtures/files'),
     helper = require('../fixtures/helper');
 
 describe('Package exports', function () {
-  'use strict';
 
   it('should export the "createMiddleware" function',
     function () {
@@ -45,8 +46,7 @@ describe('Package exports', function () {
   describe('exports.createMiddleware', function () {
     it('should work with the "new" operator',
       function (done) {
-        // noinspection JSPotentiallyInvalidConstructorUsage
-        var middleware = new swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = new swagger(files.parsed.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -60,7 +60,7 @@ describe('Package exports', function () {
 
     it('should work without the "new" operator',
       function (done) {
-        var middleware = swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = swagger(files.parsed.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -109,7 +109,7 @@ describe('Package exports', function () {
 
     it('should call the callback if a Swagger object was given',
       function (done) {
-        var middleware = swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = swagger(files.parsed.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -124,7 +124,7 @@ describe('Package exports', function () {
 
     it('should call the callback if a file path was given',
       function (done) {
-        var middleware = swagger(files.paths.petStore, function (err, mw) {
+        let middleware = swagger(files.paths.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -147,13 +147,13 @@ describe('Package exports', function () {
         expect(middleware).to.be.an.instanceOf(swagger.Middleware);
 
         // Call done() if the callback is not called
-        var timeout = setTimeout(done, 100);
+        let timeout = setTimeout(done, 100);
       }
     );
 
     it('can be called with an empty Paths object',
       function (done) {
-        var middleware = swagger(files.parsed.petStoreNoPaths, function (err, mw) {
+        let middleware = swagger(files.parsed.petStoreNoPaths, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -168,7 +168,7 @@ describe('Package exports', function () {
 
     it('can be called with empty Path Item objects',
       function (done) {
-        var middleware = swagger(files.parsed.petStoreNoPathItems, function (err, mw) {
+        let middleware = swagger(files.parsed.petStoreNoPathItems, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -205,8 +205,7 @@ describe('Package exports', function () {
       it('should throw an error if called with a new Object',
         function () {
           function notGonnaWork () {
-            // noinspection JSPrimitiveTypeWrapperUsage
-            swagger(new Object());
+            swagger(new Object());  // eslint-disable-line no-new-object
           }
 
           expect(notGonnaWork).to.throw(Error, 'Expected a Swagger file or object');
@@ -225,7 +224,7 @@ describe('Package exports', function () {
 
       it('should return an error if parsing fails',
         function (done) {
-          var middleware = swagger(files.paths.blank, function (err, mw) {
+          let middleware = swagger(files.paths.blank, function (err, mw) {
             expect(err).to.be.an.instanceOf(Error);
             expect(mw).to.be.an.instanceOf(swagger.Middleware);
             expect(mw).to.equal(middleware);

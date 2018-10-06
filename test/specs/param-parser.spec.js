@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -6,7 +8,6 @@ let swagger = require('../../'),
     api;
 
 describe('ParamParser middleware', function () {
-  'use strict';
 
   describe('Query param parser', function () {
     it('should not parse query params if the metadata middleware is not used',

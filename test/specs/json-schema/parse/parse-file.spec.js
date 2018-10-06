@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -6,7 +8,6 @@ let swagger = require('../../../../'),
     api, photoParam;
 
 describe('JSON Schema - parse file params', function () {
-  'use strict';
 
   beforeEach(function () {
     api = _.cloneDeep(files.parsed.petStore);

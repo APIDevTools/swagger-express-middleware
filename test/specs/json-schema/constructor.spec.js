@@ -1,12 +1,9 @@
-let swagger = require('../../../'),
-    expect = require('chai').expect,
-    _ = require('lodash'),
-    files = require('../../fixtures/files'),
-    helper = require('../../fixtures/helper'),
+'use strict';
+
+let expect = require('chai').expect,
     JsonSchema = require('../../../lib/helpers/json-schema');
 
 describe('JSON Schema constructor', function () {
-  'use strict';
 
   it('should throw an error if the schema is missing',
     function () {
@@ -64,4 +61,3 @@ describe('JSON Schema constructor', function () {
     }
   );
 });
-

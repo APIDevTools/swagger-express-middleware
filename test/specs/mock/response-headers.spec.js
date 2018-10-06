@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -5,7 +7,6 @@ let swagger = require('../../../'),
     helper = require('./helper');
 
 describe('Mock response headers', function () {
-  'use strict';
 
   let api;
   beforeEach(function () {

@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../../'),
     util = require('../../../lib/helpers/util'),
     expect = require('chai').expect,
@@ -20,7 +22,6 @@ describe('Query Collection Mock', function () {
 });
 
 function testCases (contentType, method) {
-  'use strict';
 
   let contentTypePattern = new RegExp('^' + contentType + '; charset=utf-8');
 

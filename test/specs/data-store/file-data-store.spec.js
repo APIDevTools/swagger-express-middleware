@@ -1,20 +1,16 @@
+'use strict';
+
 let swagger = require('../../../'),
     expect = require('chai').expect,
     sinon = require('sinon'),
-    _ = require('lodash'),
     path = require('path'),
     fs = require('fs'),
     files = require('../../fixtures/files'),
-    helper = require('../../fixtures/helper'),
     Resource = swagger.Resource,
-    DataStore = swagger.DataStore,
-    MemoryDataStore = swagger.MemoryDataStore,
     FileDataStore = swagger.FileDataStore,
     tempDir;
 
 describe('FileDataStore', function () {
-  'use strict';
-
   beforeEach(function (done) {
     files.createTempDir(function (temp) {
       tempDir = temp;

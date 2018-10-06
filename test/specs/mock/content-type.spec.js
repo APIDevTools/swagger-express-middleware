@@ -1,12 +1,12 @@
+'use strict';
+
 let swagger = require('../../../'),
-    expect = require('chai').expect,
     _ = require('lodash'),
     files = require('../../fixtures/files'),
     helper = require('./helper'),
     fs = require('fs');
 
 describe('Mock Content-Type header', function () {
-  'use strict';
 
   let api;
   beforeEach(function () {

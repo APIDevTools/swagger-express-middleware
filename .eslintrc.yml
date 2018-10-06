@@ -9,3 +9,15 @@ extends:
   - modular/style
   - modular/es6
   - modular/node
+
+rules:
+  # Don't warn about unused "req", "res", and "next" arguments
+  no-unused-vars:
+    - error
+    - args: none
+
+  # Don't warn about shadowed variables like "err"
+  no-shadow: off
+
+  # Don't warn about capitalized functions like middleware.CORS, express.Router, etc.
+  new-cap: off

@@ -1,3 +1,5 @@
+'use strict';
+
 let swagger = require('../../'),
     expect = require('chai').expect,
     _ = require('lodash'),
@@ -5,7 +7,6 @@ let swagger = require('../../'),
     helper = require('../fixtures/helper');
 
 describe('RequestMetadata middleware', function () {
-  'use strict';
 
   it('should set all req.swagger properties for a parameterless path',
     function (done) {

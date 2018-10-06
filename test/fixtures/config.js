@@ -1,6 +1,7 @@
 /**
  * Test environment config
  */
+'use strict';
 
 // Chai plugins
 let chai = require('chai');

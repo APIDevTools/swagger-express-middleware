@@ -1,15 +1,15 @@
+'use strict';
+
 let swagger = require('../../../'),
     util = require('../../../lib/helpers/util'),
     expect = require('chai').expect,
     _ = require('lodash'),
     files = require('../../fixtures/files'),
-    helper = require('./helper'),
-    isWindows = /^win/.test(process.platform);
+    helper = require('./helper');
 
 describe('Query Resource Mock', function () {
   ['head', 'options', 'get'].forEach(function (method) {
     describe(method.toUpperCase(), function () {
-      'use strict';
 
       let api, noBody, noHeaders;
       beforeEach(function () {
