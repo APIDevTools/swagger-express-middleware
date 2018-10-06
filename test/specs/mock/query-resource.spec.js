@@ -633,7 +633,7 @@ describe('Query Resource Mock', function() {
 
                     request.end(helper.checkResults(done, function(res2) {
                       if (noBody) {
-                        expect(res2.text).to.be.empty;
+                        expect(res2.text || '').to.be.empty;
 
                         if (method === 'options') {
                           expect(res2.body).to.be.empty;

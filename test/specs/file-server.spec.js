@@ -326,7 +326,7 @@ describe('FileServer middleware', function() {
               else {
                 expect(res.body).to.be.empty;
               }
-              expect(res.text).to.be.empty;
+              expect(res.text || '').to.be.empty;
             }
             else {
               var rawFile = fs.readFileSync(file);
