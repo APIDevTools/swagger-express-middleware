@@ -7,7 +7,7 @@ let swagger = require('../../../'),
     files = require('../../fixtures/files'),
     helper = require('./helper');
 
-describe('Query Resource Mock', function () {
+describe.only('Query Resource Mock', function () {
   ['head', 'options', 'get'].forEach(function (method) {
     describe(method.toUpperCase(), function () {
 
@@ -449,175 +449,11 @@ describe('Query Resource Mock', function () {
           }
         );
 
-        // This test hangs on Node 6 for some reason
-        if (process.version.substr(0, 2) !== 'v6') {
-          it('should return multipart/form-data',
-            function (done) {
-              // Set the response schemas to return the full multipart/form-data object
-              api.paths['/pets/{PetName}/photos'].post.responses[201].schema = { type: 'object' };
-              api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].schema.type = 'object';
-              helper.initTest(api, function (supertest) {
-                supertest
-                  .post('/api/pets/Fido/photos')
-                  .field('Label', 'Photo 1')
-                  .field('Description', 'A photo of Fido')
-                  .attach('Photo', files.paths.oneMB)
-                  .end(helper.checkResults(done, function (res1) {
-                    let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
-
-                    let request = supertest[method]('/api/pets/Fido/photos/' + photoID);
-                    noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                    request.end(helper.checkResults(done, function (res2) {
-                      if (noBody) {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.be.empty;
-                      }
-                      else {
-                        expect(res2.body).to.deep.equal({
-                          ID: photoID,
-                          Label: 'Photo 1',
-                          Description: 'A photo of Fido',
-                          Photo: {
-                            fieldname: 'Photo',
-                            originalname: '1MB.jpg',
-                            name: res1.body.Photo.name,
-                            encoding: '7bit',
-                            mimetype: 'image/jpeg',
-                            path: res1.body.Photo.path,
-                            extension: 'jpg',
-                            size: 683709,
-                            truncated: false,
-                            buffer: null
-                          }
-                        });
-                      }
-                      done();
-                    }));
-                  }));
-              });
-            }
-          );
-        }
-
-        it('should return a file',
+        it('should return multipart/form-data',
           function (done) {
-            helper.initTest(api, function (supertest) {
-              supertest
-                .post('/api/pets/Fido/photos')
-                .field('Label', 'Photo 1')
-                .field('Description', 'A photo of Fido')
-                .attach('Photo', files.paths.PDF)
-                .end(helper.checkResults(done, function (res1) {
-                  let request = supertest[method](res1.headers.location);
-                  noHeaders || request.expect('Content-Length', 263287);
-                  noHeaders || request.expect('Content-Type', 'application/pdf');
-                  request.end(helper.checkResults(done, function (res2) {
-                    // It should NOT be an attachment
-                    expect(res2.headers['content-disposition']).to.be.undefined;
-
-                    if (noBody) {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.be.empty;
-                    }
-                    else {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
-                    }
-                    done();
-                  }));
-                }));
-            });
-          }
-        );
-
-        it('should return a file attachment (using the basename of the URL)',
-          function (done) {
-            api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
-              'content-disposition': {
-                type: 'string'
-              }
-            };
-
-            helper.initTest(api, function (supertest) {
-              supertest
-                .post('/api/pets/Fido/photos')
-                .field('Label', 'Photo 1')
-                .field('Description', 'A photo of Fido')
-                .attach('Photo', files.paths.text)
-                .end(helper.checkResults(done, function (res1) {
-                  let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
-
-                  let request = supertest[method](res1.headers.location);
-                  noHeaders || request.expect('Content-Length', /^(95|87)$/);      // CRLF vs LF
-                  noHeaders || request.expect('Content-Type', 'text/plain; charset=UTF-8');
-
-                  // The filename is set to the basename of the URL by default
-                  noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
-
-                  request.end(helper.checkResults(done, function (res2) {
-                    if (noBody) {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.be.empty;
-                    }
-                    else {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.have.length.at.least(87).and.at.most(95);  // CRLF vs LF
-                    }
-                    done();
-                  }));
-                }));
-            });
-          }
-        );
-
-        it('should return a file attachment (using the default filename in the Swagger API)',
-          function (done) {
-            api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
-              'content-disposition': {
-                type: 'string',
-                default: 'attachment; filename="MyCustomFileName.xyz"'
-              }
-            };
-
-            helper.initTest(api, function (supertest) {
-              supertest
-                .post('/api/pets/Fido/photos')
-                .field('Label', 'Photo 1')
-                .field('Description', 'A photo of Fido')
-                .attach('Photo', files.paths.PDF)
-                .end(helper.checkResults(done, function (res1) {
-                  let request = supertest[method](res1.headers.location);
-                  noHeaders || request.expect('Content-Length', 263287);
-                  noHeaders || request.expect('Content-Type', 'application/pdf');
-
-                  // The filename comes from the Swagger API
-                  noHeaders || request.expect('Content-Disposition', 'attachment; filename="MyCustomFileName.xyz"');
-
-                  request.end(helper.checkResults(done, function (res2) {
-                    if (noBody) {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.be.empty;
-                    }
-                    else {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
-                    }
-                    done();
-                  }));
-                }));
-            });
-          }
-        );
-
-        it('should return a file attachment (using the basename of the URL when there\'s no default filename in the Swagger API)',
-          function (done) {
-            api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
-              'content-disposition': {
-                type: 'string',
-                default: 'attachment'   // <--- No filename was specified
-              }
-            };
-
+            // Set the response schemas to return the full multipart/form-data object
+            api.paths['/pets/{PetName}/photos'].post.responses[201].schema = { type: 'object' };
+            api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].schema.type = 'object';
             helper.initTest(api, function (supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
@@ -627,34 +463,200 @@ describe('Query Resource Mock', function () {
                 .end(helper.checkResults(done, function (res1) {
                   let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                  let request = supertest[method](res1.headers.location);
-                  noHeaders || request.expect('Content-Length', 683709);
-                  noHeaders || request.expect('Content-Type', 'image/jpeg');
-
-                  // The filename is the basename of the URL, since it wasn't specified in the Swagger API
-                  noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
-
+                  let request = supertest[method]('/api/pets/Fido/photos/' + photoID);
+                  noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                   request.end(helper.checkResults(done, function (res2) {
                     if (noBody) {
-                      expect(res2.text || '').to.be.empty;
-
-                      if (method === 'options') {
-                        expect(res2.body).to.be.empty;
-                      }
-                      else {
-                        expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
-                      }
+                      expect(res2.body).to.be.empty;
+                      expect(res2.text).to.be.empty;
                     }
                     else {
-                      expect(res2.body).to.be.an.instanceOf(Buffer);
-                      expect(res2.body.length).to.equal(683709);
+                      expect(res2.body).to.deep.equal({
+                        ID: photoID,
+                        Label: 'Photo 1',
+                        Description: 'A photo of Fido',
+                        Photo: {
+                          fieldname: 'Photo',
+                          originalname: '1MB.jpg',
+                          name: res1.body.Photo.name,
+                          encoding: '7bit',
+                          mimetype: 'image/jpeg',
+                          path: res1.body.Photo.path,
+                          extension: 'jpg',
+                          size: 683709,
+                          truncated: false,
+                          buffer: null
+                        }
+                      });
                     }
                     done();
                   }));
                 }));
+            });
+          }
+        );
+
+        if (method === 'get' && process.env.CI && process.version.startsWith('v6')) {
+          console.warn('Skipping query-resource file tests because they cause CI to hang in Node 6');
+        }
+        else {
+          it('should return a file',
+            function (done) {
+              helper.initTest(api, function (supertest) {
+                supertest
+                  .post('/api/pets/Fido/photos')
+                  .field('Label', 'Photo 1')
+                  .field('Description', 'A photo of Fido')
+                  .attach('Photo', files.paths.PDF)
+                  .end(helper.checkResults(done, function (res1) {
+                    let request = supertest[method](res1.headers.location);
+                    noHeaders || request.expect('Content-Length', 263287);
+                    noHeaders || request.expect('Content-Type', 'application/pdf');
+                    request.end(helper.checkResults(done, function (res2) {
+                      // It should NOT be an attachment
+                      expect(res2.headers['content-disposition']).to.be.undefined;
+
+                      if (noBody) {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.be.empty;
+                      }
+                      else {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
+                      }
+                      done();
+                    }));
+                  }));
+              });
             }
-            );
-          });
+          );
+
+          it('should return a file attachment (using the basename of the URL)',
+            function (done) {
+              api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
+                'content-disposition': {
+                  type: 'string'
+                }
+              };
+
+              helper.initTest(api, function (supertest) {
+                supertest
+                  .post('/api/pets/Fido/photos')
+                  .field('Label', 'Photo 1')
+                  .field('Description', 'A photo of Fido')
+                  .attach('Photo', files.paths.text)
+                  .end(helper.checkResults(done, function (res1) {
+                    let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+
+                    let request = supertest[method](res1.headers.location);
+                    noHeaders || request.expect('Content-Length', /^(95|87)$/);      // CRLF vs LF
+                    noHeaders || request.expect('Content-Type', 'text/plain; charset=UTF-8');
+
+                    // The filename is set to the basename of the URL by default
+                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
+
+                    request.end(helper.checkResults(done, function (res2) {
+                      if (noBody) {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.be.empty;
+                      }
+                      else {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.have.length.at.least(87).and.at.most(95);  // CRLF vs LF
+                      }
+                      done();
+                    }));
+                  }));
+              });
+            }
+          );
+
+          it('should return a file attachment (using the default filename in the Swagger API)',
+            function (done) {
+              api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
+                'content-disposition': {
+                  type: 'string',
+                  default: 'attachment; filename="MyCustomFileName.xyz"'
+                }
+              };
+
+              helper.initTest(api, function (supertest) {
+                supertest
+                  .post('/api/pets/Fido/photos')
+                  .field('Label', 'Photo 1')
+                  .field('Description', 'A photo of Fido')
+                  .attach('Photo', files.paths.PDF)
+                  .end(helper.checkResults(done, function (res1) {
+                    let request = supertest[method](res1.headers.location);
+                    noHeaders || request.expect('Content-Length', 263287);
+                    noHeaders || request.expect('Content-Type', 'application/pdf');
+
+                    // The filename comes from the Swagger API
+                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="MyCustomFileName.xyz"');
+
+                    request.end(helper.checkResults(done, function (res2) {
+                      if (noBody) {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.be.empty;
+                      }
+                      else {
+                        expect(res2.body).to.be.empty;
+                        expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
+                      }
+                      done();
+                    }));
+                  }));
+              });
+            }
+          );
+
+          it('should return a file attachment (using the basename of the URL when there\'s no default filename in the Swagger API)',
+            function (done) {
+              api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
+                'content-disposition': {
+                  type: 'string',
+                  default: 'attachment'   // <--- No filename was specified
+                }
+              };
+
+              helper.initTest(api, function (supertest) {
+                supertest
+                  .post('/api/pets/Fido/photos')
+                  .field('Label', 'Photo 1')
+                  .field('Description', 'A photo of Fido')
+                  .attach('Photo', files.paths.oneMB)
+                  .end(helper.checkResults(done, function (res1) {
+                    let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+
+                    let request = supertest[method](res1.headers.location);
+                    noHeaders || request.expect('Content-Length', 683709);
+                    noHeaders || request.expect('Content-Type', 'image/jpeg');
+
+                    // The filename is the basename of the URL, since it wasn't specified in the Swagger API
+                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
+
+                    request.end(helper.checkResults(done, function (res2) {
+                      if (noBody) {
+                        expect(res2.text || '').to.be.empty;
+
+                        if (method === 'options') {
+                          expect(res2.body).to.be.empty;
+                        }
+                        else {
+                          expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
+                        }
+                      }
+                      else {
+                        expect(res2.body).to.be.an.instanceOf(Buffer);
+                        expect(res2.body.length).to.equal(683709);
+                      }
+                      done();
+                    }));
+                  }));
+              });
+            }
+          );
+        }
       });
     });
   });
