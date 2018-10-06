@@ -13,7 +13,7 @@ var middleware = require('swagger-express-middleware');
 var path = require('path');
 var app = express();
 
-//middleware(path.join(__dirname, '../tests/files/petstore.yaml'), app, function(err, middleware) {
+//middleware(path.join(__dirname, '../test/files/petstore.yaml'), app, function(err, middleware) {
 middleware(path.join(__dirname, 'PetStore.yaml'), app, function(err, middleware) {
   // Add all the Swagger Express Middleware, or just the ones you need.
   // NOTE: Some of these accept optional options (omitted here for brevity)
