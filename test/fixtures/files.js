@@ -1,10 +1,10 @@
 'use strict';
 
-var _              = require('lodash'),
-    path           = require('path'),
-    mkdirp         = require('mkdirp'),
+let _ = require('lodash'),
+    path = require('path'),
+    mkdirp = require('mkdirp'),
     swaggerMethods = require('swagger-methods'),
-    petStoreJSON   = require('../files/petstore.json');
+    petStoreJSON = require('../files/petstore.json');
 
 /**
  * Paths to sample files and directories
@@ -28,23 +28,23 @@ exports.paths = {
  * Parsed Swagger specs
  */
 exports.parsed = {
-  blank: {swagger: '2.0', info: {title: 'Test Swagger', version: '1.0'}, paths: {}},
+  blank: { swagger: '2.0', info: { title: 'Test Swagger', version: '1.0' }, paths: {}},
   petStore: petStoreJSON,
   petStoreNoBasePath: _.omit(petStoreJSON, 'basePath'),
-  petStoreNoPaths: (function() {
-    var clone = _.cloneDeep(petStoreJSON);
+  petStoreNoPaths: (function () {
+    let clone = _.cloneDeep(petStoreJSON);
     clone.paths = {};
     return clone;
-  })(),
-  petStoreNoPathItems: (function() {
-    var clone = _.cloneDeep(petStoreJSON);
-    swaggerMethods.forEach(function(method) {
+  }()),
+  petStoreNoPathItems: (function () {
+    let clone = _.cloneDeep(petStoreJSON);
+    swaggerMethods.forEach(function (method) {
       if (clone.paths[method]) {
         delete clone.paths[method];
       }
     });
     return clone;
-  })(),
+  }()),
   petStoreSecurity: petStoreJSON.security,
   petsPath: petStoreJSON.paths['/pets'],
   petsGetOperation: petStoreJSON.paths['/pets'].get,
@@ -64,10 +64,10 @@ exports.parsed = {
 /**
  * Creates the temp directory and returns its path to the callback.
  */
-exports.createTempDir = function(done) {
-  setTimeout(function() {
-    var dirName = path.join(exports.paths.tempDir, new Date().toJSON().replace(/:/g, '-'));
-    mkdirp(dirName, function() {
+exports.createTempDir = function (done) {
+  setTimeout(function () {
+    let dirName = path.join(exports.paths.tempDir, new Date().toJSON().replace(/:/g, '-'));
+    mkdirp(dirName, function () {
       done(dirName);
     });
   }, 10);

@@ -1,7 +1,7 @@
-var swagger = require('../../../'),
-    helper  = require('../../fixtures/helper'),
-    util    = require('../../../lib/helpers/util'),
-    _       = require('lodash');
+let swagger = require('../../../'),
+    helper = require('../../fixtures/helper'),
+    util = require('../../../lib/helpers/util'),
+    _ = require('lodash');
 
 _.extend(exports, helper);
 
@@ -14,7 +14,7 @@ _.extend(exports, helper);
  * @param   {object}        api         - The Swagger API for the test
  * @param   {function}      test        - The actual unit test
  */
-exports.initTest = function(express, dataStore, fns, api, test) {
+exports.initTest = function (express, dataStore, fns, api, test) {
   switch (arguments.length) {
     case 2:
       test = arguments[1];
@@ -51,9 +51,9 @@ exports.initTest = function(express, dataStore, fns, api, test) {
   }
 
   express = express || helper.express();
-  var supertest = helper.supertest(express.app || express);
+  let supertest = helper.supertest(express.app || express);
 
-  swagger(api, express, function(err, middleware) {
+  swagger(api, express, function (err, middleware) {
     express.use(
       middleware.metadata(),
       middleware.CORS(),

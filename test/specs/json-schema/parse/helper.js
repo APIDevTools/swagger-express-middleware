@@ -1,7 +1,7 @@
-var swagger = require('../../../../'),
-    files   = require('../../../fixtures/files'),
-    helper  = require('../../../fixtures/helper'),
-    _       = require('lodash');
+let swagger = require('../../../../'),
+    files = require('../../../fixtures/files'),
+    helper = require('../../../fixtures/helper'),
+    _ = require('lodash');
 
 _.extend(exports, helper);
 
@@ -13,25 +13,25 @@ _.extend(exports, helper);
  * @param   {function}  done   - The test's "done" callback
  * @returns {express}
  */
-exports.parse = function(schema, value, done) {
+exports.parse = function (schema, value, done) {
   // Create a Swagger API that uses this schema
-  var api = _.cloneDeep(files.parsed.petStore);
+  let api = _.cloneDeep(files.parsed.petStore);
   api.paths['/test'] = {
     post: {
-      parameters: [_.extend(schema, {name: 'Test', in: 'header'})],
+      parameters: [_.extend(schema, { name: 'Test', in: 'header' })],
       responses: {
-        default: {description: 'Parameter parsing test'}
+        default: { description: 'Parameter parsing test' }
       }
     }
   };
 
-  var middleware = swagger(api, function(err) {
+  let middleware = swagger(api, function (err) {
     if (err) {
       done(err);
     }
 
     // Make a request to the Swagger API, passing the test value
-    var supertest = helper.supertest(express).post('/api/test');
+    let supertest = helper.supertest(express).post('/api/test');
     if (value !== undefined) {
       supertest.set(schema.name, value);
     }

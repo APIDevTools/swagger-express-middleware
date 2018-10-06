@@ -3,14 +3,14 @@
  */
 
 // Chai plugins
-var chai = require('chai');
+let chai = require('chai');
 chai.use(require('chai-datetime'));
 
 // Disable warnings, which clutter the test output
 process.env.WARN = 'off';
 
 // Increase test timeouts.
-beforeEach(function() {
+beforeEach(function () {
   // Some of our tests simulate uploading several large files, which takes time.
   // A lot of this time is garbage-collection between requests
   this.currentTest.timeout(15000);

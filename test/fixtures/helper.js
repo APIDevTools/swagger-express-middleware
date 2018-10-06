@@ -3,19 +3,19 @@
  */
 'use strict';
 
-var _         = require('lodash'),
-    express   = require('express'),
+let _ = require('lodash'),
+    express = require('express'),
     supertest = require('supertest'),
-    sinon     = require('sinon');
+    sinon = require('sinon');
 
 /**
  * Creates and configures an Express application.
  */
-exports.express = function(middleware) {
-  var app = express();
+exports.express = function (middleware) {
+  let app = express();
   app.set('env', 'test'); // Turns on enhanced debug/error info
 
-  _.each(arguments, function(middleware) {
+  _.each(arguments, function (middleware) {
     app.use(middleware);
   });
 
@@ -25,8 +25,8 @@ exports.express = function(middleware) {
 /**
  * Creates and configures an Express Router.
  */
-exports.router = function(middleware) {
-  var args, opts;
+exports.router = function (middleware) {
+  let args, opts;
   if (_.isObject(middleware)) {
     opts = middleware;
     args = [];
@@ -36,9 +36,9 @@ exports.router = function(middleware) {
     args = arguments;
   }
 
-  var router = express.Router(opts);
+  let router = express.Router(opts);
 
-  _.each(args, function(middleware) {
+  _.each(args, function (middleware) {
     router.use(middleware);
   });
 
@@ -48,7 +48,7 @@ exports.router = function(middleware) {
 /**
  * Creates and configures a Supertest instance.
  */
-exports.supertest = function(middleware) {
+exports.supertest = function (middleware) {
   return supertest(middleware);
 };
 
@@ -66,23 +66,23 @@ exports.testFailed = 598;
  * Spies on the given middleware function and captures any errors.
  * If the middleware doesn't call `next()`, then a successful response is sent.
  */
-exports.spy = function(fn) {
+exports.spy = function (fn) {
   exports.spy.error = null;
 
   if (fn.length === 4) {
-    return function(err, req, res, next) {
+    return function (err, req, res, next) {
       tryCatch(err, req, res, next);
-    }
+    };
   }
   else {
-    return function(req, res, next) {
+    return function (req, res, next) {
       tryCatch(null, req, res, next);
-    }
+    };
   }
 
-  function tryCatch(err, req, res, next) {
+  function tryCatch (err, req, res, next) {
     try {
-      var spy = sinon.spy();
+      let spy = sinon.spy();
       if (err) {
         fn(err, req, res, spy);
       }
@@ -107,8 +107,8 @@ exports.spy = function(fn) {
 /**
  * Checks the results of any {@link env#spy} middleware, and fails the test if an error occurred.
  */
-exports.checkSpyResults = function(done) {
-  return function(err, res) {
+exports.checkSpyResults = function (done) {
+  return function (err, res) {
     if (err) {
       done(err);
     }
@@ -116,7 +116,7 @@ exports.checkSpyResults = function(done) {
       done(exports.spy.error);
     }
     else if (res.status !== exports.testPassed) {
-      var serverError;
+      let serverError;
       if (res.error) {
         serverError = new Error(res.error.message +
           _.unescape(res.error.text).replace(/<br>/g, '\n').replace(/&nbsp;/g, ' '));
@@ -129,7 +129,7 @@ exports.checkSpyResults = function(done) {
     else {
       done();
     }
-  }
+  };
 };
 
 /**
@@ -138,10 +138,10 @@ exports.checkSpyResults = function(done) {
  * @param   {function}  done - The `done` callback for the test.  This will be called if an error occurs.
  * @param   {function}  next - The next code to run after checking the results (if no error occurs)
  */
-exports.checkResults = function(done, next) {
-  return function(err, res) {
+exports.checkResults = function (done, next) {
+  return function (err, res) {
     if (res && res.status >= 400) {
-      var serverError;
+      let serverError;
       if (res.error) {
         serverError = new Error(res.error.message +
           _.unescape(res.error.text).replace(/<br>/g, '\n').replace(/&nbsp;/g, ' '));
@@ -162,5 +162,5 @@ exports.checkResults = function(done, next) {
         done();
       }
     }
-  }
+  };
 };

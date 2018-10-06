@@ -1,16 +1,16 @@
-var swagger    = require('../../../'),
-    expect     = require('chai').expect,
-    _          = require('lodash'),
-    files      = require('../../fixtures/files'),
-    helper     = require('../../fixtures/helper'),
+let swagger = require('../../../'),
+    expect = require('chai').expect,
+    _ = require('lodash'),
+    files = require('../../fixtures/files'),
+    helper = require('../../fixtures/helper'),
     JsonSchema = require('../../../lib/helpers/json-schema');
 
-describe('JSON Schema constructor', function() {
+describe('JSON Schema constructor', function () {
   'use strict';
 
   it('should throw an error if the schema is missing',
-    function() {
-      function createMissingSchema() {
+    function () {
+      function createMissingSchema () {
         new JsonSchema();
       }
 
@@ -19,8 +19,8 @@ describe('JSON Schema constructor', function() {
   );
 
   it('should throw an error if the schema is null',
-    function() {
-      function createNullSchema() {
+    function () {
+      function createNullSchema () {
         new JsonSchema(null);
       }
 
@@ -29,8 +29,8 @@ describe('JSON Schema constructor', function() {
   );
 
   it('should not throw an error if the schema is empty',
-    function() {
-      function createEmptySchema() {
+    function () {
+      function createEmptySchema () {
         new JsonSchema({});
       }
 
@@ -39,9 +39,9 @@ describe('JSON Schema constructor', function() {
   );
 
   it('should throw an error if the schema type is unsupported',
-    function() {
-      function unsupportedType() {
-        new JsonSchema({type: 'foobar'});
+    function () {
+      function unsupportedType () {
+        new JsonSchema({ type: 'foobar' });
       }
 
       expect(unsupportedType).to.throw('Invalid JSON schema type: foobar');
@@ -49,8 +49,8 @@ describe('JSON Schema constructor', function() {
   );
 
   it('should not throw an error if the schema type is missing',
-    function() {
-      function missingType() {
+    function () {
+      function missingType () {
         new JsonSchema({
           properties: {
             name: {

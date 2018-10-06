@@ -1,19 +1,19 @@
-var swagger    = require('../../../'),
-    expect     = require('chai').expect,
-    _          = require('lodash'),
-    files      = require('../../fixtures/files'),
-    helper     = require('./helper');
+let swagger = require('../../../'),
+    expect = require('chai').expect,
+    _ = require('lodash'),
+    files = require('../../fixtures/files'),
+    helper = require('./helper');
 
-describe('Mock response headers', function() {
+describe('Mock response headers', function () {
   'use strict';
 
-  var api;
-  beforeEach(function() {
+  let api;
+  beforeEach(function () {
     api = _.cloneDeep(files.parsed.petStore);
   });
 
   it('should set headers to the default values specified in the Swagger API',
-    function(done) {
+    function (done) {
       api.paths['/pets'].get.responses[200].headers = {
         location: {
           type: 'string',
@@ -31,17 +31,17 @@ describe('Mock response headers', function() {
           type: 'string',
           default: 'attachment'
         },
-        'pragma': {
+        pragma: {
           type: 'string',
           default: 'no-cache'
         },
-        'myMadeUpHeader': {
+        myMadeUpHeader: {
           type: 'integer',
           default: 42
         }
       };
 
-      helper.initTest(api, function(supertest) {
+      helper.initTest(api, function (supertest) {
         supertest
           .get('/api/pets')
           .expect('Location', 'hello world')
@@ -56,7 +56,7 @@ describe('Mock response headers', function() {
   );
 
   it('should not override headers that were already set by other middleware',
-    function(done) {
+    function (done) {
       api.paths['/pets'].get.responses[200].headers = {
         location: {
           type: 'string',
@@ -74,18 +74,18 @@ describe('Mock response headers', function() {
           type: 'string',
           default: 'attachment'
         },
-        'pragma': {
+        pragma: {
           type: 'string',
           default: 'no-cache'
         },
-        'myMadeUpHeader': {
+        myMadeUpHeader: {
           type: 'integer',
           default: 42
         }
       };
 
-      var express = helper.express();
-      express.use(function(req, res, next) {
+      let express = helper.express();
+      express.use(function (req, res, next) {
         res.set('location', 'foo');
         res.set('last-modified', 'bar');
         res.set('set-cookie', 'hello=world');
@@ -95,7 +95,7 @@ describe('Mock response headers', function() {
         next();
       });
 
-      helper.initTest(express, api, function(supertest) {
+      helper.initTest(express, api, function (supertest) {
         supertest
           .get('/api/pets')
           .expect('Location', 'foo')
@@ -110,35 +110,35 @@ describe('Mock response headers', function() {
   );
 
   it('should generate sample values for headers that have no values',
-    function(done) {
+    function (done) {
       api.paths['/pets'].get.responses[200].headers = {
-        'pragma': {
+        pragma: {
           type: 'string'
         },
-        'myMadeUpHeader': {
+        myMadeUpHeader: {
           type: 'number'
         },
         'content-length': {
           type: 'integer'
         },
-        'expires': {
+        expires: {
           type: 'string',
           format: 'date-time'
         },
-        'date': {
+        date: {
           type: 'string',
           format: 'date'
         }
       };
 
-      helper.initTest(api, function(supertest) {
+      helper.initTest(api, function (supertest) {
         supertest
           .get('/api/pets')
-          .end(helper.checkResults(done, function(res) {
-            var floatRegExp = /^-?\d+\.\d+(e[+-]\d+)$/;
-            var integerRegExp = /^-?\d+$/;
-            var dateTimeRegExp = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/;
-            var dateRegExp = /^\w{3}, \d{2} \w{3} \d{4} 00:00:00 GMT/;
+          .end(helper.checkResults(done, function (res) {
+            let floatRegExp = /^-?\d+\.\d+(e[+-]\d+)$/;
+            let integerRegExp = /^-?\d+$/;
+            let dateTimeRegExp = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/;
+            let dateRegExp = /^\w{3}, \d{2} \w{3} \d{4} 00:00:00 GMT/;
 
             expect(res.headers.pragma).to.be.a('string').and.not.empty;
             expect(res.headers.mymadeupheader).to.match(floatRegExp);
@@ -151,13 +151,13 @@ describe('Mock response headers', function() {
     }
   );
 
-  describe('Location header', function() {
+  describe('Location header', function () {
     it('should set the Location header to the newly-created resource',
-      function(done) {
-        helper.initTest(api, function(supertest) {
+      function (done) {
+        helper.initTest(api, function (supertest) {
           supertest
             .post('/api/pets')
-            .send({Name: 'Fido', Type: 'dog'})
+            .send({ Name: 'Fido', Type: 'dog' })
             .expect('Location', '/api/pets/Fido')
             .end(helper.checkResults(done));
         });
@@ -165,14 +165,14 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Location header to the existing resource',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           location: {
             type: 'string'
           }
         };
 
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
             .expect('Location', '/api/pets')
@@ -182,18 +182,18 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Location header to the newly-created resource for a nested router',
-      function(done) {
-        var app = helper.express();
-        var router1 = helper.router();
-        var router2 = helper.router();
+      function (done) {
+        let app = helper.express();
+        let router1 = helper.router();
+        let router2 = helper.router();
         app.use('/nested/path/', router1);
         router1.use('/deeply/nested/path', router2);
         router2.app = app;
 
-        helper.initTest(router2, api, function(supertest) {
+        helper.initTest(router2, api, function (supertest) {
           supertest
             .post('/nested/path/deeply/nested/path/api/pets')
-            .send({Name: 'Fido', Type: 'dog'})
+            .send({ Name: 'Fido', Type: 'dog' })
             .expect('Location', '/nested/path/deeply/nested/path/api/pets/Fido')
             .end(helper.checkResults(done));
         });
@@ -201,21 +201,21 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Location header to the existing resource for a nested router',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           location: {
             type: 'string'
           }
         };
 
-        var app = helper.express();
-        var router1 = helper.router();
-        var router2 = helper.router();
+        let app = helper.express();
+        let router1 = helper.router();
+        let router2 = helper.router();
         app.use('/nested/path/', router1);
         router1.use('/deeply/nested/path', router2);
         router2.app = app;
 
-        helper.initTest(router2, api, function(supertest) {
+        helper.initTest(router2, api, function (supertest) {
           supertest
             .get('/nested/path/deeply/nested/path/api/pets')
             .expect('Location', '/nested/path/deeply/nested/path/api/pets')
@@ -225,13 +225,13 @@ describe('Mock response headers', function() {
     );
 
     it('should not set the Location header if not specified in the Swagger API',
-      function(done) {
+      function (done) {
         delete api.paths['/pets'].post.responses[201].headers;
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .post('/api/pets')
-            .send({Name: 'Fido', Type: 'dog'})
-            .end(helper.checkResults(done, function(res) {
+            .send({ Name: 'Fido', Type: 'dog' })
+            .end(helper.checkResults(done, function (res) {
               expect(res.headers.location).to.be.undefined;
               done();
             }));
@@ -240,10 +240,10 @@ describe('Mock response headers', function() {
     );
   });
 
-  describe('Last-Modified header', function() {
+  describe('Last-Modified header', function () {
     it('should set the Last-Modified header to the current date/time if no data exists',
-      function(done) {
-        var before = new Date(Date.now() - 1000); // one second ago
+      function (done) {
+        let before = new Date(Date.now() - 1000); // one second ago
 
         api.paths['/pets'].get.responses[200].headers = {
           'Last-modified': {
@@ -251,11 +251,11 @@ describe('Mock response headers', function() {
           }
         };
 
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
-            .end(helper.checkResults(done, function(res) {
-              var lastModified = new Date(res.headers['last-modified']);
+            .end(helper.checkResults(done, function (res) {
+              let lastModified = new Date(res.headers['last-modified']);
               expect(lastModified).to.be.afterTime(before);
               expect(lastModified).to.be.beforeTime(new Date());
               done();
@@ -265,7 +265,7 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Last-Modified header to the date/time that the data was created',
-      function(done) {
+      function (done) {
         api.paths['/pets'].post.responses[201].headers = {
           'Last-modified': {
             type: 'string'
@@ -277,21 +277,21 @@ describe('Mock response headers', function() {
           }
         };
 
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .post('/api/pets')
-            .send({Name: 'Fido', Type: 'dog'})
+            .send({ Name: 'Fido', Type: 'dog' })
             .expect(201)
-            .end(helper.checkResults(done, function(res) {
-              var dateCreated = new Date(res.headers['last-modified']);
+            .end(helper.checkResults(done, function (res) {
+              let dateCreated = new Date(res.headers['last-modified']);
 
               // Wait 1 second before re-querying the data,
               // to make sure the Last-Modified header isn't just the current date/time
-              setTimeout(function() {
+              setTimeout(function () {
                 supertest
                   .get('/api/pets')
-                  .end(helper.checkResults(done, function(res) {
-                    var lastModified = new Date(res.headers['last-modified']);
+                  .end(helper.checkResults(done, function (res) {
+                    let lastModified = new Date(res.headers['last-modified']);
                     expect(lastModified).to.equalTime(dateCreated);
                     done();
                   }));
@@ -302,17 +302,17 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Last-Modified header to the date/time that the data was last modified',
-      function(done) {
-        var dataStore = new swagger.MemoryDataStore();
+      function (done) {
+        let dataStore = new swagger.MemoryDataStore();
         api.paths['/pets'].get.responses[200].headers = {
           'Last-modified': {
             type: 'string'
           }
         };
 
-        helper.initTest(dataStore, api, function(supertest) {
-          var resource = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
-          dataStore.save(resource, function(err) {
+        helper.initTest(dataStore, api, function (supertest) {
+          let resource = new swagger.Resource('/api/pets/Fido', { Name: 'Fido', Type: 'dog' });
+          dataStore.save(resource, function (err) {
             if (err) {
               return done(err);
             }
@@ -322,11 +322,11 @@ describe('Mock response headers', function() {
 
             // Wait 1 second before re-querying the data,
             // to make sure the Last-Modified header isn't just the current date/time
-            setTimeout(function() {
+            setTimeout(function () {
               supertest
                 .get('/api/pets')
-                .end(helper.checkResults(done, function(res) {
-                  var lastModified = new Date(res.headers['last-modified']);
+                .end(helper.checkResults(done, function (res) {
+                  let lastModified = new Date(res.headers['last-modified']);
                   expect(lastModified).to.equalTime(resource.modifiedOn);
                   done();
                 }));
@@ -337,11 +337,11 @@ describe('Mock response headers', function() {
     );
 
     it('should not set the Last-Modified header if not specified in the Swagger API',
-      function(done) {
-        helper.initTest(api, function(supertest) {
+      function (done) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
-            .end(helper.checkResults(done, function(res) {
+            .end(helper.checkResults(done, function (res) {
               expect(res.headers['last-modified']).to.be.undefined;
               done();
             }));
@@ -350,18 +350,18 @@ describe('Mock response headers', function() {
     );
   });
 
-  describe('Content-Disposition header', function() {
+  describe('Content-Disposition header', function () {
     it('should set the Content-Disposition header to basename of the Location URL',
-      function(done) {
+      function (done) {
         api.paths['/pets'].post.responses[201].headers = {
           'content-disposition': {
             type: 'string'
           }
         };
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .post('/api/pets')
-            .send({Name: 'Fido', Type: 'dog'})
+            .send({ Name: 'Fido', Type: 'dog' })
             .expect('Content-Disposition', 'attachment; filename="Fido"')
             .end(helper.checkResults(done));
         });
@@ -369,13 +369,13 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Content-Disposition header to basename of the request URL',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           'content-disposition': {
             type: 'string'
           }
         };
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
             .expect('Content-Disposition', 'attachment; filename="pets"')
@@ -385,10 +385,10 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Content-Disposition header to the basename of the request URL for a nested router',
-      function(done) {
-        var app = helper.express();
-        var router1 = helper.router();
-        var router2 = helper.router();
+      function (done) {
+        let app = helper.express();
+        let router1 = helper.router();
+        let router2 = helper.router();
         app.use('/nested/path/', router1);
         router1.use('/deeply/nested/path', router2);
         router2.app = app;
@@ -399,7 +399,7 @@ describe('Mock response headers', function() {
           }
         };
 
-        helper.initTest(router2, api, function(supertest) {
+        helper.initTest(router2, api, function (supertest) {
           supertest
             .get('/nested/path/deeply/nested/path/api/pets')
             .expect('Content-Disposition', 'attachment; filename="pets"')
@@ -409,11 +409,11 @@ describe('Mock response headers', function() {
     );
 
     it('should not set the Content-Disposition header if not specified in the Swagger API',
-      function(done) {
-        helper.initTest(api, function(supertest) {
+      function (done) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
-            .end(helper.checkResults(done, function(res) {
+            .end(helper.checkResults(done, function (res) {
               expect(res.headers['content-disposition']).to.be.undefined;
               done();
             }));
@@ -422,19 +422,19 @@ describe('Mock response headers', function() {
     );
   });
 
-  describe('Set-Cookie header', function() {
+  describe('Set-Cookie header', function () {
     it('should set the Set-Cookie header to a random value',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           'Set-Cookie': {
             type: 'string'
           }
         };
 
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
-            .end(helper.checkResults(done, function(res) {
+            .end(helper.checkResults(done, function (res) {
               expect(res.headers['set-cookie']).to.have.lengthOf(1);
               expect(res.headers['set-cookie'][0]).to.match(/^swagger=random\d+/);
               done();
@@ -444,14 +444,14 @@ describe('Mock response headers', function() {
     );
 
     it('should set the Set-Cookie header to the same value, if it already exists',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           'Set-Cookie': {
             type: 'string'
           }
         };
 
-        helper.initTest(api, function(supertest) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
             .set('Cookie', 'swagger=foo')
@@ -462,20 +462,20 @@ describe('Mock response headers', function() {
     );
 
     it('should not set the Set-Cookie header if already set by other middleware',
-      function(done) {
+      function (done) {
         api.paths['/pets'].get.responses[200].headers = {
           'Set-Cookie': {
             type: 'string'
           }
         };
 
-        var express = helper.express();
-        express.use(function(req, res, next) {
+        let express = helper.express();
+        express.use(function (req, res, next) {
           res.cookie('myCookie', 'some value');
           next();
         });
 
-        helper.initTest(express, api, function(supertest) {
+        helper.initTest(express, api, function (supertest) {
           supertest
             .get('/api/pets')
             .expect('Set-Cookie', 'myCookie=some%20value; Path=/')
@@ -485,11 +485,11 @@ describe('Mock response headers', function() {
     );
 
     it('should not set the Set-Cookie header if not specified in the Swagger API',
-      function(done) {
-        helper.initTest(api, function(supertest) {
+      function (done) {
+        helper.initTest(api, function (supertest) {
           supertest
             .get('/api/pets')
-            .end(function(err, res) {
+            .end(function (err, res) {
               expect(res.headers['set-cookie']).to.be.undefined;
               done(err);
             });

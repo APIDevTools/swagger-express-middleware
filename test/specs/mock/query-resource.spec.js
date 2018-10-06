@@ -1,24 +1,24 @@
-var swagger   = require('../../../'),
-    util      = require('../../../lib/helpers/util'),
-    expect    = require('chai').expect,
-    _         = require('lodash'),
-    files     = require('../../fixtures/files'),
-    helper    = require('./helper'),
+let swagger = require('../../../'),
+    util = require('../../../lib/helpers/util'),
+    expect = require('chai').expect,
+    _ = require('lodash'),
+    files = require('../../fixtures/files'),
+    helper = require('./helper'),
     isWindows = /^win/.test(process.platform);
 
-describe('Query Resource Mock', function() {
-  ['head', 'options', 'get'].forEach(function(method) {
-    describe(method.toUpperCase(), function() {
+describe('Query Resource Mock', function () {
+  ['head', 'options', 'get'].forEach(function (method) {
+    describe(method.toUpperCase(), function () {
       'use strict';
 
-      var api, noBody, noHeaders;
-      beforeEach(function() {
+      let api, noBody, noHeaders;
+      beforeEach(function () {
         api = _.cloneDeep(files.parsed.petStore);
         noBody = method === 'head' || method === 'options';
         noHeaders = method === 'options';
 
         // Change the HTTP method of GET /pets/{PetName}
-        var operation = api.paths['/pets/{PetName}'].get;
+        let operation = api.paths['/pets/{PetName}'].get;
         delete api.paths['/pets/{PetName}'].get;
         api.paths['/pets/{PetName}'][method] = operation;
 
@@ -29,17 +29,17 @@ describe('Query Resource Mock', function() {
       });
 
       it('should return only the requested resource',
-        function(done) {
-          var dataStore = new swagger.MemoryDataStore();
-          var res1 = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
-          var res2 = new swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-          var res3 = new swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'});
+        function (done) {
+          let dataStore = new swagger.MemoryDataStore();
+          let res1 = new swagger.Resource('/api/pets/Fido', { Name: 'Fido', Type: 'dog' });
+          let res2 = new swagger.Resource('/api/pets/Fluffy', { Name: 'Fluffy', Type: 'cat' });
+          let res3 = new swagger.Resource('/api/pets/Polly', { Name: 'Polly', Type: 'bird' });
 
-          dataStore.save(res1, res2, res3, function() {
-            helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fluffy');
+          dataStore.save(res1, res2, res3, function () {
+            helper.initTest(dataStore, api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fluffy');
               noHeaders || request.expect('Content-Length', 30);
-              request.expect(200, noBody ? '' : {Name: 'Fluffy', Type: 'cat'});
+              request.expect(200, noBody ? '' : { Name: 'Fluffy', Type: 'cat' });
               request.end(helper.checkResults(done));
             });
           });
@@ -47,28 +47,28 @@ describe('Query Resource Mock', function() {
       );
 
       it('should return a wrapped resource',
-        function(done) {
+        function (done) {
           // Wrap the "pet" definition in an envelope object
           api.paths['/pets/{PetName}'][method].responses[200].schema = {
             type: 'object',
             properties: {
-              code: {type: 'integer', default: 42},
-              message: {type: 'string', default: 'hello world'},
-              error: {type: 'object'},
+              code: { type: 'integer', default: 42 },
+              message: { type: 'string', default: 'hello world' },
+              error: { type: 'object' },
               result: _.cloneDeep(api.definitions.pet)
             }
           };
 
-          var dataStore = new swagger.MemoryDataStore();
-          var res1 = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
-          var res2 = new swagger.Resource('/api/pets/Fluffy', {Name: 'Fluffy', Type: 'cat'});
-          var res3 = new swagger.Resource('/api/pets/Polly', {Name: 'Polly', Type: 'bird'});
+          let dataStore = new swagger.MemoryDataStore();
+          let res1 = new swagger.Resource('/api/pets/Fido', { Name: 'Fido', Type: 'dog' });
+          let res2 = new swagger.Resource('/api/pets/Fluffy', { Name: 'Fluffy', Type: 'cat' });
+          let res3 = new swagger.Resource('/api/pets/Polly', { Name: 'Polly', Type: 'bird' });
 
-          dataStore.save(res1, res2, res3, function() {
-            helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fluffy');
+          dataStore.save(res1, res2, res3, function () {
+            helper.initTest(dataStore, api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fluffy');
               noHeaders || request.expect('Content-Length', 75);
-              request.expect(200, noBody ? '' : {code: 42, message: 'hello world', result: {Name: 'Fluffy', Type: 'cat'}});
+              request.expect(200, noBody ? '' : { code: 42, message: 'hello world', result: { Name: 'Fluffy', Type: 'cat' }});
               request.end(helper.checkResults(done));
             });
           });
@@ -76,16 +76,16 @@ describe('Query Resource Mock', function() {
       );
 
       it('should not return anything if no response schema is specified in the Swagger API',
-        function(done) {
+        function (done) {
           delete api.paths['/pets/{PetName}'][method].responses[200].schema;
-          var dataStore = new swagger.MemoryDataStore();
-          var resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
-          dataStore.save(resource, function() {
-            helper.initTest(dataStore, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+          let dataStore = new swagger.MemoryDataStore();
+          let resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
+          dataStore.save(resource, function () {
+            helper.initTest(dataStore, api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fido');
               request.expect(200, '');
-              request.end(helper.checkResults(done, function(res) {
-                expect(res.headers['content-length']).to.satisfy(function(contentLength) {
+              request.end(helper.checkResults(done, function (res) {
+                expect(res.headers['content-length']).to.satisfy(function (contentLength) {
                   // This is the difference between returning an empty array vs. nothing at all
                   return contentLength === undefined || contentLength === '0';
                 });
@@ -97,17 +97,17 @@ describe('Query Resource Mock', function() {
       );
 
       it('should return `res.body` if already set by other middleware',
-        function(done) {
-          var dataStore = new swagger.MemoryDataStore();
-          var resource = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
-          dataStore.save(resource, function() {
-            function messWithTheBody(req, res, next) {
+        function (done) {
+          let dataStore = new swagger.MemoryDataStore();
+          let resource = new swagger.Resource('/api/pets/Fido', { Name: 'Fido', Type: 'dog' });
+          dataStore.save(resource, function () {
+            function messWithTheBody (req, res, next) {
               res.body = ['Not', 'the', 'response', 'you', 'expected'];
               next();
             }
 
-            helper.initTest(dataStore, messWithTheBody, api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+            helper.initTest(dataStore, messWithTheBody, api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fido');
               noHeaders || request.expect('Content-Length', 41);
               request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
               request.end(helper.checkResults(done));
@@ -117,17 +117,17 @@ describe('Query Resource Mock', function() {
       );
 
       it('should return `res.body` instead of a 404',
-        function(done) {
-          api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
-          api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
+        function (done) {
+          api.paths['/pets/{PetName}'][method].responses[200].schema.default = { default: 'The default value' };
+          api.paths['/pets/{PetName}'][method].responses[200].schema.example = { example: 'The example value' };
 
-          function messWithTheBody(req, res, next) {
+          function messWithTheBody (req, res, next) {
             res.body = ['Not', 'the', 'response', 'you', 'expected'];
             next();
           }
 
-          helper.initTest(messWithTheBody, api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+          helper.initTest(messWithTheBody, api, function (supertest) {
+            let request = supertest[method]('/api/pets/Fido');
             noHeaders || request.expect('Content-Length', 41);
             request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
             request.end(helper.checkResults(done));
@@ -136,45 +136,45 @@ describe('Query Resource Mock', function() {
       );
 
       it('should return the default value instead of a 404',
-        function(done) {
-          api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
-          api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
+        function (done) {
+          api.paths['/pets/{PetName}'][method].responses[200].schema.default = { default: 'The default value' };
+          api.paths['/pets/{PetName}'][method].responses[200].schema.example = { example: 'The example value' };
 
-          helper.initTest(api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+          helper.initTest(api, function (supertest) {
+            let request = supertest[method]('/api/pets/Fido');
             noHeaders || request.expect('Content-Length', 31);
-            request.expect(200, noBody ? '' : {default: 'The default value'});
+            request.expect(200, noBody ? '' : { default: 'The default value' });
             request.end(helper.checkResults(done));
           });
         }
       );
 
       it('should return the example value instead of a 404',
-        function(done) {
-          api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
+        function (done) {
+          api.paths['/pets/{PetName}'][method].responses[200].schema.example = { example: 'The example value' };
 
-          helper.initTest(api, function(supertest) {
-            var request = supertest[method]('/api/pets/Fido');
+          helper.initTest(api, function (supertest) {
+            let request = supertest[method]('/api/pets/Fido');
             noHeaders || request.expect('Content-Length', 31);
-            request.expect(200, noBody ? '' : {example: 'The example value'});
+            request.expect(200, noBody ? '' : { example: 'The example value' });
             request.end(helper.checkResults(done));
           });
         }
       );
 
       it('should set the Last-Modified date to the ModifiedOn date of the resource',
-        function(done) {
+        function (done) {
           api.paths['/pets/{PetName}'][method].responses[200].headers = {
-            'Last-Modified': {type: 'string'}
+            'Last-Modified': { type: 'string' }
           };
 
-          var dataStore = new swagger.MemoryDataStore();
-          var resource = new swagger.Resource('/api/pets/Fido', 'I am fido');
-          dataStore.save(resource, function() {
-            helper.initTest(dataStore, api, function(supertest) {
+          let dataStore = new swagger.MemoryDataStore();
+          let resource = new swagger.Resource('/api/pets/Fido', 'I am fido');
+          dataStore.save(resource, function () {
+            helper.initTest(dataStore, api, function (supertest) {
               // Wait 1 second, since the "Last-Modified" header is only precise to the second
-              setTimeout(function() {
-                var request = supertest[method]('/api/pets/Fido');
+              setTimeout(function () {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Length', 11);
                 noHeaders || request.expect('Last-Modified', util.rfc1123(resource.modifiedOn));
                 request.end(helper.checkResults(done));
@@ -186,11 +186,11 @@ describe('Query Resource Mock', function() {
 
       if (method !== 'options') {
         it('should throw a 404 if the resource does not exist',
-          function(done) {
-            helper.initTest(api, function(supertest) {
-              var request = supertest[method]('/api/pets/Fido');
+          function (done) {
+            helper.initTest(api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fido');
               request.expect(404);
-              request.end(function(err, res) {
+              request.end(function (err, res) {
                 if (err) {
                   return done(err);
                 }
@@ -204,48 +204,48 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a 500 error if a DataStore error occurs',
-          function(done) {
-            var dataStore = new swagger.MemoryDataStore();
-            dataStore.__openDataStore = function(collection, callback) {
+          function (done) {
+            let dataStore = new swagger.MemoryDataStore();
+            dataStore.__openDataStore = function (collection, callback) {
               setImmediate(callback, new Error('Test Error'));
             };
 
-            helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
-                request.expect(500);
-                request.end(function(err, res) {
-                  if (err) {
-                    return done(err);
-                  }
+            helper.initTest(dataStore, api, function (supertest) {
+              let request = supertest[method]('/api/pets/Fido');
+              request.expect(500);
+              request.end(function (err, res) {
+                if (err) {
+                  return done(err);
+                }
 
-                  // The content-length will vary slightly, depending on the stack trace
-                  expect(res.headers['content-length']).to.match(/^\d{4,5}$/);
+                // The content-length will vary slightly, depending on the stack trace
+                expect(res.headers['content-length']).to.match(/^\d{4,5}$/);
 
-                  if (!noBody) {
-                    expect(res.text).to.contain('Error: Test Error');
-                  }
-                  done();
-                });
-              }
+                if (!noBody) {
+                  expect(res.text).to.contain('Error: Test Error');
+                }
+                done();
+              });
+            }
             );
           }
         );
       }
 
-      describe('different data types', function() {
+      describe('different data types', function () {
         it('should return an object',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', {Name: 'Fido', Type: 'dog'});
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', { Name: 'Fido', Type: 'dog' });
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 28);
-                request.expect(200, noBody ? '' : {Name: 'Fido', Type: 'dog'});
+                request.expect(200, noBody ? '' : { Name: 'Fido', Type: 'dog' });
                 request.end(helper.checkResults(done));
               });
             });
@@ -253,15 +253,15 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a string',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', 'I am Fido');
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 9);
                 request.expect(200, noBody ? '' : 'I am Fido');
@@ -272,15 +272,15 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return an empty string response',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', '');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', '');
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', '0');
                 request.expect(200, '');
@@ -291,15 +291,15 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a number',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'number';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', 42.999);
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', 42.999);
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 6);
                 request.expect(200, noBody ? '' : '42.999');
@@ -310,16 +310,16 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a date',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
             api.paths['/pets/{PetName}'][method].responses[200].schema.format = 'date-time';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 24);
                 request.expect(200, noBody ? '' : '2000-02-02T03:04:05.006Z');
@@ -330,15 +330,15 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a Buffer (as a string)',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'string';
             api.paths['/pets/{PetName}'][method].produces = ['text/plain'];
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 11);
                 request.expect(200, noBody ? '' : 'hello world');
@@ -349,14 +349,14 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a Buffer (as JSON)',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', new Buffer('hello world'));
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 69);
                 request.expect(200, noBody ? '' : {
@@ -370,18 +370,18 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return an undefined value',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido');
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 request.expect(200, '');
-                request.end(helper.checkResults(done, function(res) {
-                  expect(res.headers['content-length']).to.satisfy(function(contentLength) {
+                request.end(helper.checkResults(done, function (res) {
+                  expect(res.headers['content-length']).to.satisfy(function (contentLength) {
                     // This is the difference between returning an empty array vs. nothing at all
                     return contentLength === undefined || contentLength === '0';
                   });
@@ -393,19 +393,19 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return the default value instead of undefined',
-          function(done) {
-            api.paths['/pets/{PetName}'][method].responses[200].schema.default = {default: 'The default value'};
-            api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
+          function (done) {
+            api.paths['/pets/{PetName}'][method].responses[200].schema.default = { default: 'The default value' };
+            api.paths['/pets/{PetName}'][method].responses[200].schema.example = { example: 'The example value' };
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido');
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 31);
-                request.expect(200, noBody ? '' : {default: 'The default value'});
+                request.expect(200, noBody ? '' : { default: 'The default value' });
                 request.end(helper.checkResults(done));
               });
             });
@@ -413,18 +413,18 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return the example value instead of undefined',
-          function(done) {
-            api.paths['/pets/{PetName}'][method].responses[200].schema.example = {example: 'The example value'};
+          function (done) {
+            api.paths['/pets/{PetName}'][method].responses[200].schema.example = { example: 'The example value' };
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido');
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido');
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 31);
-                request.expect(200, noBody ? '' : {example: 'The example value'});
+                request.expect(200, noBody ? '' : { example: 'The example value' });
                 request.end(helper.checkResults(done));
               });
             });
@@ -432,14 +432,14 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a null value',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}'][method].responses[200].schema.type = 'object';
 
-            var dataStore = new swagger.MemoryDataStore();
-            var resource = new swagger.Resource('/api/pets/Fido', null);
-            dataStore.save(resource, function() {
-              helper.initTest(dataStore, api, function(supertest) {
-                var request = supertest[method]('/api/pets/Fido');
+            let dataStore = new swagger.MemoryDataStore();
+            let resource = new swagger.Resource('/api/pets/Fido', null);
+            dataStore.save(resource, function () {
+              helper.initTest(dataStore, api, function (supertest) {
+                let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                 noHeaders || request.expect('Content-Length', 4);
                 request.expect(200, noBody ? '' : 'null');
@@ -450,22 +450,22 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return multipart/form-data',
-          function(done) {
+          function (done) {
             // Set the response schemas to return the full multipart/form-data object
-            api.paths['/pets/{PetName}/photos'].post.responses[201].schema = {type: 'object'};
+            api.paths['/pets/{PetName}/photos'].post.responses[201].schema = { type: 'object' };
             api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].schema.type = 'object';
-            helper.initTest(api, function(supertest) {
+            helper.initTest(api, function (supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.oneMB)
-                .end(helper.checkResults(done, function(res1) {
-                  var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+                .end(helper.checkResults(done, function (res1) {
+                  let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                  var request = supertest[method]('/api/pets/Fido/photos/' + photoID);
+                  let request = supertest[method]('/api/pets/Fido/photos/' + photoID);
                   noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                  request.end(helper.checkResults(done, function(res2) {
+                  request.end(helper.checkResults(done, function (res2) {
                     if (noBody) {
                       expect(res2.body).to.be.empty;
                       expect(res2.text).to.be.empty;
@@ -497,18 +497,18 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a file',
-          function(done) {
-            helper.initTest(api, function(supertest) {
+          function (done) {
+            helper.initTest(api, function (supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.PDF)
-                .end(helper.checkResults(done, function(res1) {
-                  var request = supertest[method](res1.headers.location);
+                .end(helper.checkResults(done, function (res1) {
+                  let request = supertest[method](res1.headers.location);
                   noHeaders || request.expect('Content-Length', 263287);
                   noHeaders || request.expect('Content-Type', 'application/pdf');
-                  request.end(helper.checkResults(done, function(res2) {
+                  request.end(helper.checkResults(done, function (res2) {
                     // It should NOT be an attachment
                     expect(res2.headers['content-disposition']).to.be.undefined;
 
@@ -528,30 +528,30 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a file attachment (using the basename of the URL)',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
               'content-disposition': {
                 type: 'string'
               }
             };
 
-            helper.initTest(api, function(supertest) {
+            helper.initTest(api, function (supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.text)
-                .end(helper.checkResults(done, function(res1) {
-                  var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+                .end(helper.checkResults(done, function (res1) {
+                  let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                  var request = supertest[method](res1.headers.location);
+                  let request = supertest[method](res1.headers.location);
                   noHeaders || request.expect('Content-Length', /^(95|87)$/);      // CRLF vs LF
                   noHeaders || request.expect('Content-Type', 'text/plain; charset=UTF-8');
 
                   // The filename is set to the basename of the URL by default
                   noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
 
-                  request.end(helper.checkResults(done, function(res2) {
+                  request.end(helper.checkResults(done, function (res2) {
                     if (noBody) {
                       expect(res2.body).to.be.empty;
                       expect(res2.text).to.be.empty;
@@ -568,7 +568,7 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a file attachment (using the default filename in the Swagger API)',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
               'content-disposition': {
                 type: 'string',
@@ -576,21 +576,21 @@ describe('Query Resource Mock', function() {
               }
             };
 
-            helper.initTest(api, function(supertest) {
+            helper.initTest(api, function (supertest) {
               supertest
                 .post('/api/pets/Fido/photos')
                 .field('Label', 'Photo 1')
                 .field('Description', 'A photo of Fido')
                 .attach('Photo', files.paths.PDF)
-                .end(helper.checkResults(done, function(res1) {
-                  var request = supertest[method](res1.headers.location);
+                .end(helper.checkResults(done, function (res1) {
+                  let request = supertest[method](res1.headers.location);
                   noHeaders || request.expect('Content-Length', 263287);
                   noHeaders || request.expect('Content-Type', 'application/pdf');
 
                   // The filename comes from the Swagger API
                   noHeaders || request.expect('Content-Disposition', 'attachment; filename="MyCustomFileName.xyz"');
 
-                  request.end(helper.checkResults(done, function(res2) {
+                  request.end(helper.checkResults(done, function (res2) {
                     if (noBody) {
                       expect(res2.body).to.be.empty;
                       expect(res2.text).to.be.empty;
@@ -607,7 +607,7 @@ describe('Query Resource Mock', function() {
         );
 
         it('should return a file attachment (using the basename of the URL when there\'s no default filename in the Swagger API)',
-          function(done) {
+          function (done) {
             api.paths['/pets/{PetName}/photos/{ID}'][method].responses[200].headers = {
               'content-disposition': {
                 type: 'string',
@@ -615,41 +615,41 @@ describe('Query Resource Mock', function() {
               }
             };
 
-            helper.initTest(api, function(supertest) {
-                supertest
-                  .post('/api/pets/Fido/photos')
-                  .field('Label', 'Photo 1')
-                  .field('Description', 'A photo of Fido')
-                  .attach('Photo', files.paths.oneMB)
-                  .end(helper.checkResults(done, function(res1) {
-                    var photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
+            helper.initTest(api, function (supertest) {
+              supertest
+                .post('/api/pets/Fido/photos')
+                .field('Label', 'Photo 1')
+                .field('Description', 'A photo of Fido')
+                .attach('Photo', files.paths.oneMB)
+                .end(helper.checkResults(done, function (res1) {
+                  let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
-                    var request = supertest[method](res1.headers.location);
-                    noHeaders || request.expect('Content-Length', 683709);
-                    noHeaders || request.expect('Content-Type', 'image/jpeg');
+                  let request = supertest[method](res1.headers.location);
+                  noHeaders || request.expect('Content-Length', 683709);
+                  noHeaders || request.expect('Content-Type', 'image/jpeg');
 
-                    // The filename is the basename of the URL, since it wasn't specified in the Swagger API
-                    noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
+                  // The filename is the basename of the URL, since it wasn't specified in the Swagger API
+                  noHeaders || request.expect('Content-Disposition', 'attachment; filename="' + photoID + '"');
 
-                    request.end(helper.checkResults(done, function(res2) {
-                      if (noBody) {
-                        expect(res2.text || '').to.be.empty;
+                  request.end(helper.checkResults(done, function (res2) {
+                    if (noBody) {
+                      expect(res2.text || '').to.be.empty;
 
-                        if (method === 'options') {
-                          expect(res2.body).to.be.empty;
-                        }
-                        else {
-                          expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
-                        }
+                      if (method === 'options') {
+                        expect(res2.body).to.be.empty;
                       }
                       else {
-                        expect(res2.body).to.be.an.instanceOf(Buffer);
-                        expect(res2.body.length).to.equal(683709);
+                        expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);
                       }
-                      done();
-                    }));
+                    }
+                    else {
+                      expect(res2.body).to.be.an.instanceOf(Buffer);
+                      expect(res2.body.length).to.equal(683709);
+                    }
+                    done();
                   }));
-              }
+                }));
+            }
             );
           });
       });

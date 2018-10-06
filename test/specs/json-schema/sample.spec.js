@@ -1,26 +1,26 @@
-var swagger    = require('../../../'),
-    expect     = require('chai').expect,
-    _          = require('lodash'),
-    files      = require('../../fixtures/files'),
-    helper     = require('../../fixtures/helper'),
+let swagger = require('../../../'),
+    expect = require('chai').expect,
+    _ = require('lodash'),
+    files = require('../../fixtures/files'),
+    helper = require('../../fixtures/helper'),
     JsonSchema = require('../../../lib/helpers/json-schema'),
     iterations = 100;
 
 // Some older versions of Node don't define these constants
-var MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;
-var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
-var MIN_VALUE = Number.MIN_VALUE || 5e-324;
-var MAX_VALUE = Number.MAX_VALUE || 1.7976931348623157e+308;
-var EPSILON = 2.220446049250313e-16;
+let MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;
+let MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
+let MIN_VALUE = Number.MIN_VALUE || 5e-324;
+let MAX_VALUE = Number.MAX_VALUE || 1.7976931348623157e+308;
+let EPSILON = 2.220446049250313e-16;
 
-describe('JSON Schema sample data', function() {
+describe('JSON Schema sample data', function () {
   'use strict';
 
-  describe('sampleNumber', function() {
+  describe('sampleNumber', function () {
     it('should generate a valid number',
-      function() {
-        var schema = new JsonSchema({type: 'number'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'number' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite);
@@ -29,9 +29,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid float',
-      function() {
-        var schema = new JsonSchema({type: 'number', format: 'float'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'number', format: 'float' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -42,9 +42,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid double',
-      function() {
-        var schema = new JsonSchema({type: 'number', format: 'double'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'number', format: 'double' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -55,9 +55,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number within min/max',
-      function() {
-        var schema = new JsonSchema({type: 'number', minimum: 1, maximum: 1.01});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'number', minimum: 1, maximum: 1.01 });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -68,9 +68,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number within exclusive min/max',
-      function() {
-        var schema = new JsonSchema({type: 'number', minimum: 1, maximum: 1.01, exclusiveMinimum: true, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'number', minimum: 1, maximum: 1.01, exclusiveMinimum: true, exclusiveMaximum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -81,15 +81,15 @@ describe('JSON Schema sample data', function() {
     );
   });
 
-  describe('sampleInteger', function() {
-    function isWholeNumber(num) {
+  describe('sampleInteger', function () {
+    function isWholeNumber (num) {
       return parseInt(num) === num;
     }
 
     it('should generate a valid number',
-      function() {
-        var schema = new JsonSchema({type: 'integer'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'integer' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -99,9 +99,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid byte',
-      function() {
-        var schema = new JsonSchema({type: 'string', format: 'byte'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', format: 'byte' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -113,9 +113,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid int32',
-      function() {
-        var schema = new JsonSchema({type: 'integer', format: 'int32'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'integer', format: 'int32' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -127,9 +127,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid int64',
-      function() {
-        var schema = new JsonSchema({type: 'integer', format: 'int64'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'integer', format: 'int64' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -141,10 +141,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number above minimum',
-      function() {
-        var min = MAX_SAFE_INTEGER - 10;
-        var schema = new JsonSchema({type: 'integer', minimum: min});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let min = MAX_SAFE_INTEGER - 10;
+        let schema = new JsonSchema({ type: 'integer', minimum: min });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -156,10 +156,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number above exclusive minimum',
-      function() {
-        var min = MAX_SAFE_INTEGER - 10;
-        var schema = new JsonSchema({type: 'integer', minimum: min, exclusiveMinimum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let min = MAX_SAFE_INTEGER - 10;
+        let schema = new JsonSchema({ type: 'integer', minimum: min, exclusiveMinimum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -171,10 +171,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number below maximum',
-      function() {
-        var max = MIN_SAFE_INTEGER + 10;
-        var schema = new JsonSchema({type: 'integer', maximum: max});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let max = MIN_SAFE_INTEGER + 10;
+        let schema = new JsonSchema({ type: 'integer', maximum: max });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -186,10 +186,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number below exclusive maximum',
-      function() {
-        var max = MIN_SAFE_INTEGER + 10;
-        var schema = new JsonSchema({type: 'integer', maximum: max, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let max = MIN_SAFE_INTEGER + 10;
+        let schema = new JsonSchema({ type: 'integer', maximum: max, exclusiveMaximum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -201,9 +201,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number within min/max',
-      function() {
-        var schema = new JsonSchema({type: 'integer', minimum: 1, maximum: 10});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'integer', minimum: 1, maximum: 10 });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -215,9 +215,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid number within exclusive min/max',
-      function() {
-        var schema = new JsonSchema({type: 'integer', minimum: 1, maximum: 10, exclusiveMinimum: true, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'integer', minimum: 1, maximum: 10, exclusiveMinimum: true, exclusiveMaximum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('number')
             .and.satisfy(Number.isFinite)
@@ -229,34 +229,34 @@ describe('JSON Schema sample data', function() {
     );
   });
 
-  describe('sampleBoolean', function() {
+  describe('sampleBoolean', function () {
     it('should generate a valid boolean',
-      function() {
-        var schema = new JsonSchema({type: 'boolean'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'boolean' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample()).to.be.a('boolean');
         }
       }
     );
   });
 
-  describe('sampleDate', function() {
+  describe('sampleDate', function () {
     it('should generate a valid date-time',
-      function() {
-        var schema = new JsonSchema({type: 'string', format: 'date-time'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', format: 'date-time' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample()).to.be.an.instanceOf(Date);
         }
       }
     );
 
     it('should generate a valid date',
-      function() {
-        var schema = new JsonSchema({type: 'string', format: 'date'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', format: 'date' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.an.instanceOf(Date)
-            .and.satisfy(function(date) {
+            .and.satisfy(function (date) {
               return date.getUTCHours() === 0 &&
                 date.getUTCMinutes() === 0 &&
                 date.getUTCSeconds() === 0 &&
@@ -267,12 +267,12 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date above minimum',
-      function() {
-        var min = new Date();
+      function () {
+        let min = new Date();
         min.setUTCMilliseconds(0);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', minimum: min });
+        for (let i = 0; i < iterations; i++) {
+          let date = schema.sample();
           expect(date).to.be.an.instanceOf(Date);
           expect(date.valueOf()).to.be.at.least(min.valueOf());
         }
@@ -280,11 +280,11 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date above exclusive minimum',
-      function() {
-        var min = new Date();
+      function () {
+        let min = new Date();
         min.setUTCMilliseconds(0);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, exclusiveMinimum: true});
-        for (var i = 0; i < iterations; i++) {
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', minimum: min, exclusiveMinimum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.an.instanceOf(Date)
             .and.afterTime(min);
@@ -293,11 +293,11 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date below maximum',
-      function() {
-        var max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
-        var schema = new JsonSchema({type: 'string', format: 'date-time', maximum: max});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
+      function () {
+        let max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', maximum: max });
+        for (let i = 0; i < iterations; i++) {
+          let date = schema.sample();
           expect(date).to.be.an.instanceOf(Date);
           expect(date.valueOf()).to.be.at.most(max.valueOf());
         }
@@ -305,10 +305,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date below exclusive maximum',
-      function() {
-        var max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
-        var schema = new JsonSchema({type: 'string', format: 'date-time', maximum: max, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let max = new Date(Date.UTC(1970, 0, 1, 0, 0, 0, 10));
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', maximum: max, exclusiveMaximum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.an.instanceOf(Date)
             .and.beforeTime(max);
@@ -317,12 +317,12 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date within min/max',
-      function() {
-        var min = new Date(2008, 5, 27, 15, 32, 17, 100);
-        var max = new Date(2008, 5, 27, 15, 32, 17, 200);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, maximum: max});
-        for (var i = 0; i < iterations; i++) {
-          var date = schema.sample();
+      function () {
+        let min = new Date(2008, 5, 27, 15, 32, 17, 100);
+        let max = new Date(2008, 5, 27, 15, 32, 17, 200);
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', minimum: min, maximum: max });
+        for (let i = 0; i < iterations; i++) {
+          let date = schema.sample();
           expect(date).to.be.an.instanceOf(Date);
           expect(date.valueOf()).to.be.at.least(min.valueOf());
           expect(date.valueOf()).to.be.at.most(max.valueOf());
@@ -331,11 +331,11 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid date within exclusive min/max',
-      function() {
-        var min = new Date(2008, 5, 27, 15, 32, 17, 100);
-        var max = new Date(2008, 5, 27, 15, 32, 17, 200);
-        var schema = new JsonSchema({type: 'string', format: 'date-time', minimum: min, maximum: max, exclusiveMinimum: true, exclusiveMaximum: true});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let min = new Date(2008, 5, 27, 15, 32, 17, 100);
+        let max = new Date(2008, 5, 27, 15, 32, 17, 200);
+        let schema = new JsonSchema({ type: 'string', format: 'date-time', minimum: min, maximum: max, exclusiveMinimum: true, exclusiveMaximum: true });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.an.instanceOf(Date)
             .and.afterTime(min)
@@ -345,20 +345,20 @@ describe('JSON Schema sample data', function() {
     );
   });
 
-  describe('sampleString', function() {
+  describe('sampleString', function () {
     it('should generate a valid string',
-      function() {
-        var schema = new JsonSchema({type: 'string'});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string' });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample()).to.be.a('string');
         }
       }
     );
 
     it('should generate a valid string of minLength',
-      function() {
-        var schema = new JsonSchema({type: 'string', minLength: 25});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', minLength: 25 });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('string')
             .with.length.at.least(25);
@@ -367,9 +367,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid string of maxLength',
-      function() {
-        var schema = new JsonSchema({type: 'string', maxLength: 25});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', maxLength: 25 });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('string')
             .with.length.at.most(25);
@@ -378,9 +378,9 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate a valid string between minLength and maxLength',
-      function() {
-        var schema = new JsonSchema({type: 'string', minLength: 500, maxLength: 510});
-        for (var i = 0; i < iterations; i++) {
+      function () {
+        let schema = new JsonSchema({ type: 'string', minLength: 500, maxLength: 510 });
+        for (let i = 0; i < iterations; i++) {
           expect(schema.sample())
             .to.be.a('string')
             .with.length.at.least(500)
@@ -390,10 +390,10 @@ describe('JSON Schema sample data', function() {
     );
   });
 
-  describe('sampleArray', function() {
+  describe('sampleArray', function () {
     it('should generate a valid array',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           type: 'array',
           items: {
             type: 'integer',
@@ -401,10 +401,10 @@ describe('JSON Schema sample data', function() {
             maximum: 10
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array');
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.a('number').at.least(1).and.at.most(10);
           });
         }
@@ -412,10 +412,10 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an array of minItems',
-      function() {
-        var min = new Date(1995, 6, 18, 12, 30, 45, 0);
-        var max = new Date(1995, 6, 18, 12, 30, 45, 10);
-        var schema = new JsonSchema({
+      function () {
+        let min = new Date(1995, 6, 18, 12, 30, 45, 0);
+        let max = new Date(1995, 6, 18, 12, 30, 45, 10);
+        let schema = new JsonSchema({
           type: 'array',
           minItems: 25,
           items: {
@@ -427,10 +427,10 @@ describe('JSON Schema sample data', function() {
             exclusiveMaximum: true
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array').with.length.at.least(25);
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.an.instanceOf(Date).afterTime(min).beforeTime(max);
           });
         }
@@ -438,8 +438,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an array of maxItems',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           type: 'array',
           maxItems: 25,
           items: {
@@ -448,10 +448,10 @@ describe('JSON Schema sample data', function() {
             maxLength: 15
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array').with.length.at.most(25);
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.a('string').with.length.at.least(10).and.at.most(15);
           });
         }
@@ -459,8 +459,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an array between minItems and maxItems',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           type: 'array',
           minItems: 5,
           maxItems: 10,
@@ -471,10 +471,10 @@ describe('JSON Schema sample data', function() {
             maximum: 25
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array').with.length.at.least(5).and.at.most(10);
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.a('number').at.least(10).and.at.most(25);
           });
         }
@@ -482,8 +482,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an array of arrays',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           type: 'array',
           minItems: 5,
           maxItems: 10,
@@ -496,10 +496,10 @@ describe('JSON Schema sample data', function() {
             }
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array').with.length.at.least(5).and.at.most(10);
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.an('array').with.length.at.least(1).and.at.most(3);
           });
         }
@@ -507,8 +507,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an array of objects',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           type: 'array',
           items: {
             properties: {
@@ -521,10 +521,10 @@ describe('JSON Schema sample data', function() {
             }
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var array = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let array = schema.sample();
           expect(array).to.be.an('array');
-          array.forEach(function(item) {
+          array.forEach(function (item) {
             expect(item).to.be.an('object');
             expect(item).to.have.property('name').that.is.a('string');
             expect(item).to.have.property('age').that.is.a('number');
@@ -534,10 +534,10 @@ describe('JSON Schema sample data', function() {
     );
   });
 
-  describe('sampleObject', function() {
+  describe('sampleObject', function () {
     it('should generate a valid object',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           properties: {
             name: {
               type: 'string',
@@ -556,8 +556,8 @@ describe('JSON Schema sample data', function() {
             }
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var obj = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let obj = schema.sample();
           expect(obj).to.be.an('object');
           expect(obj.name).to.be.a('string').with.length.at.least(5).and.at.most(10);
           expect(obj.age).to.be.a('number').at.least(1).and.at.most(20);
@@ -567,8 +567,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate nested objects',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           properties: {
             nested: {
               properties: {
@@ -579,8 +579,8 @@ describe('JSON Schema sample data', function() {
             }
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var obj = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let obj = schema.sample();
           expect(obj).to.be.an('object');
           expect(obj.nested).to.be.an('object').with.property('name').that.is.a('string');
         }
@@ -588,8 +588,8 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate deeply nested objects',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           properties: {
             names: {
               type: 'array',
@@ -606,11 +606,11 @@ describe('JSON Schema sample data', function() {
             }
           }
         });
-        for (var i = 0; i < iterations; i++) {
-          var obj = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let obj = schema.sample();
           expect(obj).to.be.an('object');
           expect(obj.names).to.be.an('array');
-          obj.names.forEach(function(name) {
+          obj.names.forEach(function (name) {
             expect(name).to.be.an('object');
             expect(name.first).to.be.a('string');
             expect(name.last).to.be.a('string');
@@ -620,12 +620,12 @@ describe('JSON Schema sample data', function() {
     );
 
     it('should generate an empty object',
-      function() {
-        var schema = new JsonSchema({
+      function () {
+        let schema = new JsonSchema({
           properties: {}
         });
-        for (var i = 0; i < iterations; i++) {
-          var obj = schema.sample();
+        for (let i = 0; i < iterations; i++) {
+          let obj = schema.sample();
           expect(obj).to.be.an('object');
           expect(obj).to.be.empty;
         }

@@ -1,23 +1,23 @@
-var swagger         = require('../../../'),
-    expect          = require('chai').expect,
-    _               = require('lodash'),
-    files           = require('../../fixtures/files'),
-    helper          = require('../../fixtures/helper'),
-    Resource        = swagger.Resource,
-    DataStore       = swagger.DataStore,
+let swagger = require('../../../'),
+    expect = require('chai').expect,
+    _ = require('lodash'),
+    files = require('../../fixtures/files'),
+    helper = require('../../fixtures/helper'),
+    Resource = swagger.Resource,
+    DataStore = swagger.DataStore,
     MemoryDataStore = swagger.MemoryDataStore,
-    FileDataStore   = swagger.FileDataStore;
+    FileDataStore = swagger.FileDataStore;
 
-describe('DataStore', function() {
+describe('DataStore', function () {
   // All of these tests should pass for all DataStore classes
-  [FileDataStore, MemoryDataStore].forEach(function(DataStoreClass) {
-    describe(DataStoreClass.name, function() {
+  [FileDataStore, MemoryDataStore].forEach(function (DataStoreClass) {
+    describe(DataStoreClass.name, function () {
       'use strict';
 
-      beforeEach(function(done) {
+      beforeEach(function (done) {
         if (DataStoreClass === FileDataStore) {
           // Create a temp directory, and chdir to it
-          files.createTempDir(function(temp) {
+          files.createTempDir(function (temp) {
             process.chdir(temp);
             done();
           });
@@ -28,20 +28,20 @@ describe('DataStore', function() {
       });
 
       it('should inherit from DataStore',
-        function() {
-          var dataStore = new DataStoreClass();
+        function () {
+          let dataStore = new DataStoreClass();
           expect(dataStore).to.be.an.instanceOf(DataStore);
         }
       );
 
-      describe('get method', function() {
+      describe('get method', function () {
         it('should be able to save and retrieve a resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(resource, function() {
-              dataStore.get(resource, function(err, retrieved) {
+            dataStore.save(resource, function () {
+              dataStore.get(resource, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -54,16 +54,16 @@ describe('DataStore', function() {
         );
 
         it('should be able to update and retrieve a resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(resource, function() {
+            dataStore.save(resource, function () {
               // Update the resource and save it again
-              var updatedResource = new Resource('/users/JDoe', {name: 'Bob Smith'});
-              dataStore.save(updatedResource, function() {
+              let updatedResource = new Resource('/users/JDoe', { name: 'Bob Smith' });
+              dataStore.save(updatedResource, function () {
                 // Retrieve the updated resource
-                dataStore.get(resource, function(err, retrieved) {
+                dataStore.get(resource, function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -84,12 +84,12 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a resource by path',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(resource, function() {
-              dataStore.get('/users/JDoe', function(err, retrieved) {
+            dataStore.save(resource, function () {
+              dataStore.get('/users/JDoe', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -102,11 +102,11 @@ describe('DataStore', function() {
         );
 
         it('should return undefined if no resource is found',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var retrieved = new Resource('/users', '/JDoe');
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let retrieved = new Resource('/users', '/JDoe');
 
-            dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.get(retrieved, function (err, retrieved) {
               if (err) {
                 return done(err);
               }
@@ -117,17 +117,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a resource using normalized collection path',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a non-normalized collection path
-            var saved = new Resource('users/', 'JDoe/', {name: 'John Doe'});
+            let saved = new Resource('users/', 'JDoe/', { name: 'John Doe' });
 
             // Retrieve the data using a normalized collection path
-            var retrieved = new Resource('/users', '/jdoe', null);
+            let retrieved = new Resource('/users', '/jdoe', null);
 
-            dataStore.save(saved, function() {
-              dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(saved, function () {
+              dataStore.get(retrieved, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -140,17 +140,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a resource using a non-normalized collection path',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a normalized collection path
-            var saved = new Resource('/users', '/jdoe', {name: 'John Doe'});
+            let saved = new Resource('/users', '/jdoe', { name: 'John Doe' });
 
             // Retrieve the data using a non-normalized collection path
-            var retrieved = new Resource('users/', 'JDoe/', null);
+            let retrieved = new Resource('users/', 'JDoe/', null);
 
-            dataStore.save(saved, function() {
-              dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(saved, function () {
+              dataStore.get(retrieved, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -163,17 +163,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a resource using normalized resource name',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a non-normalized resource name
-            var saved = new Resource('/users/', '/JDoe/', {name: 'John Doe'});
+            let saved = new Resource('/users/', '/JDoe/', { name: 'John Doe' });
 
             // Retrieve the data using a normalized resource name
-            var retrieved = new Resource('/users', '/jdoe', null);
+            let retrieved = new Resource('/users', '/jdoe', null);
 
-            dataStore.save(saved, function() {
-              dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(saved, function () {
+              dataStore.get(retrieved, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -186,17 +186,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a resource using a non-normalized resource name',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a normalized resource name
-            var saved = new Resource('/users', '/jdoe/', {name: 'John Doe'});
+            let saved = new Resource('/users', '/jdoe/', { name: 'John Doe' });
 
             // Retrieve the data using a non-normalized resource name
-            var retrieved = new Resource('/users/', 'JDoe/', null);
+            let retrieved = new Resource('/users/', 'JDoe/', null);
 
-            dataStore.save(saved, function() {
-              dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(saved, function () {
+              dataStore.get(retrieved, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -209,22 +209,22 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a case-sensitive resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
 
-            var res1 = new Resource('/users', '/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/UsErS', 'jdoe', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/', '/JDOE/', {name: 'John Doe 3'});
+            let res1 = new Resource('/users', '/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/UsErS', 'jdoe', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/', '/JDOE/', { name: 'John Doe 3' });
 
             // Case-sensitive.  Non-Strict
-            var retrieved = new Resource('UsErS/jdoe/');
+            let retrieved = new Resource('UsErS/jdoe/');
 
-            dataStore.save(res1, function() {
-              dataStore.save(res2, function() {
-                dataStore.save(res3, function() {
-                  dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(res1, function () {
+              dataStore.save(res2, function () {
+                dataStore.save(res3, function () {
+                  dataStore.get(retrieved, function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -239,22 +239,22 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a strict resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users', '/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/UsErS', 'jdoe', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/', '/JDOE/', {name: 'John Doe 3'});
+            let res1 = new Resource('/users', '/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/UsErS', 'jdoe', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/', '/JDOE/', { name: 'John Doe 3' });
 
             // Case-insensitive.  Strict
-            var retrieved = new Resource('/USERS/jdoe/');
+            let retrieved = new Resource('/USERS/jdoe/');
 
-            dataStore.save(res1, function() {
-              dataStore.save(res2, function() {
-                dataStore.save(res3, function() {
-                  dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(res1, function () {
+              dataStore.save(res2, function () {
+                dataStore.save(res3, function () {
+                  dataStore.get(retrieved, function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -269,23 +269,23 @@ describe('DataStore', function() {
         );
 
         it('should be able to retrieve a strict, case-sensitive resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users', '/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/UsErS', 'jdoe', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/', '/JDOE/', {name: 'John Doe 3'});
+            let res1 = new Resource('/users', '/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/UsErS', 'jdoe', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/', '/JDOE/', { name: 'John Doe 3' });
 
             // Case-sensitive.  Strict
-            var retrieved = new Resource('UsErS/jdoe');
+            let retrieved = new Resource('UsErS/jdoe');
 
-            dataStore.save(res1, function() {
-              dataStore.save(res2, function() {
-                dataStore.save(res3, function() {
-                  dataStore.get(retrieved, function(err, retrieved) {
+            dataStore.save(res1, function () {
+              dataStore.save(res2, function () {
+                dataStore.save(res3, function () {
+                  dataStore.get(retrieved, function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -300,19 +300,19 @@ describe('DataStore', function() {
         );
 
         it('should return an error if data cannot be parsed',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users', '/JDoe', {name: 'John Doe 1'});
-            var retrieved = new Resource('/users', '/JDoe', null);
-            var error = null;
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users', '/JDoe', { name: 'John Doe 1' });
+            let retrieved = new Resource('/users', '/JDoe', null);
+            let error = null;
 
             // This will cause a parsing error
             saved.name = 'foo/bar/baz';
 
-            dataStore.save(saved, function(err) {
+            dataStore.save(saved, function (err) {
               error = err;
 
-              dataStore.get(retrieved, function(err, retrieved) {
+              dataStore.get(retrieved, function (err, retrieved) {
                 // Depending on the implementation, the error may occur during saving or retrieving
                 error = error || err;
 
@@ -325,8 +325,8 @@ describe('DataStore', function() {
         );
 
         it('should throw an error if not called with a Resource object',
-          function() {
-            function throws() {
+          function () {
+            function throws () {
               dataStore.get(_.cloneDeep(new Resource()));
             }
 
@@ -336,19 +336,19 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.get(new Resource());
           }
         );
       });
 
-      describe('save method (single resource)', function() {
+      describe('save method (single resource)', function () {
         it('should set the createdOn and modifiedOn properties when saved',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
-            var now = new Date(Date.now() - 5); // 5 milliseconds ago
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
+            let now = new Date(Date.now() - 5); // 5 milliseconds ago
 
             // The timestamps are null to start out with
             expect(resource.createdOn).to.be.null;
@@ -361,13 +361,13 @@ describe('DataStore', function() {
             expect(resource.modifiedOn).to.equalTime(new Date(2011, 9, 10));
 
             // When I save the resource, both dates will be set, since it's a new resource
-            dataStore.save(resource, function(err, saved) {
+            dataStore.save(resource, function (err, saved) {
               expect(saved).to.equal(resource);
               expect(saved.createdOn).to.be.afterTime(now);
               expect(saved.modifiedOn).to.equalTime(saved.createdOn);
 
               // Make sure the dates were persisted
-              dataStore.get(resource, function(err, retrieved) {
+              dataStore.get(resource, function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -380,16 +380,16 @@ describe('DataStore', function() {
         );
 
         it('should update modifiedOn when a resource is updated',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
 
             // Save the resource
-            dataStore.save(resource, function() {
+            dataStore.save(resource, function () {
               // Update the resource (after a few ticks)
-              setTimeout(function() {
-                var updatedResource = new Resource('/users/JDoe');
-                dataStore.save(updatedResource, function(err, saved) {
+              setTimeout(function () {
+                let updatedResource = new Resource('/users/JDoe');
+                dataStore.save(updatedResource, function (err, saved) {
                   // The modifiedOn should have changed.  The createdOn should NOT have changed.
                   expect(saved).to.equal(updatedResource);
                   expect(saved.createdOn).to.equalTime(resource.createdOn);
@@ -397,7 +397,7 @@ describe('DataStore', function() {
                   expect(saved.modifiedOn).to.be.afterTime(resource.modifiedOn);
 
                   // Make sure the updated dates were persisted
-                  dataStore.get(resource, function(err, retrieved) {
+                  dataStore.get(resource, function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -412,9 +412,9 @@ describe('DataStore', function() {
         );
 
         it('should merge with the existing resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/JDoe', {
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/JDoe', {
               name: {
                 first: 'John',
                 last: 'Doe',
@@ -433,8 +433,8 @@ describe('DataStore', function() {
               }
             });
 
-            dataStore.save(resource, function() {
-              var updatedResource = new Resource('/users/JDoe', {
+            dataStore.save(resource, function () {
+              let updatedResource = new Resource('/users/JDoe', {
                 name: {
                   first: 'Bob',
                   suffixes: {
@@ -447,8 +447,8 @@ describe('DataStore', function() {
                 favoriteColors: ['yellow']
               });
 
-              dataStore.save(updatedResource, function() {
-                dataStore.get(resource, function(err, retrieved) {
+              dataStore.save(updatedResource, function () {
+                dataStore.get(resource, function (err, retrieved) {
                   expect(retrieved.data).to.deep.equal({
                     name: {
                       first: 'Bob',
@@ -477,16 +477,16 @@ describe('DataStore', function() {
         );
 
         it('should merge with the existing resource array',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var resource = new Resource('/users/BSmith', [1, 'two', {number: 'three'}, 4, [5]]);
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let resource = new Resource('/users/BSmith', [1, 'two', { number: 'three' }, 4, [5]]);
 
-            dataStore.save(resource, function() {
-              var updatedResource = new Resource('/users/BSmith', ['one', 2, {three: true}]);
+            dataStore.save(resource, function () {
+              let updatedResource = new Resource('/users/BSmith', ['one', 2, { three: true }]);
 
-              dataStore.save(updatedResource, function() {
-                dataStore.get(resource, function(err, retrieved) {
-                  expect(retrieved.data).to.deep.equal(['one', 2, {three: true, number: 'three'}, 4, [5]]);
+              dataStore.save(updatedResource, function () {
+                dataStore.get(resource, function (err, retrieved) {
+                  expect(retrieved.data).to.deep.equal(['one', 2, { three: true, number: 'three' }, 4, [5]]);
                   done(err);
                 });
               });
@@ -495,18 +495,18 @@ describe('DataStore', function() {
         );
 
         it('should overwrite an empty resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save an empty resource
-            var resource = new Resource('/users/JDoe');
-            dataStore.save(resource, function() {
+            let resource = new Resource('/users/JDoe');
+            dataStore.save(resource, function () {
               // Now add data
-              var updatedResource = new Resource('/users/JDoe', {name: 'John Doe'});
-              dataStore.save(updatedResource, function() {
+              let updatedResource = new Resource('/users/JDoe', { name: 'John Doe' });
+              dataStore.save(updatedResource, function () {
                 // The data should have replaced the empty resource
-                dataStore.get(resource, function(err, retrieved) {
-                  expect(retrieved.data).to.deep.equal({name: 'John Doe'});
+                dataStore.get(resource, function (err, retrieved) {
+                  expect(retrieved.data).to.deep.equal({ name: 'John Doe' });
                   done(err);
                 });
               });
@@ -515,17 +515,17 @@ describe('DataStore', function() {
         );
 
         it('should overwrite a resource with an empty value',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save a number resource
-            var resource = new Resource('/users/JDoe', 42);
-            dataStore.save(resource, function() {
+            let resource = new Resource('/users/JDoe', 42);
+            dataStore.save(resource, function () {
               // Overwrite it with an empty value
-              var updatedResource = new Resource('/users/JDoe');
-              dataStore.save(updatedResource, function() {
+              let updatedResource = new Resource('/users/JDoe');
+              dataStore.save(updatedResource, function () {
                 // The resource should now be empty
-                dataStore.get(resource, function(err, retrieved) {
+                dataStore.get(resource, function (err, retrieved) {
                   expect(retrieved.data).to.be.undefined;
                   done(err);
                 });
@@ -535,18 +535,18 @@ describe('DataStore', function() {
         );
 
         it('should overwrite a simple resource with an object resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save a number resource
-            var resource = new Resource('/users/JDoe', 42);
-            dataStore.save(resource, function() {
+            let resource = new Resource('/users/JDoe', 42);
+            dataStore.save(resource, function () {
               // Overwrite it with an object resource
-              var updatedResource = new Resource('/users/JDoe', {name: 'John Doe'});
-              dataStore.save(updatedResource, function() {
+              let updatedResource = new Resource('/users/JDoe', { name: 'John Doe' });
+              dataStore.save(updatedResource, function () {
                 // The data should have replaced the empty resource
-                dataStore.get(resource, function(err, retrieved) {
-                  expect(retrieved.data).to.deep.equal({name: 'John Doe'});
+                dataStore.get(resource, function (err, retrieved) {
+                  expect(retrieved.data).to.deep.equal({ name: 'John Doe' });
                   done(err);
                 });
               });
@@ -555,17 +555,17 @@ describe('DataStore', function() {
         );
 
         it('should overwrite an object resource with a simple resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save an object resource
-            var resource = new Resource('/users/JDoe', {name: 'John Doe'});
-            dataStore.save(resource, function() {
+            let resource = new Resource('/users/JDoe', { name: 'John Doe' });
+            dataStore.save(resource, function () {
               // Overwrite it with a simple resource
-              var updatedResource = new Resource('/users/JDoe', 'hello world');
-              dataStore.save(updatedResource, function() {
+              let updatedResource = new Resource('/users/JDoe', 'hello world');
+              dataStore.save(updatedResource, function () {
                 // The resource should now be a string
-                dataStore.get(resource, function(err, retrieved) {
+                dataStore.get(resource, function (err, retrieved) {
                   expect(retrieved.data).to.equal('hello world');
                   done(err);
                 });
@@ -575,8 +575,8 @@ describe('DataStore', function() {
         );
 
         it('should throw an error if not called with a Resource object',
-          function() {
-            function throws() {
+          function () {
+            function throws () {
               dataStore.save(_.cloneDeep(new Resource()));
             }
 
@@ -586,19 +586,19 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.save(new Resource());
           }
         );
       });
 
-      describe('save method (multiple resources)', function() {
+      describe('save method (multiple resources)', function () {
         it('should return an empty array if no resources are saved',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
-            dataStore.save([], function(err, saved) {
+            dataStore.save([], function (err, saved) {
               if (err) {
                 return done(err);
               }
@@ -609,88 +609,88 @@ describe('DataStore', function() {
         );
 
         it('should save new resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('users', 'JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/USERS/', '/BSmith/', {name: 'Bob Smith'});
-            var res3 = new Resource('/Users/SConnor', {name: 'Sarah Connor'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('users', 'JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/USERS/', '/BSmith/', { name: 'Bob Smith' });
+            let res3 = new Resource('/Users/SConnor', { name: 'Sarah Connor' });
 
             // Save the resources
-            dataStore.save(res1, [res2], res3, function(err, saved) {
+            dataStore.save(res1, [res2], res3, function (err, saved) {
               expect(saved).to.have.same.members([res1, res2, res3]);
 
               // Verify that the resources were persisted
-              dataStore.getCollection('users', function(err, retrieved) {
+              dataStore.getCollection('users', function (err, retrieved) {
                 expect(retrieved).not.to.equal(saved);
                 expect(retrieved).to.have.same.deep.members(saved);
                 done();
-              })
+              });
             });
           }
         );
 
         it('should add new resources to an existing collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('users', 'JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/Users/', '/BSmith/', {name: 'Bob Smith'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('users', 'JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/Users/', '/BSmith/', { name: 'Bob Smith' });
 
             // Save the original resources
-            dataStore.save(res1, res2, function(err, saved) {
+            dataStore.save(res1, res2, function (err, saved) {
               // Add more resources
-              var res3 = new Resource('uSeRs', 'SConnor', {name: 'Sarah Connor'});
-              var res4 = new Resource('/USERS/BBob', {name: 'Billy Bob'});
+              let res3 = new Resource('uSeRs', 'SConnor', { name: 'Sarah Connor' });
+              let res4 = new Resource('/USERS/BBob', { name: 'Billy Bob' });
 
-              dataStore.save([res3, res4], function(err, saved) {
+              dataStore.save([res3, res4], function (err, saved) {
                 expect(saved).to.have.same.deep.members([res3, res4]);
 
                 // Verify that the resources were persisted
-                dataStore.getCollection('users', function(err, retrieved) {
+                dataStore.getCollection('users', function (err, retrieved) {
                   expect(retrieved).to.have.same.deep.members([res1, res2, res3, res4]);
                   done();
-                })
+                });
               });
             });
           }
         );
 
         it('should merge resources with an existing collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('users', 'JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/Users/', '/BSmith/', {name: 'Bob Smith'});
-            var res3 = new Resource('/USERS', 'SConnor', {name: 'Sarah Connor'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('users', 'JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/Users/', '/BSmith/', { name: 'Bob Smith' });
+            let res3 = new Resource('/USERS', 'SConnor', { name: 'Sarah Connor' });
 
             // Save the original resources
-            dataStore.save([res1, res2], res3, function(err, saved) {
+            dataStore.save([res1, res2], res3, function (err, saved) {
               // Add/update resources
-              var res4 = new Resource('UsErS/BSmith', {name: 'Barbra Smith'});    // <-- Barbara replaces Bob
-              var res5 = new Resource('/users/BBob', {name: 'Billy Bob'});
+              let res4 = new Resource('UsErS/BSmith', { name: 'Barbra Smith' });    // <-- Barbara replaces Bob
+              let res5 = new Resource('/users/BBob', { name: 'Billy Bob' });
 
-              dataStore.save([res4], [res5], function(err, saved) {
+              dataStore.save([res4], [res5], function (err, saved) {
                 expect(saved).to.have.same.deep.members([res4, res5]);
 
                 // Verify that the resources were persisted
-                dataStore.getCollection('users', function(err, retrieved) {
+                dataStore.getCollection('users', function (err, retrieved) {
                   expect(retrieved).to.have.same.deep.members([res1, res3, res4, res5]);
                   done();
-                })
+                });
               });
             });
           }
         );
 
         it('should merge duplicate resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/users/JDoe/', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/JDoe', {name: 'John Doe 3'});
-            var res4 = new Resource('/users/jdoe', {name: 'John Doe 4'});
-            var res5 = new Resource('/users/jdoe/', {name: 'John Doe 5'});
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/users/JDoe/', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/JDoe', { name: 'John Doe 3' });
+            let res4 = new Resource('/users/jdoe', { name: 'John Doe 4' });
+            let res5 = new Resource('/users/jdoe/', { name: 'John Doe 5' });
 
-            dataStore.save(res1, res2, res3, res4, res5, function(err, saved) {
+            dataStore.save(res1, res2, res3, res4, res5, function (err, saved) {
               if (err) {
                 return done(err);
               }
@@ -701,7 +701,7 @@ describe('DataStore', function() {
               expect(res1.data).to.equal(res5.data);
 
               // Verify that only one record was saved
-              dataStore.getCollection('/Users', function(err, retrieved1) {
+              dataStore.getCollection('/Users', function (err, retrieved1) {
                 if (err) {
                   return done(err);
                 }
@@ -709,7 +709,7 @@ describe('DataStore', function() {
                 expect(retrieved1[0]).to.deep.equal(res5);     // value equality
                 expect(retrieved1[0]).not.to.equal(res5);      // not reference equality
 
-                dataStore.getCollection('/users', function(err, retrieved2) {
+                dataStore.getCollection('/users', function (err, retrieved2) {
                   if (err) {
                     return done(err);
                   }
@@ -724,21 +724,21 @@ describe('DataStore', function() {
         );
 
         it('should save strict, case-sensitive resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/users/JDoe/', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/JDoe', {name: 'John Doe 3'});
-            var res4 = new Resource('/users/jdoe', {name: 'John Doe 4'});
-            var res5 = new Resource('/users/jdoe/', {name: 'John Doe 5'});
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/users/JDoe/', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/JDoe', { name: 'John Doe 3' });
+            let res4 = new Resource('/users/jdoe', { name: 'John Doe 4' });
+            let res5 = new Resource('/users/jdoe/', { name: 'John Doe 5' });
 
-            dataStore.save(res1, res2, res3, res4, res5, function() {
+            dataStore.save(res1, res2, res3, res4, res5, function () {
               // Verify that all of the records were saved
-              dataStore.getCollection('/Users', function(err, retrieved) {
+              dataStore.getCollection('/Users', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -746,7 +746,7 @@ describe('DataStore', function() {
                 expect(retrieved[0]).to.deep.equal(res3);     // value equality
                 expect(retrieved[0]).not.to.equal(res3);      // not reference equality
 
-                dataStore.getCollection('/users', function(err, retrieved) {
+                dataStore.getCollection('/users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -767,8 +767,8 @@ describe('DataStore', function() {
         );
 
         it('should throw an error if not called with an array of Resources',
-          function() {
-            function throws() {
+          function () {
+            function throws () {
               dataStore.save(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
             }
 
@@ -778,27 +778,27 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.save(new Resource(), new Resource());
           }
         );
       });
 
-      describe('delete method (single resource)', function() {
+      describe('delete method (single resource)', function () {
         it('should be aliased as "remove"',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             expect(dataStore.delete).to.equal(dataStore.remove);
           }
         );
 
         it('should return undefined if no resource is deleted',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var deleted = new Resource('/users/JDoe');
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let deleted = new Resource('/users/JDoe');
 
-            dataStore.delete(deleted, function(err, deleted) {
+            dataStore.delete(deleted, function (err, deleted) {
               if (err) {
                 return done(err);
               }
@@ -809,13 +809,13 @@ describe('DataStore', function() {
         );
 
         it('deleted items should not be returned later',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
-            var deleted = new Resource('/users', '/jdoe', undefined);
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
+            let deleted = new Resource('/users', '/jdoe', undefined);
 
-            dataStore.save(saved, function() {
-              dataStore.delete(deleted, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(deleted, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -823,7 +823,7 @@ describe('DataStore', function() {
                 expect(deleted).not.to.equal(saved);      // not reference equality
 
                 // Verify that the data was deleted
-                dataStore.get(deleted, function(err, retrieved) {
+                dataStore.get(deleted, function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -836,13 +836,13 @@ describe('DataStore', function() {
         );
 
         it('deleted items should not be returned later by collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
-            var deleted = new Resource('/users', '/jdoe', undefined);
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
+            let deleted = new Resource('/users', '/jdoe', undefined);
 
-            dataStore.save(saved, function() {
-              dataStore.delete(deleted, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(deleted, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -850,7 +850,7 @@ describe('DataStore', function() {
                 expect(deleted).not.to.equal(saved);      // not reference equality
 
                 // Verify that the data was deleted
-                dataStore.getCollection('/users', function(err, retrieved) {
+                dataStore.getCollection('/users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -863,17 +863,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to delete a resource using normalized values',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a non-normalized values
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
 
             // Delete the data using a normalized values
-            var deleted = new Resource('/users', '/jdoe', undefined);
+            let deleted = new Resource('/users', '/jdoe', undefined);
 
-            dataStore.save(saved, function() {
-              dataStore.delete(deleted, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(deleted, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -881,7 +881,7 @@ describe('DataStore', function() {
                 expect(deleted).not.to.equal(saved);      // not reference equality
 
                 // Verify that the data was deleted
-                dataStore.getCollection('/users', function(err, retrieved) {
+                dataStore.getCollection('/users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -894,17 +894,17 @@ describe('DataStore', function() {
         );
 
         it('should be able to delete a resource using non-normalized values',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
             // Save the data using a normalized values
-            var saved = new Resource('/users', '/jdoe', {name: 'John Doe'});
+            let saved = new Resource('/users', '/jdoe', { name: 'John Doe' });
 
             // Delete the data using a non-normalized values
-            var deleted = new Resource('Users/', 'JDoe/', undefined);
+            let deleted = new Resource('Users/', 'JDoe/', undefined);
 
-            dataStore.save(saved, function() {
-              dataStore.delete(deleted, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(deleted, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -912,7 +912,7 @@ describe('DataStore', function() {
                 expect(deleted).not.to.equal(saved);      // not reference equality
 
                 // Verify that the data was deleted
-                dataStore.getCollection('/users', function(err, retrieved) {
+                dataStore.getCollection('/users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -925,23 +925,23 @@ describe('DataStore', function() {
         );
 
         it('should be able to delete a strict, case-sensitive resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users', '/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/UsErS', 'jdoe', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/', '/JDOE/', {name: 'John Doe 3'});
+            let res1 = new Resource('/users', '/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/UsErS', 'jdoe', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/', '/JDOE/', { name: 'John Doe 3' });
 
             // Case-sensitive.  Strict
-            var retrieved = new Resource('UsErS/', '/jdoe', undefined);
+            let retrieved = new Resource('UsErS/', '/jdoe', undefined);
 
-            dataStore.save(res1, function() {
-              dataStore.save(res2, function() {
-                dataStore.save(res3, function() {
-                  dataStore.delete(retrieved, function(err, deleted) {
+            dataStore.save(res1, function () {
+              dataStore.save(res2, function () {
+                dataStore.save(res3, function () {
+                  dataStore.delete(retrieved, function (err, deleted) {
                     if (err) {
                       return done(err);
                     }
@@ -949,7 +949,7 @@ describe('DataStore', function() {
                     expect(deleted).not.to.equal(res2);      // not reference equality
 
                     // Verify that the data was deleted
-                    dataStore.getCollection('/UsErS', function(err, retrieved) {
+                    dataStore.getCollection('/UsErS', function (err, retrieved) {
                       if (err) {
                         return done(err);
                       }
@@ -964,8 +964,8 @@ describe('DataStore', function() {
         );
 
         it('should throw an error if not called with a Resource object',
-          function() {
-            function throws() {
+          function () {
+            function throws () {
               dataStore.delete(_.cloneDeep(new Resource()));
             }
 
@@ -975,19 +975,19 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.delete(new Resource());
           }
         );
       });
 
-      describe('delete method (multiple resources)', function() {
+      describe('delete method (multiple resources)', function () {
         it('should return an empty array if no resources are deleted',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
-            dataStore.delete([], function(err, deleted) {
+            dataStore.delete([], function (err, deleted) {
               if (err) {
                 return done(err);
               }
@@ -998,14 +998,14 @@ describe('DataStore', function() {
         );
 
         it('should return an empty array if no resources matched',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
-            var del1 = new Resource('/users/BSmith');
-            var del2 = new Resource('/users/SConnor');
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
+            let del1 = new Resource('/users/BSmith');
+            let del2 = new Resource('/users/SConnor');
 
-            dataStore.save(saved, function() {
-              dataStore.delete(del1, del2, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(del1, del2, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1017,13 +1017,13 @@ describe('DataStore', function() {
         );
 
         it('should return undefined if the only resource was not matched',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
-            var del1 = new Resource('/users/BSmith');
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
+            let del1 = new Resource('/users/BSmith');
 
-            dataStore.save(saved, function() {
-              dataStore.delete(del1, function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.delete(del1, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1035,15 +1035,15 @@ describe('DataStore', function() {
         );
 
         it('should delete multiple resources from a collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('/users', '/JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/UsErS', '/BSmith', {name: 'Bob Smith'});
-            var res3 = new Resource('/Users/', '/SConnor', {name: 'Sarah Connor'});
-            var res4 = new Resource('/Users/', '/JConnor', {name: 'John Connor'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('/users', '/JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/UsErS', '/BSmith', { name: 'Bob Smith' });
+            let res3 = new Resource('/Users/', '/SConnor', { name: 'Sarah Connor' });
+            let res4 = new Resource('/Users/', '/JConnor', { name: 'John Connor' });
 
-            dataStore.save(res1, [res2, res3], res3, res4, function() {
-              dataStore.delete(res2, res4, function(err, deleted) {
+            dataStore.save(res1, [res2, res3], res3, res4, function () {
+              dataStore.delete(res2, res4, function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1056,7 +1056,7 @@ describe('DataStore', function() {
                 expect(deleted[1]).not.to.equal(res4);      // not reference equality
 
                 // Verify that the records were deleted
-                dataStore.getCollection('/Users', function(err, retrieved) {
+                dataStore.getCollection('/Users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -1076,20 +1076,20 @@ describe('DataStore', function() {
         );
 
         it('should only delete strict, case-sensitive resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/users/JDoe/', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/JDoe', {name: 'John Doe 3'});
-            var res4 = new Resource('/users/jdoe', {name: 'John Doe 4'});
-            var res5 = new Resource('/users/jdoe/', {name: 'John Doe 5'});
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/users/JDoe/', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/JDoe', { name: 'John Doe 3' });
+            let res4 = new Resource('/users/jdoe', { name: 'John Doe 4' });
+            let res5 = new Resource('/users/jdoe/', { name: 'John Doe 5' });
 
-            dataStore.save(res1, res2, res3, res4, res5, function() {
-              dataStore.delete([res1, res5], function(err, deleted) {
+            dataStore.save(res1, res2, res3, res4, res5, function () {
+              dataStore.delete([res1, res5], function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1102,7 +1102,7 @@ describe('DataStore', function() {
                 expect(deleted[1]).not.to.equal(res5);      // not reference equality
 
                 // Verify that the records were deleted
-                dataStore.getCollection('/Users', function(err, retrieved) {
+                dataStore.getCollection('/Users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -1111,7 +1111,7 @@ describe('DataStore', function() {
                   expect(retrieved[0]).not.to.equal(res3);      // not reference equality
 
                   // Verify that other records were NOT deleted
-                  dataStore.getCollection('/users', function(err, retrieved) {
+                  dataStore.getCollection('/users', function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -1129,8 +1129,8 @@ describe('DataStore', function() {
         );
 
         it('should throw an error if not called with an array of Resources',
-          function() {
-            function throws() {
+          function () {
+            function throws () {
               dataStore.delete(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
             }
 
@@ -1140,19 +1140,19 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.delete(new Resource(), new Resource());
           }
         );
       });
 
-      describe('getCollection', function() {
+      describe('getCollection', function () {
         it('should return an empty array if no resources are found',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
-            dataStore.getCollection('/foo/bar/baz', function(err, retrieved) {
+            dataStore.getCollection('/foo/bar/baz', function (err, retrieved) {
               if (err) {
                 return done(err);
               }
@@ -1163,12 +1163,12 @@ describe('DataStore', function() {
         );
 
         it('should retrieve an array of one resource',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(saved, function() {
-              dataStore.getCollection('/Users', function(err, retrieved) {
+            dataStore.save(saved, function () {
+              dataStore.getCollection('/Users', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -1182,14 +1182,14 @@ describe('DataStore', function() {
         );
 
         it('should retrieve an array of multiple resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/UsErS/BSmith', {name: 'Bob Smith'});
-            var res3 = new Resource('/Users/SConnor', {name: 'Sarah Connor'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/UsErS/BSmith', { name: 'Bob Smith' });
+            let res3 = new Resource('/Users/SConnor', { name: 'Sarah Connor' });
 
-            dataStore.save(res1, res2, res3, function() {
-              dataStore.getCollection('Users', function(err, retrieved) {
+            dataStore.save(res1, res2, res3, function () {
+              dataStore.getCollection('Users', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -1209,15 +1209,15 @@ describe('DataStore', function() {
         );
 
         it('should only return resources that are in the collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/people/BSmith', {name: 'Bob Smith'});
-            var res3 = new Resource('/users/SConnor', {name: 'Sarah Connor'});
-            var res4 = new Resource('/BBob', {name: 'Billy Bob'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/people/BSmith', { name: 'Bob Smith' });
+            let res3 = new Resource('/users/SConnor', { name: 'Sarah Connor' });
+            let res4 = new Resource('/BBob', { name: 'Billy Bob' });
 
-            dataStore.save(res1, res2, res3, res4, function() {
-              dataStore.getCollection('/users', function(err, retrieved) {
+            dataStore.save(res1, res2, res3, res4, function () {
+              dataStore.getCollection('/users', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -1235,19 +1235,19 @@ describe('DataStore', function() {
         );
 
         it('should only return strict, case-sensitive resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/Users/JDoe', {name: 'John Doe 2'});
-            var res3 = new Resource('/users/jdoe', {name: 'John Doe 3'});
-            var res4 = new Resource('/Users/JDoe/', {name: 'John Doe 4'});
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/Users/JDoe', { name: 'John Doe 2' });
+            let res3 = new Resource('/users/jdoe', { name: 'John Doe 3' });
+            let res4 = new Resource('/Users/JDoe/', { name: 'John Doe 4' });
 
-            dataStore.save(res1, res2, res3, res4, function() {
-              dataStore.getCollection('/Users', function(err, retrieved) {
+            dataStore.save(res1, res2, res3, res4, function () {
+              dataStore.getCollection('/Users', function (err, retrieved) {
                 if (err) {
                   return done(err);
                 }
@@ -1265,26 +1265,26 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.getCollection('/users');
           }
         );
       });
 
-      describe('deleteCollection', function() {
+      describe('deleteCollection', function () {
         it('should be aliased as "removeCollection"',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             expect(dataStore.deleteCollection).to.equal(dataStore.removeCollection);
           }
         );
 
         it('should return an empty array if no resources are deleted',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
 
-            dataStore.deleteCollection('/foo/bar/baz', function(err, deleted) {
+            dataStore.deleteCollection('/foo/bar/baz', function (err, deleted) {
               if (err) {
                 return done(err);
               }
@@ -1295,12 +1295,12 @@ describe('DataStore', function() {
         );
 
         it('should return an empty array if no resources matched',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(saved, function() {
-              dataStore.deleteCollection('/people', function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.deleteCollection('/people', function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1312,12 +1312,12 @@ describe('DataStore', function() {
         );
 
         it('should delete a one-resource collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var saved = new Resource('/users/JDoe', {name: 'John Doe'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let saved = new Resource('/users/JDoe', { name: 'John Doe' });
 
-            dataStore.save(saved, function() {
-              dataStore.deleteCollection('/Users', function(err, deleted) {
+            dataStore.save(saved, function () {
+              dataStore.deleteCollection('/Users', function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1326,7 +1326,7 @@ describe('DataStore', function() {
                 expect(deleted[0]).not.to.equal(saved);      // not reference equality
 
                 // Verify that the record was deleted
-                dataStore.getCollection('/users', function(err, retrieved) {
+                dataStore.getCollection('/users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -1339,14 +1339,14 @@ describe('DataStore', function() {
         );
 
         it('should delete a multiple-resource collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/UsErS/BSmith', {name: 'Bob Smith'});
-            var res3 = new Resource('/Users/SConnor', {name: 'Sarah Connor'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/UsErS/BSmith', { name: 'Bob Smith' });
+            let res3 = new Resource('/Users/SConnor', { name: 'Sarah Connor' });
 
-            dataStore.save(res1, res2, res3, function() {
-              dataStore.deleteCollection('Users', function(err, deleted) {
+            dataStore.save(res1, res2, res3, function () {
+              dataStore.deleteCollection('Users', function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1361,7 +1361,7 @@ describe('DataStore', function() {
                 expect(deleted[2]).not.to.equal(res3);      // not reference equality
 
                 // Verify that the records were deleted
-                dataStore.getCollection('/Users', function(err, retrieved) {
+                dataStore.getCollection('/Users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -1374,15 +1374,15 @@ describe('DataStore', function() {
         );
 
         it('should only delete resources that are in the collection',
-          function(done) {
-            var dataStore = new DataStoreClass();
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe'});
-            var res2 = new Resource('/people/BSmith', {name: 'Bob Smith'});
-            var res3 = new Resource('/USERS/SConnor', {name: 'Sarah Connor'});
-            var res4 = new Resource('/BBob', {name: 'Billy Bob'});
+          function (done) {
+            let dataStore = new DataStoreClass();
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe' });
+            let res2 = new Resource('/people/BSmith', { name: 'Bob Smith' });
+            let res3 = new Resource('/USERS/SConnor', { name: 'Sarah Connor' });
+            let res4 = new Resource('/BBob', { name: 'Billy Bob' });
 
-            dataStore.save(res1, res2, res3, res4, function() {
-              dataStore.deleteCollection('/users', function(err, deleted) {
+            dataStore.save(res1, res2, res3, res4, function () {
+              dataStore.deleteCollection('/users', function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1395,7 +1395,7 @@ describe('DataStore', function() {
                 expect(deleted[1]).not.to.equal(res3);      // not reference equality
 
                 // Verify that the records were deleted
-                dataStore.getCollection('/Users', function(err, retrieved) {
+                dataStore.getCollection('/Users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
@@ -1408,20 +1408,20 @@ describe('DataStore', function() {
         );
 
         it('should only delete strict, case-sensitive resources',
-          function(done) {
-            var dataStore = new DataStoreClass();
+          function (done) {
+            let dataStore = new DataStoreClass();
             dataStore.__router = helper.express();
             dataStore.__router.enable('case sensitive routing');
             dataStore.__router.enable('strict routing');
 
-            var res1 = new Resource('/users/JDoe', {name: 'John Doe 1'});
-            var res2 = new Resource('/users/JDoe/', {name: 'John Doe 2'});
-            var res3 = new Resource('/Users/jdoe', {name: 'John Doe 3'});
-            var res4 = new Resource('/Users/JDoe', {name: 'John Doe 4'});
-            var res5 = new Resource('/Users/JDoe/', {name: 'John Doe 5'});
+            let res1 = new Resource('/users/JDoe', { name: 'John Doe 1' });
+            let res2 = new Resource('/users/JDoe/', { name: 'John Doe 2' });
+            let res3 = new Resource('/Users/jdoe', { name: 'John Doe 3' });
+            let res4 = new Resource('/Users/JDoe', { name: 'John Doe 4' });
+            let res5 = new Resource('/Users/JDoe/', { name: 'John Doe 5' });
 
-            dataStore.save(res1, res2, res3, res4, res5, function() {
-              dataStore.deleteCollection('/Users', function(err, deleted) {
+            dataStore.save(res1, res2, res3, res4, res5, function () {
+              dataStore.deleteCollection('/Users', function (err, deleted) {
                 if (err) {
                   return done(err);
                 }
@@ -1436,14 +1436,14 @@ describe('DataStore', function() {
                 expect(deleted[2]).not.to.equal(res5);      // not reference equality
 
                 // Verify that the records were deleted
-                dataStore.getCollection('/Users', function(err, retrieved) {
+                dataStore.getCollection('/Users', function (err, retrieved) {
                   if (err) {
                     return done(err);
                   }
                   expect(retrieved).to.have.lengthOf(0);
 
                   // Verify that other records were NOT deleted
-                  dataStore.getCollection('/users', function(err, retrieved) {
+                  dataStore.getCollection('/users', function (err, retrieved) {
                     if (err) {
                       return done(err);
                     }
@@ -1461,8 +1461,8 @@ describe('DataStore', function() {
         );
 
         it('can be called without a callback',
-          function() {
-            var dataStore = new DataStoreClass();
+          function () {
+            let dataStore = new DataStoreClass();
             dataStore.deleteCollection('/users');
           }
         );
