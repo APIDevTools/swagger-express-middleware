@@ -9,15 +9,17 @@ language: node_js
 
 matrix:
   include:
-    - node_js: 0.10
-    - node_js: 0.11
-    - node_js: 0.12
-branches:
-  only:
-    - master            # only run CI on the master branch
-    - /^PR /            # also build pull requests
+    - node_js: 6
+    - node_js: 8
+    - node_js: 10
+
+script:
+  - npm run lint
+  - npm run coverage
+
 after_success:
-  - cat coverage/*/lcov.info > coveralls.txt                    # concatenate all code-coverage data into a single file
-  - cat coveralls.txt                                           # output the file contents (for debugging)
-  - ls -R1 coverage/*/lcov.info                                 # list the files (for debugging)
-  - cat coveralls.txt | node_modules/coveralls/bin/coveralls.js # send code-coverage data to Coveralls
+  # send code-coverage data to Codacy
+  - cat ./coverage/lcov.info | node_modules/.bin/codacy-coverage -p .
+
+  # send code-coverage data to Coveralls
+  - cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
