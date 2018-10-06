@@ -7,7 +7,7 @@ let swagger = require('../../../'),
     files = require('../../fixtures/files'),
     helper = require('./helper');
 
-describe.only('Query Resource Mock', function () {
+describe('Query Resource Mock', function () {
   ['head', 'options', 'get'].forEach(function (method) {
     describe(method.toUpperCase(), function () {
 
