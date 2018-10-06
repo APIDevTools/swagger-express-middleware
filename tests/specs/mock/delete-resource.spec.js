@@ -625,4 +625,3 @@ describe('Edit Resource Mock', function() {
     });
   });
 });
-

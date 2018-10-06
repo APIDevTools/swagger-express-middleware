@@ -5,6 +5,7 @@ Swagger Express Middleware
 [![Build Status](https://api.travis-ci.org/APIDevTools/swagger-express-middleware.svg)](https://travis-ci.org/APIDevTools/swagger-express-middleware)
 [![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
+[![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
 [![Codacy Score](https://api.codacy.com/project/badge/Grade/011f89f6f0dd46e5b9b5d3662a51213d)](https://www.codacy.com/public/JamesMessinger/swagger-express-middleware)
 [![Inline docs](https://inch-ci.org/github/APIDevTools/swagger-express-middleware.svg?branch=master&style=shields)](https://inch-ci.org/github/APIDevTools/swagger-express-middleware)
 
@@ -19,7 +20,7 @@ Features
 Swagger Express Middleware uses [Swagger-Parser](https://github.com/APIDevTools/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers.
 
 - **Thoroughly tested**<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 100 Google APIs](https://github.com/APIs-guru/api-models/tree/master/APIs/googleapis.com).  All tests are run on Mac, Linux, and Windows using the past 3 versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
+Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [over 1,000 real-world APIs](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
 
 - [**Mock middleware**](https://github.com/APIDevTools/swagger-express-middleware/blob/master/docs/middleware/mock.md)<br>
 **Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.

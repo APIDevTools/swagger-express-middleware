@@ -1298,5 +1298,3 @@ describe('Edit Collection Mock', function() {
     });
   });
 });
-
-

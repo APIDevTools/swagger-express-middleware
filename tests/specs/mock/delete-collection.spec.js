@@ -964,4 +964,3 @@ describe('Query Collection Mock', function() {
     });
   });
 });
-

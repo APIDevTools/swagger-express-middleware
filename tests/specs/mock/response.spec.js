@@ -40,7 +40,7 @@ describe('Mock Response', function() {
         'default': {description: ''},
         '203': {description: ''},
         '201': {description: ''},
-        '102': {description: ''},
+        '201': {description: ''},
         '404': {description: ''}
       };
 
@@ -73,13 +73,13 @@ describe('Mock Response', function() {
     }
   );
 
-  it('should use the lowest 1XX response that exists',
+  it('should use the lowest 2XX response that exists',
     function(done) {
       api.paths['/pets'].get.responses = {
         '102': {description: ''},
         '404': {description: ''},
         '500': {description: ''},
-        '101': {description: ''},
+        '201': {description: ''},
         '400': {description: ''},
         '504': {description: ''}
       };
@@ -87,7 +87,7 @@ describe('Mock Response', function() {
       helper.initTest(api, function(supertest) {
         supertest
           .get('/api/pets')
-          .expect(101)
+          .expect(201)
           .end(helper.checkResults(done));
       });
     }
@@ -100,8 +100,7 @@ describe('Mock Response', function() {
         '400': {description: ''},
         'default': {description: ''},
         '402': {description: ''},
-        '500': {description: ''},
-        '102': {description: ''}
+        '500': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
@@ -121,7 +120,7 @@ describe('Mock Response', function() {
         'default': {description: ''},
         '402': {description: ''},
         '500': {description: ''},
-        '102': {description: ''}
+        '201': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
@@ -140,14 +139,14 @@ describe('Mock Response', function() {
         '400': {description: ''},
         '402': {description: ''},
         '500': {description: ''},
-        '102': {description: ''}
+        '201': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
         supertest
           .post('/api/pets')
           .send({Name: 'Fido', Type: 'dog'})
-          .expect(102)
+          .expect(201)
           .end(helper.checkResults(done));
       });
     }
@@ -162,7 +161,7 @@ describe('Mock Response', function() {
         'default': {description: ''},
         '402': {description: ''},
         '500': {description: ''},
-        '102': {description: ''}
+        '201': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
@@ -183,14 +182,14 @@ describe('Mock Response', function() {
         '400': {description: ''},
         '402': {description: ''},
         '500': {description: ''},
-        '102': {description: ''}
+        '201': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
         supertest
           .put('/api/pets')
           .send({Name: 'Fido', Type: 'dog'})
-          .expect(101)
+          .expect(201)
           .end(helper.checkResults(done));
       });
     }
@@ -203,8 +202,7 @@ describe('Mock Response', function() {
         '400': {description: ''},
         'default': {description: ''},
         '402': {description: ''},
-        '500': {description: ''},
-        '102': {description: ''}
+        '500': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
@@ -223,13 +221,13 @@ describe('Mock Response', function() {
         '400': {description: ''},
         '402': {description: ''},
         '500': {description: ''},
-        '102': {description: ''}
+        '204': {description: ''}
       };
 
       helper.initTest(api, function(supertest) {
         supertest
           .delete('/api/pets/Fido')
-          .expect(101)
+          .expect(204)
           .end(helper.checkResults(done));
       });
     }
