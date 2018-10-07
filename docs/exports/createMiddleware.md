@@ -1,4 +1,4 @@
-The `createMiddleware` function
+The createMiddleware function
 ================================
 Swagger Express Middleware exposes several JavaScript classes, but most of them are only needed for advanced usage scenarios.  Most simple apps can just use the `createMiddleware` function, which is a convenience function that reduces the amount of code you need to write.
 

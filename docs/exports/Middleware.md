@@ -1,4 +1,4 @@
-The `Middleware` class
+The Middleware class
 ============================
 The `Middleware` class is the main class in Swagger Express Middleware.  It's role is simple: You give it a Swagger API, and it gives you Express middleware for that API.  You can create multiple `Middleware` instances if you need to work with more than one Swagger API.  Each `Middleware` instance is entirely isolated, so any Express middleware that is created by one instance will only know about its own Swagger API.
 
