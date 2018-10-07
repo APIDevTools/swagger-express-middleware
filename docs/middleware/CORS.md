@@ -7,15 +7,16 @@ If you aren't familiar with how CORS works, then [here's a good explanation](htt
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](../../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ````javascript
-var util       = require('util');
-var express    = require('express');
-var middleware = require('swagger-express-middleware');
-var app        = express();
+const util = require('util');
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
 
-middleware('PetStore.yaml', app, function(err, middleware) {
+let app = express();
+
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
     app.use(middleware.metadata());
     app.use(middleware.CORS());
 
@@ -30,7 +31,7 @@ middleware('PetStore.yaml', app, function(err, middleware) {
 });
 ````
 
-Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets) and [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos](http://localhost:8000/pets/Fido/photos). You will see that the HTTP headers are set differently for each URL, based on the Swagger API.  
+Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets) and [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos](http://localhost:8000/pets/Fido/photos). You will see that the HTTP headers are set differently for each URL, based on the Swagger API.
 
 If you use a tool such as [Postman](http://getpostman.com) or [curl](http://curl.haxx.se/) to send CORS request headers (e.g. `Origin`, `Access-Control-Request-Method`, `Access-Control-Request-Headers`, etc.), then you'll notice that the CORS middleware will adjust the corresponding HTTP response headers (e.g. `Access-Control-Allow-Origin`, `Access-Control-Allow-Credentials`, `Access-Control-Allow-Headers`, etc.).
 
@@ -44,7 +45,7 @@ How CORS headers are set
 --------------------------
 The CORS middleware automatically sets the following HTTP headers on _every_ request:
 
-| Header Name                        | Value Assigned 
+| Header Name                        | Value Assigned
 |:-----------------------------------|:-----------------
 | `Access-Control-Allow-Origin`      | If the HTTP request includes an `Origin` header, then that value is echoed back; otherwise, a wildcard (`*`) is sent.
 | `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your Swagger API, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
@@ -82,4 +83,3 @@ To override a header's value, just specify a `default` value in your Swagger API
             type: number
             default: 60
 ````
-

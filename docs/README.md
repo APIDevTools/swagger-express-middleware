@@ -1,8 +1,5 @@
-Swagger Express Middleware
-============================
-
 Middleware
---------------------------
+============================
 * [Mock middleware](middleware/mock.md)
 * [Metadata middleware](middleware/metadata.md)
 * [Parse Request middleware](middleware/parseRequest.md)
@@ -12,7 +9,7 @@ Middleware
 
 
 API
---------------------------
+============================
 * [__`createMiddleware`__ function](exports/createMiddleware.md)
 * [__`Middleware`__ class](exports/Middleware.md)
 * [__`DataStore`__ abstract class](exports/DataStore.md)

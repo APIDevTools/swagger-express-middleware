@@ -1,8 +1,5 @@
-Swagger Express Middleware
-===========================
-
 Sample 2 Walkthrough
---------------------------
+============================
 * [Running the Sample](#running-the-sample)
 * [Alternate Syntax](#alternate-syntax)
 * [Pre-Populating Mock Data](#pre-populated-data)
@@ -18,9 +15,9 @@ This sample expands upon the [Sample 1 walkthrough](running.md) and demonstrates
 
 Running the Sample
 --------------------------
-Sample 2 uses the same [Swagger Pet Store API](../../samples/PetStore.yaml) as Sample 1.  Only the [JavaScript code](../../samples/sample2.js) is different.  Running the sample is the same as [running sample 1](running.md), except that you replace `node sample1.js` with `node sample2.js`.
+Sample 2 uses the same [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) as Sample 1.  Only the [JavaScript code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js) is different.  Running the sample is the same as [running sample 1](running.md), except that you replace `node sample1.js` with `node sample2.js`.
 
-Once you've got the sample running, browse to [http://localhost:8000](http://localhost:8000) and you should see the Swagger Pet Store homepage.  This is the same page as in Sample 1 ([index.html](../../samples/index.html)), although it behaves a bit differently now.  We'll got to that next...
+Once you've got the sample running, browse to [http://localhost:8000](http://localhost:8000) and you should see the Swagger Pet Store homepage.  This is the same page as in Sample 1 ([index.html](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/index.html)), although it behaves a bit differently now.  We'll got to that next...
 
 ![Screenshot](../img/samples.png)
 
@@ -35,7 +32,7 @@ createMiddleware(swaggerFile, app, function(err, middleware) {
 The `createMiddleware` function is a helper function that simplifies your code a bit.  But in Sample 2, we're _not_ using it so we can show you what's going on under the hood.  When you call the `createMiddleware` function, it creates a new [Middleware](../exports/Middleware.md) object and calls its [`init()` method](../exports/Middleware.md#initswagger-callback).  That's exactly what we're doing in Sample 2:
 
 ````javascript
-var middleware = new Middleware(app);
+let middleware = new Middleware(app);
 middleware.init('PetStore.yaml', function(err) {
 ````
 
@@ -48,7 +45,7 @@ Sample 1 started out with an empty pet store, so you had to add a pet before [`G
 
 ````javascript
 // Create a custom data store with some initial mock data
-var myDB = new MemoryDataStore();
+let myDB = new MemoryDataStore();
 myDB.save(
     new Resource('/pets/Lassie', {name: 'Lassie', type: 'dog', ...}),
     new Resource('/pets/Clifford', {name: 'Clifford', type: 'dog', ...}),
@@ -67,7 +64,7 @@ app.use(middleware.mock(myDB));
 Each of the five sample pets is a [Resource](../exports/Resource.md) object, which is what the [DataStore](../exports/DataStore.md) class uses to store data.  You could also load data using the [Resource.parse()](../exports/Resource.md#parsejson) method, which accepts plain JSON data and converts it to `Resource` objects.  Here's an example:
 
 ````javascript
-var data = [
+let data = [
     {collection: '/pets', name: '/Lassie', data: {name: 'Lassie', type: 'dog'}},
     {collection: '/pets', name: '/Clifford', data: {name: 'Clifford', type: 'dog'}},
     {collection: '/pets', name: '/Garfield', data: {name: 'Garfield', type: 'cat'}},
@@ -75,7 +72,7 @@ var data = [
     {collection: '/pets', name: '/Hello%20Kitty', data: {name: 'Hello Kitty', type: 'cat'}}
 ];
 
-var myDB = new MemoryDataStore();
+let myDB = new MemoryDataStore();
 myDB.save(Resource.parse(data));
 ````
 

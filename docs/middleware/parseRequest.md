@@ -2,20 +2,21 @@ Parse Request middleware
 ============================
 Parses incoming requests and converts everything into the correct data types, according to your Swagger API definition.  It'll even use the `default` values specified in your API for any missing parameters.
 
-You can access the parsed request using the standard Express properties and methods, such as [req.body](http://expressjs.com/4x/api.html#req.body), [req.params](http://expressjs.com/4x/api.html#req.params), [req.query](http://expressjs.com/4x/api.html#req.query), [req.get()](http://expressjs.com/4x/api.html#req.get), [req.files](http://expressjs.com/4x/api.html#req.files), [req.cookies](http://expressjs.com/4x/api.html#req.cookies), and [req.signedCookies](http://expressjs.com/4x/api.html#req.signedCookies).  
+You can access the parsed request using the standard Express properties and methods, such as [req.body](http://expressjs.com/4x/api.html#req.body), [req.params](http://expressjs.com/4x/api.html#req.params), [req.query](http://expressjs.com/4x/api.html#req.query), [req.get()](http://expressjs.com/4x/api.html#req.get), [req.files](http://expressjs.com/4x/api.html#req.files), [req.cookies](http://expressjs.com/4x/api.html#req.cookies), and [req.signedCookies](http://expressjs.com/4x/api.html#req.signedCookies).
 
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](../../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ````javascript
-var util       = require('util');
-var express    = require('express');
-var middleware = require('swagger-express-middleware');
-var app        = express();
+const util = require('util');
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
 
-middleware('PetStore.yaml', app, function(err, middleware) {
+let app = express();
+
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
     app.use(middleware.metadata());
     app.use(middleware.parseRequest());
 
@@ -33,7 +34,7 @@ middleware('PetStore.yaml', app, function(err, middleware) {
 });
 ````
 
-Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets).  You'll see all the parsed query params for the `/pets` path in the [PetStore.yaml](../../samples/PetStore.yaml).  Now try adding some query parameters to the URL and see how those params get parsed.  
+Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets).  You'll see all the parsed query params for the `/pets` path in the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).  Now try adding some query parameters to the URL and see how those params get parsed.
 
 Here are some sample links to try:
 
@@ -62,7 +63,7 @@ An [Express Application](http://expressjs.com/4x/api.html#application) or [Route
 All Swagger Express Middleware modules accept this optional first parameter. Rather than passing it to each middleware, you can just pass it to the [createMiddleware function](../exports/createMiddleware.md) (as shown in the example above) and all middleware will use it.
 
 * __options__ (_optional_) - `object`<br>
-The Parse Request middleware uses [body-parser](https://www.npmjs.com/package/body-parser), [cookie-parser](https://www.npmjs.com/package/cookie-parser), and [multer](https://www.npmjs.com/package/multer) to parse the raw string/binary data in an HTTP request into useful JavaScript types and objects.  You can use this options parameter to customize the settings for each of these third-party libraries.  For an example, see [Sample 2](../../samples/sample2.js) and read the [Sample 2 walkthrough](../samples/walkthrough2.md).  To see the default options that Swagger Express Middleware uses, check the [request-parser.js source code](../../lib/request-parser.js).
+The Parse Request middleware uses [body-parser](https://www.npmjs.com/package/body-parser), [cookie-parser](https://www.npmjs.com/package/cookie-parser), and [multer](https://www.npmjs.com/package/multer) to parse the raw string/binary data in an HTTP request into useful JavaScript types and objects.  You can use this options parameter to customize the settings for each of these third-party libraries.  For an example, see [Sample 2](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js) and read the [Sample 2 walkthrough](../samples/walkthrough2.md).  To see the default options that Swagger Express Middleware uses, check the [request-parser.js source code](../../lib/request-parser.js).
 
 
 Dependencies
@@ -88,7 +89,7 @@ Finally, if everything is valid, then the HTTP request values are converted to t
 
 
 ### Phase 3 - Path parsing
-Path parameters get parsed in the third phase. Swagger and Express both support path parameters, but they use slightly different syntax.  For example, the Swagger path `/pets/{name}/photos/{id}` is equivalent to the Express path `/pets/:name/photos/:id`. Express automatically parses all path parameters as _strings_ and stores them on the [`req.params`](http://expressjs.com/4x/api.html#req.params) object. The Parse Request middleware parses path parameters according to the data type specified in your Swagger API, and updates `req.params` accordingly. 
+Path parameters get parsed in the third phase. Swagger and Express both support path parameters, but they use slightly different syntax.  For example, the Swagger path `/pets/{name}/photos/{id}` is equivalent to the Express path `/pets/:name/photos/:id`. Express automatically parses all path parameters as _strings_ and stores them on the [`req.params`](http://expressjs.com/4x/api.html#req.params) object. The Parse Request middleware parses path parameters according to the data type specified in your Swagger API, and updates `req.params` accordingly.
 
 #### Tricky Behavior with `req.params`
 ##### TLDR

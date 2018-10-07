@@ -8,31 +8,34 @@ Example
 All of the examples in these docs use the `createMiddleware` function like this:
 
 ````javascript
-var middleware = require('swagger-express-middleware');
-var app        = express();
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
+
+let app = express();
 
 // Call the createMiddleware function (aliased as "middleware")
-middleware('PetStore.yaml', app, function(err, middleware) { 
-    ... 
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
+    ...
 });
 ````
 
 But any of the examples or samples could be rewritten to use the [Middleware class](Middleware.md) and the [init method](Middleware.md#initswagger-callback) instead, like this:
 
 ````javascript
-var swagger    = require('swagger-express-middleware');
-var Middleware = swagger.Middleware;
-var app        = express();
+const express = require('express');
+const swagger = require('swagger-express-middleware');
+
+let app = express();
 
 // Create a Middleware object
-var middleware = new Middleware(app);
+let middleware = new swagger.Middleware(app);
 
 // Call its init method
-middleware.init('PetStore.yaml', function(err) { 
-    ... 
+middleware.init('PetStore.yaml', function(err) {
+    ...
 });
 ````
-For a complete example of this second pattern, see [Sample 2](../../samples/sample2.js)
+For a complete example of this second pattern, see [Sample 2](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
 
 
 API

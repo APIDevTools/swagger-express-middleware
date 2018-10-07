@@ -5,14 +5,15 @@ Ensures that every request complies with your Swagger API definition, or returns
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](../../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ````javascript
-var express    = require('express');
-var middleware = require('swagger-express-middleware');
-var app        = express();
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
 
-middleware('PetStore.yaml', app, function(err, middleware) {
+let app = express();
+
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
     app.use(middleware.metadata());
     app.use(middleware.parseRequest());
     app.use(middleware.validateRequest());
@@ -42,7 +43,7 @@ middleware('PetStore.yaml', app, function(err, middleware) {
 });
 ````
 
-Run the above example and then browse to [http://localhost:8000](http://localhost:8000).  When you click the button, it will send a `POST` request to the `/pets/{petName}` path in the [Swagger PetStore API](../../samples/PetStore.yaml).  However, that path does not allow `POST` requests, so the Validate Request middleware will throw an [HTTP 405 (Method Not Allowed)](http://httpstatusdogs.com/405-method-not-allowed) error.
+Run the above example and then browse to [http://localhost:8000](http://localhost:8000).  When you click the button, it will send a `POST` request to the `/pets/{petName}` path in the [Swagger PetStore API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).  However, that path does not allow `POST` requests, so the Validate Request middleware will throw an [HTTP 405 (Method Not Allowed)](http://httpstatusdogs.com/405-method-not-allowed) error.
 
 
 Options
@@ -70,7 +71,7 @@ The Validate Request middleware checks each HTTP request for several different t
 
 
 ### HTTP 401 (Unauthorized)
-If your Swagger API has [security requirements](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityRequirementObject) defined, then the Validate Request middleware will check to make sure each request contains the necessary security info.  For example, if you're using `basic` security, then it will verify that the `Authorization` HTTP header is present.  If you're using `apiKey` security, then it will verify that the corresponding HTTP header or query parameter exists.  
+If your Swagger API has [security requirements](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#securityRequirementObject) defined, then the Validate Request middleware will check to make sure each request contains the necessary security info.  For example, if you're using `basic` security, then it will verify that the `Authorization` HTTP header is present.  If you're using `apiKey` security, then it will verify that the corresponding HTTP header or query parameter exists.
 
 If the request doesn't contain the necessary security information, then it will throw an [HTTP 401 (Unauthorized)](http://httpstatusdogs.com/401-unauthorized) error.  For `basic` security, it will also set the `WWW-Authenticate` response header.
 
@@ -82,7 +83,7 @@ The Validate Request middleware will throw an [HTTP 404 (Not Found)](http://http
 
 
 ### HTTP 405 (Method Not Allowed)
-If the HTTP request method does not match one of the methods allowed by your Swagger API, then the Validate Request middleware will throw an [HTTP 405 (Method Not Allowed)](http://httpstatusdogs.com/405-method-not-allowed) error.  For example, if your Swagger API has a `/pets/{petName}` path with `GET`, `POST`, and `DELETE` operations, and somebody sends a `PATCH /pets/Fido` request, then a 405 error will be thrown. 
+If the HTTP request method does not match one of the methods allowed by your Swagger API, then the Validate Request middleware will throw an [HTTP 405 (Method Not Allowed)](http://httpstatusdogs.com/405-method-not-allowed) error.  For example, if your Swagger API has a `/pets/{petName}` path with `GET`, `POST`, and `DELETE` operations, and somebody sends a `PATCH /pets/Fido` request, then a 405 error will be thrown.
 
 In addition, the `Allow` response header will be set to the methods that _are_ allowed by your Swagger API.
 
@@ -101,5 +102,3 @@ If your Swagger API includes a `consumes` list of [MIME types](https://github.co
 
 ### HTTP 500 (Internal Server Error)
 If there's an error in the Swagger API itself &mdash; for example, the file couldn't be found, couldn't be parsed, or is invalid &mdash; then the Validate Request middleware will throw an [HTTP 500 (Internal Server Error)](http://httpstatusdogs.com/500-internal-server-error) error.
-
-

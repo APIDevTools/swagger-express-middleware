@@ -1,9 +1,5 @@
-Swagger Express Middleware
-============================
-
-
 Sample 1 Walkthrough
---------------------------
+============================
 * __Running the sample__
 * [JavaScript Walkthrough](javascript.md)
 * [YAML Walkthrough](yaml.md)
@@ -18,7 +14,7 @@ This sample also demonstrates a __fully-functional mock__ without any custom mid
 
 Run the Sample
 --------------------------
-To run the sample, you'll need to `cd` to the `samples` directory and then run [sample1.js](../../samples/sample1.js) in Node.  Here's how to do that:
+To run the sample, you'll need to `cd` to the `samples` directory and then run [sample1.js](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js) in Node.  Here's how to do that:
 
 ````bash
 cd node_modules/swagger-express-middleware/samples
@@ -31,7 +27,7 @@ You should see a message telling you that the Swagger Pet Store is now running a
 
 ![Screenshot](../img/samples.png)
 
-This page is just a simple GUI that lets you perform _some_ of the operations in the [Swagger Pet Store API](../../samples/PetStore.yaml).  You can add, edit, and delete pets, as well as add pet photos.  There's also helpful links to the raw YAML and JSON data.
+This page is just a simple GUI that lets you perform _some_ of the operations in the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).  You can add, edit, and delete pets, as well as add pet photos.  There's also helpful links to the raw YAML and JSON data.
 
 > **TIP:** Browsers differ in how they handle .yaml and .json URLs.  Some browsers open the files as plain-text in the browser window.  Others prompt you to download the file or open it in your default text editor.
 
@@ -49,15 +45,17 @@ The form at the bottom of the page lets you add pet photos. Use the file-picker 
 
 You can click the "_Photos_" button to view all the photo data for the current pet.  This is _not_ the actual images, just the JSON data, such as file names, sizes, MIME types, etc.  However, you'll see that each image is assigned a unique `id` property.  You can use this ID to view an individual photo (e.g. [http://localhost:8000/pets/Fido/photos/123456789](http://localhost:8000/pets/Fido/photos/123456789))
 
-> **TIP:** So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](../../samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md#how-primary-keys-are-determined).
+> **TIP:** So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md#how-primary-keys-are-determined).
 
 
 ### More Advanced Stuff
-This HTML page is just a simple interface on top of the [Swagger Pet Store API](../../samples/PetStore.yaml), and there are several other operations in the API that aren't exposed on this page.  We encourage you to use a tool such as [Postman](http://www.getpostman.com) or [curl](http://curl.haxx.se) to further experiment with the API and try a few more advanced REST operations.
+This HTML page is just a simple interface on top of the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml), and there are several other operations in the API that aren't exposed on this page.  We encourage you to use a tool such as [Postman](http://www.getpostman.com) or [curl](http://curl.haxx.se) to further experiment with the API and try a few more advanced REST operations.
 
 [![Postman screenshot](../img/postman.png)](http://www.getpostman.com)
 
 
--------------------------------------------------------------------------------------------------
-| &nbsp;                                        | Next: [JavaScript Walkthrough](javascript.md) |
-|:----------------------------------------------|----------------------------------------------:|
+Sample 1 Walkthrough
+--------------------------
+* __Running the sample__
+* [JavaScript Walkthrough](javascript.md)
+* [YAML Walkthrough](yaml.md)

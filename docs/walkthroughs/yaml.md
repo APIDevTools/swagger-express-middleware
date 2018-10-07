@@ -1,9 +1,5 @@
-Swagger Express Middleware
-============================
-
-
 Sample 1 Walkthrough
---------------------------
+============================
 * [Running the sample](running.md)
 * [JavaScript Walkthrough](javascript.md)
 * __YAML Walkthrough__
@@ -11,7 +7,7 @@ Sample 1 Walkthrough
 
 YAML Walkthrough
 --------------------------
-Now that you have the sample [running](running.md), it's time to look at the Swagger API.  Open up [PetStore.yaml](../../samples/PetStore.yaml) and let's go through it.
+Now that you have the sample [running](running.md), it's time to look at the Swagger API.  Open up [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) and let's go through it.
 
 > **TIP:** All of the behavior discussed on this page is the _default_ behavior of Swagger Express Middleware.  You can modify/disable _any_ of this behavior, either by passing options to the middleware, or by adding your own [custom logic](walkthrough2.md#custom-middleware).
 
@@ -112,9 +108,11 @@ Notice that the `DELETE` operation does not have a response schema defined.  It 
 
 
 ### Default/Example Responses
-The very last thing in the [Swagger Pet Store API](../../samples/PetStore.yaml) is `GET /` operation.  This operation is what serves the HTML page that you see whenever you go to [http://localhost:8000](http://localhost:8000).   How does this work?   The Swagger 2.0 spec allows you to specify `default` and `example` values for response schemas, model schemas, and parameters, and Swagger Express Middleware will automatically use these values whenever no other value is available.  In this case, the response schema for the `GET /` operation has a `default` value that points to the [index.html](../../samples/index.html) file, so that file gets served as the response.  It doesn't have to be an HTML file though.  Any type of file would work, or you could include a literal default value such as: `default: "<h1>Hello World</h1>"` or `default: {title: "Hello World", message: "Welcome to the Swagger Pet Store"}`.   Of course, you'll want to make sure your `default` value and your `produces` MIME types match.
+The very last thing in the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) is `GET /` operation.  This operation is what serves the HTML page that you see whenever you go to [http://localhost:8000](http://localhost:8000).   How does this work?   The Swagger 2.0 spec allows you to specify `default` and `example` values for response schemas, model schemas, and parameters, and Swagger Express Middleware will automatically use these values whenever no other value is available.  In this case, the response schema for the `GET /` operation has a `default` value that points to the [index.html](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/index.html) file, so that file gets served as the response.  It doesn't have to be an HTML file though.  Any type of file would work, or you could include a literal default value such as: `default: "<h1>Hello World</h1>"` or `default: {title: "Hello World", message: "Welcome to the Swagger Pet Store"}`.   Of course, you'll want to make sure your `default` value and your `produces` MIME types match.
 
 
--------------------------------------------------------------------------------------------------
-| Back: [JavaScript Walkthrough](javascript.md) | &nbsp;                                        |
-|:----------------------------------------------|----------------------------------------------:|
+Sample 1 Walkthrough
+--------------------------
+* [Running the sample](running.md)
+* [JavaScript Walkthrough](javascript.md)
+* __YAML Walkthrough__

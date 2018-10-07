@@ -10,12 +10,12 @@ Examples
 For some examples (and explanations) of the Mock middleware in action, see the [Sample 1 walkthrough](../samples/running.md) and [Sample 2 walkthrough](../samples/walkthrough2.md).
 
 ````javascript
-var express = require('express');
-var middleware = require('swagger-express-middleware');
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
 
-var app = express();
+let app = express();
 
-middleware('PetStore.yaml', app, function(err, middleware) {
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
     app.use(
         middleware.metadata(),
         middleware.parseRequest(),
@@ -63,7 +63,7 @@ The Mock middleware's behavior varies greatly depending on the HTTP request and 
 ### 1) Determine if it's a collection or resource operation
 Two fundamental concepts in RESTful API are [resources and collections](http://restful-api-design.readthedocs.org/en/latest/resources.html).  Put simply, resources are the _things_ in your API &mdash; the users, the products, the orders, etc. &mdash; and collections are _groups_ of those things &mdash; all the products in your database, all the orders for a user, etc.  Every REST operation is either operating on a resource or a collection of resources, so the first thing the Mock middleware does is determine which one.
 
-To determine this, it compares the _response_ schema of your `GET` or `HEAD` operation to the _request_ schema of your `POST`, `PUT`, or `PATCH` operation.  If the response schema is an `array`, or an `object` with an `array` property that matches your request schema, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](../../samples/PetStore.yaml) has five paths defined:
+To determine this, it compares the _response_ schema of your `GET` or `HEAD` operation to the _request_ schema of your `POST`, `PUT`, or `PATCH` operation.  If the response schema is an `array`, or an `object` with an `array` property that matches your request schema, then the path is considered a collection path; otherwise, it's considered a resource path.  For example, the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) has five paths defined:
 
 * __/pets__<br>
 Has a `get` operation with an `array` response schema, therefore it's a collection path. You can `get` multiple pets from the collection, `delete` multiple pets from the collection, and `post` a new pet to the collection.
@@ -80,7 +80,7 @@ Has a `get` operation with an `file` response schema, therefore it's a resource 
 * __/__<br>
 This is the root URL of the API.  It has a `get` operation with an `file` response schema, therefore it's a resource path. You can `get` the homepage (which is the _index.html_ file)
 
-But what if your API has a path _without_ a `GET` operation?  Or what if your `GET` operation _doesn't_ have a response schema? In this case, the Mock middleware tries to guess whether it's a collection or resource path based on the path parameters.  If the final path segment contains a path parameter, then it's assumed to be a resource path; otherwise, it's a collection path.  For example, if the [Swagger Pet Store API](../../samples/PetStore.yaml) didn't have any `get` operations for any of its paths, then they would be categorized like this, based on their path parameters:
+But what if your API has a path _without_ a `GET` operation?  Or what if your `GET` operation _doesn't_ have a response schema? In this case, the Mock middleware tries to guess whether it's a collection or resource path based on the path parameters.  If the final path segment contains a path parameter, then it's assumed to be a resource path; otherwise, it's a collection path.  For example, if the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) didn't have any `get` operations for any of its paths, then they would be categorized like this, based on their path parameters:
 
 * __Collections:__<br>
 `/pets`, `/pets/{petName}/photos`, and `/` (the root URL) would all be considered collection paths becasue they do not end with parameters.
@@ -263,7 +263,7 @@ app.use(middleware.mock());
 
 
 ### Manipulating the mock data store
-The Mock middleware uses a [DataStore](../exports/DataStore.md) object to get and save all of its data.  You can add, delete, or modify data in the data store to change how the Mock middleware behaves.  There's a great example of this in [Sample 2](../../samples/sample2.js).  It has a custom middleware function to detect when a pet's name changes.  When that happens, it deletes the old pet from the data store and creates a new pet resource at the new URL (since the pet's name is part of the URL).
+The Mock middleware uses a [DataStore](../exports/DataStore.md) object to get and save all of its data.  You can add, delete, or modify data in the data store to change how the Mock middleware behaves.  There's a great example of this in [Sample 2](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js).  It has a custom middleware function to detect when a pet's name changes.  When that happens, it deletes the old pet from the data store and creates a new pet resource at the new URL (since the pet's name is part of the URL).
 
 See the [Sample 2 Walkthrough](../samples/walkthrough2.md) for a detailed explanation.
 

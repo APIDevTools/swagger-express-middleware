@@ -5,15 +5,16 @@ Annotates each request with all the relevant information from the Swagger defini
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](../../samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ````javascript
-var util       = require('util');
-var express    = require('express');
-var middleware = require('swagger-express-middleware');
-var app        = express();
+const util = require('util');
+const express = require('express');
+const createMiddleware = require('swagger-express-middleware');
 
-middleware('PetStore.yaml', app, function(err, middleware) {
+let app = express();
+
+createMiddleware('PetStore.yaml', app, function(err, middleware) {
     // Add the Metadata middleware to the Express app
     app.use(middleware.metadata());
 

@@ -1,9 +1,5 @@
-Swagger Express Middleware
-============================
-
-
 Sample 1 Walkthrough
---------------------------
+============================
 * [Running the sample](running.md)
 * __JavaScript Walkthrough__
 * [YAML Walkthrough](yaml.md)
@@ -11,7 +7,7 @@ Sample 1 Walkthrough
 
 JavaScript Walkthrough
 --------------------------
-Now that you have the sample [running](running.md), it's time to look at the source code.  Open up [sample1.js](../../samples/sample1.js) and let's see what it's doing.
+Now that you have the sample [running](running.md), it's time to look at the source code.  Open up [sample1.js](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js) and let's see what it's doing.
 
 
 ### Creating an Express Application
@@ -19,7 +15,7 @@ If you're already familiar with Express.js, then the first few lines should be p
 
 
 ### Middleware initialization
-The next few lines of code are where we really start working with Swagger Express Middleware.  First we use `path.join()` to get the full path of our [Swagger file](../../samples/PetStore.yaml), then we use it to initialize the middleware.  For more details about this line, see the [createMiddleware function](../exports/createMiddleware.md) documentation.
+The next few lines of code are where we really start working with Swagger Express Middleware.  First we use `path.join()` to get the full path of our [Swagger file](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml), then we use it to initialize the middleware.  For more details about this line, see the [createMiddleware function](../exports/createMiddleware.md) documentation.
 
 ````javascript
 createMiddleware(swaggerFile, app, function(err, middleware) {
@@ -51,6 +47,8 @@ app.listen(8000, function() {
 ````
 
 
--------------------------------------------------------------------------------------------------
-| Back: [Running the Sample](running.md)        | Next: [YAML Walkthrough](yaml.md)             |
-|:----------------------------------------------|----------------------------------------------:|
+Sample 1 Walkthrough
+--------------------------
+* [Running the sample](running.md)
+* __JavaScript Walkthrough__
+* [YAML Walkthrough](yaml.md)
