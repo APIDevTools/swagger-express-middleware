@@ -33,7 +33,7 @@ You should see a message telling you that the Swagger Pet Store is now running a
 
 This page is just a simple GUI that lets you perform _some_ of the operations in the [Swagger Pet Store API](../../samples/PetStore.yaml).  You can add, edit, and delete pets, as well as add pet photos.  There's also helpful links to the raw YAML and JSON data.
 
-__TIP:__ Browsers differ in how they handle .yaml and .json URLs.  Some browsers open the files as plain-text in the browser window.  Others prompt you to download the file or open it in your default text editor.
+> **TIP:** Browsers differ in how they handle .yaml and .json URLs.  Some browsers open the files as plain-text in the browser window.  Others prompt you to download the file or open it in your default text editor.
 
 
 ### Adding/Editing a Pet
@@ -41,7 +41,7 @@ The big text box in the middle of the page lets you enter the raw JSON data for 
 
 Each time you save or delete a pet, you'll see a pop-up window showing you the response from the server.  If there's something wrong with your JSON data, then you'll see an error message explaining the problem.  If all goes well, then the server will send the back the JSON data for the pet that was created, updated, or deleted.  This is _not necessarily_ the same as the JSON data you sent to the server, especially in the case of an update or delete.
 
-__TIP:__ Swagger Express Middleware will automatically determine that the `name` property is the key field for a pet. That's how it determines whether the "_Save_" button causes an insert or an update.  It's also how it determines which pet to delete when you click the "_Delete_" button.  How does this work?  Read the [Mock middleware documentation](../middleware/mock.md).
+> **TIP:** Swagger Express Middleware will automatically determine that the `name` property is the key field for a pet. That's how it determines whether the "_Save_" button causes an insert or an update.  It's also how it determines which pet to delete when you click the "_Delete_" button.  How does this work?  Read the [Mock middleware documentation](../middleware/mock.md).
 
 
 ### Adding/Viewing Photos
@@ -49,7 +49,7 @@ The form at the bottom of the page lets you add pet photos. Use the file-picker 
 
 You can click the "_Photos_" button to view all the photo data for the current pet.  This is _not_ the actual images, just the JSON data, such as file names, sizes, MIME types, etc.  However, you'll see that each image is assigned a unique `id` property.  You can use this ID to view an individual photo (e.g. [http://localhost:8000/pets/Fido/photos/123456789](http://localhost:8000/pets/Fido/photos/123456789))
 
-__TIP:__ So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](../../samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md#how-primary-keys-are-determined).
+> **TIP:** So how does each photo automatically get a unique ID assigned? The [Swagger Pet Store API](../../samples/PetStore.yaml) defines an optional, numeric `id` parameter for the `POST /pets/{petName}/photos` operation, and our HTML form didn't supply a value for that parameter.  The mock middleware determines that the `id` property is the key property, so it generates a unique value for it.  For more information, read the [Mock middleware documentation](../middleware/mock.md#how-primary-keys-are-determined).
 
 
 ### More Advanced Stuff

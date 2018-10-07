@@ -156,7 +156,7 @@ Each operation in your Swagger API can have multiple responses defined &mdash; o
 
 __NOTE:__ If your Swagger API doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
 
-__TIP:__ If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the Swagger API. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
+> **TIP:** If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the Swagger API. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
 
 
 ### How response headers are set
@@ -177,7 +177,7 @@ Sets a cookie named "_swagger_" with a random, unique value.  If the "_swagger_"
 * __Anything else__<br>
 A random value is generated, based on the data type of the header.
 
-__TIP:__ You can set response headers yourself using custom middleware.  The Mock middleware won't set any headers that already have values.
+> **TIP:** You can set response headers yourself using custom middleware.  The Mock middleware won't set any headers that already have values.
 
 
 ### How the content-type is set
@@ -272,6 +272,3 @@ See the [Sample 2 Walkthrough](../samples/walkthrough2.md) for a detailed explan
 The Mock middleware works pretty well for most standard REST operations, but many REST APIs have a _few_ operations that are atypical or require highly customized behavior.  In these cases, it may be best to simply bypass the Mock middleware entirely and just write your own implementation.  Fortunately the Express middleware pipeline was built with this sort of thing in mind.  Any middleware anywhere in the pipeline can choose _not_ to call `next()`, which skips the rest of the middleware in the pipeline.  So it's very easy for you to add your own implementation for certain operations that bypasses the Mock middleware entirely, while still allowing other operations to be handled by the Mock middleware.
 
 This is also a great technique for developing your API.  You can start-off with the Mock middleware handling _all_ operations in your API, and then start writing your own implementations one-by-one.  Once you have every operation implemented, you can remove the Mock middleware.  Or you can just leave the Mock middleware in place for when you inevitably add new operations to your API later.
-
-
-

@@ -25,7 +25,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "samples"
   ],
   "engines": {
     "node": ">=0.10.36",
@@ -38,7 +39,7 @@
     "upgrade": "npm-check -u",
     "bump": "bump --prompt --tag --push --all",
     "release": "npm run upgrade && npm test && npm run bump && npm publish",
-    "start": "cd samples && node sample2.js"
+    "start": "cd samples && node sample1.js"
   },
   "devDependencies": {
     "basic-auth": "^1.0.3",

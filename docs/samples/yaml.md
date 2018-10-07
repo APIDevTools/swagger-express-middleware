@@ -13,32 +13,32 @@ YAML Walkthrough
 --------------------------
 Now that you have the sample [running](running.md), it's time to look at the Swagger API.  Open up [PetStore.yaml](../../samples/PetStore.yaml) and let's go through it.
 
-__TIP:__ All of the behavior discussed on this page is the _default_ behavior of Swagger Express Middleware.  You can modify/disable _any_ of this behavior, either by passing options to the middleware, or by adding your own [custom logic](walkthrough2.md#custom-middleware).
+> **TIP:** All of the behavior discussed on this page is the _default_ behavior of Swagger Express Middleware.  You can modify/disable _any_ of this behavior, either by passing options to the middleware, or by adding your own [custom logic](walkthrough2.md#custom-middleware).
 
 
 ### Consumes/Produces
 The first section defines the default MIME types that any given operation in the API can consume and produce.  Most operations in the Swagger Pet Store API send and receive JSON data, but there are a few that override these default values.  For example, the `POST /pets/{petName}/photos` operation accepts `multipart/form-data`, and the `GET /pets/{petName}/photos/{id}` operation produces several different image formats.
 
-__TIP:__ If you try to send a request with a `Content-Type` header that doesn't match a `consumes` value, then the [Validate Request middleware](../middleware/validateRequest.md) will return an HTTP 415 (Unsupported Media Type) error.
+> **TIP:** If you try to send a request with a `Content-Type` header that doesn't match a `consumes` value, then the [Validate Request middleware](../middleware/validateRequest.md) will return an HTTP 415 (Unsupported Media Type) error.
 
-__TIP:__ If you send a request with an `Accept` header that doesn't match a `produces` value, then the [Validate Request middleware](../middleware/validateRequest.md) will return an [HTTP 406 (Not Acceptable)](http://httpstatusdogs.com/406-not-acceptable) error.  
+> **TIP:** If you send a request with an `Accept` header that doesn't match a `produces` value, then the [Validate Request middleware](../middleware/validateRequest.md) will return an [HTTP 406 (Not Acceptable)](http://httpstatusdogs.com/406-not-acceptable) error.
 
 
 ### Model Definitions
 The next section defines the models for the API: `pet`, `veterinarian`, and `address`.  Each model definition is a [JSON Schema](http://json-schema.org/examples.html) that defines the model's properties, whether they're required or optional, default values, data types, minimum lengths, min/max values, RegEx patterns, enumerations, and more.
 
-__TIP:__ If you send JSON data that doesn't comply with the model definition, then the [Parse Request middleware](../middleware/parseRequest.md) will return an [HTTP 400 (Bad Request)](http://httpstatusdogs.com/400-bad-request) error.
+> **TIP:** If you send JSON data that doesn't comply with the model definition, then the [Parse Request middleware](../middleware/parseRequest.md) will return an [HTTP 400 (Bad Request)](http://httpstatusdogs.com/400-bad-request) error.
 
 
 ### Querying/Deleting Pets
-The first two operations in the Pet Store API are `GET /pets` and `DELETE /pets`.  Both of these operations can be called without any query parameters, in which case they will return or delete _all_ pets, respectively.  You can also pass one or more query parameters to filter which pets are returned or deleted.  
+The first two operations in the Pet Store API are `GET /pets` and `DELETE /pets`.  Both of these operations can be called without any query parameters, in which case they will return or delete _all_ pets, respectively.  You can also pass one or more query parameters to filter which pets are returned or deleted.
 
 For example, [/pets?type=cat](http://localhost:8000/pets?type=cat) would get/delete all pets where `type` is "cat", and [/pets?age=4&tags=brown&tags=fluffy](http://localhost:8000/pets?age=4&tags=brown&tags=fluffy) would get/delete all pets where `age` is 4 and the `tags` array contains both "brown" and "fluffy".  You can also filter by nested properties. For example, [/pets?vet.address.state=CA](http://localhost:8000/pets?vet.address.state=CA) would get/delete all pets where the `state` of the `address` of the `vet` is "CA".
 
 ##### How Filtering Works
 This filtering functionality is provided by the [Mock middleware](../middleware/mock.md).  It will only filter by query parameters that are explicitly defined in the Swagger API. For example, the "name" parameter in [/pets?name=Fido](http://localhost:8000/pets?name=Fido) will be ignored, even though pets do have a `name` property, because there is no "name" query parameter defined in the API.
 
-__TIP:__ Notice that all the query parameters are only defined for the `GET` operation, along with a `&petFilters` [YAML anchor](https://en.wikipedia.org/wiki/YAML#Repeated_nodes). This allows us to save about 60 lines of duplicated code by simply referencing the anchor in the `DELETE` operation. 
+> **TIP:** Notice that all the query parameters are defined in the `definitions` section and the `GET` and `DELETE` operations use `$ref` pointers to reuse the same parameters.  This allows us to save about 60 lines of duplicated code.
 
 ##### Response Codes
 The `GET /pets` and `DELETE /pets` operations both define a "default" response code rather than a specific HTTP status code such as 200.  Because of this, the [Mock middleware](../middleware/mock.md) will return whichever response code makes the most sense.  For GET requests, this is always 200.  For DELETE requests, it is [200 (OK)](http://httpstatusdogs.com/200-ok) or [204 (No Content)](http://httpstatusdogs.com/204-no-content), depending on whether or not the operation returns data.  In this case, the DELETE operation _does_ return data, so a 200 response code is used.
@@ -55,7 +55,7 @@ The `GET /pets` operation has a `Last-Modified` response header defined, so the 
 
 
 ### Adding New Pets
-The `POST /pets` operation lets you add new pets.  Each pet that you add gets its own URL.  For example, if you add the pet `{name: "Fido", type: "dog", age: 4}`, then you can later GET, PATCH, or DELETE this pet at [/pets/Fido](http://localhost:8000/pets/Fido).  But how does this URL get created?  Why did it use the pet's `name` property rather than its `type` or `age`? 
+The `POST /pets` operation lets you add new pets.  Each pet that you add gets its own URL.  For example, if you add the pet `{name: "Fido", type: "dog", age: 4}`, then you can later GET, PATCH, or DELETE this pet at [/pets/Fido](http://localhost:8000/pets/Fido).  But how does this URL get created?  Why did it use the pet's `name` property rather than its `type` or `age`?
 
 ##### Determining the primary key
 The [Mock middleware](../middleware/mock.md) tries to determine your model's primary key using [a few different techniques](../middleware/mock.md#how-primary-keys-are-determined), depending on data types.  For `object` types, such as our `pet` model, it first looks for common property names like `id`, `key`, `username`, `name`, etc.  If that doesn't work, then it looks for required properties in your JSON schema. If all else fails, then it just generates a random, unique value.
@@ -71,9 +71,9 @@ The response schema is a `pet` object, so the newly-created pet will be returned
 
 
 ### Getting/Editing/Deleting a Pet by Name
-The `/pets/{petName}` path has three operations: `GET`, `PATCH`, and `DELETE`.  These are very similar to the operations we've already discussed, except that these three only operate on a single pet, rather than all pets or a filtered list of pets.  The [Mock middleware](../middleware/mock.md) will figure out that the `{petName}` path parameter corresponds to the `name` property on the `pet` model (using the [same logic as before](#determining-the-primary-key)).  This would still work, even if the parameter name was completely different, like `{theThingICallMyPet}`.
+The `/pets/{petName}` path has three operations: `GET`, `PATCH`, and `DELETE`.  These are very similar to the operations we've already discussed, except that these three only operate on a single pet, rather than all pets or a filtered list of pets.  The [Mock middleware](../middleware/mock.md) will figure out that the `{petName}` path parameter corresponds to the `name` property on the `pet` model (using the [same logic as before](#determining-the-primary-key)).  This would still work, even if the parameter name was completely different, like `theThingICallMyPet`.
 
-Since the pet is determined by the `{petName}` property, the `GET` and `DELETE` operations don't need to pass any other parameters.   The `PATCH` operation accepts a `pet` parameter that is the JSON data to update the pet.
+Since the pet is determined by the `{petName}` parameter, the `GET` and `DELETE` operations don't need to pass any other parameters.   The `PATCH` operation accepts a `pet` parameter that is the JSON data to update the pet.
 
 ##### Changing a Pet's Name
 Let's say you have this pet: `{name: "Fido", type: "dog"}` at the URL [/pets/Fido](http://localhost:8000/pets/Fido), and you decide you want to change Fido's name to "Fluffy".  So, you send a `PATCH` request to [/pets/Fido](http://localhost:8000/pets/Fido) with the data `{name: "Fluffy", type: "dog"}`.  Presto! Fido is now Fluffy.  Except for one thing: Fluffy's URL is still [/pets/Fido](http://localhost:8000/pets/Fido), _not_ [/pets/Fluffy](http://localhost:8000/pets/Fluffy).  Why is that?
@@ -86,7 +86,7 @@ The [Mock middleware](../middleware/mock.md) treats `PUT` and `PATCH` operations
 
 
 ### Adding Photos
-Up to now, we've only been looking at operations that send and receive JSON data.  But the `POST /pets/{petName}/photos` operation breaks that trend.  It consumes `multipart/form-data`, consisting of two string parameters, an integer parameter, and our first file parameter.  
+Up to now, we've only been looking at operations that send and receive JSON data.  But the `POST /pets/{petName}/photos` operation breaks that trend.  It consumes `multipart/form-data`, consisting of two string parameters, an integer parameter, and our first file parameter.
 
 ##### Auto-Generated IDs
 The `label` and `photo` parameters are required. `description` and `id` are optional.  If you don't specify a value for the `description` parameter, then it will be left undefined.  If you don't specify a value for the `id` parameter, then the [Mock middleware](../middleware/mock.md) will automatically set it to a random, unique value.  This is because the mock middleware uses the [same logic as before](#determining-the-primary-key) to determine that the `id` is the primary key for a photo. Whenever a primary key is not set, the mock middleware will set it.
@@ -100,12 +100,12 @@ The `POST` and `GET` operations both have an `object` response schema defined.  
 
 
 ### Getting/Deleting a Photo by ID
-The `GET /pets/{petName}/photos/{id}` and `DELETE /pets/{petName}/photos/{id}` operations should seem pretty straightforward by now.  Just as before, the `{petName}` parameter corresponds to the pet's `name` property, and the `{id}` parameter corresponds to the photo's `id`. 
+The `GET /pets/{petName}/photos/{id}` and `DELETE /pets/{petName}/photos/{id}` operations should seem pretty straightforward by now.  Just as before, the `{petName}` parameter corresponds to the pet's `name` property, and the `{id}` parameter corresponds to the photo's `id`.
 
 ##### Returning the Actual Image
 The `GET` operation has a new twist.  Rather than returning JSON data, it returns the actual image file that you uploaded.  This is accomplished by two things: First, the `produces` MIME types are all `image/*` rather than `application/json`, and second, the response schema is `type: file` rather than `type: object`.  Whenever the [Mock middleware](../middleware/mock.md) encouters a `file` response schema, it will return the raw file data rather than the JSON object describing the file.
 
-__TIP:__ If the image file no longer exists on the server (such as if it has been deleted), then the mock middleware will return an [HTTP 410 (Gone)](http://httpstatusdogs.com/410-gone) response.
+> **TIP:** If the image file no longer exists on the server (such as if it has been deleted), then the mock middleware will return an [HTTP 410 (Gone)](http://httpstatusdogs.com/410-gone) response.
 
 ##### Empty DELETE Response
 Notice that the `DELETE` operation does not have a response schema defined.  It simply has a `default` response code and that's all.  Because of this, the [Mock middleware](../middleware/mock.md) will send an [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content) response rather than an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).

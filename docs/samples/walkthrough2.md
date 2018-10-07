@@ -13,7 +13,7 @@ Sample 2 Walkthrough
 
 Overview
 --------------------------
-This sample expands upon [Sample 1 walkthrough](running.md) and demonstrates a few more advanced features of Swagger Express Middleware, such as setting a few options, initializing the mock data store, and adding custom middleware logic.
+This sample expands upon the [Sample 1 walkthrough](running.md) and demonstrates a few more advanced features of Swagger Express Middleware, such as setting a few options, initializing the mock data store, and adding custom middleware logic.
 
 
 Running the Sample
@@ -29,8 +29,7 @@ Alternate Syntax
 In Sample 1, we used the [createMiddleware](../exports/createMiddleware.md) function to load the Swagger file and initialize the middleware.
 
 ````javascript
-// Call the createMiddleware function (aliased as "middleware")
-middleware('PetStore.yaml', app, function(err, middleware) {
+createMiddleware(swaggerFile, app, function(err, middleware) {
 ````
 
 The `createMiddleware` function is a helper function that simplifies your code a bit.  But in Sample 2, we're _not_ using it so we can show you what's going on under the hood.  When you call the `createMiddleware` function, it creates a new [Middleware](../exports/Middleware.md) object and calls its [`init()` method](../exports/Middleware.md#initswagger-callback).  That's exactly what we're doing in Sample 2:
@@ -45,7 +44,7 @@ There is no functional difference between these two syntaxes.  It's just a matte
 
 Pre-Populated Data
 --------------------------
-Sample 1 started out with an empty pet store, so you had to add a pet before [/pets](http://localhost:8000/pets) would return any data.  Now in Sample 2, we're using the [MemoryDataStore](../exports/MemoryDataStore.md) class to pre-populate the [Mock middleware](../middleware/mock.md) with data.
+Sample 1 started out with an empty pet store, so you had to add a pet before [`GET /pets`](http://localhost:8000/pets) would return any data.  Now in Sample 2, we're using the [MemoryDataStore](../exports/MemoryDataStore.md) class to pre-populate the [Mock middleware](../middleware/mock.md) with data.
 
 ````javascript
 // Create a custom data store with some initial mock data
@@ -97,6 +96,8 @@ All Swagger Express Middleware modules honor Express's case-sensitivity and stri
 ````javascript
 app.use(middleware.files(
     {
+        // Override the Express App's case-sensitive and strict-routing settings
+        // for the Files middleware.
         caseSensitive: false,
         strict: false
     },
@@ -216,4 +217,3 @@ The second custom middleware function is pretty straightforward.  Notice that it
 The first parameter is the `Error` object that was thrown.  Just like most other Express middleware, Swagger Express Middleware always sets the `status` property of any errors to the corresponding HTTP status code.  So, the middleware function calls [`res.status()`](http://expressjs.com/4x/api.html#res.status) using the `err.status` property.
 
 The middleware formats the error message as HTML, so it also calls [`res.type()`](http://expressjs.com/4x/api.html#res.type) to explicitly set the `Content-Type` header to `text/html`.  Then it calls [`res.send()`](http://expressjs.com/4x/api.html#res.send) to send the response.
-
