@@ -51,8 +51,8 @@ The CORS middleware automatically sets the following HTTP headers on _every_ req
 | `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your Swagger API, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
 | `Access-Control-Allow-Headers`     | If the HTTP request includes an `Access-Control-Request-Headers` header, then that value is echoed back; otherwise, an empty value is returned.
 | `Access-Control-Allow-Max-Age`     | This header is always set to zero, which means CORS preflight requests will not be cached.  This is especially useful for development/debugging, but you may want to set it to a higher value for production.
-| <nobr>`Access-Control-Allow-Credentials`</nobr> | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>__NOTE:__ This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
-| `Vary`                             | If the `Access-Control-Allow-Origin` is _not_ a wildcard, then `Origin` is added to the `Vary` response header.<br><br>__NOTE:__ This behavior is required by the CORS spec. It indicates to clients that server responses will differ based on the value of the `Origin` request header.
+| <nobr>`Access-Control-Allow-Credentials`</nobr> | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>**NOTE:** This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
+| `Vary`                             | If the `Access-Control-Allow-Origin` is _not_ a wildcard, then `Origin` is added to the `Vary` response header.<br><br>**NOTE:** This behavior is required by the CORS spec. It indicates to clients that server responses will differ based on the value of the `Origin` request header.
 
 
 ### Customizing CORS headers

@@ -2,7 +2,7 @@ Mock middleware
 ============================
 __Fully-functional mock__ implementations for every operation in your API, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
-__NOTE:__ The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible Swagger API.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the [default behavior](#default-behavior) with your own [custom behavior](#customizing-behavior).
+> **NOTE:** The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible Swagger API.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the [default behavior](#default-behavior) with your own [custom behavior](#customizing-behavior).
 
 
 Examples
@@ -88,7 +88,7 @@ But what if your API has a path _without_ a `GET` operation?  Or what if your `G
 * __Resources:__<br>
 `/pets/{petName}` and `/pets/{petName}/photos/{id}` would both be considered resource paths becasue they end with parameters.
 
-__NOTE:__ This algorithm may be enhanced with additional logic over time.  If you have any ideas for ways to improve the algorithm, please [let me know](https://github.com/APIDevTools/swagger-express-middleware/issues).
+> **NOTE:** This algorithm may be enhanced with additional logic over time.  If you have any ideas for ways to improve the algorithm, please [let me know](https://github.com/APIDevTools/swagger-express-middleware/issues).
 
 
 ### 2) Perform the corresponding action for the HTTP method
@@ -154,7 +154,7 @@ The final step to the Mock middleware is sending a response back to the client. 
 ### How the status code is set
 Each operation in your Swagger API can have multiple responses defined &mdash; one for each HTTP status code, plus a "default" response.  If you define any 2XX or 3XX responses, then the Mock middleware will use the lowest one as the status code.  If you only have a "default" response defined, then it will use HTTP status code that is most appropriate.  For `POST` and `PUT` operations, it will use [HTTP 201 (Created)](http://httpstatusdogs.com/201-created).  For `DELETE` operations that have no response schema, it will use [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content).  For everything else, it uses an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).
 
-__NOTE:__ If your Swagger API doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
+> **NOTE:** If your Swagger API doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
 
 > **TIP:** If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the Swagger API. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
 

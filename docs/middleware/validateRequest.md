@@ -75,7 +75,7 @@ If your Swagger API has [security requirements](https://github.com/swagger-api/s
 
 If the request doesn't contain the necessary security information, then it will throw an [HTTP 401 (Unauthorized)](http://httpstatusdogs.com/401-unauthorized) error.  For `basic` security, it will also set the `WWW-Authenticate` response header.
 
-__NOTE:__ The Validate Request middleware does not perform any authentication or authorization. It simply verifies that authentication info is present.
+> **NOTE:** The Validate Request middleware does not perform any authentication or authorization. It simply verifies that authentication info is present.
 
 
 ### HTTP 404 (Not Found)

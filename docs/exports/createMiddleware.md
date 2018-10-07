@@ -49,7 +49,7 @@ The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a val
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
 An [Express Application](http://expressjs.com/4x/api.html#application) or [Router](http://expressjs.com/4x/api.html#router) that will be used to determine settings (such as case-sensitivity and strict routing) and to register path-parsing middleware.
 <br><br>
-__NOTE:__ If you don't specify this parameter, then the default Express routing settings will be used (case-insensitive, non-strict).  You can override this parameter (or the defaults) for any specific middleware by passing an Express App or Router to the middleware.
+**NOTE:** If you don't specify this parameter, then the default Express routing settings will be used (case-insensitive, non-strict).  You can override this parameter (or the defaults) for any specific middleware by passing an Express App or Router to the middleware.
 
 * __callback__ (_optional_) - `function(err, middleware)`<br>
 A callback function that will be called once the Swagger API is fully parsed, dereferenced, and validated. The second parameter is the [Middleware](Middleware.md) object that was created.
