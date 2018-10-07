@@ -52,6 +52,7 @@ The resource's data.  This can be any value that is serializable as JSON, such a
 
 Properties
 -----------------------
+
 | Property Name       | Data Type               | Description
 |:--------------------|:------------------------|:-------------
 | `collection`        | string       | The resource's collection path.  This property can be an empty string, if the resource is at the root of your API.<br><br> The collection path should always begin with a forward slash and should _not_ end with one.  The `Resource` constructor automatically handles this normalization.  For example, "pets/" becomes "/pets".

@@ -95,6 +95,7 @@ But what if your API has a path _without_ a `GET` operation?  Or what if your `G
 This is where the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) happens.  Each HTTP method corresponds to a CRUD action, though the action varies depending on whether this is a resource operation or a collection operation.
 
 ##### Resources
+
 | HTTP Method | CRUD action
 |:------------|:-------------
 | `GET`       | Returns the resource.  If no data exists, then an [HTTP 404 (Not Found)](http://httpstatusdogs.com/404-not-found) error is sent.
@@ -106,6 +107,7 @@ This is where the [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_
 | `OPTIONS`   | `OPTIONS` is usually reserved for CORS preflight requests.  If you're _not_ using the [CORS middleware](CORS.md), then `OPTIONS` is treated the same as `GET`
 
 ##### Collections
+
 | HTTP Method | CRUD action
 |:------------|:-------------
 | `GET`       | Returns all resources in the collection.  If your API has `query` parameters, they can be used to filter the results (e.g. _/pets?age=4&type=dog_)
