@@ -7,7 +7,7 @@ __Fully-functional mock__ implementations for every operation in your API, inclu
 
 Examples
 --------------------------
-For some examples (and explanations) of the Mock middleware in action, see the [Sample 1 walkthrough](../samples/running.md) and [Sample 2 walkthrough](../samples/walkthrough2.md).
+For some examples (and explanations) of the Mock middleware in action, see the [Sample 1 walkthrough](../walkthroughs/running.md) and [Sample 2 walkthrough](../walkthroughs/walkthrough2.md).
 
 ````javascript
 const express = require('express');
@@ -147,7 +147,7 @@ If the operation has a _single_ file parameter, then the file name is used as th
 
 If a primary key is found, then it is used as the resource's URL.  If the primary key property has no value, then a random, unique value is generated for it, according to the property's data type.  If _no_ primary key is found at all, then a random value is generated and used as the resource's URL.
 
-For an example of all this in action, see the [Sample 1 walkthrough](../samples/running.md).  When you `POST` to the the _/pets_ path, the pet's `name` property is used for the resource URL (e.g. _/pets/Fido_).   When you `POST` a photo to the _/pets/{petName}/photos_ path, the `id` parameter is used as the resource URL (e.g. _/pets/Fido/photos/12345_).  But the `id` parameter is optional, so if you don't specify it, then a random, unique ID is generated.
+For an example of all this in action, see the [Sample 1 walkthrough](../walkthroughs/running.md).  When you `POST` to the the _/pets_ path, the pet's `name` property is used for the resource URL (e.g. _/pets/Fido_).   When you `POST` a photo to the _/pets/{petName}/photos_ path, the `id` parameter is used as the resource URL (e.g. _/pets/Fido/photos/12345_).  But the `id` parameter is optional, so if you don't specify it, then a random, unique ID is generated.
 
 
 ### 3) Send the response
@@ -227,7 +227,7 @@ paths:
 ### Modifying the request
 All Express apps use a middleware pipeline.  Any middleware in the pipeline can modify the [Request object](http://expressjs.com/4x/api.html#request), and other middleware later in the pipeline will get the modified object.  You can do the same thing with the Mock middleware.
 
-For example, if your data model has a primary key that is _not_ specified by the client, then the Mock middleware normally [generates a random unique value](../samples/yaml.md#auto-generated-ids) for the key.  But what if the random value isn't good enough for you?  Maybe you have a specific algorithm for determining the key, or maybe it needs to be formatted a certain way.  In this case, the answer is to simply add your own middleware to set the key yourself. You can modify the Request object so that when it gets to the Mock middleware, the key is already set to whatever value you want.  Here's an example:
+For example, if your data model has a primary key that is _not_ specified by the client, then the Mock middleware normally [generates a random unique value](../walkthroughs/yaml.md#auto-generated-ids) for the key.  But what if the random value isn't good enough for you?  Maybe you have a specific algorithm for determining the key, or maybe it needs to be formatted a certain way.  In this case, the answer is to simply add your own middleware to set the key yourself. You can modify the Request object so that when it gets to the Mock middleware, the key is already set to whatever value you want.  Here's an example:
 
 ````javascript
 // Set the photo's ID using a custom algorithm
@@ -267,7 +267,7 @@ app.use(middleware.mock());
 ### Manipulating the mock data store
 The Mock middleware uses a [DataStore](../exports/DataStore.md) object to get and save all of its data.  You can add, delete, or modify data in the data store to change how the Mock middleware behaves.  There's a great example of this in [Sample 2](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js).  It has a custom middleware function to detect when a pet's name changes.  When that happens, it deletes the old pet from the data store and creates a new pet resource at the new URL (since the pet's name is part of the URL).
 
-See the [Sample 2 Walkthrough](../samples/walkthrough2.md) for a detailed explanation.
+See the [Sample 2 Walkthrough](../walkthroughs/walkthrough2.md) for a detailed explanation.
 
 
 ### Skip the Mock middleware

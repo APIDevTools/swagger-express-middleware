@@ -1,6 +1,6 @@
 The DataStore abstract class
 ============================
-The [Mock middleware](../middleware/mock.md) uses `DataStore` classes to store its data, and you can use the `DataStore` API to to add/modify/remove this mock data, which is very handy for demos and POCs.  Refer to the [Mock middleware documentation](../middleware/mock.md) to find out how to specify which `DataStore` class is used.  Refer to the [Sample 2 walkthrough](../samples/walkthrough2.md) to see how to initialize the data store with data.
+The [Mock middleware](../middleware/mock.md) uses `DataStore` classes to store its data, and you can use the `DataStore` API to to add/modify/remove this mock data, which is very handy for demos and POCs.  Refer to the [Mock middleware documentation](../middleware/mock.md) to find out how to specify which `DataStore` class is used.  Refer to the [Sample 2 walkthrough](../walkthroughs/walkthrough2.md) to see how to initialize the data store with data.
 
 > **TIP:** This is an _abstract base class_, which means you should _not_ use this class directly. Instead, you should use one of its child classes: [MemoryDataStore](MemoryDataStore.md) or [FileDataStore](FileDataStore.md).  Or, if you want to store your data somewhere else &mdash; such as a SQL database, a Cloud service, etc. &mdash; then you can create your own child class that inherits from `DataStore`.
 

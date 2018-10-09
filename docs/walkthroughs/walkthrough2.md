@@ -166,7 +166,7 @@ Custom Middleware
 In addition to all the Swagger Express Middleware modules, Sample 2 also includes a couple custom middleware functions.
 
 ### Changing a Pet's Name
-In Sample 1, we pointed out that when you change a pet's name, it's [URL stays the same](../samples/yaml.md#changing-a-pets-name), since the URL for each resource is assigned when the resource is _first created_.  Well, in Sample 2, we've fixed that issue:
+In Sample 1, we pointed out that when you change a pet's name, it's [URL stays the same](../walkthroughs/yaml.md#changing-a-pets-name), since the URL for each resource is assigned when the resource is _first created_.  Well, in Sample 2, we've fixed that issue:
 
 ````javascript
 app.patch('/pets/:petName', function(req, res, next) {
