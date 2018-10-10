@@ -9,7 +9,7 @@ Example
 --------------------------
 This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
-````javascript
+```javascript
 const util = require('util');
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
@@ -32,7 +32,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('Go to http://localhost:8000/pets');
     });
 });
-````
+```
 
 Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets).  You'll see all the parsed query params for the `/pets` path in the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).  Now try adding some query parameters to the URL and see how those params get parsed.
 

@@ -16,10 +16,10 @@ Run the Sample
 --------------------------
 To run the sample, you'll need to `cd` to the `samples` directory and then run [sample1.js](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js) in Node.  Here's how to do that:
 
-````bash
+```bash
 cd node_modules/swagger-express-middleware/samples
 node sample1.js
-````
+```
 
 
 ### Open Your Browser

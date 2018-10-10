@@ -9,7 +9,7 @@ Examples
 --------------------------
 For some examples (and explanations) of the Mock middleware in action, see the [Sample 1 walkthrough](../walkthroughs/running.md) and [Sample 2 walkthrough](../walkthroughs/walkthrough2.md).
 
-````javascript
+```javascript
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
 
@@ -26,7 +26,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
     app.listen(8000, function() {
         console.log('POST some data to http://localhost:8000/pets');
     });
-````
+```
 
 
 Options
@@ -205,7 +205,7 @@ The Mock middleware is pretty good at figuring out the right response to send.  
 
 But you can change that.  Rather than sending back a 404, you might want to send back some other value.  Perhaps your own custom error object, or maybe a friendly message with instructions, or maybe just a default value.  You can do this by specifying a `default` or `example` value on your response schema.  For example:
 
-````yaml
+```yaml
 paths:
   /pets/{petName}:
     get:
@@ -221,7 +221,7 @@ paths:
               tags:
                 - furry
                 - brown
-````
+```
 
 
 ### Modifying the request
@@ -229,7 +229,7 @@ All Express apps use a middleware pipeline.  Any middleware in the pipeline can 
 
 For example, if your data model has a primary key that is _not_ specified by the client, then the Mock middleware normally [generates a random unique value](../walkthroughs/yaml.md#auto-generated-ids) for the key.  But what if the random value isn't good enough for you?  Maybe you have a specific algorithm for determining the key, or maybe it needs to be formatted a certain way.  In this case, the answer is to simply add your own middleware to set the key yourself. You can modify the Request object so that when it gets to the Mock middleware, the key is already set to whatever value you want.  Here's an example:
 
-````javascript
+```javascript
 // Set the photo's ID using a custom algorithm
 app.post('/pets/:petName/photos', function(req, res, next) {
     req.body.id = myCustomIdAlgorithm();
@@ -238,7 +238,7 @@ app.post('/pets/:petName/photos', function(req, res, next) {
 
 // Make sure the Mock middleware comes *after* your middleware
 app.use(middleware.mock());
-````
+```
 
 
 ### Modifying the response
@@ -246,7 +246,7 @@ Just like you can modify the [Request object](http://expressjs.com/4x/api.html#r
 
 Here's an example of using `res.body` to customize the response:
 
-````javascript
+```javascript
 app.post('/pets', function(req, res, next) {
     // Customize the response body
     res.body = {
@@ -261,7 +261,7 @@ app.post('/pets', function(req, res, next) {
 
 // Make sure the Mock middleware comes *after* your middleware
 app.use(middleware.mock());
-````
+```
 
 
 ### Manipulating the mock data store

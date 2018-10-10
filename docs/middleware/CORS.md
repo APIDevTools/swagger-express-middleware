@@ -9,7 +9,7 @@ Example
 --------------------------
 This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
-````javascript
+```javascript
 const util = require('util');
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
@@ -29,7 +29,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('Go to http://localhost:8000/pets');
     });
 });
-````
+```
 
 Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets) and [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos](http://localhost:8000/pets/Fido/photos). You will see that the HTTP headers are set differently for each URL, based on the Swagger API.
 
@@ -51,7 +51,7 @@ The CORS middleware automatically sets the following HTTP headers on _every_ req
 | `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your Swagger API, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
 | `Access-Control-Allow-Headers`     | If the HTTP request includes an `Access-Control-Request-Headers` header, then that value is echoed back; otherwise, an empty value is returned.
 | `Access-Control-Allow-Max-Age`     | This header is always set to zero, which means CORS preflight requests will not be cached.  This is especially useful for development/debugging, but you may want to set it to a higher value for production.
-| <nobr>`Access-Control-Allow-Credentials`</nobr> | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>**NOTE:** This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
+| `Access-Control-Allow-Credentials` | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>**NOTE:** This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
 | `Vary`                             | If the `Access-Control-Allow-Origin` is _not_ a wildcard, then `Origin` is added to the `Vary` response header.<br><br>**NOTE:** This behavior is required by the CORS spec. It indicates to clients that server responses will differ based on the value of the `Origin` request header.
 
 
@@ -60,7 +60,7 @@ As shown above, the CORS middleware tries to determine the best value for each C
 
 To override a header's value, just specify a `default` value in your Swagger API.  You can do this for a specific operation, or for an entire path by using the `options` operation.  For example, in the following Swagger API, the `Access-Control-Allow-Headers` and `Access-Control-Allow-Origin` headers have been customized for all operations on the "_/pets/{petName}_" path, and the `Access-Control-Max-Age` header has been customized only for the `get` operation.
 
-````yaml
+```yaml
 /pets/{petName}:
   options:
     responses:
@@ -82,4 +82,4 @@ To override a header's value, just specify a `default` value in your Swagger API
           Access-Control-Max-Age:
             type: number
             default: 60
-````
+```

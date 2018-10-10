@@ -8,7 +8,7 @@ Example
 --------------------------
 This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
-````javascript
+```javascript
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
 
@@ -25,7 +25,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('Go to to http://localhost:8000/my/custom/path/PetStore.yaml');
     });
 });
-````
+```
 
 Run the above example and then browse to [http://localhost:8000/api-docs/](http://localhost:8000/api-docs/) and [http://localhost:8000/my/custom/path/PetStore.yaml](http://localhost:8000/my/custom/path/PetStore.yaml).  The first URL will return the Swagger API in JSON.  The second URL will return the raw [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) file.  Note that the second URL's path has been customized in the example code.
 

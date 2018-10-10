@@ -25,16 +25,16 @@ Alternate Syntax
 --------------------------
 In Sample 1, we used the [createMiddleware](../exports/createMiddleware.md) function to load the Swagger file and initialize the middleware.
 
-````javascript
+```javascript
 createMiddleware(swaggerFile, app, function(err, middleware) {
-````
+```
 
 The `createMiddleware` function is a helper function that simplifies your code a bit.  But in Sample 2, we're _not_ using it so we can show you what's going on under the hood.  When you call the `createMiddleware` function, it creates a new [Middleware](../exports/Middleware.md) object and calls its [`init()` method](../exports/Middleware.md#initswagger-callback).  That's exactly what we're doing in Sample 2:
 
-````javascript
+```javascript
 let middleware = new Middleware(app);
 middleware.init('PetStore.yaml', function(err) {
-````
+```
 
 There is no functional difference between these two syntaxes.  It's just a matter of personal taste.
 
@@ -43,7 +43,7 @@ Pre-Populated Data
 --------------------------
 Sample 1 started out with an empty pet store, so you had to add a pet before [`GET /pets`](http://localhost:8000/pets) would return any data.  Now in Sample 2, we're using the [MemoryDataStore](../exports/MemoryDataStore.md) class to pre-populate the [Mock middleware](../middleware/mock.md) with data.
 
-````javascript
+```javascript
 // Create a custom data store with some initial mock data
 let myDB = new MemoryDataStore();
 myDB.save(
@@ -59,11 +59,11 @@ myDB.save(
 // The mock middleware will use our custom data store,
 // which we already pre-populated with mock data
 app.use(middleware.mock(myDB));
-````
+```
 
 Each of the five sample pets is a [Resource](../exports/Resource.md) object, which is what the [DataStore](../exports/DataStore.md) class uses to store data.  You could also load data using the [Resource.parse()](../exports/Resource.md#parsejson) method, which accepts plain JSON data and converts it to `Resource` objects.  Here's an example:
 
-````javascript
+```javascript
 let data = [
     {collection: '/pets', name: '/Lassie', data: {name: 'Lassie', type: 'dog'}},
     {collection: '/pets', name: '/Clifford', data: {name: 'Clifford', type: 'dog'}},
@@ -74,23 +74,23 @@ let data = [
 
 let myDB = new MemoryDataStore();
 myDB.save(Resource.parse(data));
-````
+```
 
 
 Case-Sensitive and Strict Routing
 --------------------------
 By default Express is case-insensitive and is not strict about whether paths have a trailing slash, but in this sample, we've changed both of those settings using the [`app.set()` method](http://expressjs.com/4x/api.html#app.set).
 
-````javascript
+```javascript
 app.enable('case sensitive routing');
 app.enable('strict routing');
-````
+```
 
 In Sample 1, [/pets/Fido](http://localhost:8000/pets/Fido), [/pets/fido](http://localhost:8000/pets/fido), and [/pets/Fido/](http://localhost:8000/pets/Fido/) all pointed to the same pet.  Now, those are treated as three different resources, and you could create a different pet at each one.  If you only create a pet named "_Fido_", then [/pets/fido](http://localhost:8000/pets/fido) and [/pets/Fido/](http://localhost:8000/pets/Fido/) will return HTTP 404 errors.
 
 All Swagger Express Middleware modules honor Express's case-sensitivity and strict-routing settings.  This is why we passed the [Express App](http://expressjs.com/4x/api.html#app) to the `Middleware` constructor.  Every middleware module will automatically use the Express App (or [Router](http://expressjs.com/4x/api.html#router)) from the `Middleware` object.  But you can override this for any individual middleware if you want.  That's exactly what we've done in Sample 2 with the [Files middleware](../middleware/files.md):
 
-````javascript
+```javascript
 app.use(middleware.files(
     {
         // Override the Express App's case-sensitive and strict-routing settings
@@ -99,7 +99,7 @@ app.use(middleware.files(
         strict: false
     },
     ...
-````
+```
 
 So, wheras all the _other_ middleware are case-sensitive and strict about trailing slashes, the Files middleware is the opposite.  This means you can browse to [http://localhost:8000/swagger/api](http://localhost:8000/swagger/api), [http://localhost:8000/Swagger/API](http://localhost:8000/Swagger/API), [http://localhost:8000/Swagger/Api/](http://localhost:8000/Swagger/Api/), etc. and they'll all work.
 
@@ -108,7 +108,7 @@ Customized Middleware Options
 --------------------------
 In Sample 1, we didn't set any middleware options.  We just accepted the defaults.
 
-````javascript
+```javascript
 app.use(
     middleware.metadata(),
     middleware.CORS(),
@@ -117,11 +117,11 @@ app.use(
     middleware.validateRequest(),
     middleware.mock()
 );
-````
+```
 
 In Sample 2, we've customized the [Files middleware](../middleware/files.md) and [Parse Request middleware](../middleware/parseRequest.md) a bit.
 
-````javascript
+```javascript
 app.use(middleware.files(
     {
         caseSensitive: false,
@@ -154,7 +154,7 @@ app.use(middleware.parseRequest(
         }
     }
 ));
-````
+```
 
 We've already discussed the first parameter to the [Files middleware](../middleware/files.md), which overrides the default case-sensitivity and strict-routing settings.  In addition, we've also specified the second parameter, which customizes the file paths.  We've changed the URL of the Swagger API from the default ([/api-docs/](http://localhost:8000/api-docs/)) to [/swagger/api](http://localhost:8000/swagger/api).  And we've completely disabled serving the raw Swagger file ([/PetStore.yaml](http://localhost:8000/PetStore.yaml)).  This means that if you click either of the links at the top of the page ("_Swagger API (YAML)_" and "_Swagger API (JSON)_"), you'll get an [HTTP 404 (Not Found)](http://httpstatusdogs.com/404-not-found) error.
 
@@ -168,7 +168,7 @@ In addition to all the Swagger Express Middleware modules, Sample 2 also include
 ### Changing a Pet's Name
 In Sample 1, we pointed out that when you change a pet's name, it's [URL stays the same](../walkthroughs/yaml.md#changing-a-pets-name), since the URL for each resource is assigned when the resource is _first created_.  Well, in Sample 2, we've fixed that issue:
 
-````javascript
+```javascript
 app.patch('/pets/:petName', function(req, res, next) {
     if (req.body.name !== req.path.petName) {
         // The pet's name has changed, so change its URL.
@@ -193,7 +193,7 @@ app.patch('/pets/:petName', function(req, res, next) {
         next();
     }
 });
-````
+```
 
 This middleware listens for `PATCH` operations on the `/pets/{petName}` path.  This is the operation that edits a pet.  As an example, let's say that you send the data `{name: 'Fluffy', type: 'dog'}` to `/pets/Fido`.  In this case, you are renaming Fido to Fluffy, and you want the new resource URL to be `/pets/Fluffy`.
 

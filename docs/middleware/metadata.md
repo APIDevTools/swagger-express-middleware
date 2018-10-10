@@ -7,7 +7,7 @@ Example
 --------------------------
 This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
-````javascript
+```javascript
 const util = require('util');
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
@@ -32,7 +32,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('Go to http://localhost:8000/pets/Fido/photos/12345');
     });
 });
-````
+```
 
 Run the above example and then try browsing to [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos/12345](http://localhost:8000/pets/Fido/photos/12345).  You will see different metadata for each path.
 

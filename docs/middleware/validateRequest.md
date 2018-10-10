@@ -7,7 +7,7 @@ Example
 --------------------------
 This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
-````javascript
+```javascript
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
 
@@ -41,7 +41,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('Go to http://localhost:8000');
     });
 });
-````
+```
 
 Run the above example and then browse to [http://localhost:8000](http://localhost:8000).  When you click the button, it will send a `POST` request to the `/pets/{petName}` path in the [Swagger PetStore API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).  However, that path does not allow `POST` requests, so the Validate Request middleware will throw an [HTTP 405 (Method Not Allowed)](http://httpstatusdogs.com/405-method-not-allowed) error.
 

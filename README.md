@@ -45,12 +45,12 @@ Installation and Use
 --------------------------
 Install using [NPM](https://docs.npmjs.com/getting-started/what-is-npm).
 
-````bash
+```bash
 npm install swagger-express-middleware
-````
+```
 Then use it in your [Node.js](http://nodejs.org/) script like this:
 
-````javascript
+```javascript
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
 
@@ -72,7 +72,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
         console.log('The PetStore sample is now running at http://localhost:8000');
     });
 });
-````
+```
 
 Samples & Walkthroughs
 --------------------------

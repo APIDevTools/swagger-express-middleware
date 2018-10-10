@@ -1,4 +1,4 @@
-The Resource class
+The `Resource` class
 ============================
 The `Resource` class represents a single [REST resource](http://restful-api-design.readthedocs.org/en/latest/resources.html) in your API.  If you are unfamiliar with RESTful API design, [here is a good article](http://www.thoughtworks.com/insights/blog/rest-api-design-resource-modeling) on the topic.
 

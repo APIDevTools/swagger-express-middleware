@@ -1,4 +1,4 @@
-The FileDataStore class
+The `FileDataStore` class
 ============================
 This data store persists its data to JSON files, which means the data doesn't go away when your app restarts, like it does with the [MemoryDataStore](MemoryDataStore.md).  This allows you to easily create an API that acts like it has a real database behind it, so you can use the [Mock middleware](../middleware/mock.md) to create some data, and then use that data for a demos and presentations days or weeks later.
 

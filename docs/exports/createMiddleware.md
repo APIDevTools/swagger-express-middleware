@@ -1,4 +1,4 @@
-The createMiddleware function
+The `createMiddleware` function
 ================================
 Swagger Express Middleware exposes several JavaScript classes, but most of them are only needed for advanced usage scenarios.  Most simple apps can just use the `createMiddleware` function, which is a convenience function that reduces the amount of code you need to write.
 
@@ -7,7 +7,7 @@ Example
 --------------------------
 All of the examples in these docs use the `createMiddleware` function like this:
 
-````javascript
+```javascript
 const express = require('express');
 const createMiddleware = require('swagger-express-middleware');
 
@@ -17,11 +17,11 @@ let app = express();
 createMiddleware('PetStore.yaml', app, function(err, middleware) {
     ...
 });
-````
+```
 
 But any of the examples or samples could be rewritten to use the [Middleware class](Middleware.md) and the [init method](Middleware.md#initswagger-callback) instead, like this:
 
-````javascript
+```javascript
 const express = require('express');
 const swagger = require('swagger-express-middleware');
 
@@ -34,7 +34,7 @@ let middleware = new swagger.Middleware(app);
 middleware.init('PetStore.yaml', function(err) {
     ...
 });
-````
+```
 For a complete example of this second pattern, see [Sample 2](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
 
 
