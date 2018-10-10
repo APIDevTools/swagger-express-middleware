@@ -17,3 +17,16 @@ defaults:
       path: ""
     values:
       image: /img/logos/card.png
+
+  - scope:
+      path: "test/**/*"
+    values:
+      sitemap: false
+
+  - scope:
+      path: "samples/index.html"
+    values:
+      sitemap: false
+
+plugins:
+  - jekyll-sitemap
