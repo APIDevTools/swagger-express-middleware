@@ -64,7 +64,7 @@
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
     "multer": "^0.1.8",
-    "ono": "^1.0.22",
+    "ono": "^4.0.10",
     "swagger-methods": "^1.0.0",
     "swagger-parser": "^6.0.2",
     "tmp": "0.0.27",
