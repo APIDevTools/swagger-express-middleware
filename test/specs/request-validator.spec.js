@@ -131,7 +131,7 @@ describe('RequestValidator middleware', function () {
             // The first request throws an error because the API is invalid
             sinon.assert.calledOnce(error);
             sinon.assert.notCalled(success);
-            error.reset();
+            error.resetHistory();
 
             // Switch to a valid API
             middleware.init(files.parsed.petStore, function () {

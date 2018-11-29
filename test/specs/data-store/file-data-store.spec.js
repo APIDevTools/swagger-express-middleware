@@ -104,7 +104,7 @@ describe('FileDataStore', function () {
       let dataStore = new FileDataStore(tempDir);
       let resource = new Resource('/users', 'JDoe', { name: 'John Doe' });
 
-      let stub = sinon.stub(fs, 'readFile', function (path, opts, callback) {
+      let stub = sinon.stub(fs, 'readFile').callsFake((path, opts, callback) => {
         setImmediate(callback, new Error('Test Error'));
       });
 
@@ -148,7 +148,7 @@ describe('FileDataStore', function () {
           return done(err);
         }
 
-        let stub = sinon.stub(fs, 'writeFile', function (path, data, callback) {
+        let stub = sinon.stub(fs, 'writeFile').callsFake((path, data, callback) => {
           setImmediate(callback, new Error('Test Error'));
         });
 
@@ -185,11 +185,11 @@ describe('FileDataStore', function () {
           return done(err);
         }
 
-        let mkdirStub = sinon.stub(fs, 'mkdir', function (path, data, callback) {
+        let mkdirStub = sinon.stub(fs, 'mkdir').callsFake((path, data, callback) => {
           setImmediate(callback, new Error('Test Error'));
         });
 
-        let statStub = sinon.stub(fs, 'stat', function (path, callback) {
+        let statStub = sinon.stub(fs, 'stat').callsFake((path, callback) => {
           setImmediate(callback, new Error('Test Error'));
         });
 
