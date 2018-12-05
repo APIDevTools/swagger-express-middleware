@@ -33,7 +33,7 @@
     "npm": ">=2.0"
   },
   "scripts": {
-    "lint": "eslint lib test/fixtures test/specs --fix",
+    "lint": "eslint lib test/fixtures test/specs",
     "test": "mocha && npm run lint",
     "coverage": "nyc --reporter=text --reporter=lcov mocha",
     "upgrade": "npm-check -u",
