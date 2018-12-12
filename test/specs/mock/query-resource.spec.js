@@ -38,8 +38,8 @@ describe('Query Resource Mock', function () {
           dataStore.save(res1, res2, res3, function () {
             helper.initTest(dataStore, api, function (supertest) {
               let request = supertest[method]('/api/pets/Fluffy');
-              noHeaders || request.expect('Content-Length', 30);
-              request.expect(200, noBody ? '' : { Name: 'Fluffy', Type: 'cat' });
+              noHeaders || request.expect('Content-Length', '30');
+              helper.processMethod(request, method, { Name: 'Fluffy', Type: 'cat' });
               request.end(helper.checkResults(done));
             });
           });
@@ -67,8 +67,8 @@ describe('Query Resource Mock', function () {
           dataStore.save(res1, res2, res3, function () {
             helper.initTest(dataStore, api, function (supertest) {
               let request = supertest[method]('/api/pets/Fluffy');
-              noHeaders || request.expect('Content-Length', 75);
-              request.expect(200, noBody ? '' : { code: 42, message: 'hello world', result: { Name: 'Fluffy', Type: 'cat' }});
+              noHeaders || request.expect('Content-Length', '75');
+              helper.processMethod(request, method, { code: 42, message: 'hello world', result: { Name: 'Fluffy', Type: 'cat' }});
               request.end(helper.checkResults(done));
             });
           });
@@ -83,7 +83,8 @@ describe('Query Resource Mock', function () {
           dataStore.save(resource, function () {
             helper.initTest(dataStore, api, function (supertest) {
               let request = supertest[method]('/api/pets/Fido');
-              request.expect(200, '');
+              helper.processMethod(request, method, '');
+
               request.end(helper.checkResults(done, function (res) {
                 expect(res.headers['content-length']).to.satisfy(function (contentLength) {
                   // This is the difference between returning an empty array vs. nothing at all
@@ -108,8 +109,9 @@ describe('Query Resource Mock', function () {
 
             helper.initTest(dataStore, messWithTheBody, api, function (supertest) {
               let request = supertest[method]('/api/pets/Fido');
-              noHeaders || request.expect('Content-Length', 41);
-              request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
+              noHeaders || request.expect('Content-Length', '41');
+              helper.processMethod(request, method, ['Not', 'the', 'response', 'you', 'expected']);
+
               request.end(helper.checkResults(done));
             });
           });
@@ -128,8 +130,9 @@ describe('Query Resource Mock', function () {
 
           helper.initTest(messWithTheBody, api, function (supertest) {
             let request = supertest[method]('/api/pets/Fido');
-            noHeaders || request.expect('Content-Length', 41);
-            request.expect(200, noBody ? '' : ['Not', 'the', 'response', 'you', 'expected']);
+            noHeaders || request.expect('Content-Length', '41');
+            helper.processMethod(request, method, ['Not', 'the', 'response', 'you', 'expected']);
+
             request.end(helper.checkResults(done));
           });
         }
@@ -142,8 +145,9 @@ describe('Query Resource Mock', function () {
 
           helper.initTest(api, function (supertest) {
             let request = supertest[method]('/api/pets/Fido');
-            noHeaders || request.expect('Content-Length', 31);
-            request.expect(200, noBody ? '' : { default: 'The default value' });
+            noHeaders || request.expect('Content-Length', '31');
+            helper.processMethod(request, method, { default: 'The default value' });
+
             request.end(helper.checkResults(done));
           });
         }
@@ -155,8 +159,9 @@ describe('Query Resource Mock', function () {
 
           helper.initTest(api, function (supertest) {
             let request = supertest[method]('/api/pets/Fido');
-            noHeaders || request.expect('Content-Length', 31);
-            request.expect(200, noBody ? '' : { example: 'The example value' });
+            noHeaders || request.expect('Content-Length', '31');
+            helper.processMethod(request, method, { example: 'The example value' });
+
             request.end(helper.checkResults(done));
           });
         }
@@ -175,7 +180,7 @@ describe('Query Resource Mock', function () {
               // Wait 1 second, since the "Last-Modified" header is only precise to the second
               setTimeout(function () {
                 let request = supertest[method]('/api/pets/Fido');
-                noHeaders || request.expect('Content-Length', 11);
+                noHeaders || request.expect('Content-Length', '11');
                 noHeaders || request.expect('Last-Modified', util.rfc1123(resource.modifiedOn));
                 request.end(helper.checkResults(done));
               }, 1000);
@@ -244,8 +249,9 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 28);
-                request.expect(200, noBody ? '' : { Name: 'Fido', Type: 'dog' });
+                noHeaders || request.expect('Content-Length', '28');
+                helper.processMethod(request, method, { Name: 'Fido', Type: 'dog' });
+
                 request.end(helper.checkResults(done));
               });
             });
@@ -263,8 +269,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 9);
-                request.expect(200, noBody ? '' : 'I am Fido');
+                noHeaders || request.expect('Content-Length', '9');
+                helper.processMethod(request, method, 'I am Fido');
                 request.end(helper.checkResults(done));
               });
             });
@@ -283,7 +289,7 @@ describe('Query Resource Mock', function () {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
                 noHeaders || request.expect('Content-Length', '0');
-                request.expect(200, '');
+                helper.processMethod(request, method, '');
                 request.end(helper.checkResults(done));
               });
             });
@@ -301,8 +307,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 6);
-                request.expect(200, noBody ? '' : '42.999');
+                noHeaders || request.expect('Content-Length', '6');
+                helper.processMethod(request, method, '42.999');
                 request.end(helper.checkResults(done));
               });
             });
@@ -321,8 +327,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 24);
-                request.expect(200, noBody ? '' : '2000-02-02T03:04:05.006Z');
+                noHeaders || request.expect('Content-Length', '24');
+                helper.processMethod(request, method, '2000-02-02T03:04:05.006Z');
                 request.end(helper.checkResults(done));
               });
             });
@@ -340,8 +346,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'text/plain; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 11);
-                request.expect(200, noBody ? '' : 'hello world');
+                noHeaders || request.expect('Content-Length', '11');
+                helper.processMethod(request, method, 'hello world');
                 request.end(helper.checkResults(done));
               });
             });
@@ -358,8 +364,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 69);
-                request.expect(200, noBody ? '' : {
+                noHeaders || request.expect('Content-Length', '69');
+                helper.processMethod(request, method, {
                   type: 'Buffer',
                   data: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
                 });
@@ -379,7 +385,7 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                request.expect(200, '');
+                helper.processMethod(request, method, '');
                 request.end(helper.checkResults(done, function (res) {
                   expect(res.headers['content-length']).to.satisfy(function (contentLength) {
                     // This is the difference between returning an empty array vs. nothing at all
@@ -404,8 +410,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 31);
-                request.expect(200, noBody ? '' : { default: 'The default value' });
+                noHeaders || request.expect('Content-Length', '31');
+                helper.processMethod(request, method, { default: 'The default value' });
                 request.end(helper.checkResults(done));
               });
             });
@@ -423,8 +429,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 31);
-                request.expect(200, noBody ? '' : { example: 'The example value' });
+                noHeaders || request.expect('Content-Length', '31');
+                helper.processMethod(request, method, { example: 'The example value' });
                 request.end(helper.checkResults(done));
               });
             });
@@ -441,8 +447,8 @@ describe('Query Resource Mock', function () {
               helper.initTest(dataStore, api, function (supertest) {
                 let request = supertest[method]('/api/pets/Fido');
                 noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
-                noHeaders || request.expect('Content-Length', 4);
-                request.expect(200, noBody ? '' : 'null');
+                noHeaders || request.expect('Content-Length', '4');
+                helper.processMethod(request, method, 'null');
                 request.end(helper.checkResults(done));
               });
             });
@@ -467,8 +473,13 @@ describe('Query Resource Mock', function () {
                   noHeaders || request.expect('Content-Type', 'application/json; charset=utf-8');
                   request.end(helper.checkResults(done, function (res2) {
                     if (noBody) {
-                      expect(res2.body).to.be.empty;
-                      expect(res2.text).to.be.empty;
+                      helper.processMethod(request, method, '');
+                      if (method === 'head') {
+                        expect(res2.text).to.be.undefined;
+                      }
+                      else {
+                        expect(res2.text).to.be.empty;
+                      }
                     }
                     else {
                       expect(res2.body).to.deep.equal({
@@ -510,19 +521,25 @@ describe('Query Resource Mock', function () {
                   .attach('Photo', files.paths.PDF)
                   .end(helper.checkResults(done, function (res1) {
                     let request = supertest[method](res1.headers.location);
-                    noHeaders || request.expect('Content-Length', 263287);
+                    noHeaders || request.expect('Content-Length', '263287');
                     noHeaders || request.expect('Content-Type', 'application/pdf');
                     request.end(helper.checkResults(done, function (res2) {
                       // It should NOT be an attachment
                       expect(res2.headers['content-disposition']).to.be.undefined;
 
                       if (noBody) {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.be.empty;
+                        helper.processMethod(request, method, '');
+
+                        if (method === 'head') {
+                          expect(res2.text).to.be.undefined;
+                        }
+                        else {
+                          expect(res2.text).to.be.empty;
+                        }
+
                       }
                       else {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
+                        expect(res2.body.toString('utf8')).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
                       }
                       done();
                     }));
@@ -557,12 +574,16 @@ describe('Query Resource Mock', function () {
 
                     request.end(helper.checkResults(done, function (res2) {
                       if (noBody) {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.be.empty;
+                        if (method === 'head') {
+                          expect(res2.text).to.be.undefined;
+                        }
+                        else {
+                          expect(res2.text).to.be.empty;
+                        }
                       }
                       else {
                         expect(res2.body).to.be.empty;
-                        expect(res2.text).to.have.length.at.least(87).and.at.most(95);  // CRLF vs LF
+                        expect(res2.text.toString('utf8')).to.have.length.at.least(87).and.at.most(95);  // CRLF vs LF
                       }
                       done();
                     }));
@@ -588,7 +609,7 @@ describe('Query Resource Mock', function () {
                   .attach('Photo', files.paths.PDF)
                   .end(helper.checkResults(done, function (res1) {
                     let request = supertest[method](res1.headers.location);
-                    noHeaders || request.expect('Content-Length', 263287);
+                    noHeaders || request.expect('Content-Length', '263287');
                     noHeaders || request.expect('Content-Type', 'application/pdf');
 
                     // The filename comes from the Swagger API
@@ -596,12 +617,16 @@ describe('Query Resource Mock', function () {
 
                     request.end(helper.checkResults(done, function (res2) {
                       if (noBody) {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.be.empty;
+                        if (method === 'head') {
+                          expect(res2.text).to.be.undefined;
+                        }
+                        else {
+                          expect(res2.text).to.be.empty;
+                        }
                       }
                       else {
-                        expect(res2.body).to.be.empty;
-                        expect(res2.text).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
+                        // expect(res2.body).to.be.empty;
+                        expect(res2.body.toString('utf8')).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
                       }
                       done();
                     }));
@@ -629,7 +654,7 @@ describe('Query Resource Mock', function () {
                     let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
                     let request = supertest[method](res1.headers.location);
-                    noHeaders || request.expect('Content-Length', 683709);
+                    noHeaders || request.expect('Content-Length', '683709');
                     noHeaders || request.expect('Content-Type', 'image/jpeg');
 
                     // The filename is the basename of the URL, since it wasn't specified in the Swagger API
@@ -639,7 +664,7 @@ describe('Query Resource Mock', function () {
                       if (noBody) {
                         expect(res2.text || '').to.be.empty;
 
-                        if (method === 'options') {
+                        if (method === 'options' || method === 'head') {
                           expect(res2.body).to.be.empty;
                         }
                         else {

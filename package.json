@@ -54,7 +54,7 @@
     "npm-check": "^5.9.0",
     "nyc": "^13.0.1",
     "sinon": "^7.1.1",
-    "supertest": "^1.1.0",
+    "supertest": "^3.3.0",
     "version-bump-prompt": "^4.2.1"
   },
   "dependencies": {

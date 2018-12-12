@@ -164,3 +164,19 @@ exports.checkResults = function (done, next) {
     }
   };
 };
+
+/**
+ * The new superagent library handles the HTTP body property differently depending on the
+ * HTTP verb that is used.
+ */
+exports.processMethod = function (request, method, expectedResult) {
+  if (method === 'head') {
+    request.expect(200, undefined);
+  }
+  else if (method === 'options') {
+    request.expect(200, '');
+  }
+  else {
+    request.expect(200, expectedResult);
+  }
+};
