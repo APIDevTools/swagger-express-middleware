@@ -86,7 +86,7 @@ describe("RequestValidator middleware", function () {
     function (done) {
       api = files.parsed.petsPostOperation;
       initTest(function (err) {
-        expect(err.message).to.contain("is not a valid Swagger API definition");
+        expect(err.message).to.contain("is not a valid Openapi API definition");
         done();
       });
     }

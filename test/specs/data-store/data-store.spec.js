@@ -2,7 +2,6 @@
 
 let swagger = require("../../../"),
     expect = require("chai").expect,
-    _ = require("lodash"),
     files = require("../../fixtures/files"),
     helper = require("../../fixtures/helper"),
     Resource = swagger.Resource,
@@ -328,7 +327,7 @@ describe("DataStore", function () {
         it("should throw an error if not called with a Resource object",
           function () {
             function throws () {
-              dataStore.get(_.cloneDeep(new Resource()));
+              dataStore.get(Object.assign({}, new Resource()));
             }
 
             let dataStore = new DataStoreClass();
@@ -578,7 +577,7 @@ describe("DataStore", function () {
         it("should throw an error if not called with a Resource object",
           function () {
             function throws () {
-              dataStore.save(_.cloneDeep(new Resource()));
+              dataStore.save(Object.assign({}, new Resource()));
             }
 
             let dataStore = new DataStoreClass();
@@ -770,7 +769,7 @@ describe("DataStore", function () {
         it("should throw an error if not called with an array of Resources",
           function () {
             function throws () {
-              dataStore.save(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
+              dataStore.save(new Resource(), [new Resource(), Object.assign({}, new Resource())]);
             }
 
             let dataStore = new DataStoreClass();
@@ -967,7 +966,7 @@ describe("DataStore", function () {
         it("should throw an error if not called with a Resource object",
           function () {
             function throws () {
-              dataStore.delete(_.cloneDeep(new Resource()));
+              dataStore.delete(Object.assign({}, new Resource()));
             }
 
             let dataStore = new DataStoreClass();
@@ -1132,7 +1131,7 @@ describe("DataStore", function () {
         it("should throw an error if not called with an array of Resources",
           function () {
             function throws () {
-              dataStore.delete(new Resource(), [new Resource(), _.cloneDeep(new Resource())]);
+              dataStore.delete(new Resource(), [new Resource(), Object.assign({}, new Resource())]);
             }
 
             let dataStore = new DataStoreClass();
