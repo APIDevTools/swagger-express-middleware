@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-let swagger = require('../../../../'),
-    files = require('../../../fixtures/files'),
-    helper = require('../../../fixtures/helper'),
-    _ = require('lodash');
+let swagger = require("../../../../"),
+    files = require("../../../fixtures/files"),
+    helper = require("../../../fixtures/helper"),
+    _ = require("lodash");
 
 _.extend(exports, helper);
 
@@ -18,11 +18,11 @@ _.extend(exports, helper);
 exports.parse = function (schema, value, done) {
   // Create a Swagger API that uses this schema
   let api = _.cloneDeep(files.parsed.petStore);
-  api.paths['/test'] = {
+  api.paths["/test"] = {
     post: {
-      parameters: [_.extend(schema, { name: 'Test', in: 'header' })],
+      parameters: [_.extend(schema, { name: "Test", in: "header" })],
       responses: {
-        default: { description: 'Parameter parsing test' }
+        default: { description: "Parameter parsing test" }
       }
     }
   };
@@ -33,7 +33,7 @@ exports.parse = function (schema, value, done) {
     }
 
     // Make a request to the Swagger API, passing the test value
-    let supertest = helper.supertest(express).post('/api/test');
+    let supertest = helper.supertest(express).post("/api/test");
     if (value !== undefined) {
       supertest.set(schema.name, value);
     }

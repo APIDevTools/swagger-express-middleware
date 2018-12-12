@@ -1,31 +1,31 @@
-'use strict';
+"use strict";
 
-let expect = require('chai').expect,
-    JsonSchema = require('../../../lib/helpers/json-schema');
+let expect = require("chai").expect,
+    JsonSchema = require("../../../lib/helpers/json-schema");
 
-describe('JSON Schema constructor', function () {
+describe("JSON Schema constructor", function () {
 
-  it('should throw an error if the schema is missing',
+  it("should throw an error if the schema is missing",
     function () {
       function createMissingSchema () {
         new JsonSchema();
       }
 
-      expect(createMissingSchema).to.throw('Missing JSON schema');
+      expect(createMissingSchema).to.throw("Missing JSON schema");
     }
   );
 
-  it('should throw an error if the schema is null',
+  it("should throw an error if the schema is null",
     function () {
       function createNullSchema () {
         new JsonSchema(null);
       }
 
-      expect(createNullSchema).to.throw('Missing JSON schema');
+      expect(createNullSchema).to.throw("Missing JSON schema");
     }
   );
 
-  it('should not throw an error if the schema is empty',
+  it("should not throw an error if the schema is empty",
     function () {
       function createEmptySchema () {
         new JsonSchema({});
@@ -35,23 +35,23 @@ describe('JSON Schema constructor', function () {
     }
   );
 
-  it('should throw an error if the schema type is unsupported',
+  it("should throw an error if the schema type is unsupported",
     function () {
       function unsupportedType () {
-        new JsonSchema({ type: 'foobar' });
+        new JsonSchema({ type: "foobar" });
       }
 
-      expect(unsupportedType).to.throw('Invalid JSON schema type: foobar');
+      expect(unsupportedType).to.throw("Invalid JSON schema type: foobar");
     }
   );
 
-  it('should not throw an error if the schema type is missing',
+  it("should not throw an error if the schema type is missing",
     function () {
       function missingType () {
         new JsonSchema({
           properties: {
             name: {
-              type: 'string'
+              type: "string"
             }
           }
         });

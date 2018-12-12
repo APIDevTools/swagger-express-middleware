@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-let swagger = require('../../../'),
-    helper = require('../../fixtures/helper'),
-    util = require('../../../lib/helpers/util'),
-    _ = require('lodash');
+let swagger = require("../../../"),
+    helper = require("../../fixtures/helper"),
+    util = require("../../../lib/helpers/util"),
+    _ = require("lodash");
 
 _.extend(exports, helper);
 
