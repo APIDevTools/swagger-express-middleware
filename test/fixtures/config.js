@@ -1,14 +1,14 @@
 /**
  * Test environment config
  */
-'use strict';
+"use strict";
 
 // Chai plugins
-let chai = require('chai');
-chai.use(require('chai-datetime'));
+let chai = require("chai");
+chai.use(require("chai-datetime"));
 
 // Disable warnings, which clutter the test output
-process.env.WARN = 'off';
+process.env.WARN = "off";
 
 // Increase test timeouts.
 beforeEach(function () {

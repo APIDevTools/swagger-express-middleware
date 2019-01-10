@@ -1,7 +1,7 @@
 {
-  "name": "swagger-express-middleware3",
-  "version": "0.1.3",
-  "description": "Swagger middleware and mocks for Express for OpenAPI 3",
+  "name": "swagger-express-middleware",
+  "version": "2.0.0",
+  "description": "Swagger middleware and mocks for Express",
   "keywords": [
     "express",
     "swagger",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/APIDevTools/swagger-express-middleware",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sedgewickmm18/swagger-express-middleware.git"
+    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
   },
   "license": "MIT",
   "main": "lib/index.js",
@@ -42,32 +42,32 @@
     "start": "cd samples && node sample1.js"
   },
   "devDependencies": {
-    "basic-auth": "^1.0.3",
+    "basic-auth": "^2.0.1",
     "chai": "^4.2.0",
     "chai-datetime": "^1.4.0",
     "codacy-coverage": "^3.1.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.6.1",
-    "eslint-config-modular": "^4.2.2",
+    "eslint-config-modular": "^5.0.1",
     "express": "^4.13.3",
     "mocha": "^5.2.0",
     "npm-check": "^5.9.0",
     "nyc": "^13.0.1",
-    "sinon": "^1.17.7",
-    "supertest": "^1.1.0",
+    "sinon": "^7.1.1",
+    "supertest": "^3.3.0",
     "version-bump-prompt": "^4.2.1"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
     "cookie-parser": "^1.3.5",
-    "debug": "^2.2.0",
-    "lodash": "^3.10.1",
+    "debug": "^4.1.0",
+    "lodash": "^4.17.11",
     "mkdirp": "^0.5.1",
     "multer": "^0.1.8",
-    "ono": "^1.0.22",
+    "ono": "^4.0.10",
     "swagger-methods": "^1.0.0",
-    "swagger-parser": ">=5.0.0",
-    "tmp": "0.0.27",
+    "swagger-parser": "^6.0.2",
+    "tmp": "^0.0.27",
     "tv4": "^1.2.5",
     "type-is": "^1.6.8"
   },

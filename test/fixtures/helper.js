@@ -1,19 +1,19 @@
 /**
  * Helper methods for working with Express & Supertest
  */
-'use strict';
+"use strict";
 
-let _ = require('lodash'),
-    express = require('express'),
-    supertest = require('supertest'),
-    sinon = require('sinon');
+let _ = require("lodash"),
+    express = require("express"),
+    supertest = require("supertest"),
+    sinon = require("sinon");
 
 /**
  * Creates and configures an Express application.
  */
 exports.express = function (middleware) {
   let app = express();
-  app.set('env', 'test'); // Turns on enhanced debug/error info
+  app.set("env", "test"); // Turns on enhanced debug/error info
 
   _.each(arguments, function (middleware) {
     app.use(middleware);
@@ -119,10 +119,10 @@ exports.checkSpyResults = function (done) {
       let serverError;
       if (res.error) {
         serverError = new Error(res.error.message +
-          _.unescape(res.error.text).replace(/<br>/g, '\n').replace(/&nbsp;/g, ' '));
+          _.unescape(res.error.text).replace(/<br>/g, "\n").replace(/&nbsp;/g, " "));
       }
       else {
-        serverError = new Error('The test failed, but no server error was returned');
+        serverError = new Error("The test failed, but no server error was returned");
       }
       done(serverError);
     }
@@ -144,10 +144,10 @@ exports.checkResults = function (done, next) {
       let serverError;
       if (res.error) {
         serverError = new Error(res.error.message +
-          _.unescape(res.error.text).replace(/<br>/g, '\n').replace(/&nbsp;/g, ' '));
+          _.unescape(res.error.text).replace(/<br>/g, "\n").replace(/&nbsp;/g, " "));
       }
       else {
-        serverError = new Error('The test failed, but no server error was returned');
+        serverError = new Error("The test failed, but no server error was returned");
       }
       done(serverError);
     }
@@ -163,4 +163,20 @@ exports.checkResults = function (done, next) {
       }
     }
   };
+};
+
+/**
+ * The new superagent library handles the HTTP body property differently depending on the
+ * HTTP verb that is used.
+ */
+exports.processMethod = function (request, method, expectedResult) {
+  if (method === "head") {
+    request.expect(200, undefined);
+  }
+  else if (method === "options") {
+    request.expect(200, "");
+  }
+  else {
+    request.expect(200, expectedResult);
+  }
 };

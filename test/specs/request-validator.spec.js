@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-let swagger = require('../../'),
-    expect = require('chai').expect,
-    assert = require('assert'),
-    sinon = require('sinon'),
-    _ = require('lodash'),
-    files = require('../fixtures/files'),
-    helper = require('../fixtures/helper'),
+let swagger = require("../../"),
+    expect = require("chai").expect,
+    assert = require("assert"),
+    sinon = require("sinon"),
+    _ = require("lodash"),
+    files = require("../fixtures/files"),
+    helper = require("../fixtures/helper"),
     api, express, supertest;
 
-describe('RequestValidator middleware', function () {
+describe("RequestValidator middleware", function () {
 
   beforeEach(function () {
     api = _.cloneDeep(files.parsed.petStore);
@@ -23,87 +23,87 @@ describe('RequestValidator middleware', function () {
     });
   }
 
-  it('all validations should pass if no other middleware is used',
+  it("all validations should pass if no other middleware is used",
     function (done) {
       swagger(api, function (err, middleware) {
         express = helper.express(middleware.validateRequest());
 
         helper.supertest(express)
-          .get('/api/pets')
+          .get("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.use('/api/pets', helper.spy(function (err, req, res, next) {
+        express.use("/api/pets", helper.spy(function (err, req, res, next) {
           assert(false, err);
         }));
 
-        express.get('/api/pets', helper.spy(function () {
+        express.get("/api/pets", helper.spy(function () {
           assert(true);
         }));
       });
     }
   );
 
-  it('all validations should pass if the API is valid',
+  it("all validations should pass if the API is valid",
     function (done) {
       initTest(function () {
 
         supertest
-          .post('/api/pets')
-          .send({ Name: 'Fido', Type: 'dog' })
+          .post("/api/pets")
+          .send({ Name: "Fido", Type: "dog" })
           .end(helper.checkSpyResults(done));
 
-        express.use('/api/pets', helper.spy(function (err, req, res, next) {
+        express.use("/api/pets", helper.spy(function (err, req, res, next) {
           assert(false, err);
         }));
 
-        express.post('/api/pets', helper.spy(function () {
+        express.post("/api/pets", helper.spy(function () {
           assert(true);
         }));
       });
     }
   );
 
-  it('all validations should pass if the request is outside of the API\'s basePath',
+  it("all validations should pass if the request is outside of the API's basePath",
     function (done) {
       initTest(function () {
 
         supertest
-          .post('/some/path')     // <--- not under the "/api" basePath
+          .post("/some/path")     // <--- not under the "/api" basePath
           .end(helper.checkSpyResults(done));
 
-        express.use('/some/path', helper.spy(function (err, req, res, next) {
+        express.use("/some/path", helper.spy(function (err, req, res, next) {
           assert(false, err);
         }));
 
-        express.post('/some/path', helper.spy(function () {
+        express.post("/some/path", helper.spy(function () {
           assert(true);
         }));
       });
     }
   );
 
-  it('should throw an error if the API is invalid',
+  it("should throw an error if the API is invalid",
     function (done) {
       api = files.parsed.petsPostOperation;
       initTest(function (err) {
-        expect(err.message).to.contain('is not a valid Openapi API definition');
+        expect(err.message).to.contain("is not a valid Openapi API definition");
         done();
       });
     }
   );
 
-  describe('http500', function () {
-    it('should throw an error if a parsing error occurs',
+  describe("http500", function () {
+    it("should throw an error if a parsing error occurs",
       function (done) {
         swagger(files.paths.blank, function (err, middleware) {
           express = helper.express(middleware.metadata(), middleware.parseRequest(), middleware.validateRequest());
           supertest = helper.supertest(express);
 
           supertest
-            .post('/api/pets')
+            .post("/api/pets")
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(500);
             expect(err.message).to.contain('blank.yaml\" is not a valid JSON Schema');
           }));
@@ -111,18 +111,18 @@ describe('RequestValidator middleware', function () {
       });
   });
 
-  it('should clear the error if the API becomes valid',
+  it("should clear the error if the API becomes valid",
     function (done) {
       api = files.parsed.blank; // <--- Invalid API
       initTest(function (err, middleware) {
 
         let success = sinon.spy(function () {});
-        express.get('/api/pets', helper.spy(success));
+        express.get("/api/pets", helper.spy(success));
 
         let error = sinon.spy(function (err, req, res, next) {});
-        express.use('/api/pets', helper.spy(error));
+        express.use("/api/pets", helper.spy(error));
 
-        supertest.get('/api/pets')
+        supertest.get("/api/pets")
           .end(function (err) {
             if (err) {
               return done(err);
@@ -131,11 +131,11 @@ describe('RequestValidator middleware', function () {
             // The first request throws an error because the API is invalid
             sinon.assert.calledOnce(error);
             sinon.assert.notCalled(success);
-            error.reset();
+            error.resetHistory();
 
             // Switch to a valid API
             middleware.init(files.parsed.petStore, function () {
-              supertest.get('/api/pets')
+              supertest.get("/api/pets")
                 .end(function (err) {
                   if (err) {
                     return done(err);
@@ -153,100 +153,100 @@ describe('RequestValidator middleware', function () {
     }
   );
 
-  describe('http401', function () {
-    it('should NOT throw an HTTP 401 if no security is defined for the API',
+  describe("http401", function () {
+    it("should NOT throw an HTTP 401 if no security is defined for the API",
       function (done) {
         delete api.security;
         initTest(function () {
 
           supertest
-            .get('/api/pets')
+            .get("/api/pets")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.have.lengthOf(0);
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 401 if no security is defined for the operation',
+    it("should NOT throw an HTTP 401 if no security is defined for the operation",
       function (done) {
-        api.paths['/pets'].get.security = [];
+        api.paths["/pets"].get.security = [];
         initTest(function () {
 
           supertest
-            .get('/api/pets')
+            .get("/api/pets")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.have.lengthOf(0);
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 401 if a Basic authentication requirement is met',
+    it("should NOT throw an HTTP 401 if a Basic authentication requirement is met",
       function (done) {
-        let security = api.paths['/pets'].get.security = [{ petStoreBasic: []}];
+        let security = api.paths["/pets"].get.security = [{ petStoreBasic: []}];
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Authorization', 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
+            .get("/api/pets")
+            .set("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.deep.equal(security);
 
-            let auth = require('basic-auth')(req);
+            let auth = require("basic-auth")(req);
             expect(auth).to.deep.equal({
-              name: 'Aladdin',
-              pass: 'open sesame'
+              name: "Aladdin",
+              pass: "open sesame"
             });
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in header)',
+    it("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in header)",
       function (done) {
-        let security = api.paths['/pets'].get.security = [{ petStoreApiKey: []}];
+        let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('PetStoreKey', 'abc123')
+            .get("/api/pets")
+            .set("PetStoreKey", "abc123")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.deep.equal(security);
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in query)',
+    it("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in query)",
       function (done) {
-        api.securityDefinitions.petStoreApiKey.in = 'query';
-        let security = api.paths['/pets'].get.security = [{ petStoreApiKey: []}];
+        api.securityDefinitions.petStoreApiKey.in = "query";
+        let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
         initTest(function () {
 
           supertest
-            .get('/api/pets?petStoreKey=abc123')
+            .get("/api/pets?petStoreKey=abc123")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.deep.equal(security);
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 401 if any of the security requirements are fully met',
+    it("should NOT throw an HTTP 401 if any of the security requirements are fully met",
       function (done) {
-        api.securityDefinitions.petStoreApiKey2 = { type: 'apiKey', name: 'petStoreKey2', in: 'query' };
-        let security = api.paths['/pets'].get.security = [
+        api.securityDefinitions.petStoreApiKey2 = { type: "apiKey", name: "petStoreKey2", in: "query" };
+        let security = api.paths["/pets"].get.security = [
           {
             petStoreBasic: [],  // met
             petStoreApiKey: []  // NOT met
@@ -260,21 +260,21 @@ describe('RequestValidator middleware', function () {
         initTest(function () {
 
           supertest
-            .get('/api/pets?petStoreKey2=abc123')
-            .set('Authorization', 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==')
+            .get("/api/pets?petStoreKey2=abc123")
+            .set("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.swagger.security).to.deep.equal(security);
           }));
         });
       }
     );
 
-    it('should throw an HTTP 401 if only some parts of a security requirements are met',
+    it("should throw an HTTP 401 if only some parts of a security requirements are met",
       function (done) {
-        api.securityDefinitions.petStoreApiKey2 = { type: 'apiKey', name: 'petStoreKey2', in: 'query' };
-        let security = api.paths['/pets'].get.security = [
+        api.securityDefinitions.petStoreApiKey2 = { type: "apiKey", name: "petStoreKey2", in: "query" };
+        let security = api.paths["/pets"].get.security = [
           {
             petStoreBasic: [],  // NOT met
             petStoreApiKey: []  // met
@@ -289,24 +289,24 @@ describe('RequestValidator middleware', function () {
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('PetStoreKey', 'abc123')
+            .get("/api/pets")
+            .set("PetStoreKey", "abc123")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(req.swagger.security).to.deep.equal(security);
             expect(err.status).to.equal(401);
-            expect(err.message).to.contain('GET /api/pets requires authentication (basic, apiKey)');
-            expect(res.get('WWW-Authenticate')).to.equal('Basic realm="127.0.0.1"');
+            expect(err.message).to.contain("GET /api/pets requires authentication (basic, apiKey)");
+            expect(res.get("WWW-Authenticate")).to.equal('Basic realm="127.0.0.1"');
           }));
         });
       }
     );
 
-    it('should throw an HTTP 401 if none of the security requirements are met',
+    it("should throw an HTTP 401 if none of the security requirements are met",
       function (done) {
-        api.securityDefinitions.petStoreApiKey2 = { type: 'apiKey', name: 'petStoreKey2', in: 'query' };
-        let security = api.paths['/pets'].get.security = [
+        api.securityDefinitions.petStoreApiKey2 = { type: "apiKey", name: "petStoreKey2", in: "query" };
+        let security = api.paths["/pets"].get.security = [
           {
             petStoreBasic: [],  // NOT met
             petStoreApiKey: []  // NOT met
@@ -317,158 +317,158 @@ describe('RequestValidator middleware', function () {
         initTest(function () {
 
           supertest
-            .get('/api/pets')
+            .get("/api/pets")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(req.swagger.security).to.deep.equal(security);
             expect(err.status).to.equal(401);
-            expect(err.message).to.contain('GET /api/pets requires authentication (basic, apiKey)');
-            expect(res.get('WWW-Authenticate')).to.equal('Basic realm="127.0.0.1"');
+            expect(err.message).to.contain("GET /api/pets requires authentication (basic, apiKey)");
+            expect(res.get("WWW-Authenticate")).to.equal('Basic realm="127.0.0.1"');
           }));
         });
       }
     );
 
-    it('should set the WWW-Authenticate header and realm using the Host header',
+    it("should set the WWW-Authenticate header and realm using the Host header",
       function (done) {
-        let security = api.paths['/pets'].get.security = [{ petStoreApiKey: []}];
+        let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Host', 'www.company.com:1234')
+            .get("/api/pets")
+            .set("Host", "www.company.com:1234")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(req.swagger.security).to.deep.equal(security);
             expect(err.status).to.equal(401);
-            expect(err.message).to.contain('GET /api/pets requires authentication (apiKey)');
-            expect(res.get('WWW-Authenticate')).to.equal('Basic realm="www.company.com"');
+            expect(err.message).to.contain("GET /api/pets requires authentication (apiKey)");
+            expect(res.get("WWW-Authenticate")).to.equal('Basic realm="www.company.com"');
           }));
         });
       }
     );
 
-    it('should set the WWW-Authenticate header and realm, even if the Host header is blank',
+    it("should set the WWW-Authenticate header and realm, even if the Host header is blank",
       function (done) {
-        let security = api.paths['/pets'].get.security = [{ petStoreApiKey: []}];
+        let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Host', '')
+            .get("/api/pets")
+            .set("Host", "")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(req.swagger.security).to.deep.equal(security);
             expect(err.status).to.equal(401);
-            expect(err.message).to.contain('GET /api/pets requires authentication (apiKey)');
-            expect(res.get('WWW-Authenticate')).to.equal('Basic realm="server"');
+            expect(err.message).to.contain("GET /api/pets requires authentication (apiKey)");
+            expect(res.get("WWW-Authenticate")).to.equal('Basic realm="server"');
           }));
         });
       }
     );
   });
 
-  it('should throw an HTTP 404 if the path is invalid',
+  it("should throw an HTTP 404 if the path is invalid",
     function (done) {
       initTest(function () {
 
         supertest
-          .get('/api/some/path')
+          .get("/api/some/path")
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy(function (err, req, res, next) {
           expect(err.status).to.equal(404);
-          expect(err.message).to.contain('Resource not found: /api/some/path');
+          expect(err.message).to.contain("Resource not found: /api/some/path");
         }));
       });
     }
   );
 
-  it('should throw an HTTP 404 if the Paths object is empty',
+  it("should throw an HTTP 404 if the Paths object is empty",
     function (done) {
       api = files.parsed.petStoreNoPaths;
       initTest(function () {
 
         supertest
-          .get('/api/some/path')
+          .get("/api/some/path")
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy(function (err, req, res, next) {
           expect(err.status).to.equal(404);
-          expect(err.message).to.contain('Resource not found: /api/some/path');
+          expect(err.message).to.contain("Resource not found: /api/some/path");
         }));
       });
     }
   );
 
-  it('should throw an HTTP 405 if the method is not allowed',
+  it("should throw an HTTP 405 if the method is not allowed",
     function (done) {
       initTest(function () {
 
         supertest
-          .delete('/api/pets')
+          .delete("/api/pets")
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy(function (err, req, res, next) {
           expect(err.status).to.equal(405);
           expect(err.message).to.contain(
-            '/api/pets does not allow DELETE. \nAllowed methods: GET, POST');
-          expect(res.get('Allow')).to.equal('GET, POST');
+            "/api/pets does not allow DELETE. \nAllowed methods: GET, POST");
+          expect(res.get("Allow")).to.equal("GET, POST");
         }));
       });
     }
   );
 
-  it('should throw an HTTP 405 if the Path Item objects are empty',
+  it("should throw an HTTP 405 if the Path Item objects are empty",
     function (done) {
       api = files.parsed.petStoreNoPathItems;
       initTest(function () {
 
         supertest
-          .delete('/api/pets')
+          .delete("/api/pets")
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy(function (err, req, res, next) {
           expect(err.status).to.equal(405);
           expect(err.message).to.contain(
-            '/api/pets does not allow DELETE. \nAllowed methods: GET, POST');
-          expect(res.get('Allow')).to.equal('GET, POST');
+            "/api/pets does not allow DELETE. \nAllowed methods: GET, POST");
+          expect(res.get("Allow")).to.equal("GET, POST");
         }));
       });
     }
   );
 
-  describe('http406', function () {
-    it('should NOT throw an HTTP 406 if no Accept header is present',
+  describe("http406", function () {
+    it("should NOT throw an HTTP 406 if no Accept header is present",
       function (done) {
         initTest(function () {
 
           supertest
-            .get('/api/pets')
+            .get("/api/pets")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.headers.accept).to.be.undefined;
-            expect(req.accepts()).to.have.same.members(['*/*']);
+            expect(req.accepts()).to.have.same.members(["*/*"]);
           }));
         });
       }
     );
 
-    it('should NOT throw an HTTP 406 if no Accept header is blank',
+    it("should NOT throw an HTTP 406 if no Accept header is blank",
       function (done) {
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', '')
+            .get("/api/pets")
+            .set("Accept", "")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
-            expect(req.headers.accept).to.equal('');
+          express.get("/api/pets", helper.spy(function (req) {
+            expect(req.headers.accept).to.equal("");
             expect(req.accepts()).to.have.lengthOf(0);
           }));
         });
@@ -478,17 +478,17 @@ describe('RequestValidator middleware', function () {
     it('should NOT throw an HTTP 406 if no "produces" MIME types are specified',
       function (done) {
         delete api.produces;
-        delete api.paths['/pets'].get.produces;
+        delete api.paths["/pets"].get.produces;
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'image/png')
+            .get("/api/pets")
+            .set("Accept", "image/png")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
-            expect(req.accepts()).to.have.same.members(['image/png']);
+          express.get("/api/pets", helper.spy(function (req) {
+            expect(req.accepts()).to.have.same.members(["image/png"]);
           }));
         });
       }
@@ -496,18 +496,18 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 406 if the Accept header exactly matches the API\'s "produces"',
       function (done) {
-        api.produces = ['application/json'];
-        delete api.paths['/pets'].get.produces;
+        api.produces = ["application/json"];
+        delete api.paths["/pets"].get.produces;
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'application/json')
+            .get("/api/pets")
+            .set("Accept", "application/json")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
-            expect(req.accepts()).to.have.same.members(['application/json']);
+          express.get("/api/pets", helper.spy(function (req) {
+            expect(req.accepts()).to.have.same.members(["application/json"]);
           }));
         });
       }
@@ -515,18 +515,18 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 406 if the Accept header exactly matches the operation\'s "produces"',
       function (done) {
-        api.produces = ['text/plain', 'xml'];
-        api.paths['/pets'].get.produces = ['application/json'];
+        api.produces = ["text/plain", "xml"];
+        api.paths["/pets"].get.produces = ["application/json"];
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'application/json')
+            .get("/api/pets")
+            .set("Accept", "application/json")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
-            expect(req.accepts()).to.have.same.members(['application/json']);
+          express.get("/api/pets", helper.spy(function (req) {
+            expect(req.accepts()).to.have.same.members(["application/json"]);
           }));
         });
       }
@@ -534,19 +534,19 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 406 if the Accept header matches one of the API\'s "produces"',
       function (done) {
-        api.produces = ['text/plain', 'image/jpeg', 'json', 'xml'];
-        delete api.paths['/pets'].get.produces;
+        api.produces = ["text/plain", "image/jpeg", "json", "xml"];
+        delete api.paths["/pets"].get.produces;
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'text/html, application/json;q=2.5,application/xml;q=0.8, */*;q=0')
+            .get("/api/pets")
+            .set("Accept", "text/html, application/json;q=2.5,application/xml;q=0.8, */*;q=0")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.accepts()).to.have.same.members([
-              'application/json', 'text/html', 'application/xml'
+              "application/json", "text/html", "application/xml"
             ]);
           }));
         });
@@ -555,19 +555,19 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 406 if the Accept header matches one of the operation\'s "produces"',
       function (done) {
-        api.produces = ['text/plain', 'xml'];
-        api.paths['/pets'].get.produces = ['text/plain', 'image/jpeg', 'json', 'xml'];
+        api.produces = ["text/plain", "xml"];
+        api.paths["/pets"].get.produces = ["text/plain", "image/jpeg", "json", "xml"];
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'text/html, application/json;q=2.5,application/octet-stream;q=0.8, */*;q=0')
+            .get("/api/pets")
+            .set("Accept", "text/html, application/json;q=2.5,application/octet-stream;q=0.8, */*;q=0")
             .end(helper.checkSpyResults(done));
 
-          express.get('/api/pets', helper.spy(function (req) {
+          express.get("/api/pets", helper.spy(function (req) {
             expect(req.accepts()).to.have.same.members([
-              'application/json', 'text/html', 'application/octet-stream'
+              "application/json", "text/html", "application/octet-stream"
             ]);
           }));
         });
@@ -576,19 +576,19 @@ describe('RequestValidator middleware', function () {
 
     it('should throw an HTTP 406 if the Accept header does not match any of the API\'s "produces"',
       function (done) {
-        api.produces = ['text/plain', 'image/jpeg', 'json', 'xml'];
-        delete api.paths['/pets'].get.produces;
+        api.produces = ["text/plain", "image/jpeg", "json", "xml"];
+        delete api.paths["/pets"].get.produces;
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'text/html, application/json;q=0.0,application/octet-stream, */*;q=0')
+            .get("/api/pets")
+            .set("Accept", "text/html, application/json;q=0.0,application/octet-stream, */*;q=0")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(406);
-            expect(err.message).to.contain('GET /api/pets cannot produce any of the requested formats (text/html, application/octet-stream). \nSupported formats: text/plain, image/jpeg, json, xml');
+            expect(err.message).to.contain("GET /api/pets cannot produce any of the requested formats (text/html, application/octet-stream). \nSupported formats: text/plain, image/jpeg, json, xml");
           }));
         });
       }
@@ -596,77 +596,77 @@ describe('RequestValidator middleware', function () {
 
     it('should throw an HTTP 406 if the Accept header does not match any of the operation\'s "produces"',
       function (done) {
-        api.produces = ['text/plain', 'xml'];
-        api.paths['/pets'].get.produces = ['text/plain', 'image/jpeg', 'json'];
+        api.produces = ["text/plain", "xml"];
+        api.paths["/pets"].get.produces = ["text/plain", "image/jpeg", "json"];
 
         initTest(function () {
 
           supertest
-            .get('/api/pets')
-            .set('Accept', 'text/html, application/xml;q=2.5,application/json;q=0.0, */*;q=0')
+            .get("/api/pets")
+            .set("Accept", "text/html, application/xml;q=2.5,application/json;q=0.0, */*;q=0")
             .end(helper.checkSpyResults(done));
 
           express.use(helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(406);
-            expect(err.message).to.contain('GET /api/pets cannot produce any of the requested formats (application/xml, text/html). \nSupported formats: text/plain, image/jpeg, json');
+            expect(err.message).to.contain("GET /api/pets cannot produce any of the requested formats (application/xml, text/html). \nSupported formats: text/plain, image/jpeg, json");
           }));
         });
       }
     );
   });
 
-  describe('http413', function () {
-    it('should throw an HTTP 413 if body content is sent and not allowed',
+  describe("http413", function () {
+    it("should throw an HTTP 413 if body content is sent and not allowed",
       function (done) {
-        api.paths['/pets'].patch = api.paths['/pets'].get;
+        api.paths["/pets"].patch = api.paths["/pets"].get;
 
         initTest(function () {
 
           supertest
-            .patch('/api/pets')
-            .send({ Name: 'Fido', Type: 'dog' })
+            .patch("/api/pets")
+            .send({ Name: "Fido", Type: "dog" })
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(413);
-            expect(err.message).to.contain('PATCH /api/pets does not allow body content');
+            expect(err.message).to.contain("PATCH /api/pets does not allow body content");
           }));
         });
       }
     );
 
-    it('should throw an HTTP 413 if a form field is sent and body content is not allowed',
+    it("should throw an HTTP 413 if a form field is sent and body content is not allowed",
       function (done) {
-        api.paths['/pets'].post = api.paths['/pets'].get;
+        api.paths["/pets"].post = api.paths["/pets"].get;
 
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .field('Foo', 'bar')
+            .post("/api/pets")
+            .field("Foo", "bar")
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
-            expect(err.message).to.contain('POST /api/pets does not allow body content');
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
+            expect(err.message).to.contain("POST /api/pets does not allow body content");
             expect(err.status).to.equal(413);
           }));
         });
       }
     );
 
-    it('should throw an HTTP 413 if a zero-byte file is sent and body content is not allowed',
+    it("should throw an HTTP 413 if a zero-byte file is sent and body content is not allowed",
       function (done) {
-        api.paths['/pets'].put = api.paths['/pets'].get;
+        api.paths["/pets"].put = api.paths["/pets"].get;
 
         initTest(function () {
 
           supertest
-            .put('/api/pets')
-            .attach('Photo', files.paths.zeroMB)
+            .put("/api/pets")
+            .attach("Photo", files.paths.zeroMB)
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
-            expect(err.message).to.contain('PUT /api/pets does not allow body content');
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
+            expect(err.message).to.contain("PUT /api/pets does not allow body content");
             expect(err.status).to.equal(413);
           }));
         });
@@ -674,18 +674,18 @@ describe('RequestValidator middleware', function () {
     );
   });
 
-  describe('http415', function () {
-    it('should NOT throw an HTTP 415 if optional body params are not specified',
+  describe("http415", function () {
+    it("should NOT throw an HTTP 415 if optional body params are not specified",
       function (done) {
-        _.find(api.paths['/pets'].post.parameters, { in: 'body' }).required = false;
+        _.find(api.paths["/pets"].post.parameters, { in: "body" }).required = false;
 
         initTest(function () {
 
           supertest
-            .post('/api/pets')
+            .post("/api/pets")
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.be.undefined;
           }));
         });
@@ -698,15 +698,15 @@ describe('RequestValidator middleware', function () {
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -715,19 +715,19 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 415 if the Content-Type exactly matches the API\'s "consumes"',
       function (done) {
-        api.consumes = ['application/json'];
+        api.consumes = ["application/json"];
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -736,20 +736,20 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 415 if the Content-Type exactly matches the operation\'s "consumes"',
       function (done) {
-        api.consumes = ['text/plain', 'xml'];
-        api.paths['/pets'].post.consumes = ['application/json'];
+        api.consumes = ["text/plain", "xml"];
+        api.paths["/pets"].post.consumes = ["application/json"];
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -758,19 +758,19 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 415 if the Content-Type matches one of the API\'s "consumes"',
       function (done) {
-        api.consumes = ['text/plain', 'image/jpeg', 'json', 'xml'];
+        api.consumes = ["text/plain", "image/jpeg", "json", "xml"];
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -779,20 +779,20 @@ describe('RequestValidator middleware', function () {
 
     it('should NOT throw an HTTP 415 if the Content-Type matches one of the operation\'s "consumes"',
       function (done) {
-        api.consumes = ['text/plain', 'xml'];
-        api.paths['/pets'].post.consumes = ['text/plain', 'image/jpeg', 'json', 'xml'];
+        api.consumes = ["text/plain", "xml"];
+        api.paths["/pets"].post.consumes = ["text/plain", "image/jpeg", "json", "xml"];
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.post('/api/pets', helper.spy(function (req) {
+          express.post("/api/pets", helper.spy(function (req) {
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -801,23 +801,23 @@ describe('RequestValidator middleware', function () {
 
     it('should throw an HTTP 415 if the Content-Type does not match any of the API\'s "consumes"',
       function (done) {
-        api.consumes = ['text/plain', 'image/jpeg', 'text/json', 'xml'];
+        api.consumes = ["text/plain", "image/jpeg", "text/json", "xml"];
         initTest(function () {
 
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(415);
             expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json;');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
@@ -826,23 +826,23 @@ describe('RequestValidator middleware', function () {
 
     it('should throw an HTTP 415 if the Content-Type does not match any of the operation\'s "consumes"',
       function (done) {
-        api.consumes = ['text/plain', 'xml'];
-        api.paths['/pets'].post.consumes = ['text/plain', 'image/jpeg', 'text/json', 'xml'];
+        api.consumes = ["text/plain", "xml"];
+        api.paths["/pets"].post.consumes = ["text/plain", "image/jpeg", "text/json", "xml"];
         initTest(function () {
           supertest
-            .post('/api/pets')
-            .set('Content-Type', 'application/json; charset=utf-8')
+            .post("/api/pets")
+            .set("Content-Type", "application/json; charset=utf-8")
             .send('{"Name": "Fido", "Type": "dog"}')
             .end(helper.checkSpyResults(done));
 
-          express.use('/api/pets', helper.spy(function (err, req, res, next) {
+          express.use("/api/pets", helper.spy(function (err, req, res, next) {
             expect(err.status).to.equal(415);
             expect(err.message).to.contain('POST /api/pets does not allow Content-Type "application/json;');
 
             // Despite the error, the body was still parsed successfully because of the "text/json" MIME type
             expect(req.body).to.deep.equal({
-              Name: 'Fido',
-              Type: 'dog'
+              Name: "Fido",
+              Type: "dog"
             });
           }));
         });
