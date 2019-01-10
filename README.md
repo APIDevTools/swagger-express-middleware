@@ -6,8 +6,6 @@ Swagger Express Middleware
 [![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
-[![Codacy Score](https://api.codacy.com/project/badge/Grade/011f89f6f0dd46e5b9b5d3662a51213d)](https://www.codacy.com/public/JamesMessinger/swagger-express-middleware)
-[![Inline docs](https://inch-ci.org/github/APIDevTools/swagger-express-middleware.svg?branch=master&style=shields)](https://inch-ci.org/github/APIDevTools/swagger-express-middleware)
 
 [![npm](https://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
 [![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
