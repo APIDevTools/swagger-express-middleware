@@ -2,7 +2,7 @@ Swagger Express Middleware
 ============================
 #### Swagger middleware and mocks for Express.js
 
-[![Build Status](https://api.travis-ci.org/APIDevTools/swagger-express-middleware.svg)](https://travis-ci.org/APIDevTools/swagger-express-middleware)
+[![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
@@ -113,3 +113,11 @@ To build/test the project locally on your computer:
 License
 --------------------------
 Swagger Express Middleware is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+
+Big Thanks To
+--------------------------
+Thanks to these awesome companies for their support of Open Source developers ❤
+
+[![Travis CI](https://jsdevtools.org/img/badges/travis-ci.svg)](https://travis-ci.com)
+[![SauceLabs](https://jsdevtools.org/img/badges/sauce-labs.svg)](https://saucelabs.com)
+[![Coveralls](https://jsdevtools.org/img/badges/coveralls.svg)](https://coveralls.io)
