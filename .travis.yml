@@ -26,7 +26,7 @@ after_success:
   # send code-coverage data to Coveralls
   - cat ./coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
 
-  jobs:
+jobs:
   include:
     - stage: Deploy
       name: Publish to npm
