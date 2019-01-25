@@ -1,13 +1,13 @@
 "use strict";
 
-let swagger = require("../../../"),
-    expect = require("chai").expect,
-    files = require("../../fixtures/files"),
-    helper = require("../../fixtures/helper"),
-    Resource = swagger.Resource,
-    DataStore = swagger.DataStore,
-    MemoryDataStore = swagger.MemoryDataStore,
-    FileDataStore = swagger.FileDataStore;
+const swagger = require("../../../");
+const expect = require("chai").expect;
+const files = require("../../fixtures/files");
+const helper = require("../../fixtures/helper");
+const Resource = swagger.Resource;
+const DataStore = swagger.DataStore;
+const MemoryDataStore = swagger.MemoryDataStore;
+const FileDataStore = swagger.FileDataStore;
 
 describe("DataStore", function () {
   // All of these tests should pass for all DataStore classes

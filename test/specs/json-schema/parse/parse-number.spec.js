@@ -1,7 +1,7 @@
 "use strict";
 
-let expect = require("chai").expect,
-    helper = require("./helper");
+const expect = require("chai").expect;
+const helper = require("./helper");
 
 describe("JSON Schema - parse number params", function () {
 

@@ -1,8 +1,9 @@
 "use strict";
 
-let expect = require("chai").expect,
-    JsonSchema = require("../../../lib/helpers/json-schema"),
-    iterations = 100;
+const expect = require("chai").expect;
+const JsonSchema = require("../../../lib/helpers/json-schema");
+
+let iterations = 100;
 
 // Some older versions of Node don't define these constants
 let MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER || -9007199254740991;

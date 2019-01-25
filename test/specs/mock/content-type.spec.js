@@ -1,10 +1,10 @@
 "use strict";
 
-let swagger = require("../../../"),
-    _ = require("lodash"),
-    files = require("../../fixtures/files"),
-    helper = require("./helper"),
-    fs = require("fs");
+const swagger = require("../../../");
+const _ = require("lodash");
+const files = require("../../fixtures/files");
+const helper = require("./helper");
+const fs = require("fs");
 
 describe("Mock Content-Type header", function () {
 

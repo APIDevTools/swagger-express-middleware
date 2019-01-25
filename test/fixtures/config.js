@@ -4,7 +4,7 @@
 "use strict";
 
 // Chai plugins
-let chai = require("chai");
+const chai = require("chai");
 chai.use(require("chai-datetime"));
 
 // Disable warnings, which clutter the test output

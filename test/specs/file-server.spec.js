@@ -1,11 +1,12 @@
 "use strict";
 
-let swagger = require("../../"),
-    expect = require("chai").expect,
-    files = require("../fixtures/files"),
-    helper = require("../fixtures/helper"),
-    fs = require("fs"),
-    isHead;
+const swagger = require("../../");
+const expect = require("chai").expect;
+const files = require("../fixtures/files");
+const helper = require("../fixtures/helper");
+const fs = require("fs");
+
+let isHead;
 
 describe("FileServer middleware", function () {
   ["head", "get"].forEach(function (method) {

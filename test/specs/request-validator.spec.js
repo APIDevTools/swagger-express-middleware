@@ -1,13 +1,14 @@
 "use strict";
 
-let swagger = require("../../"),
-    expect = require("chai").expect,
-    assert = require("assert"),
-    sinon = require("sinon"),
-    _ = require("lodash"),
-    files = require("../fixtures/files"),
-    helper = require("../fixtures/helper"),
-    api, express, supertest;
+const swagger = require("../../");
+const expect = require("chai").expect;
+const assert = require("assert");
+const sinon = require("sinon");
+const _ = require("lodash");
+const files = require("../fixtures/files");
+const helper = require("../fixtures/helper");
+
+let api, express, supertest;
 
 describe("RequestValidator middleware", function () {
 

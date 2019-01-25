@@ -3,10 +3,10 @@
  */
 "use strict";
 
-let _ = require("lodash"),
-    express = require("express"),
-    supertest = require("supertest"),
-    sinon = require("sinon");
+const _ = require("lodash");
+const express = require("express");
+const supertest = require("supertest");
+const sinon = require("sinon");
 
 /**
  * Creates and configures an Express application.

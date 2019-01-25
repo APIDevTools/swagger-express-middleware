@@ -1,10 +1,10 @@
 "use strict";
 
-let _ = require("lodash"),
-    path = require("path"),
-    mkdirp = require("mkdirp"),
-    swaggerMethods = require("swagger-methods"),
-    petStoreJSON = require("../files/petstore.json");
+const _ = require("lodash");
+const path = require("path");
+const mkdirp = require("mkdirp");
+const swaggerMethods = require("swagger-methods");
+const petStoreJSON = require("../files/petstore.json");
 
 /**
  * Paths to sample files and directories

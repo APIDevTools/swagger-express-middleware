@@ -1,14 +1,15 @@
 "use strict";
 
-let swagger = require("../../../"),
-    expect = require("chai").expect,
-    sinon = require("sinon"),
-    path = require("path"),
-    fs = require("fs"),
-    files = require("../../fixtures/files"),
-    Resource = swagger.Resource,
-    FileDataStore = swagger.FileDataStore,
-    tempDir;
+const swagger = require("../../../");
+const expect = require("chai").expect;
+const sinon = require("sinon");
+const path = require("path");
+const fs = require("fs");
+const files = require("../../fixtures/files");
+const Resource = swagger.Resource;
+const FileDataStore = swagger.FileDataStore;
+
+let tempDir;
 
 describe("FileDataStore", function () {
   beforeEach(function (done) {

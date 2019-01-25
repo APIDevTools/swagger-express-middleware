@@ -1,9 +1,9 @@
 "use strict";
 
-let swagger = require("../../../"),
-    expect = require("chai").expect,
-    files = require("../../fixtures/files"),
-    helper = require("./helper");
+const swagger = require("../../../");
+const expect = require("chai").expect;
+const files = require("../../fixtures/files");
+const helper = require("./helper");
 
 describe("Mock middleware", function () {
 

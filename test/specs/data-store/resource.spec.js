@@ -1,8 +1,8 @@
 "use strict";
 
-let swagger = require("../../../"),
-    expect = require("chai").expect,
-    helper = require("../../fixtures/helper");
+const swagger = require("../../../");
+const expect = require("chai").expect;
+const helper = require("../../fixtures/helper");
 
 describe("Resource class", function () {
   describe("constructor", function () {

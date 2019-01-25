@@ -1,11 +1,12 @@
 "use strict";
 
-let swagger = require("../../../../"),
-    expect = require("chai").expect,
-    _ = require("lodash"),
-    files = require("../../../fixtures/files"),
-    helper = require("./helper"),
-    api, petParam;
+const swagger = require("../../../../");
+const expect = require("chai").expect;
+const _ = require("lodash");
+const files = require("../../../fixtures/files");
+const helper = require("./helper");
+
+let api, petParam;
 
 describe("JSON Schema - parse object params", function () {
 

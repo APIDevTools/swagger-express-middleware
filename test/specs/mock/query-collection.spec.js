@@ -1,11 +1,11 @@
 "use strict";
 
-let swagger = require("../../../"),
-    util = require("../../../lib/helpers/util"),
-    expect = require("chai").expect,
-    _ = require("lodash"),
-    files = require("../../fixtures/files"),
-    helper = require("./helper");
+const swagger = require("../../../");
+const util = require("../../../lib/helpers/util");
+const expect = require("chai").expect;
+const _ = require("lodash");
+const files = require("../../fixtures/files");
+const helper = require("./helper");
 
 describe("Query Collection Mock", function () {
   let availableContentTypes = _.intersection(files.parsed.petStore.consumes, files.parsed.petStore.produces);

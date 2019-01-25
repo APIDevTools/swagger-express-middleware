@@ -1,8 +1,8 @@
 "use strict";
 
-let _ = require("lodash"),
-    files = require("../../fixtures/files"),
-    helper = require("./helper");
+const _ = require("lodash");
+const files = require("../../fixtures/files");
+const helper = require("./helper");
 
 describe("Mock Response", function () {
 

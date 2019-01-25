@@ -1,7 +1,7 @@
 "use strict";
 
-let expect = require("chai").expect,
-    JsonSchema = require("../../../lib/helpers/json-schema");
+const expect = require("chai").expect;
+const JsonSchema = require("../../../lib/helpers/json-schema");
 
 describe("JSON Schema constructor", function () {
 
