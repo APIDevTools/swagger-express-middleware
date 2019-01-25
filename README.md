@@ -42,7 +42,7 @@ Serves the Swagger API file(s) in JSON or YAML format so they can be used with f
 
 Installation and Use
 --------------------------
-Install using [NPM](https://docs.npmjs.com/getting-started/what-is-npm).
+Install using [npm](https://docs.npmjs.com/about-npm/).
 
 ```bash
 npm install swagger-express-middleware
