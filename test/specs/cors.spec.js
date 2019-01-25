@@ -56,9 +56,9 @@ describe("CORS middleware", function () {
     }
   );
 
-  it("should set CORS headers, even if the Path Items objects are empty",
+  it("should set CORS headers, even if there are no operations",
     function (done) {
-      swagger(files.parsed.swagger2.petStoreNoPathItems, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStoreNoOperations, function (err, middleware) {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -67,7 +67,7 @@ describe("CORS middleware", function () {
 
         express.get("/api/pets", helper.spy(function (req, res, next) {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
-          expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, POST");
+          expect(res.get("Access-Control-Allow-Methods")).to.equal("");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");

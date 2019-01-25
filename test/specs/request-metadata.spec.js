@@ -189,9 +189,9 @@ describe("RequestMetadata middleware", function () {
     }
   );
 
-  it("should set req.swagger.api and req.swagger.path, even if the Path Item objects are empty",
+  it("should set req.swagger.api and req.swagger.path, even if the Path Item has no operations",
     function (done) {
-      swagger(files.parsed.swagger2.petStoreNoPathItems, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStoreNoOperations, function (err, middleware) {
         let express = helper.express(middleware.metadata());
 
         // The path IS defined in the Swagger API, but there's no POST operation
@@ -202,9 +202,9 @@ describe("RequestMetadata middleware", function () {
         express.post("/api/pets/fido", helper.spy(function (req, res, next) {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
-            api: files.parsed.swagger2.petStoreNoPathItems,
+            api: files.parsed.swagger2.petStoreNoOperations,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
+            path: files.parsed.swagger2.petPathNoOperations,
 
             // req.swagger.operation should be null
             operation: null,

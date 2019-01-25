@@ -423,9 +423,9 @@ describe("RequestValidator middleware", function () {
     }
   );
 
-  it("should throw an HTTP 405 if the Path Item objects are empty",
+  it("should throw an HTTP 405 if the Path Item has no operations",
     function (done) {
-      api = files.parsed.swagger2.petStoreNoPathItems;
+      api = files.parsed.swagger2.petStoreNoOperations;
       initTest(function () {
 
         supertest
@@ -435,8 +435,8 @@ describe("RequestValidator middleware", function () {
         express.use(helper.spy(function (err, req, res, next) {
           expect(err.status).to.equal(405);
           expect(err.message).to.contain(
-            "/api/pets does not allow DELETE. \nAllowed methods: GET, POST");
-          expect(res.get("Allow")).to.equal("GET, POST");
+            "/api/pets does not allow DELETE. \nAllowed methods: NONE");
+          expect(res.get("Allow")).to.equal("");
         }));
       });
     }

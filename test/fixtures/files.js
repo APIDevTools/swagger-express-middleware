@@ -41,20 +41,8 @@ exports.parsed = {
     blank: { swagger: "2.0", info: { title: "Test Swagger", version: "1.0" }, paths: {}},
     petStore: swagger2,
     petStoreNoBasePath: _.omit(swagger2, "basePath"),
-    petStoreNoPaths: (function () {
-      let clone = _.cloneDeep(swagger2);
-      clone.paths = {};
-      return clone;
-    }()),
-    petStoreNoPathItems: (function () {
-      let clone = _.cloneDeep(swagger2);
-      swaggerMethods.forEach(function (method) {
-        if (clone.paths[method]) {
-          delete clone.paths[method];
-        }
-      });
-      return clone;
-    }()),
+    petStoreNoPaths: omitPaths(swagger2),
+    petStoreNoOperations: omitOperations(swagger2),
     petStoreSecurity: swagger2.security,
     petsPath: swagger2.paths["/pets"],
     petsGetOperation: swagger2.paths["/pets"].get,
@@ -83,3 +71,33 @@ exports.createTempDir = function (done) {
     });
   }, 10);
 };
+
+/**
+ * Returns a copy of the API definition with all paths removed
+ */
+function omitPaths (api) {
+  let clone = _.cloneDeep(api);
+  clone.paths = {};
+  return clone;
+}
+
+/**
+ * Returns a copy of the API definition with all operations removed
+ */
+function omitOperations (api) {
+  let clone = _.cloneDeep(api);
+
+  for (let path of Object.keys(clone.paths)) {
+    clone.paths[path] = omitOperationsFromPath(clone.paths[path]);
+  }
+
+  return clone;
+}
+
+/**
+ * Returns a copy of the given Path Item object with all operations removed
+ */
+function omitOperationsFromPath (pathItem) {
+  let clone = _.omit(pathItem, swaggerMethods);
+  return clone;
+}

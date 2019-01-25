@@ -166,9 +166,9 @@ describe("Package exports", function () {
       }
     );
 
-    it("can be called with empty Path Item objects",
+    it("can be called without any operations",
       function (done) {
-        let middleware = swagger(files.parsed.swagger2.petStoreNoPathItems, function (err, mw) {
+        let middleware = swagger(files.parsed.swagger2.petStoreNoOperations, function (err, mw) {
           if (err) {
             return done(err);
           }
