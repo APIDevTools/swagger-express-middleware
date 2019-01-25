@@ -8,7 +8,7 @@ const files = require("../../fixtures/files");
 const helper = require("./helper");
 
 describe("Query Collection Mock", function () {
-  let availableContentTypes = _.intersection(files.parsed.petStore.consumes, files.parsed.petStore.produces);
+  let availableContentTypes = _.intersection(files.parsed.swagger2.petStore.consumes, files.parsed.swagger2.petStore.produces);
 
   availableContentTypes.forEach(function (contentType) {
     ["get", "head", "options"].forEach(function (method) {
@@ -27,7 +27,7 @@ function testCases (contentType, method) {
 
   let api, noBody, noHeaders;
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
     noBody = method === "head" || method === "options";
     noHeaders = method === "options";
 

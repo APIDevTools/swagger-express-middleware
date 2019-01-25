@@ -10,7 +10,7 @@ describe("PathParser middleware", function () {
 
   it("should not parse path params if the metadata middleware is not used",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.parseRequest(express));
 
@@ -31,7 +31,7 @@ describe("PathParser middleware", function () {
 
   it("should parse path params",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express, {}));
@@ -55,7 +55,7 @@ describe("PathParser middleware", function () {
     function (done) {
       // The Express app is passed to the Middleware class
       let express = helper.express();
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         express.use(middleware.metadata());          // <--- The Express app is NOT passed to the Metadata class
         express.use(middleware.parseRequest({}));    // <--- The Express app is NOT passed to the PathParser class
 
@@ -78,7 +78,7 @@ describe("PathParser middleware", function () {
     function (done) {
       // The Express app is passed to the Middleware class
       let express = helper.express();
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         express.use(middleware.metadata());                                 // <--- The Express app is NOT passed to the Metadata class
         express.use(middleware.parseRequest({ caseSensitive: true }, {}));    // <--- The Express app is NOT passed to the PathParser class
 
@@ -99,7 +99,7 @@ describe("PathParser middleware", function () {
 
   it("should parse path params that are overridden by an operation",
     function (done) {
-      let api = _.cloneDeep(files.parsed.petStore);
+      let api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/pets/{PetName}/photos/{ID}"].get.parameters = [
         {
           name: "PetName",
@@ -131,7 +131,7 @@ describe("PathParser middleware", function () {
 
   it("should decode encoded path params",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express, {}));
@@ -158,7 +158,7 @@ describe("PathParser middleware", function () {
   it("should parse path params as the proper data type",
     function (done) {
       // Create a dummy path with different types of parameters
-      let api = _.cloneDeep(files.parsed.petStore);
+      let api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/{intParam}/{floatParam}/{byteParam}/{dateParam}/{timeParam}/{boolParam}"] = {
         parameters: [
           { in: "path", required: true, name: "intParam", type: "integer", format: "int32" },
@@ -205,7 +205,7 @@ describe("PathParser middleware", function () {
     function (done) {
       // The Express app is passed to the Middleware class
       let express = helper.express();
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         let router1 = helper.router();
         let router2 = helper.router();
         let router3 = helper.router();
@@ -277,7 +277,7 @@ describe("PathParser middleware", function () {
 
   it("should not set req.params properties if the path is not parameterized",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express));
@@ -297,7 +297,7 @@ describe("PathParser middleware", function () {
 
   it("should not parse path params if the middleware is not parameterized",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express));
@@ -324,7 +324,7 @@ describe("PathParser middleware", function () {
 
   it("should not parse path params if param names don't match",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express));
@@ -353,7 +353,7 @@ describe("PathParser middleware", function () {
 
   it("should not parse non-path params",
     function (done) {
-      let api = _.cloneDeep(files.parsed.petStore);
+      let api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/pets/{PetName}/photos/{ID}"].parameters.push({
         name: "test",
         in: "header",
@@ -384,7 +384,7 @@ describe("PathParser middleware", function () {
 
   it("should throw an error if path params are invalid",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express));
@@ -420,7 +420,7 @@ describe("PathParser middleware", function () {
       let supertest = helper.supertest(express);
 
       // Load an invalid (blank) API
-      swagger(files.parsed.blank, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.blank, express, function (err, middleware) {
         express.use(middleware.metadata());
         express.use(middleware.parseRequest());
         let counter = 0;
@@ -432,7 +432,7 @@ describe("PathParser middleware", function () {
             }
 
             // Load a valid API
-            middleware.init(files.parsed.petStore, function (err, middleware) {
+            middleware.init(files.parsed.swagger2.petStore, function (err, middleware) {
               supertest.get("/api/pets/Fido/photos/12345")
                 .end(helper.checkSpyResults(done));
             });
@@ -464,7 +464,7 @@ describe("PathParser middleware", function () {
     function (done) {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         express.use(middleware.metadata());
         express.use(middleware.parseRequest());
         let counter = 0;
@@ -476,7 +476,7 @@ describe("PathParser middleware", function () {
             }
 
             // Change the definition of the "name" parameter to a number
-            let api = _.cloneDeep(files.parsed.petStore);
+            let api = _.cloneDeep(files.parsed.swagger2.petStore);
             _.find(api.paths["/pets/{PetName}/photos/{ID}"].parameters, { name: "PetName" }).type = "number";
 
             middleware.init(api, function (err, middleware) {
@@ -509,7 +509,7 @@ describe("PathParser middleware", function () {
 
   it("should stop parsing path params that no longer exist after the API changes",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         express.use(middleware.metadata(express));
         express.use(middleware.parseRequest(express));
@@ -523,7 +523,7 @@ describe("PathParser middleware", function () {
             }
 
             // Replace the parameterized path with a non-parameterized one
-            let api = _.cloneDeep(files.parsed.petStore);
+            let api = _.cloneDeep(files.parsed.swagger2.petStore);
             delete api.paths["/pets/{PetName}/photos/{ID}"];
             api.paths["/pets/Fido/photos/12345"] = {
               get: {

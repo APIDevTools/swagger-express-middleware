@@ -10,7 +10,7 @@ describe("Mock response headers", function () {
 
   let api;
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
   });
 
   it("should set headers to the default values specified in the Swagger API",

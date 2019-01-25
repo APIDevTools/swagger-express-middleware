@@ -11,7 +11,7 @@ let api, photoParam;
 describe("JSON Schema - parse file params", function () {
 
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
     let parameters = api.paths["/pets/{PetName}/photos"].post.parameters;
     parameters.forEach(function (param) { param.required = false; });
     photoParam = _.find(parameters, { name: "Photo" });

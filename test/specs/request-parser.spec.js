@@ -11,7 +11,7 @@ describe("RequestParser middleware", function () {
   describe("method signatures", function () {
     it("can be called without any params",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -28,7 +28,7 @@ describe("RequestParser middleware", function () {
 
     it("can be called with just an Express app",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express();
           express.use(middleware.parseRequest(express));
 
@@ -46,7 +46,7 @@ describe("RequestParser middleware", function () {
 
     it("can be called with just routing options",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ caseSensitive: true, secret: "abc123" }));
 
           helper.supertest(express)
@@ -63,7 +63,7 @@ describe("RequestParser middleware", function () {
 
     it("can be called with just options",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
           helper.supertest(express)
@@ -80,7 +80,7 @@ describe("RequestParser middleware", function () {
 
     it("can be called with an Express app and options",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express();
           express.use(middleware.parseRequest(express, { cookie: { secret: "abc123" }}));
 
@@ -98,7 +98,7 @@ describe("RequestParser middleware", function () {
 
     it("can be called with a routing options and options",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ caseSensitive: true }, { cookie: { secret: "abc123" }}));
 
           helper.supertest(express)
@@ -117,7 +117,7 @@ describe("RequestParser middleware", function () {
   describe("Cookie parser", function () {
     it("should parse unsigned cookies",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -141,7 +141,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse signed cookies if a secret is provided",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
           helper.supertest(express)
@@ -168,7 +168,7 @@ describe("RequestParser middleware", function () {
 
     it("should not parse signed cookies if no secret is provided",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -193,7 +193,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse signed and unsigned cookies if a secret is provided",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
           helper.supertest(express)
@@ -224,7 +224,7 @@ describe("RequestParser middleware", function () {
 
     it("should not throw an error if the cookie header is invalid",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -241,7 +241,7 @@ describe("RequestParser middleware", function () {
 
     it("should not throw an error if cookie values are invalid",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -262,7 +262,7 @@ describe("RequestParser middleware", function () {
 
     it("should not throw an error if signed cookies are invalid",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
           helper.supertest(express)
@@ -290,7 +290,7 @@ describe("RequestParser middleware", function () {
   describe("JSON parser", function () {
     it("should parse application/json",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -309,7 +309,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse text/json",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -328,7 +328,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse application/calendar+json",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -347,7 +347,7 @@ describe("RequestParser middleware", function () {
 
     it("can be modified to accept other content types",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({
             json: { type: "foo/bar" }
           }));
@@ -368,7 +368,7 @@ describe("RequestParser middleware", function () {
 
     it("should throw an error if the JSON is malformed",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -394,7 +394,7 @@ describe("RequestParser middleware", function () {
   describe("Text parser", function () {
     it("should parse text/plain",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -412,7 +412,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse text/css",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -430,7 +430,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse text/xml",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -448,7 +448,7 @@ describe("RequestParser middleware", function () {
 
     it("can be modified to accept other content types",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({
             text: { type: "foo/bar" }
           }));
@@ -470,7 +470,7 @@ describe("RequestParser middleware", function () {
   describe("URL-encoded parser", function () {
     it("should parse encoded data",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -496,7 +496,7 @@ describe("RequestParser middleware", function () {
 
     it("can be modified to accept other content types",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({
             urlencoded: { type: "foo/bar" }
           }));
@@ -524,7 +524,7 @@ describe("RequestParser middleware", function () {
 
     it("should not throw an error if the data is malformed",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -549,7 +549,7 @@ describe("RequestParser middleware", function () {
   describe("Raw parser", function () {
     it("should parse plain text as a Buffer",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -568,7 +568,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse binary data as a Buffer",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let buffer = fs.readFileSync(files.paths.oneMB);
 
@@ -588,7 +588,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse application/xml as a Buffer",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -607,7 +607,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse application/soap+xml as a Buffer",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -626,7 +626,7 @@ describe("RequestParser middleware", function () {
 
     it("should support large files (up to 5MB) by default",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let buffer = fs.readFileSync(files.paths.fiveMB);
 
@@ -648,7 +648,7 @@ describe("RequestParser middleware", function () {
 
     it("should not support files larger than 5MB by default",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
           let buffer = fs.readFileSync(files.paths.sixMB);
 
@@ -674,7 +674,7 @@ describe("RequestParser middleware", function () {
 
     it("should support files larger than 5MB if configured to",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({
             raw: { limit: "6mb" }
           }));
@@ -698,7 +698,7 @@ describe("RequestParser middleware", function () {
 
     it("can be modified to accept other content types",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest({
             raw: { type: "foo/bar" }
           }));
@@ -721,7 +721,7 @@ describe("RequestParser middleware", function () {
   describe("Multipart form data parser", function () {
     it("should parse simple fields",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -755,7 +755,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse file attachments",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -800,7 +800,7 @@ describe("RequestParser middleware", function () {
 
     it("should parse a mix of fields and file attachments",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -862,7 +862,7 @@ describe("RequestParser middleware", function () {
 
     it("should support large file attachments by default",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)

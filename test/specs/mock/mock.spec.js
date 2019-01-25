@@ -9,7 +9,7 @@ describe("Mock middleware", function () {
 
   it("should do nothing if no other middleware is used",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express(middleware.mock());
 
         helper.supertest(express)
@@ -26,7 +26,7 @@ describe("Mock middleware", function () {
 
   it("should do nothing if the Metadata middleware is not used",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express(
           middleware.CORS(), middleware.parseRequest(), middleware.validateRequest(), middleware.mock()
         );
@@ -45,7 +45,7 @@ describe("Mock middleware", function () {
 
   it("should do nothing if the API is not valid",
     function (done) {
-      swagger(files.parsed.blank, function (err, middleware) {
+      swagger(files.parsed.swagger2.blank, function (err, middleware) {
         let express = helper.express(
           middleware.metadata(), middleware.CORS(), middleware.parseRequest(), middleware.mock()
         );
@@ -79,7 +79,7 @@ describe("Mock middleware", function () {
   it('should do nothing if "mock" is disabled in Express',
     function (done) {
       let express = helper.express();
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         express.use(
           middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
           middleware.validateRequest(), middleware.mock()
@@ -94,11 +94,11 @@ describe("Mock middleware", function () {
 
         express.get("/api/pets", helper.spy(function (req, res, next) {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.petStore,
+            api: files.parsed.swagger2.petStore,
             pathName: "/pets",
-            path: files.parsed.petsPath,
-            operation: files.parsed.petsGetOperation,
-            params: files.parsed.petsGetParams,
+            path: files.parsed.swagger2.petsPath,
+            operation: files.parsed.swagger2.petsGetOperation,
+            params: files.parsed.swagger2.petsGetParams,
             security: []
           });
           expect(res.swagger).to.be.undefined;
@@ -109,7 +109,7 @@ describe("Mock middleware", function () {
 
   it("can be passed an Express Application",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         let supertest = helper.supertest(express);
 
@@ -140,7 +140,7 @@ describe("Mock middleware", function () {
 
   it("can be passed a data store",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         let supertest = helper.supertest(express);
         let dataStore = new swagger.MemoryDataStore();
@@ -170,7 +170,7 @@ describe("Mock middleware", function () {
 
   it("can be passed an Express App and a data store",
     function (done) {
-      swagger(files.parsed.petStore, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
         let express = helper.express();
         let supertest = helper.supertest(express);
         let dataStore = new swagger.MemoryDataStore();
@@ -213,7 +213,7 @@ describe("Mock middleware", function () {
     function (done) {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         let dataStore = new swagger.MemoryDataStore();
 
         // Setting the "mock data store" on the Express App
@@ -242,7 +242,7 @@ describe("Mock middleware", function () {
     function (done) {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         let dataStore1 = new swagger.MemoryDataStore();
         let dataStore2 = new swagger.MemoryDataStore();
 
@@ -278,7 +278,7 @@ describe("Mock middleware", function () {
     function (done) {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      swagger(files.parsed.petStore, express, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {
         let dataStore1 = new swagger.MemoryDataStore();
         let dataStore2 = new swagger.MemoryDataStore();
 

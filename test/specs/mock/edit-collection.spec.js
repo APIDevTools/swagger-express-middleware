@@ -12,7 +12,7 @@ describe("Edit Collection Mock", function () {
 
       let api;
       beforeEach(function () {
-        api = _.cloneDeep(files.parsed.petStore);
+        api = _.cloneDeep(files.parsed.swagger2.petStore);
         api.paths["/pets"][method] = api.paths["/pets"].post;
         api.paths["/pets/{PetName}/photos"][method] = api.paths["/pets/{PetName}/photos"].post;
       });

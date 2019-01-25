@@ -11,7 +11,7 @@ let api, petParam;
 describe("JSON Schema - parse object params", function () {
 
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
     petParam = api.paths["/pets/{PetName}"].patch.parameters[0];
   });
 

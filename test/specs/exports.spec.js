@@ -46,7 +46,7 @@ describe("Package exports", function () {
   describe("exports.createMiddleware", function () {
     it('should work with the "new" operator',
       function (done) {
-        let middleware = new swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = new swagger(files.parsed.swagger2.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -60,7 +60,7 @@ describe("Package exports", function () {
 
     it('should work without the "new" operator',
       function (done) {
-        let middleware = swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = swagger(files.parsed.swagger2.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -81,14 +81,14 @@ describe("Package exports", function () {
 
     it("can be called with just a file path",
       function () {
-        let middleware = swagger(files.paths.petStore);
+        let middleware = swagger(files.paths.swagger2.petStore);
         expect(middleware).to.be.an.instanceOf(swagger.Middleware);
       }
     );
 
     it("can be called with just an object",
       function () {
-        let middleware = swagger(files.parsed.petStore);
+        let middleware = swagger(files.parsed.swagger2.petStore);
         expect(middleware).to.be.an.instanceOf(swagger.Middleware);
       }
     );
@@ -109,7 +109,7 @@ describe("Package exports", function () {
 
     it("should call the callback if a Swagger object was given",
       function (done) {
-        let middleware = swagger(files.parsed.petStore, function (err, mw) {
+        let middleware = swagger(files.parsed.swagger2.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -124,7 +124,7 @@ describe("Package exports", function () {
 
     it("should call the callback if a file path was given",
       function (done) {
-        let middleware = swagger(files.paths.petStore, function (err, mw) {
+        let middleware = swagger(files.paths.swagger2.petStore, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -153,7 +153,7 @@ describe("Package exports", function () {
 
     it("can be called with an empty Paths object",
       function (done) {
-        let middleware = swagger(files.parsed.petStoreNoPaths, function (err, mw) {
+        let middleware = swagger(files.parsed.swagger2.petStoreNoPaths, function (err, mw) {
           if (err) {
             return done(err);
           }
@@ -168,7 +168,7 @@ describe("Package exports", function () {
 
     it("can be called with empty Path Item objects",
       function (done) {
-        let middleware = swagger(files.parsed.petStoreNoPathItems, function (err, mw) {
+        let middleware = swagger(files.parsed.swagger2.petStoreNoPathItems, function (err, mw) {
           if (err) {
             return done(err);
           }

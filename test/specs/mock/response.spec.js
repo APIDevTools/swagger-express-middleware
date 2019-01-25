@@ -8,7 +8,7 @@ describe("Mock Response", function () {
 
   let api;
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
   });
 
   it("should use the 200 response, if it exists",

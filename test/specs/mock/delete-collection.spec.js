@@ -11,7 +11,7 @@ describe("Query Collection Mock", function () {
 
     let api;
     beforeEach(function () {
-      api = _.cloneDeep(files.parsed.petStore);
+      api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/pets"].delete = _.cloneDeep(api.paths["/pets"].get);
       api.paths["/pets/{PetName}/photos"].delete = _.cloneDeep(api.paths["/pets/{PetName}/photos"].get);
     });

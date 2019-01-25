@@ -13,7 +13,7 @@ describe("Query Resource Mock", function () {
 
       let api, noBody, noHeaders;
       beforeEach(function () {
-        api = _.cloneDeep(files.parsed.petStore);
+        api = _.cloneDeep(files.parsed.swagger2.petStore);
         noBody = method === "head" || method === "options";
         noHeaders = method === "options";
 
@@ -561,7 +561,7 @@ describe("Query Resource Mock", function () {
                   .post("/api/pets/Fido/photos")
                   .field("Label", "Photo 1")
                   .field("Description", "A photo of Fido")
-                  .attach("Photo", files.paths.text)
+                  .attach("Photo", files.paths.swagger2.text)
                   .end(helper.checkResults(done, function (res1) {
                     let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 

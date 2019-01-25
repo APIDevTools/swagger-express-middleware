@@ -12,7 +12,7 @@ describe("Edit Resource Mock", function () {
 
       let api;
       beforeEach(function () {
-        api = _.cloneDeep(files.parsed.petStore);
+        api = _.cloneDeep(files.parsed.swagger2.petStore);
 
         let operation = api.paths["/pets/{PetName}"].patch;
         delete api.paths["/pets/{PetName}"].patch;

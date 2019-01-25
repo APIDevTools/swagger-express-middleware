@@ -13,7 +13,7 @@ let api, express, supertest;
 describe("RequestValidator middleware", function () {
 
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
   });
 
   function initTest (callback) {
@@ -85,7 +85,7 @@ describe("RequestValidator middleware", function () {
 
   it("should throw an error if the API is invalid",
     function (done) {
-      api = files.parsed.petsPostOperation;
+      api = files.parsed.swagger2.petsPostOperation;
       initTest(function (err) {
         expect(err.message).to.contain("is not a valid Openapi API definition");
         done();
@@ -114,7 +114,7 @@ describe("RequestValidator middleware", function () {
 
   it("should clear the error if the API becomes valid",
     function (done) {
-      api = files.parsed.blank; // <--- Invalid API
+      api = files.parsed.swagger2.blank; // <--- Invalid API
       initTest(function (err, middleware) {
 
         let success = sinon.spy(function () {});
@@ -135,7 +135,7 @@ describe("RequestValidator middleware", function () {
             error.resetHistory();
 
             // Switch to a valid API
-            middleware.init(files.parsed.petStore, function () {
+            middleware.init(files.parsed.swagger2.petStore, function () {
               supertest.get("/api/pets")
                 .end(function (err) {
                   if (err) {
@@ -390,7 +390,7 @@ describe("RequestValidator middleware", function () {
 
   it("should throw an HTTP 404 if the Paths object is empty",
     function (done) {
-      api = files.parsed.petStoreNoPaths;
+      api = files.parsed.swagger2.petStoreNoPaths;
       initTest(function () {
 
         supertest
@@ -425,7 +425,7 @@ describe("RequestValidator middleware", function () {
 
   it("should throw an HTTP 405 if the Path Item objects are empty",
     function (done) {
-      api = files.parsed.petStoreNoPathItems;
+      api = files.parsed.swagger2.petStoreNoPathItems;
       initTest(function () {
 
         supertest

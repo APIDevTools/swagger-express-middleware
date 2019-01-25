@@ -13,7 +13,7 @@ describe("ParamParser middleware", function () {
   describe("Query param parser", function () {
     it("should not parse query params if the metadata middleware is not used",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.parseRequest());
 
           helper.supertest(express)
@@ -32,7 +32,7 @@ describe("ParamParser middleware", function () {
 
     it("should parse query params",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -60,7 +60,7 @@ describe("ParamParser middleware", function () {
 
     it("should decode encoded query params",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -88,7 +88,7 @@ describe("ParamParser middleware", function () {
 
     it("should set query params to undefined if optional and unspecified",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -116,7 +116,7 @@ describe("ParamParser middleware", function () {
 
     it("should set query params to their defaults if unspecified",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         _.find(api.paths["/pets"].get.parameters, { name: "Age" }).default = 99;
         _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).default = "hello,world";
         _.find(api.paths["/pets"].get.parameters, { name: "Type" }).default = "hello world";
@@ -149,7 +149,7 @@ describe("ParamParser middleware", function () {
 
     it("should throw an error if query params are invalid",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -174,7 +174,7 @@ describe("ParamParser middleware", function () {
 
     beforeEach(function () {
       // Change the "query" parameters to "header" parameters
-      api = _.cloneDeep(files.parsed.petStore);
+      api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/pets"].get.parameters.forEach(function (param) {
         param.in = "header";
       });
@@ -319,7 +319,7 @@ describe("ParamParser middleware", function () {
 
     it("should throw an HTTP 411 error if the Content-Length header is required and is missing",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         api.paths["/pets"].post.parameters.push({
           in: "header",
           name: "Content-Length",
@@ -349,7 +349,7 @@ describe("ParamParser middleware", function () {
 
     beforeEach(function () {
       // Change the "query" parameters to "formData" parameters
-      api = _.cloneDeep(files.parsed.petStore);
+      api = _.cloneDeep(files.parsed.swagger2.petStore);
       api.paths["/pets"].put = _.cloneDeep(api.paths["/pets"].get);
       api.paths["/pets"].put.parameters.forEach(function (param) {
         param.in = "formData";
@@ -521,7 +521,7 @@ describe("ParamParser middleware", function () {
 
     it("should parse file params",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -561,7 +561,7 @@ describe("ParamParser middleware", function () {
   describe("Body param parser", function () {
     it("should parse the body param",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -581,7 +581,7 @@ describe("ParamParser middleware", function () {
 
     it("should validate a non-JSON body param, if third-party parsing middleware is used",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express();
           express.use(middleware.metadata());
           express.use(myXmlParser);   // <--- NOTE: This middleware must come before the `parseRequest` middleware
@@ -614,7 +614,7 @@ describe("ParamParser middleware", function () {
 
     it("should validate a non-object body param",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         api.paths["/pets/{PetName}"].patch.parameters[0].schema = {
           type: "integer"
         };
@@ -643,7 +643,7 @@ describe("ParamParser middleware", function () {
 
     it("should set the body to undefined if optional and unspecified",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         api.paths["/pets/{PetName}"].patch.parameters[0].required = false;
 
         swagger(api, function (err, middleware) {
@@ -662,7 +662,7 @@ describe("ParamParser middleware", function () {
 
     it("should set the body to its default if optional and unspecified",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         let petParam = api.paths["/pets/{PetName}"].patch.parameters[0];
         petParam.required = false;
         petParam.schema.default = { Name: "Fido", Type: "dog" };
@@ -686,7 +686,7 @@ describe("ParamParser middleware", function () {
 
     it("should throw an error if the body param is required and unspecified",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)
@@ -703,7 +703,7 @@ describe("ParamParser middleware", function () {
 
     it("should throw an error if the body param is required and unspecified, even if there's a default value",
       function (done) {
-        let api = _.cloneDeep(files.parsed.petStore);
+        let api = _.cloneDeep(files.parsed.swagger2.petStore);
         api.paths["/pets/{PetName}"].patch.parameters[0].schema.default = '{"name": "Fluffy", "type": "cat"}';
 
         swagger(api, function (err, middleware) {
@@ -723,7 +723,7 @@ describe("ParamParser middleware", function () {
 
     it("should throw an error if the body param is invalid",
       function (done) {
-        swagger(files.parsed.petStore, function (err, middleware) {
+        swagger(files.parsed.swagger2.petStore, function (err, middleware) {
           let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
           helper.supertest(express)

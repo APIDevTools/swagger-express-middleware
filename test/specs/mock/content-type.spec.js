@@ -10,7 +10,7 @@ describe("Mock Content-Type header", function () {
 
   let api;
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
   });
 
   describe("Object responses", function () {

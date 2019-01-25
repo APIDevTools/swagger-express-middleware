@@ -23,7 +23,7 @@ paths:
           schema:
             type: file
             example:
-              $ref: ../1MB.jpg
+              $ref: ../../1MB.jpg
         default:
           description: references the "error.json" file
           schema:

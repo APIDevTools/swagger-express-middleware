@@ -11,7 +11,7 @@ let api;
 
 describe("CORS middleware", function () {
   beforeEach(function () {
-    api = _.cloneDeep(files.parsed.petStore);
+    api = _.cloneDeep(files.parsed.swagger2.petStore);
   });
 
   it("should set CORS headers, even if no other middleware is used",
@@ -37,7 +37,7 @@ describe("CORS middleware", function () {
 
   it("should set CORS headers, even if the Paths object is empty",
     function (done) {
-      swagger(files.parsed.petStoreNoPaths, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStoreNoPaths, function (err, middleware) {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -58,7 +58,7 @@ describe("CORS middleware", function () {
 
   it("should set CORS headers, even if the Path Items objects are empty",
     function (done) {
-      swagger(files.parsed.petStoreNoPathItems, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStoreNoPathItems, function (err, middleware) {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -79,7 +79,7 @@ describe("CORS middleware", function () {
 
   it("should set CORS headers, even if a parsing error occurs",
     function (done) {
-      swagger(files.parsed.blank, function (err, middleware) {
+      swagger(files.parsed.swagger2.blank, function (err, middleware) {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -100,7 +100,7 @@ describe("CORS middleware", function () {
 
   it("should echo back CORS headers by default",
     function (done) {
-      swagger(files.parsed.petStoreNoPaths, function (err, middleware) {
+      swagger(files.parsed.swagger2.petStoreNoPaths, function (err, middleware) {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)

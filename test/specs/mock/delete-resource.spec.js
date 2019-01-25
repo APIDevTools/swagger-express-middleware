@@ -11,7 +11,7 @@ describe("Edit Resource Mock", function () {
 
     let api;
     beforeEach(function () {
-      api = _.cloneDeep(files.parsed.petStore);
+      api = _.cloneDeep(files.parsed.swagger2.petStore);
     });
 
     it("should delete a resource",

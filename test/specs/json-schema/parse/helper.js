@@ -17,7 +17,7 @@ _.extend(exports, helper);
  */
 exports.parse = function (schema, value, done) {
   // Create a Swagger API that uses this schema
-  let api = _.cloneDeep(files.parsed.petStore);
+  let api = _.cloneDeep(files.parsed.swagger2.petStore);
   api.paths["/test"] = {
     post: {
       parameters: [_.extend(schema, { name: "Test", in: "header" })],
