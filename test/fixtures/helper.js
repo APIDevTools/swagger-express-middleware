@@ -15,7 +15,7 @@ exports.express = function (middleware) {
   let app = express();
   app.set("env", "test"); // Turns on enhanced debug/error info
 
-  _.each(arguments, function (middleware) {
+  _.each(arguments, (middleware) => {
     app.use(middleware);
   });
 
@@ -38,7 +38,7 @@ exports.router = function (middleware) {
 
   let router = express.Router(opts);
 
-  _.each(args, function (middleware) {
+  _.each(args, (middleware) => {
     router.use(middleware);
   });
 

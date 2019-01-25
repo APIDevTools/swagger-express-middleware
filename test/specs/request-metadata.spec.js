@@ -3,37 +3,35 @@
 const swagger = require("../../");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const files = require("../fixtures/files");
+const specs = require("../fixtures/specs");
 const helper = require("../fixtures/helper");
 
-describe("RequestMetadata middleware", function () {
+for (let spec of specs) {
+  describe(`RequestMetadata middleware (${spec.name})`, () => {
 
-  it("should set all req.swagger properties for a parameterless path",
-    function (done) {
-      swagger(files.paths.swagger2.petStore, function (err, middleware) {
+    it("should set all req.swagger properties for a parameterless path", (done) => {
+      swagger(spec.files.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .post("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.post("/api/pets", helper.spy(function (req, res, next) {
+        express.post("/api/pets", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
             pathName: "/pets",
-            path: files.parsed.swagger2.petsPath,
-            operation: files.parsed.swagger2.petsPostOperation,
-            params: files.parsed.swagger2.petsPostParams,
-            security: files.parsed.swagger2.petsPostSecurity
+            path: spec.samples.petsPath,
+            operation: spec.samples.petsPostOperation,
+            params: spec.samples.petsPostParams,
+            security: spec.samples.petsPostSecurity
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should set all req.swagger properties for a parameterized path",
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it("should set all req.swagger properties for a parameterized path", (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
         let counter = 0;
 
@@ -41,14 +39,14 @@ describe("RequestMetadata middleware", function () {
           .patch("/api/pets/fido")
           .end(helper.checkSpyResults(done));
 
-        let handler = helper.spy(function (req, res, next) {
+        let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
-            operation: files.parsed.swagger2.petPatchOperation,
-            params: files.parsed.swagger2.petPatchParams,
-            security: files.parsed.swagger2.petPatchSecurity
+            path: spec.samples.petPath,
+            operation: spec.samples.petPatchOperation,
+            params: spec.samples.petPatchParams,
+            security: spec.samples.petPatchSecurity
           });
 
           if (++counter !== 2) {
@@ -59,35 +57,31 @@ describe("RequestMetadata middleware", function () {
         express.patch("/api/pets/:name", handler);
         express.patch("/api/pets/fido", handler);
       });
-    }
-  );
+    });
 
-  it("should set all req.swagger properties when the API has no basePath",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoBasePath, function (err, middleware) {
+    it("should set all req.swagger properties when the API has no basePath", (done) => {
+      swagger(spec.samples.petStoreNoBasePath, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .patch("/pets/fido")
           .end(helper.checkSpyResults(done));
 
-        express.patch("/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/pets/fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.swagger2.petStoreNoBasePath,
+            api: spec.samples.petStoreNoBasePath,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
-            operation: files.parsed.swagger2.petPatchOperation,
-            params: files.parsed.swagger2.petPatchParams,
-            security: files.parsed.swagger2.petPatchSecurity
+            path: spec.samples.petPath,
+            operation: spec.samples.petPatchOperation,
+            params: spec.samples.petPatchParams,
+            security: spec.samples.petPatchSecurity
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should not set any req.swagger properties if the API was not parsed successfully",
-    function (done) {
-      swagger(files.paths.blank, function (err, middleware) {
+    it("should not set any req.swagger properties if the API was not parsed successfully", (done) => {
+      swagger(spec.files.blank, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // Doesn't matter what path we browse to
@@ -95,7 +89,7 @@ describe("RequestMetadata middleware", function () {
           .get("/foo")
           .end(helper.checkSpyResults(done));
 
-        express.get("/foo", helper.spy(function (req, res, next) {
+        express.get("/foo", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: null,
             pathName: "",
@@ -106,12 +100,10 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should not set any req.swagger properties if the request isn't under the basePath",
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it("should not set any req.swagger properties if the request isn't under the basePath", (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // "/pets" isn't under the "/api" basePath
@@ -119,7 +111,7 @@ describe("RequestMetadata middleware", function () {
           .get("/pets")
           .end(helper.checkSpyResults(done));
 
-        express.get("/pets", helper.spy(function (req, res, next) {
+        express.get("/pets", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: null,
             pathName: "",
@@ -130,25 +122,23 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.api, even if the Paths object is empty",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoPaths, function (err, middleware) {
+    it("should set req.swagger.api, even if the Paths object is empty", (done) => {
+      swagger(spec.samples.petStoreNoPaths, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .patch("/api/pets/fido")
           .end(helper.checkSpyResults(done));
 
-        express.patch("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger should be set, even though the path is invalid
-            api: files.parsed.swagger2.petStoreNoPaths,
+            api: spec.samples.petStoreNoPaths,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -158,25 +148,23 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.api, even if the path isn't matched",
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it("should set req.swagger.api, even if the path isn't matched", (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .get("/api/foo")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/foo", helper.spy(function (req, res, next) {
+        express.get("/api/foo", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger should be set, even though the path is invalid
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -186,12 +174,10 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.api and req.swagger.path, even if the Path Item has no operations",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoOperations, function (err, middleware) {
+    it("should set req.swagger.api and req.swagger.path, even if the Path Item has no operations", (done) => {
+      swagger(spec.samples.petStoreNoOperations, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // The path IS defined in the Swagger API, but there's no POST operation
@@ -199,30 +185,28 @@ describe("RequestMetadata middleware", function () {
           .post("/api/pets/fido")
           .end(helper.checkSpyResults(done));
 
-        express.post("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.post("/api/pets/fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
-            api: files.parsed.swagger2.petStoreNoOperations,
+            api: spec.samples.petStoreNoOperations,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPathNoOperations,
+            path: spec.samples.petPathNoOperations,
 
             // req.swagger.operation should be null
             operation: null,
 
             // Only the path parameter should be set
-            params: [files.parsed.swagger2.petPatchParams[1]],
+            params: [spec.samples.petPatchParams[1]],
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity
+            security: spec.samples.petStoreSecurity
           });
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.api and req.swagger.path, even if the operation isn't matched",
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it("should set req.swagger.api and req.swagger.path, even if the operation isn't matched", (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // The path IS defined in the Swagger API, but there's no POST operation
@@ -230,30 +214,28 @@ describe("RequestMetadata middleware", function () {
           .post("/api/pets/fido")
           .end(helper.checkSpyResults(done));
 
-        express.post("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.post("/api/pets/fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
+            path: spec.samples.petPath,
 
             // req.swagger.operation should be null
             operation: null,
 
             // Only the path parameter should be set
-            params: [files.parsed.swagger2.petPatchParams[1]],
+            params: [spec.samples.petPatchParams[1]],
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity
+            security: spec.samples.petStoreSecurity
           });
         }));
       });
-    }
-  );
+    });
 
-  it('should use case-insensitive matching if "case sensitive routing" is disabled',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use case-insensitive matching if "case sensitive routing" is disabled', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
         let counter = 0;
 
@@ -263,14 +245,14 @@ describe("RequestMetadata middleware", function () {
           .patch("/api/PeTs/Fido")
           .end(helper.checkSpyResults(done));
 
-        let handler = helper.spy(function (req, res, next) {
+        let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
-            operation: files.parsed.swagger2.petPatchOperation,
-            params: files.parsed.swagger2.petPatchParams,
-            security: files.parsed.swagger2.petPatchSecurity
+            path: spec.samples.petPath,
+            operation: spec.samples.petPatchOperation,
+            params: spec.samples.petPatchParams,
+            security: spec.samples.petPatchSecurity
           });
 
           if (++counter !== 3) {
@@ -283,12 +265,10 @@ describe("RequestMetadata middleware", function () {
         express.patch("/API/PETS/FIDO", handler);
         express.patch("/api/pets/fido", handler);
       });
-    }
-  );
+    });
 
-  it('should use case-sensitive matching if "case sensitive routing" is enabled',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use case-sensitive matching if "case sensitive routing" is enabled', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express();
         express.enable("case sensitive routing");
         express.use(middleware.metadata(express));
@@ -299,17 +279,17 @@ describe("RequestMetadata middleware", function () {
           .end(helper.checkSpyResults(done));
 
         // This middleware should NOT get called because Express is configured to be case-sensitive
-        express.patch("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido", helper.spy((req, res, next) => {
           assert(false, "This middleware should NOT have been called");
         }));
 
-        express.patch("/api/PeTs/Fido", helper.spy(function (req, res, next) {
+        express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -319,13 +299,11 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it('should use case-sensitive matching if "case sensitive routing" is enabled on the Middleware class',
-    function (done) {
+    it('should use case-sensitive matching if "case sensitive routing" is enabled on the Middleware class', (done) => {
       let express = helper.express();
-      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+      swagger(spec.samples.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
         express.enable("case sensitive routing");
         express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
@@ -335,17 +313,17 @@ describe("RequestMetadata middleware", function () {
           .end(helper.checkSpyResults(done));
 
         // This middleware should NOT get called because Express is configured to be case-sensitive
-        express.patch("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido", helper.spy((req, res, next) => {
           assert(false, "This middleware should NOT have been called");
         }));
 
-        express.patch("/api/PeTs/Fido", helper.spy(function (req, res, next) {
+        express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -355,12 +333,10 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it('should use case-sensitive matching if "caseSensitive" is set',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use case-sensitive matching if "caseSensitive" is set', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata({ caseSensitive: true }));
         let counter = 0;
 
@@ -371,13 +347,13 @@ describe("RequestMetadata middleware", function () {
 
         // Even though Express is case-insensitive, the metadata middleware IS case-sensitive,
         // so `req.swagger.path` and `req.swagger.operation` will be null both times.
-        let handler = helper.spy(function (req, res, next) {
+        let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -395,12 +371,10 @@ describe("RequestMetadata middleware", function () {
         express.patch("/api/pets/fido", handler);
         express.patch("/api/PeTs/Fido", handler);
       });
-    }
-  );
+    });
 
-  it('should use loose matching if "strict routing" is disabled',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use loose matching if "strict routing" is disabled', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata());
         let counter = 0;
 
@@ -410,14 +384,14 @@ describe("RequestMetadata middleware", function () {
           .patch("/api/pets/fido/")
           .end(helper.checkSpyResults(done));
 
-        let handler = helper.spy(function (req, res, next) {
+        let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
             pathName: "/pets/{PetName}",
-            path: files.parsed.swagger2.petPath,
-            operation: files.parsed.swagger2.petPatchOperation,
-            params: files.parsed.swagger2.petPatchParams,
-            security: files.parsed.swagger2.petPatchSecurity
+            path: spec.samples.petPath,
+            operation: spec.samples.petPatchOperation,
+            params: spec.samples.petPatchParams,
+            security: spec.samples.petPatchSecurity
           });
 
           if (++counter !== 2) {
@@ -429,12 +403,10 @@ describe("RequestMetadata middleware", function () {
         express.patch("/api/pETs/Fido", handler);
         express.patch("/API/petS/fido/", handler);
       });
-    }
-  );
+    });
 
-  it('should use strict matching if "strict routing" is enabled',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use strict matching if "strict routing" is enabled', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express();
         express.enable("strict routing");
         express.use(middleware.metadata(express));
@@ -445,17 +417,17 @@ describe("RequestMetadata middleware", function () {
           .end(helper.checkSpyResults(done));
 
         // This middleware should NOT get called because Express is configured to use strict routing
-        express.patch("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido", helper.spy((req, res, next) => {
           assert(false, "This middleware should NOT have been called");
         }));
 
-        express.patch("/api/pets/fido/", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -465,13 +437,11 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it('should use strict matching if "strict routing" is enabled on the Middleware class',
-    function (done) {
+    it('should use strict matching if "strict routing" is enabled on the Middleware class', (done) => {
       let express = helper.express();
-      swagger(files.parsed.swagger2.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+      swagger(spec.samples.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
         express.enable("strict routing");
         express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
@@ -481,17 +451,17 @@ describe("RequestMetadata middleware", function () {
           .end(helper.checkSpyResults(done));
 
         // This middleware should NOT get called because Express is configured to use strict routing
-        express.patch("/api/pets/fido", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido", helper.spy((req, res, next) => {
           assert(false, "This middleware should NOT have been called");
         }));
 
-        express.patch("/api/pets/fido/", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -501,12 +471,10 @@ describe("RequestMetadata middleware", function () {
           });
         }));
       });
-    }
-  );
+    });
 
-  it('should use strict matching if "strict" is set',
-    function (done) {
-      swagger(files.parsed.swagger2.petStore, function (err, middleware) {
+    it('should use strict matching if "strict" is set', (done) => {
+      swagger(spec.samples.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata({ strict: true }));
         let counter = 0;
 
@@ -517,13 +485,13 @@ describe("RequestMetadata middleware", function () {
 
         // Even though Express is using loose routing, the metadata middleware is using strict routing,
         // so `req.swagger.path` and `req.swagger.operation` will be null both times.
-        let handler = helper.spy(function (req, res, next) {
+        let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api should be set because the basePath matches
-            api: files.parsed.swagger2.petStore,
+            api: spec.samples.petStore,
 
             // The default API security should be set
-            security: files.parsed.swagger2.petStoreSecurity,
+            security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
             pathName: "",
@@ -541,33 +509,31 @@ describe("RequestMetadata middleware", function () {
         express.patch("/api/pets/fido", handler);
         express.patch("/api/pets/fido/", handler);
       });
-    }
-  );
+    });
 
-  it("should detect when the API changes",
-    function (done) {
+    it("should detect when the API changes", (done) => {
       let express = helper.express();
 
       // Load an invalid (blank) API
-      swagger(files.parsed.swagger2.blank, express, function (err, middleware) {
+      swagger(spec.samples.blank, express, (err, middleware) => {
         express.use(middleware.metadata(express));
         let supertest = helper.supertest(express);
         let counter = 0;
 
         supertest.patch("/api/pets/fido")
-          .end(function (err) {
+          .end((err) => {
             if (err) {
               return done(err);
             }
 
             // Load a valid API
-            middleware.init(files.parsed.swagger2.petStore, function (err, middleware) {
+            middleware.init(spec.samples.petStore, (err, middleware) => {
               supertest.patch("/api/pets/fido")
                 .end(helper.checkSpyResults(done));
             });
           });
 
-        express.patch("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.patch("/api/pets/:name", helper.spy((req, res, next) => {
           if (++counter === 1) {
             // req.swagger doesn't get populated on the first request, because the API is invalid
             expect(req.swagger).to.deep.equal({
@@ -589,56 +555,52 @@ describe("RequestMetadata middleware", function () {
           else {
             // req.swagger DOES get populated on the second request, because the API is now valid
             expect(req.swagger).to.deep.equal({
-              api: files.parsed.swagger2.petStore,
+              api: spec.samples.petStore,
               pathName: "/pets/{PetName}",
-              path: files.parsed.swagger2.petPath,
-              operation: files.parsed.swagger2.petPatchOperation,
-              params: files.parsed.swagger2.petPatchParams,
-              security: files.parsed.swagger2.petPatchSecurity
+              path: spec.samples.petPath,
+              operation: spec.samples.petPatchOperation,
+              params: spec.samples.petPatchParams,
+              security: spec.samples.petPatchSecurity
             });
           }
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.security to an empty array if not defined on the operation or API",
-    function (done) {
-      let api = _.cloneDeep(files.parsed.swagger2.petStore);
+    it("should set req.swagger.security to an empty array if not defined on the operation or API", (done) => {
+      let api = _.cloneDeep(spec.samples.petStore);
       delete api.security;
       delete api.paths["/pets"].post.security;
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .post("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.post("/api/pets", helper.spy(function (req, res, next) {
+        express.post("/api/pets", helper.spy((req, res, next) => {
           expect(req.swagger.security).to.have.lengthOf(0);
         }));
       });
-    }
-  );
+    });
 
-  it("should set req.swagger.security to an empty array if not defined on the API",
-    function (done) {
-      let api = _.cloneDeep(files.parsed.swagger2.petStore);
+    it("should set req.swagger.security to an empty array if not defined on the API", (done) => {
+      let api = _.cloneDeep(spec.samples.petStore);
       delete api.security;
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         helper.supertest(express)
           .delete("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.delete("/api/pets", helper.spy(function (req, res, next) {
+        express.delete("/api/pets", helper.spy((req, res, next) => {
           expect(req.swagger.security).to.have.lengthOf(0);
         }));
       });
-    }
-  );
+    });
 
-});
+  });
+}

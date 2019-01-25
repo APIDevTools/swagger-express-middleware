@@ -3,61 +3,51 @@
 const expect = require("chai").expect;
 const JsonSchema = require("../../../lib/helpers/json-schema");
 
-describe("JSON Schema constructor", function () {
+describe("JSON Schema constructor", () => {
 
-  it("should throw an error if the schema is missing",
-    function () {
-      function createMissingSchema () {
-        new JsonSchema();
-      }
-
-      expect(createMissingSchema).to.throw("Missing JSON schema");
+  it("should throw an error if the schema is missing", () => {
+    function createMissingSchema () {
+      new JsonSchema();
     }
-  );
 
-  it("should throw an error if the schema is null",
-    function () {
-      function createNullSchema () {
-        new JsonSchema(null);
-      }
+    expect(createMissingSchema).to.throw("Missing JSON schema");
+  });
 
-      expect(createNullSchema).to.throw("Missing JSON schema");
+  it("should throw an error if the schema is null", () => {
+    function createNullSchema () {
+      new JsonSchema(null);
     }
-  );
 
-  it("should not throw an error if the schema is empty",
-    function () {
-      function createEmptySchema () {
-        new JsonSchema({});
-      }
+    expect(createNullSchema).to.throw("Missing JSON schema");
+  });
 
-      expect(createEmptySchema).not.to.throw();
+  it("should not throw an error if the schema is empty", () => {
+    function createEmptySchema () {
+      new JsonSchema({});
     }
-  );
 
-  it("should throw an error if the schema type is unsupported",
-    function () {
-      function unsupportedType () {
-        new JsonSchema({ type: "foobar" });
-      }
+    expect(createEmptySchema).not.to.throw();
+  });
 
-      expect(unsupportedType).to.throw("Invalid JSON schema type: foobar");
+  it("should throw an error if the schema type is unsupported", () => {
+    function unsupportedType () {
+      new JsonSchema({ type: "foobar" });
     }
-  );
 
-  it("should not throw an error if the schema type is missing",
-    function () {
-      function missingType () {
-        new JsonSchema({
-          properties: {
-            name: {
-              type: "string"
-            }
+    expect(unsupportedType).to.throw("Invalid JSON schema type: foobar");
+  });
+
+  it("should not throw an error if the schema type is missing", () => {
+    function missingType () {
+      new JsonSchema({
+        properties: {
+          name: {
+            type: "string"
           }
-        });
-      }
-
-      expect(missingType).not.to.throw();
+        }
+      });
     }
-  );
+
+    expect(missingType).not.to.throw();
+  });
 });

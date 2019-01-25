@@ -1,18 +1,18 @@
 "use strict";
 
 const _ = require("lodash");
-const files = require("../../fixtures/files");
+const specs = require("../../fixtures/specs");
 const helper = require("./helper");
 
-describe("Mock Response", function () {
+for (let spec of specs) {
+  describe(`Mock Response (${spec.name})`, () => {
 
-  let api;
-  beforeEach(function () {
-    api = _.cloneDeep(files.parsed.swagger2.petStore);
-  });
+    let api;
+    beforeEach(() => {
+      api = _.cloneDeep(spec.samples.petStore);
+    });
 
-  it("should use the 200 response, if it exists",
-    function (done) {
+    it("should use the 200 response, if it exists", (done) => {
       api.paths["/pets"].get.responses = {
         100: { description: "" },
         204: { description: "" },
@@ -22,17 +22,15 @@ describe("Mock Response", function () {
         400: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect(200)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it("should use the lowest 2XX response that exists",
-    function (done) {
+    it("should use the lowest 2XX response that exists", (done) => {
       api.paths["/pets"].get.responses = {
         100: { description: "" },
         204: { description: "" },
@@ -42,17 +40,15 @@ describe("Mock Response", function () {
         404: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it("should use the lowest 3XX response that exists",
-    function (done) {
+    it("should use the lowest 3XX response that exists", (done) => {
       api.paths["/pets"].get.responses = {
         100: { description: "" },
         304: { description: "" },
@@ -62,17 +58,15 @@ describe("Mock Response", function () {
         400: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect(302)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it("should use the lowest 2XX response that exists",
-    function (done) {
+    it("should use the lowest 2XX response that exists", (done) => {
       api.paths["/pets"].get.responses = {
         102: { description: "" },
         404: { description: "" },
@@ -82,17 +76,15 @@ describe("Mock Response", function () {
         504: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should use a 200 response if "default" exists',
-    function (done) {
+    it('should use a 200 response if "default" exists', (done) => {
       api.paths["/pets"].get.responses = {
         100: { description: "" },
         400: { description: "" },
@@ -101,17 +93,15 @@ describe("Mock Response", function () {
         500: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect(200)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should use a 201 response for POST operations if "default" exists',
-    function (done) {
+    it('should use a 201 response for POST operations if "default" exists', (done) => {
       api.paths["/pets"].post.responses = {
         100: { description: "" },
         400: { description: "" },
@@ -121,18 +111,16 @@ describe("Mock Response", function () {
         201: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should not use a 201 response for POST operations if "default" does not exist',
-    function (done) {
+    it('should not use a 201 response for POST operations if "default" does not exist', (done) => {
       api.paths["/pets"].post.responses = {
         400: { description: "" },
         402: { description: "" },
@@ -140,18 +128,16 @@ describe("Mock Response", function () {
         201: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should use a 201 response for PUT operations if "default" exists',
-    function (done) {
+    it('should use a 201 response for PUT operations if "default" exists', (done) => {
       api.paths["/pets"].put = api.paths["/pets"].post;
       api.paths["/pets"].put.responses = {
         100: { description: "" },
@@ -162,18 +148,16 @@ describe("Mock Response", function () {
         201: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .put("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should not use a 201 response for PUT operations if "default" does not exist',
-    function (done) {
+    it('should not use a 201 response for PUT operations if "default" does not exist', (done) => {
       api.paths["/pets"].put = api.paths["/pets"].post;
       api.paths["/pets"].put.responses = {
         101: { description: "" },
@@ -183,18 +167,16 @@ describe("Mock Response", function () {
         201: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .put("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
           .expect(201)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should use a 204 response for DELETE operations if "default" exists',
-    function (done) {
+    it('should use a 204 response for DELETE operations if "default" exists', (done) => {
       api.paths["/pets/{PetName}"].delete.responses = {
         100: { description: "" },
         400: { description: "" },
@@ -203,17 +185,15 @@ describe("Mock Response", function () {
         500: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .delete("/api/pets/Fido")
           .expect(204)
           .end(helper.checkResults(done));
       });
-    }
-  );
+    });
 
-  it('should not use a 204 response for DELETE operations if "default" does not exist',
-    function (done) {
+    it('should not use a 204 response for DELETE operations if "default" does not exist', (done) => {
       api.paths["/pets/{PetName}"].delete.responses = {
         101: { description: "" },
         400: { description: "" },
@@ -222,12 +202,12 @@ describe("Mock Response", function () {
         204: { description: "" }
       };
 
-      helper.initTest(api, function (supertest) {
+      helper.initTest(api, (supertest) => {
         supertest
           .delete("/api/pets/Fido")
           .expect(204)
           .end(helper.checkResults(done));
       });
-    }
-  );
-});
+    });
+  });
+}

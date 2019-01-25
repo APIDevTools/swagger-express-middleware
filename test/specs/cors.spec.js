@@ -1,29 +1,28 @@
-/* eslint new-cap:off */
 "use strict";
 
 const swagger = require("../../");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const files = require("../fixtures/files");
+const specs = require("../fixtures/specs");
 const helper = require("../fixtures/helper");
 
-let api;
+for (let spec of specs) {
+  describe(`CORS middleware (${spec.name})`, () => {
+    let api;
 
-describe("CORS middleware", function () {
-  beforeEach(function () {
-    api = _.cloneDeep(files.parsed.swagger2.petStore);
-  });
+    beforeEach(() => {
+      api = _.cloneDeep(spec.samples.petStore);
+    });
 
-  it("should set CORS headers, even if no other middleware is used",
-    function (done) {
-      swagger(api, function (err, middleware) {
+    it("should set CORS headers, even if no other middleware is used", (done) => {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets", helper.spy(function (req, res, next) {
+        express.get("/api/pets", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -32,19 +31,17 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should set CORS headers, even if the Paths object is empty",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoPaths, function (err, middleware) {
+    it("should set CORS headers, even if the Paths object is empty", (done) => {
+      swagger(spec.samples.petStoreNoPaths, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets", helper.spy(function (req, res, next) {
+        express.get("/api/pets", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -53,19 +50,17 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should set CORS headers, even if there are no operations",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoOperations, function (err, middleware) {
+    it("should set CORS headers, even if there are no operations", (done) => {
+      swagger(spec.samples.petStoreNoOperations, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets", helper.spy(function (req, res, next) {
+        express.get("/api/pets", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -74,19 +69,17 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should set CORS headers, even if a parsing error occurs",
-    function (done) {
-      swagger(files.parsed.swagger2.blank, function (err, middleware) {
+    it("should set CORS headers, even if a parsing error occurs", (done) => {
+      swagger(spec.samples.blank, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets", helper.spy(function (req, res, next) {
+        express.get("/api/pets", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, PUT, POST, DELETE, OPTIONS, HEAD, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -95,12 +88,10 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should echo back CORS headers by default",
-    function (done) {
-      swagger(files.parsed.swagger2.petStoreNoPaths, function (err, middleware) {
+    it("should echo back CORS headers by default", (done) => {
+      swagger(spec.samples.petStoreNoPaths, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -110,7 +101,7 @@ describe("CORS middleware", function () {
           .set("Access-Control-Request-Headers", "X-Foo-Bar, X-PINGOTHER")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets", helper.spy(function (req, res, next) {
+        express.get("/api/pets", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://www.company.com");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("DELETE");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("X-Foo-Bar, X-PINGOTHER");
@@ -119,11 +110,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.equal("Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should use the CORS header defaults for the operation",
-    function (done) {
+    it("should use the CORS header defaults for the operation", (done) => {
       api.paths["/pets/{PetName}"].get.responses["200"].headers = {
         "Access-Control-Allow-Origin": {
           type: "string",
@@ -141,7 +130,7 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -151,7 +140,7 @@ describe("CORS middleware", function () {
           .set("Access-Control-Request-Headers", "X-Foo-Bar, X-PINGOTHER")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://some.company.net");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, HEAD");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("X-Foo-Bar, X-PINGOTHER");
@@ -160,11 +149,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.equal("Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should use the CORS header defaults for the OPTIONS operation",
-    function (done) {
+    it("should use the CORS header defaults for the OPTIONS operation", (done) => {
       api.paths["/pets/{PetName}"].options = {
         responses: {
           200: {
@@ -192,7 +179,7 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -202,7 +189,7 @@ describe("CORS middleware", function () {
           .set("Access-Control-Request-Headers", "X-Foo-Bar, X-PINGOTHER")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://some.company.net");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, HEAD");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("X-Foo-Bar, X-PINGOTHER");
@@ -211,11 +198,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.equal("Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should merge the CORS header defaults for the operation and the OPTIONS operation",
-    function (done) {
+    it("should merge the CORS header defaults for the operation and the OPTIONS operation", (done) => {
       api.paths["/pets/{PetName}"].get.responses["200"].headers = {
         // This header gets applied because it has the highest priority
         "Access-Control-Allow-Methods": {
@@ -276,7 +261,7 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -286,7 +271,7 @@ describe("CORS middleware", function () {
           .set("Access-Control-Request-Headers", "X-Foo-Bar, X-PINGOTHER")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://company.com");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, OPTIONS");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("X-Foo-Bar, X-PINGOTHER");
@@ -295,19 +280,17 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.equal("Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should set Access-Control-Allow-Methods to the methods that are allowed by the Swagger API",
-    function (done) {
-      swagger(api, function (err, middleware) {
+    it("should set Access-Control-Allow-Methods to the methods that are allowed by the Swagger API", (done) => {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets/Fido")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, DELETE, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -316,11 +299,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should set Access-Control-Allow-Credentials if Access-Control-Allow-Origin is wild-carded",
-    function (done) {
+    it("should set Access-Control-Allow-Credentials if Access-Control-Allow-Origin is wild-carded", (done) => {
       api.paths["/pets/{PetName}"].get.responses["200"].headers = {
         "Access-Control-Allow-Origin": {
           type: "string",
@@ -332,7 +313,7 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
@@ -340,7 +321,7 @@ describe("CORS middleware", function () {
           .set("Origin", "http://company.com")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("*");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, DELETE, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -349,11 +330,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.be.undefined;
         }));
       });
-    }
-  );
+    });
 
-  it("should set Vary: Origin if Access-Control-Allow-Origin is not wild-carded",
-    function (done) {
+    it("should set Vary: Origin if Access-Control-Allow-Origin is not wild-carded", (done) => {
       api.paths["/pets/{PetName}"].get.responses["200"].headers = {
         "Access-Control-Allow-Origin": {
           type: "string",
@@ -361,14 +340,14 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.CORS());
 
         helper.supertest(express)
           .get("/api/pets/Fido")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://company.com");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, DELETE, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -377,11 +356,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.equal("Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should append to existing Vary header if Access-Control-Allow-Origin is not wild-carded",
-    function (done) {
+    it("should append to existing Vary header if Access-Control-Allow-Origin is not wild-carded", (done) => {
       api.paths["/pets/{PetName}"].get.responses["200"].headers = {
         "Access-Control-Allow-Origin": {
           type: "string",
@@ -389,9 +366,9 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata());
-        express.use(function (req, res, next) {
+        express.use((req, res, next) => {
           res.set("Vary", "Accept-Encoding, Authentication");
           next();
         });
@@ -401,7 +378,7 @@ describe("CORS middleware", function () {
           .get("/api/pets/Fido")
           .end(helper.checkSpyResults(done));
 
-        express.get("/api/pets/:name", helper.spy(function (req, res, next) {
+        express.get("/api/pets/:name", helper.spy((req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.equal("http://company.com");
           expect(res.get("Access-Control-Allow-Methods")).to.equal("GET, DELETE, PATCH");
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
@@ -410,11 +387,9 @@ describe("CORS middleware", function () {
           expect(res.get("Vary")).to.equal("Accept-Encoding, Authentication, Origin");
         }));
       });
-    }
-  );
+    });
 
-  it("should automatically respond to CORS preflight requests",
-    function (done) {
+    it("should automatically respond to CORS preflight requests", (done) => {
       api.paths["/pets/{PetName}"].options = {
         responses: {
           200: {
@@ -442,11 +417,11 @@ describe("CORS middleware", function () {
         }
       };
 
-      swagger(api, function (err, middleware) {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // This happens before the CORS middleware, so none of the headers are set
-        express.options("/api/pets/:name", function (req, res, next) {
+        express.options("/api/pets/:name", (req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.be.undefined;
           expect(res.get("Access-Control-Allow-Methods")).to.be.undefined;
           expect(res.get("Access-Control-Allow-Headers")).to.be.undefined;
@@ -470,20 +445,18 @@ describe("CORS middleware", function () {
           .end(done);
 
         // This never gets called, because the CORS middleware already responded
-        express.options("/api/pets/:name", function (req, res, next) {
+        express.options("/api/pets/:name", (req, res, next) => {
           assert(false, "This middleware should NOT get called");
         });
       });
-    }
-  );
+    });
 
-  it("should automatically respond to CORS preflight requests, even if they're not defined in the Swagger API",
-    function (done) {
-      swagger(api, function (err, middleware) {
+    it("should automatically respond to CORS preflight requests, even if they're not defined in the Swagger API", (done) => {
+      swagger(api, (err, middleware) => {
         let express = helper.express(middleware.metadata());
 
         // This happens before the CORS middleware, so none of the headers are set
-        express.options("/api/pets/:name", function (req, res, next) {
+        express.options("/api/pets/:name", (req, res, next) => {
           expect(res.get("Access-Control-Allow-Origin")).to.be.undefined;
           expect(res.get("Access-Control-Allow-Methods")).to.be.undefined;
           expect(res.get("Access-Control-Allow-Headers")).to.be.undefined;
@@ -506,11 +479,11 @@ describe("CORS middleware", function () {
           .end(done);
 
         // This never gets called, because the CORS middleware already responded
-        express.options("/api/pets/:name", function (req, res, next) {
+        express.options("/api/pets/:name", (req, res, next) => {
           assert(false, "This middleware should NOT get called");
         });
       });
-    }
-  );
+    });
 
-});
+  });
+}

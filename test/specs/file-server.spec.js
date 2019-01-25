@@ -2,38 +2,35 @@
 
 const swagger = require("../../");
 const expect = require("chai").expect;
-const files = require("../fixtures/files");
+const specs = require("../fixtures/specs");
 const helper = require("../fixtures/helper");
 const fs = require("fs");
 
-let isHead;
+for (let spec of specs) {
+  describe(`FileServer middleware (${spec.name})`, () => {
+    ["head", "get"].forEach((method) => {
+      describe(method.toUpperCase(), () => {
+        let isHead;
 
-describe("FileServer middleware", function () {
-  ["head", "get"].forEach(function (method) {
-    describe(method.toUpperCase(), function () {
+        beforeEach(() => {
+          isHead = method === "head";
+        });
 
-      beforeEach(function () {
-        isHead = method === "head";
-      });
-
-      describe("dereferenced JSON file", function () {
-        it("should serve the fully-dereferenced JSON API",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+        describe("dereferenced JSON file", () => {
+          it("should serve the fully-dereferenced JSON API", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "" }));
 
               helper.supertest(express)
@@ -41,12 +38,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "" }));
 
               helper.supertest(express)
@@ -54,101 +49,87 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should use the path specified in `apiPath`",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use the path specified in `apiPath`", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/my/custom/path")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should use the path specified in `apiPath`",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use the path specified in `apiPath`", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/my/custom/path")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it('should not serve at "/api-docs/" if an alternate path specified is set in the options',
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it('should not serve at "/api-docs/" if an alternate path specified is set in the options', (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/api-docs")
                 .expect(404, done);
             });
-          }
-        );
+          });
 
-        it('should prepend the API\'s basePath to "/api-docs/"',
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it('should prepend the API\'s basePath to "/api-docs/"', (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true }));
 
               helper.supertest(express)
                 [method]("/api/api-docs/")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should prepend the API's basePath to the custom path",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should prepend the API's basePath to the custom path", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true, apiPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/api/my/custom/path/")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should not use strict routing by default",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not use strict routing by default", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/")                                          // <-- trailing slash
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
-                .end(helper.checkResults(done, function () {
+                .expect(isHead ? undefined : spec.samples.petStore)
+                .end(helper.checkResults(done, () => {
 
                   helper.supertest(express)
                     [method]("/api-docs")                                   // <-- no trailing slash
                     .expect("Content-Type", "application/json; charset=utf-8")
-                    .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                    .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
                 }));
             });
-          }
-        );
+          });
 
-        it("should use strict routing if enabled",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use strict routing if enabled", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express));
 
@@ -156,7 +137,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/api-docs")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -165,16 +146,14 @@ describe("FileServer middleware", function () {
                   helper.supertest(express)
                     [method]("/api-docs")
                     .expect("Content-Type", "application/json; charset=utf-8")
-                    .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                    .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use case-sensitive routing if enabled",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use case-sensitive routing if enabled", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express));
 
@@ -182,7 +161,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/API-docs")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -191,16 +170,14 @@ describe("FileServer middleware", function () {
                   helper.supertest(express)
                     [method]("/API-docs")
                     .expect("Content-Type", "application/json; charset=utf-8")
-                    .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                    .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use strict, case-sensitive routing, and a custom URL",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use strict, case-sensitive routing, and a custom URL", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express, { useBasePath: true, apiPath: "/custom/path.json" }));
 
@@ -210,7 +187,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/API/Custom/Path.json/")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -220,16 +197,14 @@ describe("FileServer middleware", function () {
                   helper.supertest(express)
                     [method]("/API/Custom/Path.json/")
                     .expect("Content-Type", "application/json; charset=utf-8")
-                    .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                    .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use routing options instead of the Express app's settings",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should use routing options instead of the Express app's settings", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(
                 // These settings will be used instead of the Express App's settings
@@ -244,15 +219,13 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/API/Custom/Path.json/")
                 .expect("Content-Type", "application/json; charset=utf-8")
-                .expect(isHead ? undefined : files.parsed.swagger2.petStore)
+                .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should return an HTTP 500 if the Swagger API is invalid",
-          function (done) {
-            swagger(files.paths.blank, function (err, middleware) {
+          it("should return an HTTP 500 if the Swagger API is invalid", (done) => {
+            swagger(spec.files.blank, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -261,12 +234,10 @@ describe("FileServer middleware", function () {
                 .expect(500, isHead ? undefined : {})
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to POST requests",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not respond to POST requests", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -274,12 +245,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to PUT requests",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not respond to PUT requests", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -287,12 +256,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to PATCH requests",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not respond to PATCH requests", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -300,12 +267,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to DELETE requests",
-          function (done) {
-            swagger(files.paths.swagger2.petStore, function (err, middleware) {
+          it("should not respond to DELETE requests", (done) => {
+            swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -313,34 +278,32 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
-      });
+          });
+        });
 
-      describe("raw Swagger files", function () {
-        function equalsFile (file) {
-          return function (res) {
-            if (isHead) {
-              if (res.body instanceof Buffer) {
-                expect(res.body).to.have.lengthOf(0);
+        describe("raw Swagger files", () => {
+          function equalsFile (file) {
+            return function (res) {
+              if (isHead) {
+                if (res.body instanceof Buffer) {
+                  expect(res.body).to.have.lengthOf(0);
+                }
+                else {
+                  expect(res.body).to.be.empty;
+                }
+                expect(res.text || "").to.be.empty;
               }
               else {
-                expect(res.body).to.be.empty;
+                let rawFile = fs.readFileSync(file);
+                expect(new Buffer(res.text || res.body)).to.deep.equal(rawFile);
               }
-              expect(res.text || "").to.be.empty;
-            }
-            else {
-              let rawFile = fs.readFileSync(file);
-              expect(new Buffer(res.text || res.body)).to.deep.equal(rawFile);
-            }
 
-            return false;
-          };
-        }
+              return false;
+            };
+          }
 
-        it("should serve the raw Swagger file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve the raw Swagger file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               if (err) {
                 return done(err);
               }
@@ -351,90 +314,78 @@ describe("FileServer middleware", function () {
                 [method]("/api-docs/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.externalRefs))
+                .expect(equalsFile(spec.files.externalRefs))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should serve a referenced file in the same directory as the main Swagger file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve a referenced file in the same directory as the main Swagger file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/error.json")
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.error))
+                .expect(equalsFile(spec.files.error))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should serve a referenced file in a subdirectory of the main Swagger file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve a referenced file in a subdirectory of the main Swagger file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/dir/subdir/text.txt")
                 .expect("Content-Type", "text/plain; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.text))
+                .expect(equalsFile(spec.files.text))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should serve a referenced file in a parent directory of the main Swagger file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve a referenced file in a parent directory of the main Swagger file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/../pet")
                 .expect("Content-Type", "application/octet-stream")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.pet))
+                .expect(equalsFile(spec.files.pet))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should serve a referenced file in a parent directory of the main Swagger file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve a referenced file in a parent directory of the main Swagger file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/../pet")
                 .expect("Content-Type", "application/octet-stream")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.pet))
+                .expect(equalsFile(spec.files.pet))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should serve a referenced binary file",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should serve a referenced binary file", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/../../1MB.jpg")
                 .expect("Content-Type", "image/jpeg")
                 .expect(200)
-                .expect(equalsFile(files.paths.oneMB))
+                .expect(equalsFile(spec.files.oneMB))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should not serve the raw Swagger file if the path is falsy",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not serve the raw Swagger file if the path is falsy", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "" }));
 
               helper.supertest(express)
@@ -442,91 +393,79 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should use the path specified in the options",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should use the path specified in the options", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path/" }));
 
               helper.supertest(express)
                 [method]("/my/custom/path/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.externalRefs))
+                .expect(equalsFile(spec.files.externalRefs))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it('should not serve at "/api-docs/" if an alternate path specified is set in the options',
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it('should not serve at "/api-docs/" if an alternate path specified is set in the options', (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/api-docs/external-refs.yaml")
                 .expect(404, done);
             });
-          }
-        );
+          });
 
-        it('should prepend the API\'s basePath to "/api-docs/"',
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it('should prepend the API\'s basePath to "/api-docs/"', (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true }));
 
               helper.supertest(express)
                 [method]("/api/v2/api-docs/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.externalRefs))
+                .expect(equalsFile(spec.files.externalRefs))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should prepend the API's basePath to the custom path",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should prepend the API's basePath to the custom path", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true, rawFilesPath: "/my/custom/path" }));
 
               helper.supertest(express)
                 [method]("/api/v2/my/custom/path/error.json")
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.error))
+                .expect(equalsFile(spec.files.error))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should not use strict routing by default",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not use strict routing by default", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
                 [method]("/api-docs/error.json/")                               // <-- trailing slash
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.error))
-                .end(helper.checkResults(done, function (res) {
+                .expect(equalsFile(spec.files.error))
+                .end(helper.checkResults(done, (res) => {
                   helper.supertest(express)
                     [method]("/api-docs/error.json")                        // <-- no trailing slash
                     .expect("Content-Type", "application/json; charset=UTF-8")
                     .expect(200)
-                    .expect(equalsFile(files.paths.swagger2.error))
+                    .expect(equalsFile(spec.files.error))
                     .end(helper.checkResults(done));
                 }));
             });
-          }
-        );
+          });
 
-        it("should use strict routing if enabled",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should use strict routing if enabled", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express));
 
@@ -534,7 +473,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/api-docs/external-refs.yaml/")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -544,16 +483,14 @@ describe("FileServer middleware", function () {
                     [method]("/api-docs/external-refs.yaml/")
                     .expect("Content-Type", "text/yaml; charset=UTF-8")
                     .expect(200)
-                    .expect(equalsFile(files.paths.swagger2.externalRefs))
+                    .expect(equalsFile(spec.files.externalRefs))
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use case-sensitive routing if enabled",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should use case-sensitive routing if enabled", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express));
 
@@ -561,7 +498,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/API-Docs/External-REFs.yaml")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -571,16 +508,14 @@ describe("FileServer middleware", function () {
                     [method]("/API-Docs/External-REFs.yaml")
                     .expect("Content-Type", "text/yaml; charset=UTF-8")
                     .expect(200)
-                    .expect(equalsFile(files.paths.swagger2.externalRefs))
+                    .expect(equalsFile(spec.files.externalRefs))
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use strict, case-sensitive routing, and a custom URL",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should use strict, case-sensitive routing, and a custom URL", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(express, { useBasePath: true, rawFilesPath: "/custom/path.json" }));
 
@@ -589,7 +524,7 @@ describe("FileServer middleware", function () {
               helper.supertest(express)
                 [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                 .expect(404)
-                .end(function (err) {
+                .end((err) => {
                   if (err) {
                     return done(err);
                   }
@@ -600,16 +535,14 @@ describe("FileServer middleware", function () {
                     [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                     .expect("Content-Type", "text/plain; charset=UTF-8")
                     .expect(200)
-                    .expect(equalsFile(files.paths.swagger2.text))
+                    .expect(equalsFile(spec.files.text))
                     .end(helper.checkResults(done));
                 });
             });
-          }
-        );
+          });
 
-        it("should use routing options instead of the Express app's settings",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should use routing options instead of the Express app's settings", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express();
               express.use(middleware.files(
                 // These settings will be used instead of the Express App's settings
@@ -625,15 +558,13 @@ describe("FileServer middleware", function () {
                 [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                 .expect("Content-Type", "text/plain; charset=UTF-8")
                 .expect(200)
-                .expect(equalsFile(files.paths.swagger2.text))
+                .expect(equalsFile(spec.files.text))
                 .end(helper.checkResults(done));
             });
-          }
-        );
+          });
 
-        it("should not respond to POST requests",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not respond to POST requests", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -641,12 +572,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to PUT requests",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not respond to PUT requests", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -654,12 +583,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to PATCH requests",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not respond to PATCH requests", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -667,12 +594,10 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
 
-        it("should not respond to DELETE requests",
-          function (done) {
-            swagger(files.paths.swagger2.externalRefs, function (err, middleware) {
+          it("should not respond to DELETE requests", (done) => {
+            swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
               helper.supertest(express)
@@ -680,9 +605,9 @@ describe("FileServer middleware", function () {
                 .expect(404)
                 .end(done);
             });
-          }
-        );
+          });
+        });
       });
     });
   });
-});
+}

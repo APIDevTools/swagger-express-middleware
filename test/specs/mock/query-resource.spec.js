@@ -4,50 +4,48 @@ const swagger = require("../../../");
 const util = require("../../../lib/helpers/util");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const files = require("../../fixtures/files");
+const specs = require("../../fixtures/specs");
 const helper = require("./helper");
 
-describe("Query Resource Mock", function () {
-  ["head", "options", "get"].forEach(function (method) {
-    describe(method.toUpperCase(), function () {
+for (let spec of specs) {
+  describe(`Query Resource Mock (${spec.name})`, () => {
+    ["head", "options", "get"].forEach((method) => {
+      describe(method.toUpperCase(), () => {
 
-      let api, noBody, noHeaders;
-      beforeEach(function () {
-        api = _.cloneDeep(files.parsed.swagger2.petStore);
-        noBody = method === "head" || method === "options";
-        noHeaders = method === "options";
+        let api, noBody, noHeaders;
+        beforeEach(() => {
+          api = _.cloneDeep(spec.samples.petStore);
+          noBody = method === "head" || method === "options";
+          noHeaders = method === "options";
 
-        // Change the HTTP method of GET /pets/{PetName}
-        let operation = api.paths["/pets/{PetName}"].get;
-        delete api.paths["/pets/{PetName}"].get;
-        api.paths["/pets/{PetName}"][method] = operation;
+          // Change the HTTP method of GET /pets/{PetName}
+          let operation = api.paths["/pets/{PetName}"].get;
+          delete api.paths["/pets/{PetName}"].get;
+          api.paths["/pets/{PetName}"][method] = operation;
 
-        // Change the HTTP method of GET /pets/{PetName}/photos/{ID}
-        operation = api.paths["/pets/{PetName}/photos/{ID}"].get;
-        delete api.paths["/pets/{PetName}/photos/{ID}"].get;
-        api.paths["/pets/{PetName}/photos/{ID}"][method] = operation;
-      });
+          // Change the HTTP method of GET /pets/{PetName}/photos/{ID}
+          operation = api.paths["/pets/{PetName}/photos/{ID}"].get;
+          delete api.paths["/pets/{PetName}/photos/{ID}"].get;
+          api.paths["/pets/{PetName}/photos/{ID}"][method] = operation;
+        });
 
-      it("should return only the requested resource",
-        function (done) {
+        it("should return only the requested resource", (done) => {
           let dataStore = new swagger.MemoryDataStore();
           let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
           let res2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           let res3 = new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
-          dataStore.save(res1, res2, res3, function () {
-            helper.initTest(dataStore, api, function (supertest) {
+          dataStore.save(res1, res2, res3, () => {
+            helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fluffy");
               noHeaders || request.expect("Content-Length", "30");
               helper.processMethod(request, method, { Name: "Fluffy", Type: "cat" });
               request.end(helper.checkResults(done));
             });
           });
-        }
-      );
+        });
 
-      it("should return a wrapped resource",
-        function (done) {
+        it("should return a wrapped resource", (done) => {
           // Wrap the "pet" definition in an envelope object
           api.paths["/pets/{PetName}"][method].responses[200].schema = {
             type: "object",
@@ -64,29 +62,27 @@ describe("Query Resource Mock", function () {
           let res2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           let res3 = new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
-          dataStore.save(res1, res2, res3, function () {
-            helper.initTest(dataStore, api, function (supertest) {
+          dataStore.save(res1, res2, res3, () => {
+            helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fluffy");
               noHeaders || request.expect("Content-Length", "75");
               helper.processMethod(request, method, { code: 42, message: "hello world", result: { Name: "Fluffy", Type: "cat" }});
               request.end(helper.checkResults(done));
             });
           });
-        }
-      );
+        });
 
-      it("should not return anything if no response schema is specified in the Swagger API",
-        function (done) {
+        it("should not return anything if no response schema is specified in the Swagger API", (done) => {
           delete api.paths["/pets/{PetName}"][method].responses[200].schema;
           let dataStore = new swagger.MemoryDataStore();
           let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
-          dataStore.save(resource, function () {
-            helper.initTest(dataStore, api, function (supertest) {
+          dataStore.save(resource, () => {
+            helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               helper.processMethod(request, method, "");
 
-              request.end(helper.checkResults(done, function (res) {
-                expect(res.headers["content-length"]).to.satisfy(function (contentLength) {
+              request.end(helper.checkResults(done, (res) => {
+                expect(res.headers["content-length"]).to.satisfy((contentLength) => {
                   // This is the difference between returning an empty array vs. nothing at all
                   return contentLength === undefined || contentLength === "0";
                 });
@@ -94,20 +90,18 @@ describe("Query Resource Mock", function () {
               }));
             });
           });
-        }
-      );
+        });
 
-      it("should return `res.body` if already set by other middleware",
-        function (done) {
+        it("should return `res.body` if already set by other middleware", (done) => {
           let dataStore = new swagger.MemoryDataStore();
           let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-          dataStore.save(resource, function () {
+          dataStore.save(resource, () => {
             function messWithTheBody (req, res, next) {
               res.body = ["Not", "the", "response", "you", "expected"];
               next();
             }
 
-            helper.initTest(dataStore, messWithTheBody, api, function (supertest) {
+            helper.initTest(dataStore, messWithTheBody, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Length", "41");
               helper.processMethod(request, method, ["Not", "the", "response", "you", "expected"]);
@@ -115,11 +109,9 @@ describe("Query Resource Mock", function () {
               request.end(helper.checkResults(done));
             });
           });
-        }
-      );
+        });
 
-      it("should return `res.body` instead of a 404",
-        function (done) {
+        it("should return `res.body` instead of a 404", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.default = { default: "The default value" };
           api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
 
@@ -128,57 +120,51 @@ describe("Query Resource Mock", function () {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, function (supertest) {
+          helper.initTest(messWithTheBody, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             noHeaders || request.expect("Content-Length", "41");
             helper.processMethod(request, method, ["Not", "the", "response", "you", "expected"]);
 
             request.end(helper.checkResults(done));
           });
-        }
-      );
+        });
 
-      it("should return the default value instead of a 404",
-        function (done) {
+        it("should return the default value instead of a 404", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.default = { default: "The default value" };
           api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
 
-          helper.initTest(api, function (supertest) {
+          helper.initTest(api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             noHeaders || request.expect("Content-Length", "31");
             helper.processMethod(request, method, { default: "The default value" });
 
             request.end(helper.checkResults(done));
           });
-        }
-      );
+        });
 
-      it("should return the example value instead of a 404",
-        function (done) {
+        it("should return the example value instead of a 404", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
 
-          helper.initTest(api, function (supertest) {
+          helper.initTest(api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             noHeaders || request.expect("Content-Length", "31");
             helper.processMethod(request, method, { example: "The example value" });
 
             request.end(helper.checkResults(done));
           });
-        }
-      );
+        });
 
-      it("should set the Last-Modified date to the ModifiedOn date of the resource",
-        function (done) {
+        it("should set the Last-Modified date to the ModifiedOn date of the resource", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].headers = {
             "Last-Modified": { type: "string" }
           };
 
           let dataStore = new swagger.MemoryDataStore();
           let resource = new swagger.Resource("/api/pets/Fido", "I am fido");
-          dataStore.save(resource, function () {
-            helper.initTest(dataStore, api, function (supertest) {
+          dataStore.save(resource, () => {
+            helper.initTest(dataStore, api, (supertest) => {
               // Wait 1 second, since the "Last-Modified" header is only precise to the second
-              setTimeout(function () {
+              setTimeout(() => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Length", "11");
                 noHeaders || request.expect("Last-Modified", util.rfc1123(resource.modifiedOn));
@@ -186,16 +172,14 @@ describe("Query Resource Mock", function () {
               }, 1000);
             });
           });
-        }
-      );
+        });
 
-      if (method !== "options") {
-        it("should throw a 404 if the resource does not exist",
-          function (done) {
-            helper.initTest(api, function (supertest) {
+        if (method !== "options") {
+          it("should throw a 404 if the resource does not exist", (done) => {
+            helper.initTest(api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               request.expect(404);
-              request.end(function (err, res) {
+              request.end((err, res) => {
                 if (err) {
                   return done(err);
                 }
@@ -205,20 +189,18 @@ describe("Query Resource Mock", function () {
                 done();
               });
             });
-          }
-        );
+          });
 
-        it("should return a 500 error if a DataStore error occurs",
-          function (done) {
+          it("should return a 500 error if a DataStore error occurs", (done) => {
             let dataStore = new swagger.MemoryDataStore();
             dataStore.__openDataStore = function (collection, callback) {
               setImmediate(callback, new Error("Test Error"));
             };
 
-            helper.initTest(dataStore, api, function (supertest) {
+            helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               request.expect(500);
-              request.end(function (err, res) {
+              request.end((err, res) => {
                 if (err) {
                   return done(err);
                 }
@@ -231,22 +213,19 @@ describe("Query Resource Mock", function () {
                 }
                 done();
               });
-            }
-            );
-          }
-        );
-      }
+            });
+          });
+        }
 
-      describe("different data types", function () {
-        it("should return an object",
-          function (done) {
+        describe("different data types", () => {
+          it("should return an object", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "28");
@@ -255,18 +234,16 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a string",
-          function (done) {
+          it("should return a string", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "9");
@@ -274,18 +251,16 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return an empty string response",
-          function (done) {
+          it("should return an empty string response", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", "");
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "0");
@@ -293,18 +268,16 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a number",
-          function (done) {
+          it("should return a number", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "number";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", 42.999);
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "6");
@@ -312,19 +285,17 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a date",
-          function (done) {
+          it("should return a date", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
             api.paths["/pets/{PetName}"][method].responses[200].schema.format = "date-time";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "24");
@@ -332,18 +303,16 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a Buffer (as a string)",
-          function (done) {
+          it("should return a Buffer (as a string)", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "11");
@@ -351,17 +320,15 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a Buffer (as JSON)",
-          function (done) {
+          it("should return a Buffer (as JSON)", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "69");
@@ -372,22 +339,20 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return an undefined value",
-          function (done) {
+          it("should return an undefined value", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido");
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 helper.processMethod(request, method, "");
-                request.end(helper.checkResults(done, function (res) {
-                  expect(res.headers["content-length"]).to.satisfy(function (contentLength) {
+                request.end(helper.checkResults(done, (res) => {
+                  expect(res.headers["content-length"]).to.satisfy((contentLength) => {
                     // This is the difference between returning an empty array vs. nothing at all
                     return contentLength === undefined || contentLength === "0";
                   });
@@ -395,19 +360,17 @@ describe("Query Resource Mock", function () {
                 }));
               });
             });
-          }
-        );
+          });
 
-        it("should return the default value instead of undefined",
-          function (done) {
+          it("should return the default value instead of undefined", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.default = { default: "The default value" };
             api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido");
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "31");
@@ -415,18 +378,16 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return the example value instead of undefined",
-          function (done) {
+          it("should return the example value instead of undefined", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido");
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "31");
@@ -434,17 +395,15 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return a null value",
-          function (done) {
+          it("should return a null value", (done) => {
             api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
             let dataStore = new swagger.MemoryDataStore();
             let resource = new swagger.Resource("/api/pets/Fido", null);
-            dataStore.save(resource, function () {
-              helper.initTest(dataStore, api, function (supertest) {
+            dataStore.save(resource, () => {
+              helper.initTest(dataStore, api, (supertest) => {
                 let request = supertest[method]("/api/pets/Fido");
                 noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
                 noHeaders || request.expect("Content-Length", "4");
@@ -452,26 +411,24 @@ describe("Query Resource Mock", function () {
                 request.end(helper.checkResults(done));
               });
             });
-          }
-        );
+          });
 
-        it("should return multipart/form-data",
-          function (done) {
+          it("should return multipart/form-data", (done) => {
             // Set the response schemas to return the full multipart/form-data object
             api.paths["/pets/{PetName}/photos"].post.responses[201].schema = { type: "object" };
             api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].schema.type = "object";
-            helper.initTest(api, function (supertest) {
+            helper.initTest(api, (supertest) => {
               supertest
                 .post("/api/pets/Fido/photos")
                 .field("Label", "Photo 1")
                 .field("Description", "A photo of Fido")
-                .attach("Photo", files.paths.oneMB)
-                .end(helper.checkResults(done, function (res1) {
+                .attach("Photo", spec.files.oneMB)
+                .end(helper.checkResults(done, (res1) => {
                   let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
                   let request = supertest[method]("/api/pets/Fido/photos/" + photoID);
                   noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
-                  request.end(helper.checkResults(done, function (res2) {
+                  request.end(helper.checkResults(done, (res2) => {
                     if (noBody) {
                       helper.processMethod(request, method, "");
                       if (method === "head") {
@@ -504,26 +461,24 @@ describe("Query Resource Mock", function () {
                   }));
                 }));
             });
-          }
-        );
+          });
 
-        if (method === "get" && process.env.CI && process.version.startsWith("v6")) {
-          console.warn("Skipping query-resource file tests because they cause CI to hang in Node 6");
-        }
-        else {
-          it("should return a file",
-            function (done) {
-              helper.initTest(api, function (supertest) {
+          if (method === "get" && process.env.CI && process.version.startsWith("v6")) {
+            console.warn("Skipping query-resource file tests because they cause CI to hang in Node 6");
+          }
+          else {
+            it("should return a file", (done) => {
+              helper.initTest(api, (supertest) => {
                 supertest
                   .post("/api/pets/Fido/photos")
                   .field("Label", "Photo 1")
                   .field("Description", "A photo of Fido")
-                  .attach("Photo", files.paths.PDF)
-                  .end(helper.checkResults(done, function (res1) {
+                  .attach("Photo", spec.files.PDF)
+                  .end(helper.checkResults(done, (res1) => {
                     let request = supertest[method](res1.headers.location);
                     noHeaders || request.expect("Content-Length", "263287");
                     noHeaders || request.expect("Content-Type", "application/pdf");
-                    request.end(helper.checkResults(done, function (res2) {
+                    request.end(helper.checkResults(done, (res2) => {
                       // It should NOT be an attachment
                       expect(res2.headers["content-disposition"]).to.be.undefined;
 
@@ -545,24 +500,22 @@ describe("Query Resource Mock", function () {
                     }));
                   }));
               });
-            }
-          );
+            });
 
-          it("should return a file attachment (using the basename of the URL)",
-            function (done) {
+            it("should return a file attachment (using the basename of the URL)", (done) => {
               api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].headers = {
                 "content-disposition": {
                   type: "string"
                 }
               };
 
-              helper.initTest(api, function (supertest) {
+              helper.initTest(api, (supertest) => {
                 supertest
                   .post("/api/pets/Fido/photos")
                   .field("Label", "Photo 1")
                   .field("Description", "A photo of Fido")
-                  .attach("Photo", files.paths.swagger2.text)
-                  .end(helper.checkResults(done, function (res1) {
+                  .attach("Photo", spec.files.text)
+                  .end(helper.checkResults(done, (res1) => {
                     let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
                     let request = supertest[method](res1.headers.location);
@@ -572,7 +525,7 @@ describe("Query Resource Mock", function () {
                     // The filename is set to the basename of the URL by default
                     noHeaders || request.expect("Content-Disposition", 'attachment; filename="' + photoID + '"');
 
-                    request.end(helper.checkResults(done, function (res2) {
+                    request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
                         if (method === "head") {
                           expect(res2.text).to.be.undefined;
@@ -589,11 +542,9 @@ describe("Query Resource Mock", function () {
                     }));
                   }));
               });
-            }
-          );
+            });
 
-          it("should return a file attachment (using the default filename in the Swagger API)",
-            function (done) {
+            it("should return a file attachment (using the default filename in the Swagger API)", (done) => {
               api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].headers = {
                 "content-disposition": {
                   type: "string",
@@ -601,13 +552,13 @@ describe("Query Resource Mock", function () {
                 }
               };
 
-              helper.initTest(api, function (supertest) {
+              helper.initTest(api, (supertest) => {
                 supertest
                   .post("/api/pets/Fido/photos")
                   .field("Label", "Photo 1")
                   .field("Description", "A photo of Fido")
-                  .attach("Photo", files.paths.PDF)
-                  .end(helper.checkResults(done, function (res1) {
+                  .attach("Photo", spec.files.PDF)
+                  .end(helper.checkResults(done, (res1) => {
                     let request = supertest[method](res1.headers.location);
                     noHeaders || request.expect("Content-Length", "263287");
                     noHeaders || request.expect("Content-Type", "application/pdf");
@@ -615,7 +566,7 @@ describe("Query Resource Mock", function () {
                     // The filename comes from the Swagger API
                     noHeaders || request.expect("Content-Disposition", 'attachment; filename="MyCustomFileName.xyz"');
 
-                    request.end(helper.checkResults(done, function (res2) {
+                    request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
                         if (method === "head") {
                           expect(res2.text).to.be.undefined;
@@ -632,11 +583,9 @@ describe("Query Resource Mock", function () {
                     }));
                   }));
               });
-            }
-          );
+            });
 
-          it("should return a file attachment (using the basename of the URL when there's no default filename in the Swagger API)",
-            function (done) {
+            it("should return a file attachment (using the basename of the URL when there's no default filename in the Swagger API)", (done) => {
               api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].headers = {
                 "content-disposition": {
                   type: "string",
@@ -644,13 +593,13 @@ describe("Query Resource Mock", function () {
                 }
               };
 
-              helper.initTest(api, function (supertest) {
+              helper.initTest(api, (supertest) => {
                 supertest
                   .post("/api/pets/Fido/photos")
                   .field("Label", "Photo 1")
                   .field("Description", "A photo of Fido")
-                  .attach("Photo", files.paths.oneMB)
-                  .end(helper.checkResults(done, function (res1) {
+                  .attach("Photo", spec.files.oneMB)
+                  .end(helper.checkResults(done, (res1) => {
                     let photoID = parseInt(res1.headers.location.match(/(\d+)$/)[0]);
 
                     let request = supertest[method](res1.headers.location);
@@ -660,7 +609,7 @@ describe("Query Resource Mock", function () {
                     // The filename is the basename of the URL, since it wasn't specified in the Swagger API
                     noHeaders || request.expect("Content-Disposition", 'attachment; filename="' + photoID + '"');
 
-                    request.end(helper.checkResults(done, function (res2) {
+                    request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
                         expect(res2.text || "").to.be.empty;
 
@@ -679,10 +628,10 @@ describe("Query Resource Mock", function () {
                     }));
                   }));
               });
-            }
-          );
-        }
+            });
+          }
+        });
       });
     });
   });
-});
+}

@@ -55,7 +55,7 @@ exports.initTest = function (express, dataStore, fns, api, test) {
   express = express || helper.express();
   let supertest = helper.supertest(express.app || express);
 
-  swagger(api, express, function (err, middleware) {
+  swagger(api, express, (err, middleware) => {
     express.use(
       middleware.metadata(),
       middleware.CORS(),
