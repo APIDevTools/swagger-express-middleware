@@ -20,6 +20,7 @@ for (let spec of specs) {
         express.post("/api/pets", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets",
             path: spec.samples.petsPath,
             operation: spec.samples.petsPostOperation,
@@ -42,6 +43,7 @@ for (let spec of specs) {
         let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPath,
             operation: spec.samples.petPatchOperation,
@@ -70,6 +72,7 @@ for (let spec of specs) {
         express.patch("/pets/fido", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStoreNoBasePath,
+            basePath: "",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPath,
             operation: spec.samples.petPatchOperation,
@@ -141,6 +144,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -167,6 +171,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -189,6 +194,7 @@ for (let spec of specs) {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
             api: spec.samples.petStoreNoOperations,
+            basePath: "/api",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPathNoOperations,
 
@@ -218,6 +224,7 @@ for (let spec of specs) {
           expect(req.swagger).to.deep.equal({
             // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPath,
 
@@ -248,6 +255,7 @@ for (let spec of specs) {
         let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPath,
             operation: spec.samples.petPatchOperation,
@@ -292,6 +300,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -326,6 +335,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -356,6 +366,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -387,6 +398,7 @@ for (let spec of specs) {
         let handler = helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets/{PetName}",
             path: spec.samples.petPath,
             operation: spec.samples.petPatchOperation,
@@ -430,6 +442,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -464,6 +477,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -494,6 +508,7 @@ for (let spec of specs) {
             security: spec.samples.petStoreSecurity,
 
             // all other properties should be null
+            basePath: "/api",
             pathName: "",
             path: null,
             operation: null,
@@ -545,6 +560,7 @@ for (let spec of specs) {
                 },
                 paths: {}
               },
+              basePath: "",
               pathName: "",
               path: null,
               operation: null,
@@ -556,6 +572,7 @@ for (let spec of specs) {
             // req.swagger DOES get populated on the second request, because the API is now valid
             expect(req.swagger).to.deep.equal({
               api: spec.samples.petStore,
+              basePath: "/api",
               pathName: "/pets/{PetName}",
               path: spec.samples.petPath,
               operation: spec.samples.petPatchOperation,

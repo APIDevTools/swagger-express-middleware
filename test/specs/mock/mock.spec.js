@@ -60,6 +60,7 @@ for (let spec of specs) {
               },
               paths: {}
             },
+            basePath: "",
             pathName: "",
             path: null,
             operation: null,
@@ -89,6 +90,7 @@ for (let spec of specs) {
         express.get("/api/pets", helper.spy((req, res, next) => {
           expect(req.swagger).to.deep.equal({
             api: spec.samples.petStore,
+            basePath: "/api",
             pathName: "/pets",
             path: spec.samples.petsPath,
             operation: spec.samples.petsGetOperation,
