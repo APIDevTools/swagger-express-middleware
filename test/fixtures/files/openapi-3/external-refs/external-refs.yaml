@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: external refs
+  description: This file includes $refs to external files
+servers:
+  - url: /api/v2
+paths:
+  /pets:
+    post:
+      responses:
+        "200":
+          description: references a file with no extension (and in a parent directory)
+          content:
+            "*/*":
+              schema:
+                $ref: ../pet
+        "300":
+          description: references a plain-text file
+          content:
+            "*/*":
+              schema:
+                type: string
+                example:
+                  $ref: dir/subdir/text.txt
+        "400":
+          description: references a binary file
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: binary
+        default:
+          description: references the "error.json" file
+          content:
+            "*/*":
+              schema:
+                $ref: error.json
