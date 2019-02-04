@@ -1,6 +1,5 @@
-Swagger Express Middleware
+Swagger 2.0 and OpenAPI 3.0 middleware
 ============================
-#### Swagger middleware and mocks for Express.js
 
 [![Cross-Platform Compatibility](https://apidevtools.org/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
@@ -15,11 +14,14 @@ Swagger Express Middleware
 
 Features
 --------------------------
-- **Supports Swagger 2.0 specs in JSON or YAML** <br>
-Swagger Express Middleware uses [Swagger-Parser](https://github.com/APIDevTools/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers.
+- **Supports JSON and YAML** <br>
+Write your API definitions in either format - or a mix of both!  You can use `$ref` pointers to reference JSON files from YAML and vice-versa.
+
+- **Full `$ref` Support** <br>
+Split your API definition into multiple files for easier management, collaboration, and version control.  Use whatever folder structure and naming convention you want.  You can even reference URLs.
 
 - **Thoroughly tested**<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 1,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
+Over 2,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 2,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
 
 - [**Mock middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/mock.html)<br>
 **Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
@@ -38,6 +40,14 @@ Adds the appropriate CORS headers to each request and automatically responds to 
 
 - [**Files middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)<br>
 Serves the Swagger API file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
+
+
+
+Related Projects
+--------------------------
+- [Swagger CLI](https://apidevtools.org/swagger-cli)
+- [Swagger Parser](https://apidevtools.org/swagger-parser)
+
 
 
 Installation and Use
