@@ -13,8 +13,17 @@ info:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 servers:
-  - url: http://company.com/api
-  - url: https://company.com/api
+  - url: "{protocol}://{hostName}/{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      hostName:
+        default: company.com
+      basePath:
+        default: api
 security:
   - petStoreBasic: []
     petStoreApiKey: []
