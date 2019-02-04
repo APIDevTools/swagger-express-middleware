@@ -5,8 +5,8 @@ const expect = require("chai").expect;
 const assert = require("assert");
 const sinon = require("sinon");
 const _ = require("lodash");
-const specs = require("../fixtures/specs");
-const helper = require("../fixtures/helper");
+const specs = require("../utils/specs");
+const helper = require("../utils/helper");
 
 for (let spec of specs) {
   describe(`RequestValidator middleware (${spec.name})`, () => {

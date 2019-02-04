@@ -5,7 +5,7 @@ const expect = require("chai").expect;
 const sinon = require("sinon");
 const path = require("path");
 const fs = require("fs");
-const files = require("../../fixtures/files");
+const createTempDir = require("../../utils/create-temp-dir");
 const Resource = swagger.Resource;
 const FileDataStore = swagger.FileDataStore;
 
@@ -13,7 +13,7 @@ let tempDir;
 
 describe("FileDataStore", () => {
   beforeEach((done) => {
-    files.createTempDir((temp) => {
+    createTempDir((temp) => {
       tempDir = temp;
       done();
     });

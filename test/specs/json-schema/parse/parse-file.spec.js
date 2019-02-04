@@ -3,8 +3,8 @@
 const swagger = require("../../../../");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const files = require("../../../fixtures/files");
-const specs = require("../../../fixtures/specs");
+const fixtures = require("../../../utils/fixtures");
+const specs = require("../../../utils/specs");
 const helper = require("./helper");
 
 let api, photoParam;
@@ -25,7 +25,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.oneMB)
+        .attach("Photo", fixtures.oneMB)
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido/photos", helper.spy((req, res, next) => {
@@ -42,7 +42,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.sixMB)
+        .attach("Photo", fixtures.sixMB)
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido/photos", helper.spy((req, res, next) => {
@@ -59,7 +59,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.zeroMB)
+        .attach("Photo", fixtures.zeroMB)
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido/photos", helper.spy((req, res, next) => {
@@ -109,7 +109,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.oneMB)
+        .attach("Photo", fixtures.oneMB)
         .end(helper.checkSpyResults(done));
 
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {
@@ -126,7 +126,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.sixMB)
+        .attach("Photo", fixtures.sixMB)
         .end(helper.checkSpyResults(done));
 
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {
@@ -145,7 +145,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.oneMB)
+        .attach("Photo", fixtures.oneMB)
         .end(helper.checkSpyResults(done));
 
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {
@@ -164,7 +164,7 @@ describe("JSON Schema - parse file params", () => {
 
       helper.supertest(express)
         .post("/api/pets/fido/photos")
-        .attach("Photo", files.oneMB)
+        .attach("Photo", fixtures.oneMB)
         .end(helper.checkSpyResults(done));
 
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {

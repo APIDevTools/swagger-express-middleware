@@ -2,8 +2,8 @@
 
 const swagger = require("../../../");
 const expect = require("chai").expect;
-const files = require("../../fixtures/files");
-const helper = require("../../fixtures/helper");
+const createTempDir = require("../../utils/create-temp-dir");
+const helper = require("../../utils/helper");
 const Resource = swagger.Resource;
 const DataStore = swagger.DataStore;
 const MemoryDataStore = swagger.MemoryDataStore;
@@ -17,7 +17,7 @@ describe("DataStore", () => {
       beforeEach((done) => {
         if (DataStoreClass === FileDataStore) {
           // Create a temp directory, and chdir to it
-          files.createTempDir((temp) => {
+          createTempDir((temp) => {
             process.chdir(temp);
             done();
           });

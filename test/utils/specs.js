@@ -1,17 +1,17 @@
 "use strict";
 
 const _ = require("lodash");
-const files = require("./files");
+const fixtures = require("./fixtures");
 const swaggerMethods = require("swagger-methods");
-const swagger2PetStore = require("./files/swagger-2/petstore.json");
-const openapi3PetStore = require("./files/openapi3/petstore.json");
+const swagger2PetStore = require("../fixtures/swagger-2/petstore.json");
+const openapi3PetStore = require("../fixtures/openapi-3/petstore.json");
 
 const swagger2 = {
   key: "swagger2",
   name: "Swagger 2.0",
   files: {
-    ...files,
-    ...files.swagger2,
+    ...fixtures,
+    ...fixtures.swagger2,
   },
   samples: {
     blank: { swagger: "2.0", info: { title: "Test Swagger", version: "1.0" }, paths: {}},
@@ -41,8 +41,8 @@ const openapi3 = {
   key: "openapi3",
   name: "OpenAPI 3.0",
   files: {
-    ...files,
-    ...files.openapi3,
+    ...fixtures,
+    ...fixtures.openapi3,
   },
   samples: {
     blank: { openapi: "3.0.0", info: { title: "Test OpenAPI", version: "1.0" }, paths: {}},

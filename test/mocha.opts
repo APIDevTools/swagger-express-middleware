@@ -1,5 +1,5 @@
  --bail
 --retries 2
 --recursive
-test/fixtures/**/*.js
+test/utils/setup.js
 test/specs/**/*.spec.js

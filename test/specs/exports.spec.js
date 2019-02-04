@@ -2,8 +2,8 @@
 
 const swagger = require("../../");
 const expect = require("chai").expect;
-const specs = require("../fixtures/specs");
-const helper = require("../fixtures/helper");
+const specs = require("../utils/specs");
+const helper = require("../utils/helper");
 
 describe("Package exports", () => {
 

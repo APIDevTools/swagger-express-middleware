@@ -2,7 +2,7 @@
 
 const swagger = require("../../../");
 const expect = require("chai").expect;
-const specs = require("../../fixtures/specs");
+const specs = require("../../utils/specs");
 const helper = require("./helper");
 
 for (let spec of specs) {

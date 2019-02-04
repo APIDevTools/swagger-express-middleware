@@ -2,7 +2,7 @@
 
 const swagger = require("../../../");
 const expect = require("chai").expect;
-const helper = require("../../fixtures/helper");
+const helper = require("../../utils/helper");
 
 describe("Resource class", () => {
   describe("constructor", () => {

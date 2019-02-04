@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const specs = require("../../fixtures/specs");
+const specs = require("../../utils/specs");
 const helper = require("./helper");
 
 for (let spec of specs) {

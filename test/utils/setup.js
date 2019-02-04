@@ -1,6 +1,3 @@
-/**
- * Test environment config
- */
 "use strict";
 
 // Chai plugins
