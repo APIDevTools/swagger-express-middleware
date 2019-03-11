@@ -7,7 +7,7 @@ const specs = require("../utils/specs");
 const helper = require("../utils/helper");
 
 for (let spec of specs) {
-  describe.only(`RequestMetadata middleware (${spec.name})`, () => {
+  describe(`RequestMetadata middleware (${spec.name})`, () => {
 
     it("should set all req.swagger properties for a parameterless path", (done) => {
       swagger(spec.files.petStore, (err, middleware) => {

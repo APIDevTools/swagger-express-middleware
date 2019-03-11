@@ -209,7 +209,13 @@ for (let spec of specs) {
       });
 
       it("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in query)", (done) => {
-        api.securityDefinitions.petStoreApiKey.in = "query";
+        if (spec.name === "OpenAPI 3.0") {
+          api.components.securitySchemes.petStoreApiKey.in = "query";
+        }
+        else {
+          api.securityDefinitions.petStoreApiKey.in = "query";
+        }
+
         let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
         initTest(() => {
 
@@ -223,6 +229,27 @@ for (let spec of specs) {
         });
       });
 
+      it.only("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in cookie)", (done) => {
+        if (spec.name === "OpenAPI 3.0") {
+          api.components.securitySchemes.petStoreApiKey.in = "cookie";
+        }
+        else {
+          api.securityDefinitions.petStoreApiKey.in = "cookie";
+        }
+
+        let security = api.paths["/pets"].get.security = [{ petStoreApiKey: []}];
+        initTest(() => {
+
+          supertest
+            .get("/api/pets?petStoreKey=abc123")
+            .set("Cookie", "petStoreKey=abc123")
+            .end(helper.checkSpyResults(done));
+
+          express.get("/api/pets", helper.spy((req) => {
+            expect(req.swagger.security).to.deep.equal(security);
+          }));
+        });
+      });
       it("should NOT throw an HTTP 401 if any of the security requirements are fully met", (done) => {
         api.securityDefinitions.petStoreApiKey2 = { type: "apiKey", name: "petStoreKey2", in: "query" };
         let security = api.paths["/pets"].get.security = [
