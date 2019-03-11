@@ -9,7 +9,7 @@ const specs = require("../utils/specs");
 const helper = require("../utils/helper");
 
 for (let spec of specs) {
-  describe(`RequestValidator middleware (${spec.name})`, () => {
+  describe.only(`RequestValidator middleware (${spec.name})`, () => {
     let api, express, supertest;
 
     beforeEach(() => {
@@ -229,7 +229,7 @@ for (let spec of specs) {
         });
       });
 
-      it.only("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in cookie)", (done) => {
+      it("should NOT throw an HTTP 401 if an ApiKey authentication requirement is met (in cookie)", (done) => {
         if (spec.name === "OpenAPI 3.0") {
           api.components.securitySchemes.petStoreApiKey.in = "cookie";
         }
