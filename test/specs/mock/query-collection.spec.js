@@ -4,32 +4,31 @@ const swagger = require("../../../");
 const util = require("../../../lib/helpers/util");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const specs = require("../../utils/specs");
+const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-for (let spec of specs) {
-  describe(`Query Collection Mock (${spec.name})`, () => {
-    let availableContentTypes = _.intersection(spec.samples.petStore.consumes, spec.samples.petStore.produces);
+describe("Query Collection Mock", () => {
+  let availableContentTypes = _.intersection(fixtures.data.petStore.consumes, fixtures.data.petStore.produces);
 
-    availableContentTypes.forEach((contentType) => {
-      ["get", "head", "options"].forEach((method) => {
-        describe(contentType, () => {
-          describe(method.toUpperCase(), () => {
-            testCases(spec, contentType, method);
-          });
+  availableContentTypes.forEach((contentType) => {
+    ["get", "head", "options"].forEach((method) => {
+      describe(contentType, () => {
+        describe(method.toUpperCase(), () => {
+          testCases(contentType, method);
         });
       });
     });
   });
-}
+});
 
-function testCases (spec, contentType, method) {
+
+function testCases (contentType, method) {
 
   let contentTypePattern = new RegExp("^" + contentType + "; charset=utf-8");
 
   let api, noBody, noHeaders;
   beforeEach(() => {
-    api = _.cloneDeep(spec.samples.petStore);
+    api = _.cloneDeep(fixtures.data.petStore);
     noBody = method === "head" || method === "options";
     noHeaders = method === "options";
 
@@ -468,7 +467,7 @@ function testCases (spec, contentType, method) {
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
           .field("Description", "A photo of Fido")
-          .attach("Photo", spec.files.oneMB)
+          .attach("Photo", fixtures.paths.oneMB)
           .end(helper.checkResults(done, (res) => {
             let photoID = parseInt(res.headers.location.match(/(\d+)$/)[0]);
 
@@ -521,7 +520,7 @@ function testCases (spec, contentType, method) {
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
           .field("Description", "A photo of Fido")
-          .attach("Photo", spec.files.oneMB)
+          .attach("Photo", fixtures.paths.oneMB)
           .expect(201)
           .end(helper.checkResults(done, () => {
             let request = supertest[method]("/api/pets/Fido/photos").set("Accept", contentType);
@@ -581,7 +580,7 @@ function testCases (spec, contentType, method) {
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
           .field("Description", "A photo of Fido")
-          .attach("Photo", spec.files.oneMB)
+          .attach("Photo", fixtures.paths.oneMB)
           .expect(201)
           .end(helper.checkResults(done, () => {
             let request = supertest[method]("/api/pets/Fido/photos");

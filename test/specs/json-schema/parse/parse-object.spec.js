@@ -3,7 +3,7 @@
 const swagger = require("../../../../");
 const expect = require("chai").expect;
 const _ = require("lodash");
-const specs = require("../../../utils/specs");
+const fixtures = require("../../../utils/fixtures");
 const helper = require("./helper");
 
 let api, petParam;

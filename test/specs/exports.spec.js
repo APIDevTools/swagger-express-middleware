@@ -2,7 +2,7 @@
 
 const swagger = require("../../");
 const expect = require("chai").expect;
-const specs = require("../utils/specs");
+const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 
 describe("Package exports", () => {
@@ -31,218 +31,216 @@ describe("Package exports", () => {
     expect(swagger.FileDataStore).to.be.a("function");
   });
 
-  for (let spec of specs) {
-    describe(`exports.createMiddleware (${spec.name})`, () => {
-      it('should work with the "new" operator', (done) => {
-        let middleware = new swagger(spec.samples.petStore, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+  describe("exports.createMiddleware", () => {
+    it('should work with the "new" operator', (done) => {
+      let middleware = new swagger(fixtures.data.petStore, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
       });
-
-      it('should work without the "new" operator', (done) => {
-        let middleware = swagger(spec.samples.petStore, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called without any params", () => {
-        let middleware = swagger();
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called with just a file path", () => {
-        let middleware = swagger(spec.files.petStore);
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called with just an object", () => {
-        let middleware = swagger(spec.samples.petStore);
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called with just an Express Application", () => {
-        let middleware = swagger(helper.express());
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called with just an Express Router", () => {
-        let middleware = swagger(helper.router());
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("should call the callback if a Swagger object was given", (done) => {
-        let middleware = swagger(spec.samples.petStore, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("should call the callback if a file path was given", (done) => {
-        let middleware = swagger(spec.files.petStore, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("should not call the callback if no Swagger API was given", (done) => {
-        let middleware = swagger(helper.express(), (err, mw) => {
-          clearTimeout(timeout);
-          assert(false, "The callback should NOT have been called!");
-        });
-
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-
-        // Call done() if the callback is not called
-        let timeout = setTimeout(done, 100);
-      });
-
-      it("can be called with an empty Paths object", (done) => {
-        let middleware = swagger(spec.samples.petStoreNoPaths, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      it("can be called without any operations", (done) => {
-        let middleware = swagger(spec.samples.petStoreNoOperations, (err, mw) => {
-          if (err) {
-            return done(err);
-          }
-          expect(mw).to.be.an.instanceOf(swagger.Middleware);
-          expect(mw).to.equal(middleware);
-          done();
-        });
-
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-      });
-
-      describe("Failure tests", () => {
-        it("should throw an error if called with just a callback", () => {
-          function notGonnaWork () {
-            swagger(function () {});
-          }
-
-          expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
-        });
-
-        it("should throw an error if called with an empty object", () => {
-          function notGonnaWork () {
-            swagger({});
-          }
-
-          expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
-        });
-
-        it("should throw an error if called with a new Object", () => {
-          function notGonnaWork () {
-            swagger(new Object());  // eslint-disable-line no-new-object
-          }
-
-          expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
-        });
-
-        it("should throw an error if called with a Date object", () => {
-          function notGonnaWork () {
-            swagger(new Date());
-          }
-
-          expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
-        });
-
-        it("should return an error if parsing fails", (done) => {
-          let middleware = swagger(spec.files.blank, (err, mw) => {
-            expect(err).to.be.an.instanceOf(Error);
-            expect(mw).to.be.an.instanceOf(swagger.Middleware);
-            expect(mw).to.equal(middleware);
-            done();
-          });
-
-          expect(middleware).to.be.an.instanceOf(swagger.Middleware);
-        });
-      });
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
     });
 
-    describe(`exports.Middleware (${spec.name})`, () => {
-      it('should work with the "new" operator', () => {
-        let middleware = new swagger.Middleware();
-        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    it('should work without the "new" operator', (done) => {
+      let middleware = swagger(fixtures.data.petStore, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
       });
-
-      it('should NOT work without the "new" operator', () => {
-        let middleware = swagger.Middleware();
-        expect(middleware).to.be.undefined;
-      });
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
     });
 
-    describe(`exports.Resource (${spec.name})`, () => {
-      it('should work with the "new" operator', () => {
-        let resource = new swagger.Resource("/users", "jdoe", { name: "John Doe" });
-        expect(resource).to.be.an.instanceOf(swagger.Resource);
+    it("can be called without any params", () => {
+      let middleware = swagger();
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("can be called with just a file path", () => {
+      let middleware = swagger(fixtures.paths.petStore);
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("can be called with just an object", () => {
+      let middleware = swagger(fixtures.data.petStore);
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("can be called with just an Express Application", () => {
+      let middleware = swagger(helper.express());
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("can be called with just an Express Router", () => {
+      let middleware = swagger(helper.router());
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("should call the callback if a Swagger object was given", (done) => {
+      let middleware = swagger(fixtures.data.petStore, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
       });
 
-      it('should NOT work without the "new" operator', () => {
-        function throws () {
-          swagger.Resource("/users", "jdoe", { name: "John Doe" });
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("should call the callback if a file path was given", (done) => {
+      let middleware = swagger(fixtures.paths.petStore, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
+      });
+
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("should not call the callback if no Swagger API was given", (done) => {
+      let middleware = swagger(helper.express(), (err, mw) => {
+        clearTimeout(timeout);
+        assert(false, "The callback should NOT have been called!");
+      });
+
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+
+      // Call done() if the callback is not called
+      let timeout = setTimeout(done, 100);
+    });
+
+    it("can be called with an empty Paths object", (done) => {
+      let middleware = swagger(fixtures.data.petStoreNoPaths, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
+      });
+
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    it("can be called without any operations", (done) => {
+      let middleware = swagger(fixtures.data.petStoreNoOperations, (err, mw) => {
+        if (err) {
+          return done(err);
+        }
+        expect(mw).to.be.an.instanceOf(swagger.Middleware);
+        expect(mw).to.equal(middleware);
+        done();
+      });
+
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
+    });
+
+    describe("Failure tests", () => {
+      it("should throw an error if called with just a callback", () => {
+        function notGonnaWork () {
+          swagger(function () {});
         }
 
-        expect(throws).to.throw(Error);
+        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+      });
+
+      it("should throw an error if called with an empty object", () => {
+        function notGonnaWork () {
+          swagger({});
+        }
+
+        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+      });
+
+      it("should throw an error if called with a new Object", () => {
+        function notGonnaWork () {
+          swagger(new Object());  // eslint-disable-line no-new-object
+        }
+
+        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+      });
+
+      it("should throw an error if called with a Date object", () => {
+        function notGonnaWork () {
+          swagger(new Date());
+        }
+
+        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+      });
+
+      it("should return an error if parsing fails", (done) => {
+        let middleware = swagger(fixtures.paths.blank, (err, mw) => {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(mw).to.be.an.instanceOf(swagger.Middleware);
+          expect(mw).to.equal(middleware);
+          done();
+        });
+
+        expect(middleware).to.be.an.instanceOf(swagger.Middleware);
       });
     });
+  });
 
-    describe(`exports.MemoryDataStore (${spec.name})`, () => {
-      it('should work with the "new" operator', () => {
-        let dataStore = new swagger.MemoryDataStore();
-        expect(dataStore).to.be.an.instanceOf(swagger.DataStore);
-        expect(dataStore).to.be.an.instanceOf(swagger.MemoryDataStore);
-      });
-
-      it('should NOT work without the "new" operator', () => {
-        let dataStore = swagger.MemoryDataStore();
-        expect(dataStore).to.be.undefined;
-      });
+  describe("exports.Middleware", () => {
+    it('should work with the "new" operator', () => {
+      let middleware = new swagger.Middleware();
+      expect(middleware).to.be.an.instanceOf(swagger.Middleware);
     });
 
-    describe("exports.FileDataStore", () => {
-      it('should work with the "new" operator', () => {
-        let dataStore = new swagger.FileDataStore();
-        expect(dataStore).to.be.an.instanceOf(swagger.DataStore);
-        expect(dataStore).to.be.an.instanceOf(swagger.FileDataStore);
-      });
-
-      it('should NOT work without the "new" operator', () => {
-        let dataStore = swagger.FileDataStore();
-        expect(dataStore).to.be.undefined;
-      });
+    it('should NOT work without the "new" operator', () => {
+      let middleware = swagger.Middleware();
+      expect(middleware).to.be.undefined;
     });
-  }
+  });
+
+  describe("exports.Resource", () => {
+    it('should work with the "new" operator', () => {
+      let resource = new swagger.Resource("/users", "jdoe", { name: "John Doe" });
+      expect(resource).to.be.an.instanceOf(swagger.Resource);
+    });
+
+    it('should NOT work without the "new" operator', () => {
+      function throws () {
+        swagger.Resource("/users", "jdoe", { name: "John Doe" });
+      }
+
+      expect(throws).to.throw(Error);
+    });
+  });
+
+  describe("exports.MemoryDataStore", () => {
+    it('should work with the "new" operator', () => {
+      let dataStore = new swagger.MemoryDataStore();
+      expect(dataStore).to.be.an.instanceOf(swagger.DataStore);
+      expect(dataStore).to.be.an.instanceOf(swagger.MemoryDataStore);
+    });
+
+    it('should NOT work without the "new" operator', () => {
+      let dataStore = swagger.MemoryDataStore();
+      expect(dataStore).to.be.undefined;
+    });
+  });
+
+  describe("exports.FileDataStore", () => {
+    it('should work with the "new" operator', () => {
+      let dataStore = new swagger.FileDataStore();
+      expect(dataStore).to.be.an.instanceOf(swagger.DataStore);
+      expect(dataStore).to.be.an.instanceOf(swagger.FileDataStore);
+    });
+
+    it('should NOT work without the "new" operator', () => {
+      let dataStore = swagger.FileDataStore();
+      expect(dataStore).to.be.undefined;
+    });
+  });
 });
