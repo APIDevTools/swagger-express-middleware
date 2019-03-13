@@ -1,7 +1,7 @@
 "use strict";
 
 const swagger = require("../../../");
-const expect = require("chai").expect;
+const { expect } = require("chai");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 

@@ -1,9 +1,9 @@
 "use strict";
 
-const swagger = require("../../../");
-const util = require("../../../lib/helpers/util");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const { expect } = require("chai");
+const { Resource, MemoryDataStore } = require("../../../");
+const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
@@ -54,8 +54,8 @@ function testCases (contentType, method) {
   });
 
   it("should return a single-item array if there is one item in the collection", (done) => {
-    let dataStore = new swagger.MemoryDataStore();
-    let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+    let dataStore = new MemoryDataStore();
+    let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
     dataStore.save(resource, () => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -68,8 +68,8 @@ function testCases (contentType, method) {
   });
 
   it("should return a single-item array containing the root item in the collection", (done) => {
-    let dataStore = new swagger.MemoryDataStore();
-    let resource = new swagger.Resource("/api/pets", "/", "This is the root resource");
+    let dataStore = new MemoryDataStore();
+    let resource = new Resource("/api/pets", "/", "This is the root resource");
     dataStore.save(resource, () => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -82,10 +82,10 @@ function testCases (contentType, method) {
   });
 
   it("should return an array of all items in the collection", (done) => {
-    let dataStore = new swagger.MemoryDataStore();
-    let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-    let res2 = new swagger.Resource("/api/pets/String", "I am Fido");
-    let res3 = new swagger.Resource("/api/pets/Buffer", new Buffer("hello world"));
+    let dataStore = new MemoryDataStore();
+    let res1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+    let res2 = new Resource("/api/pets/String", "I am Fido");
+    let res3 = new Resource("/api/pets/Buffer", new Buffer("hello world"));
     dataStore.save(res1, res2, res3, () => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -115,10 +115,10 @@ function testCases (contentType, method) {
       }
     };
 
-    let dataStore = new swagger.MemoryDataStore();
-    let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-    let res2 = new swagger.Resource("/api/pets/String", "I am Fido");
-    let res3 = new swagger.Resource("/api/pets/Buffer", new Buffer("hello world"));
+    let dataStore = new MemoryDataStore();
+    let res1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+    let res2 = new Resource("/api/pets/String", "I am Fido");
+    let res3 = new Resource("/api/pets/Buffer", new Buffer("hello world"));
     dataStore.save(res1, res2, res3, () => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -143,10 +143,10 @@ function testCases (contentType, method) {
   });
 
   it("should return an array of all items in the collection, including the root resource", (done) => {
-    let dataStore = new swagger.MemoryDataStore();
-    let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-    let res2 = new swagger.Resource("/api/pets", "/", "This is the root resource");
-    let res3 = new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
+    let dataStore = new MemoryDataStore();
+    let res1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+    let res2 = new Resource("/api/pets", "/", "This is the root resource");
+    let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
     dataStore.save(res1, res2, res3, () => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -243,8 +243,8 @@ function testCases (contentType, method) {
       "Last-Modified": { type: "string" }
     };
 
-    let dataStore = new swagger.MemoryDataStore();
-    let resource = new swagger.Resource("/api/pets", "/", "This is the root resource");
+    let dataStore = new MemoryDataStore();
+    let resource = new Resource("/api/pets", "/", "This is the root resource");
     dataStore.save(resource, () => {
       helper.initTest(dataStore, api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
         setTimeout(() => {
@@ -263,14 +263,14 @@ function testCases (contentType, method) {
       "Last-Modified": { type: "string" }
     };
 
-    let dataStore = new swagger.MemoryDataStore();
+    let dataStore = new MemoryDataStore();
 
     // Save resource1
-    let resource1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+    let resource1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
     dataStore.save(resource1, () => {
       setTimeout(() => {
         // Save resource2
-        let resource2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+        let resource2 = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
         dataStore.save(resource2, () => {
           setTimeout(() => {
             // Update resource1
@@ -294,7 +294,7 @@ function testCases (contentType, method) {
 
   if (method !== "options") {
     it("should return a 500 error if a DataStore error occurs", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       dataStore.__openDataStore = function (collection, callback) {
         setImmediate(callback, new Error("Test Error"));
       };
@@ -323,8 +323,8 @@ function testCases (contentType, method) {
     it("should return a string", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "string" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -340,8 +340,8 @@ function testCases (contentType, method) {
     it("should return an empty string", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "string" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "");
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -357,8 +357,8 @@ function testCases (contentType, method) {
     it("should return a number", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "number" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", 42.999);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", 42.999);
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -374,8 +374,8 @@ function testCases (contentType, method) {
     it("should return a date", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "string", format: "date" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -391,8 +391,8 @@ function testCases (contentType, method) {
     it("should return a date-time", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "string", format: "date-time" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -408,8 +408,8 @@ function testCases (contentType, method) {
     it("should return a Buffer (as a string)", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = { type: "string" };
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -425,8 +425,8 @@ function testCases (contentType, method) {
     it("should return a Buffer (as JSON)", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = {};
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -447,8 +447,8 @@ function testCases (contentType, method) {
     it("should return a null value", (done) => {
       api.paths["/pets"][method].responses[200].schema.items = {};
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido");
       dataStore.save(resource, () => {
         helper.initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -657,9 +657,9 @@ function testCases (contentType, method) {
 
     let dataStore;
     beforeEach((done) => {
-      dataStore = new swagger.MemoryDataStore();
+      dataStore = new MemoryDataStore();
       let resources = allPets.map((pet) => {
-        return new swagger.Resource("/api/pets", pet.Name, pet);
+        return new Resource("/api/pets", pet.Name, pet);
       });
       dataStore.save(resources, done);
     });

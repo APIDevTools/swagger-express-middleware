@@ -1,9 +1,9 @@
 "use strict";
 
+const _ = require("lodash");
 const swagger = require("../../../");
 const helper = require("../../utils/helper");
 const util = require("../../../lib/helpers/util");
-const _ = require("lodash");
 
 _.extend(exports, helper);
 

@@ -1,10 +1,10 @@
 "use strict";
 
-const swagger = require("../../../");
 const _ = require("lodash");
+const fs = require("fs");
+const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
-const fs = require("fs");
 
 describe("Mock Content-Type header", () => {
 
@@ -18,8 +18,8 @@ describe("Mock Content-Type header", () => {
       delete api.produces;
       delete api.paths["/pets/{PetName}"].get.produces;
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -35,8 +35,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/json" if the "produces" list is empty', (done) => {
       api.paths["/pets/{PetName}"].get.produces = [];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -52,8 +52,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/json" if none of the "produces" MIME types are supported', (done) => {
       api.paths["/pets/{PetName}"].get.produces = ["text/html", "image/jpeg", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -69,8 +69,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/json" if included in the "produces" list', (done) => {
       api.paths["/pets/{PetName}"].get.produces = ["text/html", "image/jpeg", "application/json", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -86,8 +86,8 @@ describe("Mock Content-Type header", () => {
     it('should use the first "json" type in the "produces" list', (done) => {
       api.paths["/pets/{PetName}"].get.produces = ["text/json", "application/calendar+json", "application/json", "application/merge-patch+json"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -103,8 +103,8 @@ describe("Mock Content-Type header", () => {
     it('should use "text/json" if included in the "produces" list', (done) => {
       api.paths["/pets/{PetName}"].get.produces = ["text/html", "image/jpeg", "text/json", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -120,8 +120,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/calendar+json" if included in the "produces" list', (done) => {
       api.paths["/pets/{PetName}"].get.produces = ["text/html", "image/jpeg", "application/calendar+json", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -141,8 +141,8 @@ describe("Mock Content-Type header", () => {
       delete api.produces;
       delete api.paths["/pets/{PetName}"].get.produces;
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -159,8 +159,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = [];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -177,8 +177,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -195,8 +195,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "text/plain", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -213,8 +213,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "text/cache-manifest", "text/html", "text/xml", "text/plain"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -231,8 +231,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "text/html", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -249,8 +249,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "text/xml", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -267,8 +267,8 @@ describe("Mock Content-Type header", () => {
       api.paths["/pets/{PetName}"].get.responses[200].schema = { type: "string" };
       api.paths["/pets/{PetName}"].get.produces = ["application/json", "image/jpeg", "application/xml", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -303,8 +303,8 @@ describe("Mock Content-Type header", () => {
       delete api.produces;
       delete api.paths["/pets/{PetName}/photos/{ID}"].get.produces;
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -321,8 +321,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/octet-stream" if the "produces" list is empty', (done) => {
       api.paths["/pets/{PetName}/photos/{ID}"].get.produces = [];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -339,8 +339,8 @@ describe("Mock Content-Type header", () => {
     it('should use the first MIME type in the "produces" list', (done) => {
       api.paths["/pets/{PetName}/photos/{ID}"].get.produces = ["text/plain", "image/jpeg", "text/cache-manifest", "text/html", "text/xml", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -357,8 +357,8 @@ describe("Mock Content-Type header", () => {
     it('should use "application/octet-stream" if it is first in the "produces" list', (done) => {
       api.paths["/pets/{PetName}/photos/{ID}"].get.produces = ["application/octet-stream", "image/jpeg", "text/html"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -375,8 +375,8 @@ describe("Mock Content-Type header", () => {
     it('should use "image/jpeg" if it is first in the "produces" list', (done) => {
       api.paths["/pets/{PetName}/photos/{ID}"].get.produces = ["image/jpeg", "application/xml", "application/octet-stream"];
 
-      let dataStore = new swagger.MemoryDataStore();
-      let resource = new swagger.Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
+      let dataStore = new MemoryDataStore();
+      let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {

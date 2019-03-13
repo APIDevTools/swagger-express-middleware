@@ -1,13 +1,9 @@
 "use strict";
 
-const swagger = require("../../../");
-const expect = require("chai").expect;
-const createTempDir = require("../../utils/create-temp-dir");
+const { expect } = require("chai");
 const helper = require("../../utils/helper");
-const Resource = swagger.Resource;
-const DataStore = swagger.DataStore;
-const MemoryDataStore = swagger.MemoryDataStore;
-const FileDataStore = swagger.FileDataStore;
+const createTempDir = require("../../utils/create-temp-dir");
+const { Resource, DataStore, MemoryDataStore, FileDataStore } = require("../../../");
 
 describe("DataStore", () => {
   // All of these tests should pass for all DataStore classes

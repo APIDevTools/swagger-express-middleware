@@ -1,8 +1,8 @@
 "use strict";
 
-const swagger = require("../../../");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const { expect } = require("chai");
+const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
@@ -17,11 +17,11 @@ describe("Query Collection Mock", () => {
     });
 
     it("should delete all resources in the collection", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -53,11 +53,11 @@ describe("Query Collection Mock", () => {
     });
 
     it("should return the deleted resources if the Swagger API schema is an array", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -77,11 +77,11 @@ describe("Query Collection Mock", () => {
     it("should return the first deleted resource if the Swagger API schema is an object", (done) => {
       api.paths["/pets"].delete.responses[200].schema = {};
 
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -114,11 +114,11 @@ describe("Query Collection Mock", () => {
         }
       };
 
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -150,11 +150,11 @@ describe("Query Collection Mock", () => {
         }
       };
 
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -180,11 +180,11 @@ describe("Query Collection Mock", () => {
       api.paths["/pets"].delete.responses[204] = api.paths["/pets"].delete.responses[200];
       delete api.paths["/pets"].delete.responses[200];
 
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       let resources = [
-        new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
-        new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
-        new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
+        new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
+        new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" }),
+        new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" })
       ];
       dataStore.save(resources, () => {
 
@@ -241,7 +241,7 @@ describe("Query Collection Mock", () => {
     });
 
     it("should return a 500 error if a DataStore open error occurs", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       dataStore.__openDataStore = function (collection, callback) {
         setImmediate(callback, new Error("Test Error"));
       };
@@ -261,12 +261,12 @@ describe("Query Collection Mock", () => {
     });
 
     it("should return a 500 error if a DataStore update error occurs", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       dataStore.__saveDataStore = function (collection, data, callback) {
         setImmediate(callback, new Error("Test Error"));
       };
 
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         helper.initTest(dataStore, api, (supertest) => {
@@ -298,8 +298,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a string resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", "I am Fido");
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -326,8 +326,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create an empty string resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", "");
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", "");
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -354,8 +354,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a number resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", 42.999);
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", 42.999);
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -383,8 +383,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a date resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -411,8 +411,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a Buffer resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -437,8 +437,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a Buffer resource
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -468,8 +468,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a resource with no value
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido");
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido");
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -494,8 +494,8 @@ describe("Query Collection Mock", () => {
         };
 
         // Create a resource with a null value
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", null);
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", null);
         dataStore.save(resource, () => {
 
           helper.initTest(dataStore, api, (supertest) => {
@@ -702,9 +702,9 @@ describe("Query Collection Mock", () => {
 
       let dataStore;
       beforeEach((done) => {
-        dataStore = new swagger.MemoryDataStore();
+        dataStore = new MemoryDataStore();
         let resources = allPets.map((pet) => {
-          return new swagger.Resource("/api/pets", pet.Name, pet);
+          return new Resource("/api/pets", pet.Name, pet);
         });
         dataStore.save(resources, done);
       });

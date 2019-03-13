@@ -1,6 +1,6 @@
 "use strict";
 
-const expect = require("chai").expect;
+const { expect } = require("chai");
 const helper = require("./helper");
 
 describe("JSON Schema - parse date params", () => {

@@ -1,9 +1,9 @@
 "use strict";
 
-const swagger = require("../../../../");
-const fixtures = require("../../../utils/fixtures");
-const helper = require("../../../utils/helper");
 const _ = require("lodash");
+const fixtures = require("../../../utils/fixtures");
+const swagger = require("../../../../");
+const helper = require("../../../utils/helper");
 
 _.extend(exports, helper);
 
@@ -17,7 +17,7 @@ _.extend(exports, helper);
  */
 exports.parse = function (schema, value, done) {
   // Create a Swagger API that uses this schema
-  let api = _.cloneDeep(specs.swagger2.samples.petStore);
+  let api = _.cloneDeep(fixtures.data.petStore);
   api.paths["/test"] = {
     post: {
       parameters: [_.extend(schema, { name: "Test", in: "header" })],

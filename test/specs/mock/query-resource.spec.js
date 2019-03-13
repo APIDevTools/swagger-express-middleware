@@ -1,9 +1,9 @@
 "use strict";
 
-const swagger = require("../../../");
-const util = require("../../../lib/helpers/util");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const { expect } = require("chai");
+const { Resource, MemoryDataStore } = require("../../../");
+const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
@@ -29,10 +29,10 @@ describe("Query Resource Mock", () => {
       });
 
       it("should return only the requested resource", (done) => {
-        let dataStore = new swagger.MemoryDataStore();
-        let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-        let res2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
-        let res3 = new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
+        let dataStore = new MemoryDataStore();
+        let res1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+        let res2 = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+        let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
         dataStore.save(res1, res2, res3, () => {
           helper.initTest(dataStore, api, (supertest) => {
@@ -56,10 +56,10 @@ describe("Query Resource Mock", () => {
           }
         };
 
-        let dataStore = new swagger.MemoryDataStore();
-        let res1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
-        let res2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
-        let res3 = new swagger.Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
+        let dataStore = new MemoryDataStore();
+        let res1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+        let res2 = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+        let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
         dataStore.save(res1, res2, res3, () => {
           helper.initTest(dataStore, api, (supertest) => {
@@ -73,8 +73,8 @@ describe("Query Resource Mock", () => {
 
       it("should not return anything if no response schema is specified in the Swagger API", (done) => {
         delete api.paths["/pets/{PetName}"][method].responses[200].schema;
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", "I am Fido");
         dataStore.save(resource, () => {
           helper.initTest(dataStore, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
@@ -92,8 +92,8 @@ describe("Query Resource Mock", () => {
       });
 
       it("should return `res.body` if already set by other middleware", (done) => {
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
         dataStore.save(resource, () => {
           function messWithTheBody (req, res, next) {
             res.body = ["Not", "the", "response", "you", "expected"];
@@ -158,8 +158,8 @@ describe("Query Resource Mock", () => {
           "Last-Modified": { type: "string" }
         };
 
-        let dataStore = new swagger.MemoryDataStore();
-        let resource = new swagger.Resource("/api/pets/Fido", "I am fido");
+        let dataStore = new MemoryDataStore();
+        let resource = new Resource("/api/pets/Fido", "I am fido");
         dataStore.save(resource, () => {
           helper.initTest(dataStore, api, (supertest) => {
             // Wait 1 second, since the "Last-Modified" header is only precise to the second
@@ -191,7 +191,7 @@ describe("Query Resource Mock", () => {
         });
 
         it("should return a 500 error if a DataStore error occurs", (done) => {
-          let dataStore = new swagger.MemoryDataStore();
+          let dataStore = new MemoryDataStore();
           dataStore.__openDataStore = function (collection, callback) {
             setImmediate(callback, new Error("Test Error"));
           };
@@ -221,8 +221,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -239,8 +239,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", "I am Fido");
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", "I am Fido");
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -256,8 +256,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", "");
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", "");
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -273,8 +273,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "number";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", 42.999);
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", 42.999);
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -291,8 +291,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.format = "date-time";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -308,8 +308,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "string";
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -324,8 +324,8 @@ describe("Query Resource Mock", () => {
         it("should return a Buffer (as JSON)", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", new Buffer("hello world"));
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -343,8 +343,8 @@ describe("Query Resource Mock", () => {
         it("should return an undefined value", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido");
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -366,8 +366,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido");
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -383,8 +383,8 @@ describe("Query Resource Mock", () => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido");
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
@@ -399,8 +399,8 @@ describe("Query Resource Mock", () => {
         it("should return a null value", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema.type = "object";
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", null);
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", null);
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");

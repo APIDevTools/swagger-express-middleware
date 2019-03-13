@@ -1,8 +1,8 @@
 "use strict";
 
-const swagger = require("../../../");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const { expect } = require("chai");
+const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
@@ -283,7 +283,7 @@ describe("Mock response headers", () => {
     });
 
     it("should set the Last-Modified header to the date/time that the data was last modified", (done) => {
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
       api.paths["/pets"].get.responses[200].headers = {
         "Last-modified": {
           type: "string"
@@ -291,7 +291,7 @@ describe("Mock response headers", () => {
       };
 
       helper.initTest(dataStore, api, (supertest) => {
-        let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+        let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
         dataStore.save(resource, (err) => {
           if (err) {
             return done(err);

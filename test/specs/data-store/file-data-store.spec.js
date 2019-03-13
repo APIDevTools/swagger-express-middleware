@@ -1,13 +1,11 @@
 "use strict";
 
-const swagger = require("../../../");
-const expect = require("chai").expect;
-const sinon = require("sinon");
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
+const sinon = require("sinon");
+const { expect } = require("chai");
 const createTempDir = require("../../utils/create-temp-dir");
-const Resource = swagger.Resource;
-const FileDataStore = swagger.FileDataStore;
+const { Resource, FileDataStore } = require("../../../");
 
 let tempDir;
 

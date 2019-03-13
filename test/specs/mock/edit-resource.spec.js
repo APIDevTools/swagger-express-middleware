@@ -1,8 +1,8 @@
 "use strict";
 
-const swagger = require("../../../");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const { expect } = require("chai");
+const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
@@ -133,8 +133,8 @@ describe("Edit Resource Mock", () => {
          */
         it("should replace an existing resource at the URL", (done) => {
           // Create a pet at the URL "/api/pets/Fido"
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
           dataStore.save(resource, () => {
             helper.initTest(api, (supertest) => {
               // Create another pet at the URL "/api/pets/Fido"
@@ -178,8 +178,8 @@ describe("Edit Resource Mock", () => {
         it("should return the whole collection if the Swagger API schema is an array", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema = { type: "array", items: {}};
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               supertest
@@ -222,8 +222,8 @@ describe("Edit Resource Mock", () => {
             }
           };
 
-          let dataStore = new swagger.MemoryDataStore();
-          let resource = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+          let dataStore = new MemoryDataStore();
+          let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
             helper.initTest(dataStore, api, (supertest) => {
               supertest
@@ -258,7 +258,7 @@ describe("Edit Resource Mock", () => {
         });
 
         it("should return a 500 error if a DataStore error occurs", (done) => {
-          let dataStore = new swagger.MemoryDataStore();
+          let dataStore = new MemoryDataStore();
           dataStore.__saveDataStore = function (collection, data, callback) {
             setImmediate(callback, new Error("Test Error"));
           };
@@ -559,7 +559,7 @@ describe("Edit Resource Mock", () => {
         });
 
         it("should return a 500 error if a DataStore error occurs", (done) => {
-          let dataStore = new swagger.MemoryDataStore();
+          let dataStore = new MemoryDataStore();
           dataStore.__openDataStore = function (collection, callback) {
             setImmediate(callback, new Error("Test Error"));
           };

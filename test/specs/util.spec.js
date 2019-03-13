@@ -1,8 +1,8 @@
 "use strict";
 
-const util = require("../../lib/helpers/util");
-const expect = require("chai").expect;
 const sinon = require("sinon");
+const util = require("../../lib/helpers/util");
+const { expect } = require("chai");
 
 /**
  * NOTE: The Util.js file isn't technically exported, but it IS used by other Swagger packages, so it needs to be tested

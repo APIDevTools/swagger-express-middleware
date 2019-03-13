@@ -1,8 +1,8 @@
 "use strict";
 
-const swagger = require("../../../../");
-const expect = require("chai").expect;
 const _ = require("lodash");
+const swagger = require("../../../../");
+const { expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
 const helper = require("./helper");
 
@@ -11,7 +11,7 @@ let api, photoParam;
 describe("JSON Schema - parse file params", () => {
 
   beforeEach(() => {
-    api = _.cloneDeep(specs.swagger2.samples.petStore);
+    api = _.cloneDeep(fixtures.data.petStore);
     let parameters = api.paths["/pets/{PetName}/photos"].post.parameters;
     parameters.forEach(function (param) { param.required = false; });
     photoParam = _.find(parameters, { name: "Photo" });
