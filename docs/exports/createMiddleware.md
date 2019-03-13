@@ -44,7 +44,7 @@ API
 The `createMiddleware` function is the main export of Swagger Express Middleware &mdash; it's what you get when you `require('swagger-express-middleware')`.  It's just a convenience function that creates a [Middleware](Middleware.md) object and calls its [init method](Middleware.md#initswagger-callback).
 
 * __swagger__ (_optional_) - `string` or `object`<br>
-The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a valid [Swagger object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.
+The file path or URL of an OpenAPI 3.0 definition, in YAML or JSON format. Or a valid [OpenAPI object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#openapi-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.
 
 * __router__ (_optional_) - `express.App` or `express.Router`<br>
 An [Express Application](http://expressjs.com/4x/api.html#application) or [Router](http://expressjs.com/4x/api.html#router) that will be used to determine settings (such as case-sensitivity and strict routing) and to register path-parsing middleware.

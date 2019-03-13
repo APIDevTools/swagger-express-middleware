@@ -55,7 +55,7 @@ A `swagger` property is added to the [Request object](http://expressjs.com/4x/ap
 
 | Property         | Type             | Description |
 |:-----------------|:-----------------|:------------|
-| `api`            | [Swagger Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object) | The complete Swagger API object. If the Swagger API has a `basePath` and the current request is not within that path, then this property is `null`.
+| `api`            | [OpenAPI Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#openapi-object) | The complete Swagger API object. If the Swagger API has a `basePath` and the current request is not within that path, then this property is `null`.
 | `pathName`       | string           | The Swagger path that corresponds to the current HTTP request. If the current request does not match any paths in the Swagger API, then this property is an empty string.<br><br> For example, the "_/pets/{petName}/photos/{id}_" Swagger path would match a request to "_/pets/Fido/photos/123_".
 | `path`           | [Path Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#path-item-object) | The Swagger path object that corresponds to the current HTTP request, or `null` if the request does not match any path in the Swagger API.
 | `operation`      | [Operation Object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#operation-object) | The Swagger operation object that corresponds to the current HTTP request, or `null` if the request does not match any operation in the Swagger API.
