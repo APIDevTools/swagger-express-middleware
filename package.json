@@ -1,17 +1,26 @@
 {
   "name": "swagger-express-middleware",
-  "version": "2.0.1",
-  "description": "Swagger middleware and mocks for Express",
+  "version": "3.0.0-alpha.0",
+  "description": "OpenAPI 3.0 and Swagger 2.0 middleware for Express",
   "keywords": [
     "express",
     "swagger",
+    "openapi",
+    "open-api",
+    "open api",
+    "oas3",
     "middleware",
     "mock",
+    "mocks",
     "fake",
+    "fakes",
     "stub",
+    "stubs",
     "rest",
     "api",
-    "json"
+    "json",
+    "yaml",
+    "schema"
   ],
   "author": {
     "name": "James Messinger",
@@ -37,8 +46,8 @@
     "test": "mocha && npm run lint",
     "coverage": "nyc --reporter=text --reporter=lcov mocha",
     "upgrade": "npm-check -u",
-    "bump": "bump --prompt --tag --push --all",
-    "release": "npm run upgrade && npm test && npm run bump",
+    "bump": "bump --prerelease --preid alpha --tag --push --all",
+    "release": "npm run upgrade && npm test && npm run bump && npm publish --tag next",
     "start": "cd samples && node sample1.js"
   },
   "devDependencies": {
