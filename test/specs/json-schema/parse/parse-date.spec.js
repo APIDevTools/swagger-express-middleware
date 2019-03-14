@@ -212,7 +212,7 @@ describe("JSON Schema - parse date params", () => {
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.status).to.equal(500);
-      expect(err.message).to.contain('The "maximum" value in the Swagger API is invalid ("2009-15-27")');
+      expect(err.message).to.contain('The "maximum" value in the OpenAPI definition is invalid ("2009-15-27")');
     }));
   });
 
@@ -275,7 +275,7 @@ describe("JSON Schema - parse date params", () => {
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
       expect(err.status).to.equal(500);
-      expect(err.message).to.contain('The "minimum" value in the Swagger API is invalid ("2009-15-27")');
+      expect(err.message).to.contain('The "minimum" value in the OpenAPI definition is invalid ("2009-15-27")');
     }));
   });
 

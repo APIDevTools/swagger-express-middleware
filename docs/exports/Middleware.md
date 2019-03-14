@@ -1,6 +1,6 @@
 The `Middleware` class
 ============================
-The `Middleware` class is the main class in Swagger Express Middleware.  It's role is simple: You give it a Swagger API, and it gives you Express middleware for that API.  You can create multiple `Middleware` instances if you need to work with more than one Swagger API.  Each `Middleware` instance is entirely isolated, so any Express middleware that is created by one instance will only know about its own Swagger API.
+The `Middleware` class is the main class in Swagger Express Middleware.  It's role is simple: You give it an OpenAPI definition, and it gives you Express middleware for that API.  You can create multiple `Middleware` instances if you need to work with more than one OpenAPI definition.  Each `Middleware` instance is entirely isolated, so any Express middleware that is created by one instance will only know about its own OpenAPI definition.
 
 > **TIP:** For most simple apps, you don't need to worry about the `Middleware` class.  The [createMiddleware function](createMiddleware.md) &mdash; which is used in all the documentation examples &mdash; is a convenience function that automatically instantiates a `Middleware` object and calls its `init()` method for you.
 
@@ -19,13 +19,13 @@ An [Express Application](http://expressjs.com/4x/api.html#application) or [Route
 Methods
 -----------------------
 ### `init(swagger, callback)`
-Initializes the middleware with the given Swagger API. This method can be called again to re-initialize with a new or modified API.
+Initializes the middleware with the given OpenAPI definition. This method can be called again to re-initialize with a new or modified API.
 
 * __swagger__ (_optional_) - `string` or `object`<br>
 The file path or URL of an OpenAPI 3.0 definition, in YAML or JSON format. Or a valid [OpenAPI object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#openapi-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.
 
 * __callback__ (_optional_) - `function(err, middleware)`<br>
-A callback function that will be called once the Swagger API is fully parsed, dereferenced, and validated. The second parameter is the same `Middleware` object.
+A callback function that will be called once the OpenAPI definition is fully parsed, dereferenced, and validated. The second parameter is the same `Middleware` object.
 
 ### `files(router, options)`
 This method creates a new [Files middleware](../middleware/files.md) instance.

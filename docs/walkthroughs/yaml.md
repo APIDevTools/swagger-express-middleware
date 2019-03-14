@@ -7,7 +7,7 @@ Sample 1 Walkthrough
 
 YAML Walkthrough
 --------------------------
-Now that you have the sample [running](running.md), it's time to look at the Swagger API.  Open up [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) and let's go through it.
+Now that you have the sample [running](running.md), it's time to look at the OpenAPI definition.  Open up [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) and let's go through it.
 
 > **TIP:** All of the behavior discussed on this page is the _default_ behavior of Swagger Express Middleware.  You can modify/disable _any_ of this behavior, either by passing options to the middleware, or by adding your own [custom logic](walkthrough2.md#custom-middleware).
 
@@ -32,7 +32,7 @@ The first two operations in the Pet Store API are `GET /pets` and `DELETE /pets`
 For example, [/pets?type=cat](http://localhost:8000/pets?type=cat) would get/delete all pets where `type` is "cat", and [/pets?age=4&tags=brown&tags=fluffy](http://localhost:8000/pets?age=4&tags=brown&tags=fluffy) would get/delete all pets where `age` is 4 and the `tags` array contains both "brown" and "fluffy".  You can also filter by nested properties. For example, [/pets?vet.address.state=CA](http://localhost:8000/pets?vet.address.state=CA) would get/delete all pets where the `state` of the `address` of the `vet` is "CA".
 
 ##### How Filtering Works
-This filtering functionality is provided by the [Mock middleware](../middleware/mock.md).  It will only filter by query parameters that are explicitly defined in the Swagger API. For example, the "name" parameter in [/pets?name=Fido](http://localhost:8000/pets?name=Fido) will be ignored, even though pets do have a `name` property, because there is no "name" query parameter defined in the API.
+This filtering functionality is provided by the [Mock middleware](../middleware/mock.md).  It will only filter by query parameters that are explicitly defined in the OpenAPI definition. For example, the "name" parameter in [/pets?name=Fido](http://localhost:8000/pets?name=Fido) will be ignored, even though pets do have a `name` property, because there is no "name" query parameter defined in the API.
 
 > **TIP:** Notice that all the query parameters are defined in the `definitions` section and the `GET` and `DELETE` operations use `$ref` pointers to reuse the same parameters.  This allows us to save about 60 lines of duplicated code.
 

@@ -52,4 +52,4 @@ An [Express Application](http://expressjs.com/4x/api.html#application) or [Route
 **NOTE:** If you don't specify this parameter, then the default Express routing settings will be used (case-insensitive, non-strict).  You can override this parameter (or the defaults) for any specific middleware by passing an Express App or Router to the middleware.
 
 * __callback__ (_optional_) - `function(err, middleware)`<br>
-A callback function that will be called once the Swagger API is fully parsed, dereferenced, and validated. The second parameter is the [Middleware](Middleware.md) object that was created.
+A callback function that will be called once the OpenAPI definition is fully parsed, dereferenced, and validated. The second parameter is the [Middleware](Middleware.md) object that was created.

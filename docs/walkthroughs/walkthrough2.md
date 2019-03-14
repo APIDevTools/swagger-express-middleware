@@ -128,7 +128,7 @@ app.use(middleware.files(
         strict: false
     },
     {
-        // Serve the Swagger API from "/swagger/api" instead of "/api-docs"
+        // Serve the OpenAPI definition from "/swagger/api" instead of "/api-docs"
         apiPath: '/swagger/api',
 
         // Disable serving the "PetStore.yaml" file
@@ -156,7 +156,7 @@ app.use(middleware.parseRequest(
 ));
 ```
 
-We've already discussed the first parameter to the [Files middleware](../middleware/files.md), which overrides the default case-sensitivity and strict-routing settings.  In addition, we've also specified the second parameter, which customizes the file paths.  We've changed the URL of the Swagger API from the default ([/api-docs/](http://localhost:8000/api-docs/)) to [/swagger/api](http://localhost:8000/swagger/api).  And we've completely disabled serving the raw Swagger file ([/PetStore.yaml](http://localhost:8000/PetStore.yaml)).  This means that if you click either of the links at the top of the page ("_Swagger API (YAML)_" and "_Swagger API (JSON)_"), you'll get an [HTTP 404 (Not Found)](http://httpstatusdogs.com/404-not-found) error.
+We've already discussed the first parameter to the [Files middleware](../middleware/files.md), which overrides the default case-sensitivity and strict-routing settings.  In addition, we've also specified the second parameter, which customizes the file paths.  We've changed the URL of the OpenAPI definition from the default ([/api-docs/](http://localhost:8000/api-docs/)) to [/swagger/api](http://localhost:8000/swagger/api).  And we've completely disabled serving the raw Swagger file ([/PetStore.yaml](http://localhost:8000/PetStore.yaml)).  This means that if you click either of the links at the top of the page ("_Swagger API (YAML)_" and "_Swagger API (JSON)_"), you'll get an [HTTP 404 (Not Found)](http://httpstatusdogs.com/404-not-found) error.
 
 As for the [Parse Request middleware](../middleware/parseRequest.md), we've set a few parsing options, just for illustration purposes.  By default, the [cookie-parser](https://github.com/expressjs/cookie-parser) uses unsigned cookies, but we've added a "secret" key, so cookies will now be digitally signed with this secret.  Of course, in a real app, you'd use a much more secure secret.  We've also set a limit on the size of JSON payloads.  If you try to create a pet with more than 100kb of data, you'll get an [HTTP 413 (Request Entity Too Large)](http://httpstatusdogs.com/413-request-entity-too-large) error.  Finally, we've changed the default directory where uploaded files are saved.  Instead of the operating system's temp directory, pet photos will now be saved to a "photos" folder in the "samples" directory.
 

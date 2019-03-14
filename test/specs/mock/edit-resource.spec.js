@@ -154,7 +154,7 @@ describe("Edit Resource Mock", () => {
           });
         });
 
-        it("should not return data if not specified in the Swagger API", (done) => {
+        it("should not return data if not specified in the OpenAPI definition", (done) => {
           delete api.paths["/pets/{PetName}"][method].responses[200].schema;
           helper.initTest(api, (supertest) => {
             supertest
@@ -165,7 +165,7 @@ describe("Edit Resource Mock", () => {
           });
         });
 
-        it("should return the saved resource if the Swagger API schema is an object", (done) => {
+        it("should return the saved resource if the OpenAPI definition schema is an object", (done) => {
           helper.initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
@@ -175,7 +175,7 @@ describe("Edit Resource Mock", () => {
           });
         });
 
-        it("should return the whole collection if the Swagger API schema is an array", (done) => {
+        it("should return the whole collection if the OpenAPI definition schema is an array", (done) => {
           api.paths["/pets/{PetName}"][method].responses[200].schema = { type: "array", items: {}};
 
           let dataStore = new MemoryDataStore();
@@ -191,7 +191,7 @@ describe("Edit Resource Mock", () => {
           });
         });
 
-        it("should return the saved resource if the Swagger API schema is a wrapped object", (done) => {
+        it("should return the saved resource if the OpenAPI definition schema is a wrapped object", (done) => {
           // Wrap the "pet" definition in an envelope object
           api.paths["/pets/{PetName}"][method].responses[200].schema = {
             properties: {
@@ -211,7 +211,7 @@ describe("Edit Resource Mock", () => {
           });
         });
 
-        it("should return the whole collection if the Swagger API schema is a wrapped array", (done) => {
+        it("should return the whole collection if the OpenAPI definition schema is a wrapped array", (done) => {
           // Wrap the "pet" definition in an envelope object
           api.paths["/pets/{PetName}"][method].responses[200].schema = {
             properties: {

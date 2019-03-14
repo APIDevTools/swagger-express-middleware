@@ -107,7 +107,7 @@ describe("Package exports", () => {
       expect(middleware).to.be.an.instanceOf(swagger.Middleware);
     });
 
-    it("should not call the callback if no Swagger API was given", (done) => {
+    it("should not call the callback if no OpenAPI definition was given", (done) => {
       let middleware = swagger(helper.express(), (err, mw) => {
         clearTimeout(timeout);
         assert(false, "The callback should NOT have been called!");

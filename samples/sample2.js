@@ -43,7 +43,7 @@ middleware.init(swaggerFile, (err) => {
       strict: false
     },
     {
-      // Serve the Swagger API from "/swagger/api" instead of "/api-docs"
+      // Serve the OpenAPI definition from "/swagger/api" instead of "/api-docs"
       apiPath: '/swagger/api',
 
       // Disable serving the "PetStore.yaml" file

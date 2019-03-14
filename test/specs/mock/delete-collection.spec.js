@@ -52,7 +52,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should return the deleted resources if the Swagger API schema is an array", (done) => {
+    it("should return the deleted resources if the OpenAPI definition schema is an array", (done) => {
       let dataStore = new MemoryDataStore();
       let resources = [
         new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" }),
@@ -74,7 +74,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should return the first deleted resource if the Swagger API schema is an object", (done) => {
+    it("should return the first deleted resource if the OpenAPI definition schema is an object", (done) => {
       api.paths["/pets"].delete.responses[200].schema = {};
 
       let dataStore = new MemoryDataStore();
@@ -103,7 +103,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should return the deleted resources if the Swagger API schema is a wrapped array", (done) => {
+    it("should return the deleted resources if the OpenAPI definition schema is a wrapped array", (done) => {
       // Wrap the "pet" definition in an envelope object
       api.paths["/pets"].delete.responses[200].schema = {
         properties: {
@@ -139,7 +139,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should return the first deleted resource if the Swagger API schema is a wrapped object", (done) => {
+    it("should return the first deleted resource if the OpenAPI definition schema is a wrapped object", (done) => {
       // Wrap the "pet" definition in an envelope object
       api.paths["/pets"].delete.responses[200].schema = {
         properties: {
@@ -176,7 +176,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should not return the deleted resources on a 204 response, even if the Swagger API schema is an array", (done) => {
+    it("should not return the deleted resources on a 204 response, even if the OpenAPI definition schema is an array", (done) => {
       api.paths["/pets"].delete.responses[204] = api.paths["/pets"].delete.responses[200];
       delete api.paths["/pets"].delete.responses[200];
 
@@ -215,7 +215,7 @@ describe("Query Collection Mock", () => {
       });
     });
 
-    it("should return nothing if nothing was deleted and the Swagger API schema is an object", (done) => {
+    it("should return nothing if nothing was deleted and the OpenAPI definition schema is an object", (done) => {
       api.paths["/pets"].delete.responses[200].schema = {};
 
       helper.initTest(api, (supertest) => {
@@ -863,7 +863,7 @@ describe("Query Collection Mock", () => {
         });
       });
 
-      it("should not filter by properties that aren't defined in the Swagger API", (done) => {
+      it("should not filter by properties that aren't defined in the OpenAPI definition", (done) => {
         helper.initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Name=Lassie&Vet.Address.Street=123%20First%20St.")
@@ -878,7 +878,7 @@ describe("Query Collection Mock", () => {
         });
       });
 
-      it("should only filter by properties that are defined in the Swagger API", (done) => {
+      it("should only filter by properties that are defined in the OpenAPI definition", (done) => {
         helper.initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Age=4&Name=Lassie&Vet.Name=Vet%202&Vet.Address.Street=123%20First%20St.")

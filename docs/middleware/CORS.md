@@ -1,13 +1,13 @@
 CORS middleware
 ============================
-Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your Swagger API definition.
+Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your OpenAPI definition definition.
 
 If you aren't familiar with how CORS works, then [here's a good explanation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS).  Don't worry if it seems really complicated &mdash; the CORS middleware handles it all for you.
 
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample OpenAPI definition.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ```javascript
 const util = require('util');
@@ -31,7 +31,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
 });
 ```
 
-Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets) and [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos](http://localhost:8000/pets/Fido/photos). You will see that the HTTP headers are set differently for each URL, based on the Swagger API.
+Run the above example and then browse to [http://localhost:8000/pets](http://localhost:8000/pets) and [http://localhost:8000/pets/Fido](http://localhost:8000/pets/Fido) and [http://localhost:8000/pets/Fido/photos](http://localhost:8000/pets/Fido/photos). You will see that the HTTP headers are set differently for each URL, based on the OpenAPI definition.
 
 If you use a tool such as [Postman](http://getpostman.com) or [curl](http://curl.haxx.se/) to send CORS request headers (e.g. `Origin`, `Access-Control-Request-Method`, `Access-Control-Request-Headers`, etc.), then you'll notice that the CORS middleware will adjust the corresponding HTTP response headers (e.g. `Access-Control-Allow-Origin`, `Access-Control-Allow-Credentials`, `Access-Control-Allow-Headers`, etc.).
 
@@ -48,7 +48,7 @@ The CORS middleware automatically sets the following HTTP headers on _every_ req
 | Header Name                        | Value Assigned
 |:-----------------------------------|:-----------------
 | `Access-Control-Allow-Origin`      | If the HTTP request includes an `Origin` header, then that value is echoed back; otherwise, a wildcard (`*`) is sent.
-| `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your Swagger API, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
+| `Access-Control-Allow-Methods`     | If the HTTP request matches a path in your OpenAPI definition, then the methods defined for that path are returned.  If the request _doesn't_ match a Swagger path, then the `Access-Control-Request-Method` header is echoed back.  If that header is not set, then _all_ HTTP methods are sent.
 | `Access-Control-Allow-Headers`     | If the HTTP request includes an `Access-Control-Request-Headers` header, then that value is echoed back; otherwise, an empty value is returned.
 | `Access-Control-Allow-Max-Age`     | This header is always set to zero, which means CORS preflight requests will not be cached.  This is especially useful for development/debugging, but you may want to set it to a higher value for production.
 | `Access-Control-Allow-Credentials` | If the `Access-Control-Allow-Origin` is a wildcard (`*`), then `false` is sent; otherwise, `true` is sent.<br><br>**NOTE:** This behavior is required by the CORS spec. Wildcarded origins cannot allow credentials.
@@ -56,9 +56,9 @@ The CORS middleware automatically sets the following HTTP headers on _every_ req
 
 
 ### Customizing CORS headers
-As shown above, the CORS middleware tries to determine the best value for each CORS header based on the HTTP request from the client and the structure of your Swagger API, but you can override the value for any header if you want.
+As shown above, the CORS middleware tries to determine the best value for each CORS header based on the HTTP request from the client and the structure of your OpenAPI definition, but you can override the value for any header if you want.
 
-To override a header's value, just specify a `default` value in your Swagger API.  You can do this for a specific operation, or for an entire path by using the `options` operation.  For example, in the following Swagger API, the `Access-Control-Allow-Headers` and `Access-Control-Allow-Origin` headers have been customized for all operations on the "_/pets/{petName}_" path, and the `Access-Control-Max-Age` header has been customized only for the `get` operation.
+To override a header's value, just specify a `default` value in your OpenAPI definition.  You can do this for a specific operation, or for an entire path by using the `options` operation.  For example, in the following OpenAPI definition, the `Access-Control-Allow-Headers` and `Access-Control-Allow-Origin` headers have been customized for all operations on the "_/pets/{petName}_" path, and the `Access-Control-Max-Age` header has been customized only for the `get` operation.
 
 ```yaml
 /pets/{petName}:

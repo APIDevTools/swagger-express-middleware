@@ -10,7 +10,7 @@ Constructor
 ### `FileDataStore(baseDir)`
 
 * __baseDir__ (_optional_) - `string`<br>
-The directory where the JSON files will be saved.  The `FileDataStore` will create separate folders and files under this directory for each path in your Swagger API.
+The directory where the JSON files will be saved.  The `FileDataStore` will create separate folders and files under this directory for each path in your OpenAPI definition.
 <br><br>
 If you don't specify this parameter, then it defaults to [`process.cwd()`](https://nodejs.org/api/process.html#process_process_cwd).
 

@@ -223,7 +223,7 @@ describe("FileServer middleware", () => {
           });
         });
 
-        it("should return an HTTP 500 if the Swagger API is invalid", (done) => {
+        it("should return an HTTP 500 if the OpenAPI definition is invalid", (done) => {
           swagger(fixtures.paths.blank, (err, middleware) => {
             let express = helper.express(middleware.files());
 

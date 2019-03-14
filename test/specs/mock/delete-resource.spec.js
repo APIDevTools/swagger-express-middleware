@@ -48,7 +48,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return the deleted resource if the Swagger API schema is an object", (done) => {
+    it("should return the deleted resource if the OpenAPI definition schema is an object", (done) => {
       // Create a 200 response to return the deleted pet
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",
@@ -71,7 +71,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return the remaining resources in the collection if the Swagger API schema is an array", (done) => {
+    it("should return the remaining resources in the collection if the OpenAPI definition schema is an array", (done) => {
       // Create a 200 response to return all pets in the collection
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",
@@ -101,7 +101,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return the deleted resource if the Swagger API schema is a wrapped object", (done) => {
+    it("should return the deleted resource if the OpenAPI definition schema is a wrapped object", (done) => {
       // Wrap the "pet" definition in an envelope object
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",
@@ -131,7 +131,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return the remaining resources in the collection if the Swagger API schema is a wrapped array", (done) => {
+    it("should return the remaining resources in the collection if the OpenAPI definition schema is a wrapped array", (done) => {
       // Wrap the "pet" definition in an envelope object
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",
@@ -172,7 +172,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should not return the deleted resource on a 204 response, even if the Swagger API schema is an object", (done) => {
+    it("should not return the deleted resource on a 204 response, even if the OpenAPI definition schema is an object", (done) => {
       // 204 responses cannot return data
       api.paths["/pets/{PetName}"].delete.responses["204"].schema = {};
 
@@ -192,7 +192,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return nothing if nothing was deleted, even if the Swagger API schema is an object", (done) => {
+    it("should return nothing if nothing was deleted, even if the OpenAPI definition schema is an object", (done) => {
       // Create a 200 response to return the deleted pet
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",
@@ -208,7 +208,7 @@ describe("Edit Resource Mock", () => {
       });
     });
 
-    it("should return an empty collection if nothing was deleted, even if the Swagger API schema is an array", (done) => {
+    it("should return an empty collection if nothing was deleted, even if the OpenAPI definition schema is an array", (done) => {
       // Create a 200 response to return all pets in the collection
       api.paths["/pets/{PetName}"].delete.responses["200"] = {
         description: "200 response",

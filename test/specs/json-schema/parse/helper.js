@@ -16,7 +16,7 @@ _.extend(exports, helper);
  * @returns {express}
  */
 exports.parse = function (schema, value, done) {
-  // Create a Swagger API that uses this schema
+  // Create an OpenAPI definition that uses this schema
   let api = _.cloneDeep(fixtures.data.petStore);
   api.paths["/test"] = {
     post: {
@@ -32,7 +32,7 @@ exports.parse = function (schema, value, done) {
       done(err);
     }
 
-    // Make a request to the Swagger API, passing the test value
+    // Make a request to the OpenAPI definition, passing the test value
     let supertest = helper.supertest(express).post("/api/test");
     if (value !== undefined) {
       supertest.set(schema.name, value);

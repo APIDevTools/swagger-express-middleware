@@ -27,19 +27,19 @@ Over 2,000 unit tests and integration tests with 100% code coverage.  Tested on 
 **Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
 - [**Metadata middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/metadata.html)<br>
-Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.swagger`.
+Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.openapi`.
 
 - [**Parse Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/parseRequest.html)<br>
-Parses incoming requests and converts everything into the correct data types, according to your Swagger API definition.
+Parses incoming requests and converts everything into the correct data types, according to your OpenAPI definition definition.
 
 - [**Validate Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/validateRequest.html)<br>
-Ensures that every request complies with your Swagger API definition, or returns the appropriate HTTP error codes if needed.  Of course, you can catch any validation errors and handle them however you want.
+Ensures that every request complies with your OpenAPI definition definition, or returns the appropriate HTTP error codes if needed.  Of course, you can catch any validation errors and handle them however you want.
 
 - [**CORS middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/CORS.html)<br>
-Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your Swagger API definition.
+Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your OpenAPI definition definition.
 
 - [**Files middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)<br>
-Serves the Swagger API file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
+Serves the OpenAPI definition file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
 
 
 

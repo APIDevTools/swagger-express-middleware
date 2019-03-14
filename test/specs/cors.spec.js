@@ -281,7 +281,7 @@ describe("CORS middleware", () => {
     });
   });
 
-  it("should set Access-Control-Allow-Methods to the methods that are allowed by the Swagger API", (done) => {
+  it("should set Access-Control-Allow-Methods to the methods that are allowed by the OpenAPI definition", (done) => {
     swagger(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
@@ -450,7 +450,7 @@ describe("CORS middleware", () => {
     });
   });
 
-  it("should automatically respond to CORS preflight requests, even if they're not defined in the Swagger API", (done) => {
+  it("should automatically respond to CORS preflight requests, even if they're not defined in the OpenAPI definition", (done) => {
     swagger(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 

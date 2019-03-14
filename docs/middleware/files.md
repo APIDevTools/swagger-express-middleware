@@ -1,12 +1,12 @@
 Files middleware
 ============================
 
-Serves your Swagger API file(s) so they can be used with front-end tools like like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
+Serves your OpenAPI definition file(s) so they can be used with front-end tools like like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
 
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample OpenAPI definition.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ```javascript
 const express = require('express');
@@ -27,7 +27,7 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
 });
 ```
 
-Run the above example and then browse to [http://localhost:8000/api-docs/](http://localhost:8000/api-docs/) and [http://localhost:8000/my/custom/path/PetStore.yaml](http://localhost:8000/my/custom/path/PetStore.yaml).  The first URL will return the Swagger API in JSON.  The second URL will return the raw [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) file.  Note that the second URL's path has been customized in the example code.
+Run the above example and then browse to [http://localhost:8000/api-docs/](http://localhost:8000/api-docs/) and [http://localhost:8000/my/custom/path/PetStore.yaml](http://localhost:8000/my/custom/path/PetStore.yaml).  The first URL will return the OpenAPI definition in JSON.  The second URL will return the raw [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) file.  Note that the second URL's path has been customized in the example code.
 
 
 Options
@@ -45,6 +45,6 @@ This parameter allows you to change the paths at which the files are served.  It
 
 | Property         | Type     | Default     | Description |
 |:-----------------|:---------|:------------|:------------|
-| `useBasePath`    | bool     | false       | If set to true, then the `apiPath` and `rawFilesPath` will be prepended with the Swagger API's `basePath`.<br><br>  For example, if the `basePath` in the Swagger API is "_/api/v1_", then the Swagger JSON file would be served at "_/api/v1/api-docs/_" instead of "_/api-docs/_".
-| `apiPath`        | string   | /api-docs/  | The path that will serve the fully dereferenced Swagger API in JSON format. This file should work with any third-party tools, even if they don't support YAML, `$ref` pointers, or mutli-file Swagger APIs.<br><br> To disable serving this file, set the path to a falsy value (such as an empty string).
-| `rawFilesPath`   | string   | <nobr>/api-docs/</nobr>  | The path that will serve the raw Swagger API file(s).<br><br> For example, assume that your API consists of the following files:<br> - Main.yaml<br> - Users.json<br> - Products/Get-Products.yml<br> - Products/Post-Products.yaml<br><br>By default, each of these files would be served at:<br> - /api-docs/Main.yaml<br> - /api-docs/Users.json<br> - /api-docs/Products/Get-Products.yml<br> - /api-docs/Products/Post-Products.yaml<br><br>To disable serving raw Swagger files, set the path to a falsy value (such as an empty string).
+| `useBasePath`    | bool     | false       | If set to true, then the `apiPath` and `rawFilesPath` will be prepended with the OpenAPI definition's `basePath`.<br><br>  For example, if the `basePath` in the OpenAPI definition is "_/api/v1_", then the Swagger JSON file would be served at "_/api/v1/api-docs/_" instead of "_/api-docs/_".
+| `apiPath`        | string   | /api-docs/  | The path that will serve the fully dereferenced OpenAPI definition in JSON format. This file should work with any third-party tools, even if they don't support YAML, `$ref` pointers, or mutli-file OpenAPI definitions.<br><br> To disable serving this file, set the path to a falsy value (such as an empty string).
+| `rawFilesPath`   | string   | <nobr>/api-docs/</nobr>  | The path that will serve the raw OpenAPI definition file(s).<br><br> For example, assume that your API consists of the following files:<br> - Main.yaml<br> - Users.json<br> - Products/Get-Products.yml<br> - Products/Post-Products.yaml<br><br>By default, each of these files would be served at:<br> - /api-docs/Main.yaml<br> - /api-docs/Users.json<br> - /api-docs/Products/Get-Products.yml<br> - /api-docs/Products/Post-Products.yaml<br><br>To disable serving raw Swagger files, set the path to a falsy value (such as an empty string).

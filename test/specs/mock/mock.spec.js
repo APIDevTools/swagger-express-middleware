@@ -16,8 +16,8 @@ describe("Mock middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.be.undefined;
-        expect(res.swagger).to.be.undefined;
+        expect(req.openapi).to.be.undefined;
+        expect(res.openapi).to.be.undefined;
       }));
     });
   });
@@ -33,8 +33,8 @@ describe("Mock middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.be.undefined;
-        expect(res.swagger).to.be.undefined;
+        expect(req.openapi).to.be.undefined;
+        expect(res.openapi).to.be.undefined;
       }));
     });
   });
@@ -50,7 +50,7 @@ describe("Mock middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: {
             swagger: "2.0",
             info: {
@@ -65,7 +65,7 @@ describe("Mock middleware", () => {
           params: [],
           security: []
         });
-        expect(res.swagger).to.be.undefined;
+        expect(res.openapi).to.be.undefined;
       }));
     });
   });
@@ -86,7 +86,7 @@ describe("Mock middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStore,
           pathName: "/pets",
           path: fixtures.data.petsPath,
@@ -94,7 +94,7 @@ describe("Mock middleware", () => {
           params: fixtures.data.petsGetParams,
           security: []
         });
-        expect(res.swagger).to.be.undefined;
+        expect(res.openapi).to.be.undefined;
       }));
     });
   });

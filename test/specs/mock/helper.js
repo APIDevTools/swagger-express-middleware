@@ -13,7 +13,7 @@ _.extend(exports, helper);
  * @param   {e.app}         [express]   - The Express App to use for the test
  * @param   {DataStore}     [dataStore] - The DataStore to use for the test
  * @param   {function[]}    [fns]       - Middleware functions to add to Express
- * @param   {object}        api         - The Swagger API for the test
+ * @param   {object}        api         - the OpenAPI definition for the test
  * @param   {function}      test        - The actual unit test
  */
 exports.initTest = function (express, dataStore, fns, api, test) {

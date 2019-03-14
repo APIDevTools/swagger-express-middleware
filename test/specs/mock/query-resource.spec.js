@@ -71,7 +71,7 @@ describe("Query Resource Mock", () => {
         });
       });
 
-      it("should not return anything if no response schema is specified in the Swagger API", (done) => {
+      it("should not return anything if no response schema is specified in the OpenAPI definition", (done) => {
         delete api.paths["/pets/{PetName}"][method].responses[200].schema;
         let dataStore = new MemoryDataStore();
         let resource = new Resource("/api/pets/Fido", "I am Fido");
@@ -543,7 +543,7 @@ describe("Query Resource Mock", () => {
             });
           });
 
-          it("should return a file attachment (using the default filename in the Swagger API)", (done) => {
+          it("should return a file attachment (using the default filename in the OpenAPI definition)", (done) => {
             api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].headers = {
               "content-disposition": {
                 type: "string",
@@ -562,7 +562,7 @@ describe("Query Resource Mock", () => {
                   noHeaders || request.expect("Content-Length", "263287");
                   noHeaders || request.expect("Content-Type", "application/pdf");
 
-                  // The filename comes from the Swagger API
+                  // The filename comes from the OpenAPI definition
                   noHeaders || request.expect("Content-Disposition", 'attachment; filename="MyCustomFileName.xyz"');
 
                   request.end(helper.checkResults(done, (res2) => {
@@ -584,7 +584,7 @@ describe("Query Resource Mock", () => {
             });
           });
 
-          it("should return a file attachment (using the basename of the URL when there's no default filename in the Swagger API)", (done) => {
+          it("should return a file attachment (using the basename of the URL when there's no default filename in the OpenAPI definition)", (done) => {
             api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].headers = {
               "content-disposition": {
                 type: "string",
@@ -605,7 +605,7 @@ describe("Query Resource Mock", () => {
                   noHeaders || request.expect("Content-Length", "683709");
                   noHeaders || request.expect("Content-Type", "image/jpeg");
 
-                  // The filename is the basename of the URL, since it wasn't specified in the Swagger API
+                  // The filename is the basename of the URL, since it wasn't specified in the OpenAPI definition
                   noHeaders || request.expect("Content-Disposition", 'attachment; filename="' + photoID + '"');
 
                   request.end(helper.checkResults(done, (res2) => {

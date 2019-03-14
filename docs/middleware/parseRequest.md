@@ -1,13 +1,13 @@
 Parse Request middleware
 ============================
-Parses incoming requests and converts everything into the correct data types, according to your Swagger API definition.  It'll even use the `default` values specified in your API for any missing parameters.
+Parses incoming requests and converts everything into the correct data types, according to your OpenAPI definition definition.  It'll even use the `default` values specified in your API for any missing parameters.
 
 You can access the parsed request using the standard Express properties and methods, such as [req.body](http://expressjs.com/4x/api.html#req.body), [req.params](http://expressjs.com/4x/api.html#req.params), [req.query](http://expressjs.com/4x/api.html#req.query), [req.get()](http://expressjs.com/4x/api.html#req.get), [req.files](http://expressjs.com/4x/api.html#req.files), [req.cookies](http://expressjs.com/4x/api.html#req.cookies), and [req.signedCookies](http://expressjs.com/4x/api.html#req.signedCookies).
 
 
 Example
 --------------------------
-This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample Swagger API.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
+This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml) sample OpenAPI definition.  If you aren't familiar with using middleware in Express.js, then [read this first](http://expressjs.com/guide/using-middleware.html).
 
 ```javascript
 const util = require('util');
@@ -81,15 +81,15 @@ The first phase performs basic parsing of the HTTP request using third-party lib
 
 
 ### Phase 2 - Swagger parsing
-The second phase performs Swagger-specific parsing.  During this phase, every parameter defined in your Swagger API is checked against the HTTP request.  If a Swagger parameter is missing from the request, and there's a `default` value specified in the Swagger API, then that default value is used, just as if the request contained that value.  If a _required_ Swagger parameter is missing from the request, and there's no `default` value, then an error is thrown.
+The second phase performs Swagger-specific parsing.  During this phase, every parameter defined in your OpenAPI definition is checked against the HTTP request.  If a Swagger parameter is missing from the request, and there's a `default` value specified in the OpenAPI definition, then that default value is used, just as if the request contained that value.  If a _required_ Swagger parameter is missing from the request, and there's no `default` value, then an error is thrown.
 
-Any Swagger parameters that _are_ included in the request are parsed and validated according to the [parameter definition](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameter-object).  If the value doesn't adhere to the parameter definition for any reason (such as improper data type, min/max length, min/max value, RegEx pattern, etc.), then an error is thrown.
+Any Swagger parameters that _are_ included in the request are parsed and validated according to the [parameter definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#parameter-object).  If the value doesn't adhere to the parameter definition for any reason (such as improper data type, min/max length, min/max value, RegEx pattern, etc.), then an error is thrown.
 
 Finally, if everything is valid, then the HTTP request values are converted to the proper JavaScript data types.  For example, if you define a Swagger parameter as `{type: "string", format: "date-time"}`, then it will be converted to a JavaScript `Date` object.  If you define a parameter as `{type: "integer", format: "int32"}`, then it will be converted to a JavaScript `Number` with a whole value.
 
 
 ### Phase 3 - Path parsing
-Path parameters get parsed in the third phase. Swagger and Express both support path parameters, but they use slightly different syntax.  For example, the Swagger path `/pets/{name}/photos/{id}` is equivalent to the Express path `/pets/:name/photos/:id`. Express automatically parses all path parameters as _strings_ and stores them on the [`req.params`](http://expressjs.com/4x/api.html#req.params) object. The Parse Request middleware parses path parameters according to the data type specified in your Swagger API, and updates `req.params` accordingly.
+Path parameters get parsed in the third phase. Swagger and Express both support path parameters, but they use slightly different syntax.  For example, the Swagger path `/pets/{name}/photos/{id}` is equivalent to the Express path `/pets/:name/photos/:id`. Express automatically parses all path parameters as _strings_ and stores them on the [`req.params`](http://expressjs.com/4x/api.html#req.params) object. The Parse Request middleware parses path parameters according to the data type specified in your OpenAPI definition, and updates `req.params` accordingly.
 
 #### Tricky Behavior with `req.params`
 ##### TLDR

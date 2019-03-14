@@ -13,7 +13,7 @@ describe("Mock response headers", () => {
     api = _.cloneDeep(fixtures.data.petStore);
   });
 
-  it("should set headers to the default values specified in the Swagger API", (done) => {
+  it("should set headers to the default values specified in the OpenAPI definition", (done) => {
     api.paths["/pets"].get.responses[200].headers = {
       location: {
         type: "string",
@@ -211,7 +211,7 @@ describe("Mock response headers", () => {
       });
     });
 
-    it("should not set the Location header if not specified in the Swagger API", (done) => {
+    it("should not set the Location header if not specified in the OpenAPI definition", (done) => {
       delete api.paths["/pets"].post.responses[201].headers;
       helper.initTest(api, (supertest) => {
         supertest
@@ -315,7 +315,7 @@ describe("Mock response headers", () => {
       });
     });
 
-    it("should not set the Last-Modified header if not specified in the Swagger API", (done) => {
+    it("should not set the Last-Modified header if not specified in the OpenAPI definition", (done) => {
       helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
@@ -379,7 +379,7 @@ describe("Mock response headers", () => {
       });
     });
 
-    it("should not set the Content-Disposition header if not specified in the Swagger API", (done) => {
+    it("should not set the Content-Disposition header if not specified in the OpenAPI definition", (done) => {
       helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
@@ -447,7 +447,7 @@ describe("Mock response headers", () => {
       });
     });
 
-    it("should not set the Set-Cookie header if not specified in the Swagger API", (done) => {
+    it("should not set the Set-Cookie header if not specified in the OpenAPI definition", (done) => {
       helper.initTest(api, (supertest) => {
         supertest
           .get("/api/pets")

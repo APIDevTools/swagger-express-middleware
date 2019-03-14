@@ -90,7 +90,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should not return data if not specified in the Swagger API", (done) => {
+        it("should not return data if not specified in the OpenAPI definition", (done) => {
           delete api.paths["/pets"][method].responses[201].schema;
           helper.initTest(api, (supertest) => {
             supertest
@@ -101,7 +101,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the new resource if the Swagger API schema is an object", (done) => {
+        it("should return the new resource if the OpenAPI definition schema is an object", (done) => {
           api.paths["/pets"][method].responses[201].schema = {};
 
           let dataStore = new MemoryDataStore();
@@ -117,7 +117,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the first new resource if the Swagger API schema is an object", (done) => {
+        it("should return the first new resource if the OpenAPI definition schema is an object", (done) => {
           api.paths["/pets"][method].responses[201].schema = {};
           arrayify();
 
@@ -134,7 +134,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the first new resource if the Swagger API schema is a wrapped object", (done) => {
+        it("should return the first new resource if the OpenAPI definition schema is a wrapped object", (done) => {
           // Wrap the "pet" definition in an envelope object
           api.paths["/pets"][method].responses[201].schema = {
             properties: {
@@ -159,7 +159,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the whole collection (including the new resource) if the Swagger API schema is an array", (done) => {
+        it("should return the whole collection (including the new resource) if the OpenAPI definition schema is an array", (done) => {
           api.paths["/pets"][method].responses[201].schema = { type: "array", items: {}};
 
           let dataStore = new MemoryDataStore();
@@ -175,7 +175,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the whole collection (including the new resources) if the Swagger API schema is an array", (done) => {
+        it("should return the whole collection (including the new resources) if the OpenAPI definition schema is an array", (done) => {
           arrayify();
           api.paths["/pets"][method].responses[201].schema = { type: "array", items: {}};
 
@@ -192,7 +192,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it("should return the whole collection (including the new resources) if the Swagger API schema is a wrapped array", (done) => {
+        it("should return the whole collection (including the new resources) if the OpenAPI definition schema is a wrapped array", (done) => {
           // Wrap the "pet" definition in an envelope object
           api.paths["/pets"][method].responses[201].schema = {
             properties: {
@@ -277,7 +277,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it('should not set the "Location" HTTP header if not specified in the Swagger API (single object)', (done) => {
+        it('should not set the "Location" HTTP header if not specified in the OpenAPI definition (single object)', (done) => {
           delete api.paths["/pets"][method].responses[201].headers;
           helper.initTest(api, (supertest) => {
             supertest
@@ -291,7 +291,7 @@ describe("Edit Collection Mock", () => {
           });
         });
 
-        it('should not set the "Location" HTTP header if not specified in the Swagger API (array)', (done) => {
+        it('should not set the "Location" HTTP header if not specified in the OpenAPI definition (array)', (done) => {
           delete api.paths["/pets"][method].responses[201].headers;
           arrayify();
           helper.initTest(api, (supertest) => {

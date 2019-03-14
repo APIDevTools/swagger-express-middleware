@@ -151,7 +151,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.have.lengthOf(0);
+          expect(req.openapi.security).to.have.lengthOf(0);
         }));
       });
     });
@@ -165,7 +165,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.have.lengthOf(0);
+          expect(req.openapi.security).to.have.lengthOf(0);
         }));
       });
     });
@@ -180,7 +180,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
 
           let auth = require("basic-auth")(req);
           expect(auth).to.deep.equal({
@@ -201,7 +201,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
         }));
       });
     });
@@ -216,7 +216,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
         }));
       });
     });
@@ -242,7 +242,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
         }));
       });
     });
@@ -269,7 +269,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy((err, req, res, next) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
           expect(err.status).to.equal(401);
           expect(err.message).to.contain("GET /api/pets requires authentication (basic, apiKey)");
           expect(res.get("WWW-Authenticate")).to.equal('Basic realm="127.0.0.1"');
@@ -294,7 +294,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy((err, req, res, next) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
           expect(err.status).to.equal(401);
           expect(err.message).to.contain("GET /api/pets requires authentication (basic, apiKey)");
           expect(res.get("WWW-Authenticate")).to.equal('Basic realm="127.0.0.1"');
@@ -312,7 +312,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy((err, req, res, next) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
           expect(err.status).to.equal(401);
           expect(err.message).to.contain("GET /api/pets requires authentication (apiKey)");
           expect(res.get("WWW-Authenticate")).to.equal('Basic realm="www.company.com"');
@@ -330,7 +330,7 @@ describe("RequestValidator middleware", () => {
           .end(helper.checkSpyResults(done));
 
         express.use(helper.spy((err, req, res, next) => {
-          expect(req.swagger.security).to.deep.equal(security);
+          expect(req.openapi.security).to.deep.equal(security);
           expect(err.status).to.equal(401);
           expect(err.message).to.contain("GET /api/pets requires authentication (apiKey)");
           expect(res.get("WWW-Authenticate")).to.equal('Basic realm="server"');

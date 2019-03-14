@@ -2,7 +2,7 @@ Mock middleware
 ============================
 __Fully-functional mock__ implementations for every operation in your API, including data persistence, all with __zero code!__  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
-> **NOTE:** The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible Swagger API.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the [default behavior](#default-behavior) with your own [custom behavior](#customizing-behavior).
+> **NOTE:** The Mock middleware is _not_ intended to be a 100% perfect implementation of every possible OpenAPI definition.  It makes intelligent guesses about the _intended_ behavior of your API based on [good RESTful API design principles](http://codeplanet.io/principles-good-restful-api-design/), but sometimes those guesses can be incorrect.  Don't worry though, it's really easy to enhance, alter, or even replace the [default behavior](#default-behavior) with your own [custom behavior](#customizing-behavior).
 
 
 Examples
@@ -54,7 +54,7 @@ The Mock middleware requires the following middleware to come before it in the m
 
 Default Behavior
 --------------------------
-The Mock middleware's behavior varies greatly depending on the HTTP request and the structure of your Swagger API.  At a high level, the logic consists of __three steps__:
+The Mock middleware's behavior varies greatly depending on the HTTP request and the structure of your OpenAPI definition.  At a high level, the logic consists of __three steps__:
 
 1. [Determine if it's a collection or resource operation](#1-determine-if-its-a-collection-or-resource-operation)
 2. [Perform the corresponding action for the HTTP method](#2-perform-the-corresponding-action-for-the-http-method)
@@ -123,7 +123,7 @@ The Mock middleware uses a [DataStore](../exports/DataStore.md) object to store 
 
 
 ##### How files are stored
-If your Swagger API has `file` parameters, then the uploaded files are stored in your operating system's temporary directory, with random, unique file names.  You can change the default directory, and even the file-naming algorithm using the [Parse Request middleware's](parseRequest.md) options.
+If your OpenAPI definition has `file` parameters, then the uploaded files are stored in your operating system's temporary directory, with random, unique file names.  You can change the default directory, and even the file-naming algorithm using the [Parse Request middleware's](parseRequest.md) options.
 
 Swagger Express Middleware uses [Multer](https://github.com/expressjs/multer) to handle file uploads, so for each `file` parameter in your API, there will be a corresponding [Multer file object](https://github.com/expressjs/multer#multer-file-object) in `req.files`.  This object contains detailed information about the file, such as the original file name, its size, MIME type, etc.
 
@@ -140,7 +140,7 @@ If your data is a simple data type, such as a string, number, boolean, or date, 
 If your data model is an object, then the Mock middleware will look for any property that is usually a primary key, such as `id`, `key`, `code`, `number`, `num`, `nbr`, `username`, `name`, etc.  If the data has more than one of these properties, then it chooses the one that is most likely to be the primary key (for example, it will choose `id` over `name`). Also, it will ignore any properties that aren't simple data types (string, number, boolean, or date).
 
 3. __Required properties__<br>
-If your Swagger API specifies any required properties for your data model, then the Mock middleware will use the _first_ required property that is a simple data type (string, number, boolean, or date).
+If your OpenAPI definition specifies any required properties for your data model, then the Mock middleware will use the _first_ required property that is a simple data type (string, number, boolean, or date).
 
 4. __File name__<br>
 If the operation has a _single_ file parameter, then the file name is used as the primary key.
@@ -151,18 +151,18 @@ For an example of all this in action, see the [Sample 1 walkthrough](../walkthro
 
 
 ### 3) Send the response
-The final step to the Mock middleware is sending a response back to the client.  It uses your Swagger API definition to determine the status code, headers, and content-type of the response.
+The final step to the Mock middleware is sending a response back to the client.  It uses your OpenAPI definition definition to determine the status code, headers, and content-type of the response.
 
 ### How the status code is set
-Each operation in your Swagger API can have multiple responses defined &mdash; one for each HTTP status code, plus a "default" response.  If you define any 2XX or 3XX responses, then the Mock middleware will use the lowest one as the status code.  If you only have a "default" response defined, then it will use HTTP status code that is most appropriate.  For `POST` and `PUT` operations, it will use [HTTP 201 (Created)](http://httpstatusdogs.com/201-created).  For `DELETE` operations that have no response schema, it will use [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content).  For everything else, it uses an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).
+Each operation in your OpenAPI definition can have multiple responses defined &mdash; one for each HTTP status code, plus a "default" response.  If you define any 2XX or 3XX responses, then the Mock middleware will use the lowest one as the status code.  If you only have a "default" response defined, then it will use HTTP status code that is most appropriate.  For `POST` and `PUT` operations, it will use [HTTP 201 (Created)](http://httpstatusdogs.com/201-created).  For `DELETE` operations that have no response schema, it will use [HTTP 204 (No Content)](http://httpstatusdogs.com/204-no-content).  For everything else, it uses an [HTTP 200 (OK)](http://httpstatusdogs.com/200-ok).
 
-> **NOTE:** If your Swagger API doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
+> **NOTE:** If your OpenAPI definition doesn't ave any 2XX or 3XX responses, and no "default" response, then the Mock will use the first status code it finds, which might be an error code.
 
-> **TIP:** If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the Swagger API. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
+> **TIP:** If you set the HTTP status code yourself using custom middleware, then the Mock middleware will use that code as long as it corresponds to a response in the OpenAPI definition. This is useful if you have multiple 2XX responses defined, and you have custom logic that determines which one is sent.
 
 
 ### How response headers are set
-If your Swagger API includes response headers, then the Mock middleware will set them.  If you specify a `default` value for the header, then that value will be used.  If you _don't_ specify a `default`, then the Mock middleware will set the value as follows:
+If your OpenAPI definition includes response headers, then the Mock middleware will set them.  If you specify a `default` value for the header, then that value will be used.  If you _don't_ specify a `default`, then the Mock middleware will set the value as follows:
 
 * `Last-Modified`<br>
 Is set to the date/time that the resource was last modified.
@@ -183,7 +183,7 @@ A random value is generated, based on the data type of the header.
 
 
 ### How the content-type is set
-The response body and `Conent-Type` header are determined by the response schema in your Swagger API.  If there is no response schema at all, then an empty response is sent.  If there _is_ a response schema then its `type` property determines what is sent.
+The response body and `Conent-Type` header are determined by the response schema in your OpenAPI definition.  If there is no response schema at all, then an empty response is sent.  If there _is_ a response schema then its `type` property determines what is sent.
 
 * `object` or `array`<br>
 The response body is sent as JSON.  The `Content-Type` header is set to `application/json` unless your API includes a different JSON MIME type in the `produces` list (such as `text/json`, `application/x-web-app-manifest+json`, etc.)
@@ -197,7 +197,7 @@ The response body is sent as plain text, and the `Content-Type` header is set to
 
 Customizing Behavior
 --------------------------
-The Mock middleware examines your Swagger API, determines what it thinks is the _intended_ behavior, and then performs that behavior.  This includes sending a response to the client, which ends the request.  For this reason, it usually makes sense for the Mock middleware to come __last__ in your app's middleware pipeline.  So if it's the last middleware in the pipeline, then how are you supposed to add additional custom logic?  There are a few different ways:
+The Mock middleware examines your OpenAPI definition, determines what it thinks is the _intended_ behavior, and then performs that behavior.  This includes sending a response to the client, which ends the request.  For this reason, it usually makes sense for the Mock middleware to come __last__ in your app's middleware pipeline.  So if it's the last middleware in the pipeline, then how are you supposed to add additional custom logic?  There are a few different ways:
 
 
 ### Default and example responses

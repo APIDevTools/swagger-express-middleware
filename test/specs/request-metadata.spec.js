@@ -8,7 +8,7 @@ const helper = require("../utils/helper");
 
 describe.only("RequestMetadata middleware", () => {
 
-  it("should set all req.swagger properties for a parameterless path", (done) => {
+  it("should set all req.openapi properties for a parameterless path", (done) => {
     swagger(fixtures.paths.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -17,7 +17,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStore,
           pathName: "/pets",
           path: fixtures.data.petsPath,
@@ -29,7 +29,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set all req.swagger properties for a parameterized path", (done) => {
+  it("should set all req.openapi properties for a parameterized path", (done) => {
     swagger(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
       let counter = 0;
@@ -39,7 +39,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -58,7 +58,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set all req.swagger properties when the API has no basePath", (done) => {
+  it("should set all req.openapi properties when the API has no basePath", (done) => {
     swagger(fixtures.data.petStoreNoBasePath, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -67,7 +67,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.patch("/pets/fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStoreNoBasePath,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -79,7 +79,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should not set any req.swagger properties if the API was not parsed successfully", (done) => {
+  it("should not set any req.openapi properties if the API was not parsed successfully", (done) => {
     swagger(fixtures.paths.blank, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -89,7 +89,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/foo", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: null,
           pathName: "",
           path: null,
@@ -101,7 +101,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should not set any req.swagger properties if the request isn't under the basePath", (done) => {
+  it("should not set any req.openapi properties if the request isn't under the basePath", (done) => {
     swagger(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -111,7 +111,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/pets", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: null,
           pathName: "",
           path: null,
@@ -123,7 +123,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set req.swagger.api, even if the Paths object is empty", (done) => {
+  it("should set req.openapi.api, even if the Paths object is empty", (done) => {
     swagger(fixtures.data.petStoreNoPaths, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -132,8 +132,8 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.patch("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger should be set, even though the path is invalid
+        expect(req.openapi).to.deep.equal({
+          // req.openapi should be set, even though the path is invalid
           api: fixtures.data.petStoreNoPaths,
 
           // The default API security should be set
@@ -149,7 +149,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set req.swagger.api, even if the path isn't matched", (done) => {
+  it("should set req.openapi.api, even if the path isn't matched", (done) => {
     swagger(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
@@ -158,8 +158,8 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/foo", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger should be set, even though the path is invalid
+        expect(req.openapi).to.deep.equal({
+          // req.openapi should be set, even though the path is invalid
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -175,23 +175,23 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set req.swagger.api and req.swagger.path, even if the Path Item has no operations", (done) => {
+  it("should set req.openapi.api and req.openapi.path, even if the Path Item has no operations", (done) => {
     swagger(fixtures.data.petStoreNoOperations, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
-      // The path IS defined in the Swagger API, but there's no POST operation
+      // The path IS defined in the OpenAPI definition, but there's no POST operation
       helper.supertest(express)
         .post("/api/pets/fido")
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api and req.openapi.path should be set, even though the operation is not valid
           api: fixtures.data.petStoreNoOperations,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPathNoOperations,
 
-          // req.swagger.operation should be null
+          // req.openapi.operation should be null
           operation: null,
 
           // Only the path parameter should be set
@@ -204,23 +204,23 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set req.swagger.api and req.swagger.path, even if the operation isn't matched", (done) => {
+  it("should set req.openapi.api and req.openapi.path, even if the operation isn't matched", (done) => {
     swagger(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
-      // The path IS defined in the Swagger API, but there's no POST operation
+      // The path IS defined in the OpenAPI definition, but there's no POST operation
       helper.supertest(express)
         .post("/api/pets/fido")
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api and req.swagger.path should be set, even though the operation is not valid
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api and req.openapi.path should be set, even though the operation is not valid
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
 
-          // req.swagger.operation should be null
+          // req.openapi.operation should be null
           operation: null,
 
           // Only the path parameter should be set
@@ -245,7 +245,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -283,8 +283,8 @@ describe.only("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -317,8 +317,8 @@ describe.only("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -345,10 +345,10 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       // Even though Express is case-insensitive, the metadata middleware IS case-sensitive,
-      // so `req.swagger.path` and `req.swagger.operation` will be null both times.
+      // so `req.openapi.path` and `req.openapi.operation` will be null both times.
       let handler = helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -384,7 +384,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
+        expect(req.openapi).to.deep.equal({
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -421,8 +421,8 @@ describe.only("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -455,8 +455,8 @@ describe.only("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -483,10 +483,10 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       // Even though Express is using loose routing, the metadata middleware is using strict routing,
-      // so `req.swagger.path` and `req.swagger.operation` will be null both times.
+      // so `req.openapi.path` and `req.openapi.operation` will be null both times.
       let handler = helper.spy((req, res, next) => {
-        expect(req.swagger).to.deep.equal({
-          // req.swagger.api should be set because the basePath matches
+        expect(req.openapi).to.deep.equal({
+          // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
           // The default API security should be set
@@ -534,8 +534,8 @@ describe.only("RequestMetadata middleware", () => {
 
       express.patch("/api/pets/:name", helper.spy((req, res, next) => {
         if (++counter === 1) {
-          // req.swagger doesn't get populated on the first request, because the API is invalid
-          expect(req.swagger).to.deep.equal({
+          // req.openapi doesn't get populated on the first request, because the API is invalid
+          expect(req.openapi).to.deep.equal({
             api: {
               swagger: "2.0",
               info: {
@@ -552,8 +552,8 @@ describe.only("RequestMetadata middleware", () => {
           });
         }
         else {
-          // req.swagger DOES get populated on the second request, because the API is now valid
-          expect(req.swagger).to.deep.equal({
+          // req.openapi DOES get populated on the second request, because the API is now valid
+          expect(req.openapi).to.deep.equal({
             api: fixtures.data.petStore,
             pathName: "/pets/{PetName}",
             path: fixtures.data.petPath,
@@ -566,7 +566,7 @@ describe.only("RequestMetadata middleware", () => {
     });
   });
 
-  it("should set req.swagger.security to an empty array if not defined on the operation or API", (done) => {
+  it("should set req.openapi.security to an empty array if not defined on the operation or API", (done) => {
     let api = _.cloneDeep(fixtures.data.petStore);
     delete api.security;
     delete api.paths["/pets"].post.security;
@@ -579,12 +579,12 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger.security).to.have.lengthOf(0);
+        expect(req.openapi.security).to.have.lengthOf(0);
       }));
     });
   });
 
-  it("should set req.swagger.security to an empty array if not defined on the API", (done) => {
+  it("should set req.openapi.security to an empty array if not defined on the API", (done) => {
     let api = _.cloneDeep(fixtures.data.petStore);
     delete api.security;
 
@@ -596,7 +596,7 @@ describe.only("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.delete("/api/pets", helper.spy((req, res, next) => {
-        expect(req.swagger.security).to.have.lengthOf(0);
+        expect(req.openapi.security).to.have.lengthOf(0);
       }));
     });
   });

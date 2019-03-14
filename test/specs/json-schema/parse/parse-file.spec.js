@@ -150,7 +150,7 @@ describe("JSON Schema - parse file params", () => {
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.status).to.equal(500);
-        expect(err.message).to.contain('The "minLength" value in the Swagger API is invalid ("hello world")');
+        expect(err.message).to.contain('The "minLength" value in the OpenAPI definition is invalid ("hello world")');
       }));
     });
   });
@@ -169,7 +169,7 @@ describe("JSON Schema - parse file params", () => {
       express.use("/api/pets/fido/photos", helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(Error);
         expect(err.status).to.equal(500);
-        expect(err.message).to.contain('The "maxLength" value in the Swagger API is invalid ("hello world")');
+        expect(err.message).to.contain('The "maxLength" value in the OpenAPI definition is invalid ("hello world")');
       }));
     });
   });

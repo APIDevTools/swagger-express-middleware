@@ -162,7 +162,7 @@ function testCases (contentType, method) {
     });
   });
 
-  it("should not return anything if no response schema is specified in the Swagger API", (done) => {
+  it("should not return anything if no response schema is specified in the OpenAPI definition", (done) => {
     delete api.paths["/pets"][method].responses[200].schema;
     helper.initTest(api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
@@ -768,7 +768,7 @@ function testCases (contentType, method) {
       });
     });
 
-    it("should not filter by properties that aren't defined in the Swagger API", (done) => {
+    it("should not filter by properties that aren't defined in the OpenAPI definition", (done) => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Name=Lassie&Vet.Address.Street=123%20First%20St.").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "1033");
@@ -778,7 +778,7 @@ function testCases (contentType, method) {
       });
     });
 
-    it("should only filter by properties that are defined in the Swagger API", (done) => {
+    it("should only filter by properties that are defined in the OpenAPI definition", (done) => {
       helper.initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Age=4&Name=Lassie&Vet.Name=Vet%202&Vet.Address.Street=123%20First%20St.").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "169");
