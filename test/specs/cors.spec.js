@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -14,7 +14,7 @@ describe("CORS middleware", () => {
   });
 
   it("should set CORS headers, even if no other middleware is used", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.CORS());
 
       helper.supertest(express)
@@ -33,7 +33,7 @@ describe("CORS middleware", () => {
   });
 
   it("should set CORS headers, even if the Paths object is empty", (done) => {
-    swagger(fixtures.data.petStoreNoPaths, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoPaths, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -52,7 +52,7 @@ describe("CORS middleware", () => {
   });
 
   it("should set CORS headers, even if there are no operations", (done) => {
-    swagger(fixtures.data.petStoreNoOperations, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoOperations, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -71,7 +71,7 @@ describe("CORS middleware", () => {
   });
 
   it("should set CORS headers, even if a parsing error occurs", (done) => {
-    swagger(fixtures.data.blank, (err, middleware) => {
+    createMiddleware(fixtures.data.blank, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -90,7 +90,7 @@ describe("CORS middleware", () => {
   });
 
   it("should echo back CORS headers by default", (done) => {
-    swagger(fixtures.data.petStoreNoPaths, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoPaths, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -129,7 +129,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -178,7 +178,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -260,7 +260,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -282,7 +282,7 @@ describe("CORS middleware", () => {
   });
 
   it("should set Access-Control-Allow-Methods to the methods that are allowed by the OpenAPI definition", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -312,7 +312,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -339,7 +339,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.CORS());
 
       helper.supertest(express)
@@ -365,7 +365,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
       express.use((req, res, next) => {
         res.set("Vary", "Accept-Encoding, Authentication");
@@ -416,7 +416,7 @@ describe("CORS middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // This happens before the CORS middleware, so none of the headers are set
@@ -451,7 +451,7 @@ describe("CORS middleware", () => {
   });
 
   it("should automatically respond to CORS preflight requests, even if they're not defined in the OpenAPI definition", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // This happens before the CORS middleware, so none of the headers are set

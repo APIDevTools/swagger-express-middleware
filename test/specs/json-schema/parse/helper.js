@@ -2,7 +2,7 @@
 
 const _ = require("lodash");
 const fixtures = require("../../../utils/fixtures");
-const swagger = require("../../../../");
+const createMiddleware = require("../../../../");
 const helper = require("../../../utils/helper");
 
 _.extend(exports, helper);
@@ -27,7 +27,7 @@ exports.parse = function (schema, value, done) {
     }
   };
 
-  let middleware = swagger(api, (err) => {
+  let middleware = createMiddleware(api, (err) => {
     if (err) {
       done(err);
     }

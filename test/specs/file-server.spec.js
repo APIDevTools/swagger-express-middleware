@@ -1,6 +1,6 @@
 "use strict";
 
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -17,7 +17,7 @@ describe("FileServer middleware", () => {
 
       describe("dereferenced JSON file", () => {
         it("should serve the fully-dereferenced JSON API", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -29,7 +29,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ apiPath: "" }));
 
             helper.supertest(express)
@@ -40,7 +40,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not serve the fully-dereferenced JSON API if `apiPath` is falsy", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ apiPath: "" }));
 
             helper.supertest(express)
@@ -51,7 +51,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use the path specified in `apiPath`", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -63,7 +63,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use the path specified in `apiPath`", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -75,7 +75,7 @@ describe("FileServer middleware", () => {
         });
 
         it('should not serve at "/api-docs/" if an alternate path specified is set in the options', (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -85,7 +85,7 @@ describe("FileServer middleware", () => {
         });
 
         it('should prepend the API\'s basePath to "/api-docs/"', (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ useBasePath: true }));
 
             helper.supertest(express)
@@ -97,7 +97,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should prepend the API's basePath to the custom path", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files({ useBasePath: true, apiPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -109,7 +109,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not use strict routing by default", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -128,7 +128,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use strict routing if enabled", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express));
 
@@ -152,7 +152,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use case-sensitive routing if enabled", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express));
 
@@ -176,7 +176,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use strict, case-sensitive routing, and a custom URL", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express, { useBasePath: true, apiPath: "/custom/path.json" }));
 
@@ -203,7 +203,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use routing options instead of the Express app's settings", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(
               // These settings will be used instead of the Express App's settings
@@ -224,7 +224,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should return an HTTP 500 if the OpenAPI definition is invalid", (done) => {
-          swagger(fixtures.paths.blank, (err, middleware) => {
+          createMiddleware(fixtures.paths.blank, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -236,7 +236,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to POST requests", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -247,7 +247,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to PUT requests", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -258,7 +258,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to PATCH requests", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -269,7 +269,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to DELETE requests", (done) => {
-          swagger(fixtures.paths.petStore, (err, middleware) => {
+          createMiddleware(fixtures.paths.petStore, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -302,7 +302,7 @@ describe("FileServer middleware", () => {
         }
 
         it("should serve the raw Swagger file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             if (err) {
               return done(err);
             }
@@ -319,7 +319,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should serve a referenced file in the same directory as the main Swagger file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -332,7 +332,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should serve a referenced file in a subdirectory of the main Swagger file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -345,7 +345,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should serve a referenced file in a parent directory of the main Swagger file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -358,7 +358,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should serve a referenced file in a parent directory of the main Swagger file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -371,7 +371,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should serve a referenced binary file", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -384,7 +384,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not serve the raw Swagger file if the path is falsy", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files({ rawFilesPath: "" }));
 
             helper.supertest(express)
@@ -395,7 +395,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use the path specified in the options", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path/" }));
 
             helper.supertest(express)
@@ -408,7 +408,7 @@ describe("FileServer middleware", () => {
         });
 
         it('should not serve at "/api-docs/" if an alternate path specified is set in the options', (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -418,7 +418,7 @@ describe("FileServer middleware", () => {
         });
 
         it('should prepend the API\'s basePath to "/api-docs/"', (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files({ useBasePath: true }));
 
             helper.supertest(express)
@@ -431,7 +431,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should prepend the API's basePath to the custom path", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files({ useBasePath: true, rawFilesPath: "/my/custom/path" }));
 
             helper.supertest(express)
@@ -444,7 +444,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not use strict routing by default", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -464,7 +464,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use strict routing if enabled", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express));
 
@@ -489,7 +489,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use case-sensitive routing if enabled", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express));
 
@@ -514,7 +514,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use strict, case-sensitive routing, and a custom URL", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(express, { useBasePath: true, rawFilesPath: "/custom/path.json" }));
 
@@ -541,7 +541,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should use routing options instead of the Express app's settings", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express();
             express.use(middleware.files(
               // These settings will be used instead of the Express App's settings
@@ -563,7 +563,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to POST requests", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -574,7 +574,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to PUT requests", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -585,7 +585,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to PATCH requests", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)
@@ -596,7 +596,7 @@ describe("FileServer middleware", () => {
         });
 
         it("should not respond to DELETE requests", (done) => {
-          swagger(fixtures.paths.externalRefs, (err, middleware) => {
+          createMiddleware(fixtures.paths.externalRefs, (err, middleware) => {
             let express = helper.express(middleware.files());
 
             helper.supertest(express)

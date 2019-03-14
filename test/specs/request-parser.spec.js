@@ -1,6 +1,6 @@
 "use strict";
 
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -10,7 +10,7 @@ describe("RequestParser middleware", () => {
 
   describe("method signatures", () => {
     it("can be called without any params", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -25,7 +25,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be called with just an Express app", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express();
         express.use(middleware.parseRequest(express));
 
@@ -41,7 +41,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be called with just routing options", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ caseSensitive: true, secret: "abc123" }));
 
         helper.supertest(express)
@@ -56,7 +56,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be called with just options", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
         helper.supertest(express)
@@ -71,7 +71,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be called with an Express app and options", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express();
         express.use(middleware.parseRequest(express, { cookie: { secret: "abc123" }}));
 
@@ -87,7 +87,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be called with a routing options and options", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ caseSensitive: true }, { cookie: { secret: "abc123" }}));
 
         helper.supertest(express)
@@ -104,7 +104,7 @@ describe("RequestParser middleware", () => {
 
   describe("Cookie parser", () => {
     it("should parse unsigned cookies", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -126,7 +126,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse signed cookies if a secret is provided", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
         helper.supertest(express)
@@ -151,7 +151,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not parse signed cookies if no secret is provided", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -174,7 +174,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse signed and unsigned cookies if a secret is provided", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
         helper.supertest(express)
@@ -203,7 +203,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not throw an error if the cookie header is invalid", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -218,7 +218,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not throw an error if cookie values are invalid", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -237,7 +237,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not throw an error if signed cookies are invalid", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({ cookie: { secret: "abc123" }}));
 
         helper.supertest(express)
@@ -263,7 +263,7 @@ describe("RequestParser middleware", () => {
 
   describe("JSON parser", () => {
     it("should parse application/json", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -280,7 +280,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse text/json", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -297,7 +297,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse application/calendar+json", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let data = { foo: "bar", biz: 42, baz: ["A", "b", 3]};
 
@@ -314,7 +314,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be modified to accept other content types", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({
           json: { type: "foo/bar" }
         }));
@@ -333,7 +333,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should throw an error if the JSON is malformed", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -357,7 +357,7 @@ describe("RequestParser middleware", () => {
 
   describe("Text parser", () => {
     it("should parse text/plain", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -373,7 +373,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse text/css", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -389,7 +389,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse text/xml", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -405,7 +405,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be modified to accept other content types", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({
           text: { type: "foo/bar" }
         }));
@@ -425,7 +425,7 @@ describe("RequestParser middleware", () => {
 
   describe("URL-encoded parser", () => {
     it("should parse encoded data", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -449,7 +449,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be modified to accept other content types", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({
           urlencoded: { type: "foo/bar" }
         }));
@@ -475,7 +475,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not throw an error if the data is malformed", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -498,7 +498,7 @@ describe("RequestParser middleware", () => {
 
   describe("Raw parser", () => {
     it("should parse plain text as a Buffer", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -515,7 +515,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse binary data as a Buffer", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let buffer = fs.readFileSync(fixtures.paths.oneMB);
 
@@ -533,7 +533,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse application/xml as a Buffer", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -550,7 +550,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse application/soap+xml as a Buffer", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -567,7 +567,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should support large files (up to 5MB) by default", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let buffer = fs.readFileSync(fixtures.paths.fiveMB);
 
@@ -587,7 +587,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should not support files larger than 5MB by default", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
         let buffer = fs.readFileSync(fixtures.paths.sixMB);
 
@@ -611,7 +611,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should support files larger than 5MB if configured to", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({
           raw: { limit: "6mb" }
         }));
@@ -633,7 +633,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("can be modified to accept other content types", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest({
           raw: { type: "foo/bar" }
         }));
@@ -654,7 +654,7 @@ describe("RequestParser middleware", () => {
 
   describe("Multipart form data parser", () => {
     it("should parse simple fields", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -686,7 +686,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse file attachments", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -729,7 +729,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should parse a mix of fields and file attachments", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -789,7 +789,7 @@ describe("RequestParser middleware", () => {
     });
 
     it("should support large file attachments by default", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)

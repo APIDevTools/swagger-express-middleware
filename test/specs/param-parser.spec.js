@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -10,7 +10,7 @@ describe("ParamParser middleware", () => {
 
   describe("Query param parser", () => {
     it("should not parse query params if the metadata middleware is not used", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -27,7 +27,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should parse query params", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -53,7 +53,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should decode encoded query params", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -79,7 +79,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should set query params to undefined if optional and unspecified", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -110,7 +110,7 @@ describe("ParamParser middleware", () => {
       _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).default = "hello,world";
       _.find(api.paths["/pets"].get.parameters, { name: "Type" }).default = "hello world";
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -136,7 +136,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should throw an error if query params are invalid", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -168,7 +168,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should not parse header params if the metadata middleware is not used", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -189,7 +189,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should parse header params", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -210,7 +210,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should decode encoded header params", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -231,7 +231,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should set header params to undefined if optional and unspecified", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -254,7 +254,7 @@ describe("ParamParser middleware", () => {
       _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).default = "hello,world";
       _.find(api.paths["/pets"].get.parameters, { name: "Type" }).default = "hello world";
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -273,7 +273,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should throw an error if header params are invalid", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -301,7 +301,7 @@ describe("ParamParser middleware", () => {
         type: "integer"
       });
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -331,7 +331,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should not parse formData params if the metadata middleware is not used", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
 
         helper.supertest(express)
@@ -350,7 +350,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should parse formData params", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -378,7 +378,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should decode encoded formData params", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -406,7 +406,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should set formData params to undefined if optional and unspecified", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -436,7 +436,7 @@ describe("ParamParser middleware", () => {
       _.find(api.paths["/pets"].put.parameters, { name: "Tags" }).default = "hello,world";
       _.find(api.paths["/pets"].put.parameters, { name: "Type" }).default = "hello world";
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -462,7 +462,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should throw an error if formData params are invalid", (done) => {
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -482,7 +482,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should parse file params", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -520,7 +520,7 @@ describe("ParamParser middleware", () => {
 
   describe("Body param parser", () => {
     it("should parse the body param", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -538,7 +538,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should validate a non-JSON body param, if third-party parsing middleware is used", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express();
         express.use(middleware.metadata());
         express.use(myXmlParser);   // <--- NOTE: This middleware must come before the `parseRequest` middleware
@@ -574,7 +574,7 @@ describe("ParamParser middleware", () => {
         type: "integer"
       };
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -599,7 +599,7 @@ describe("ParamParser middleware", () => {
       let api = _.cloneDeep(fixtures.data.petStore);
       api.paths["/pets/{PetName}"].patch.parameters[0].required = false;
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -618,7 +618,7 @@ describe("ParamParser middleware", () => {
       petParam.required = false;
       petParam.schema.default = { Name: "Fido", Type: "dog" };
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -635,7 +635,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should throw an error if the body param is required and unspecified", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -653,7 +653,7 @@ describe("ParamParser middleware", () => {
       let api = _.cloneDeep(fixtures.data.petStore);
       api.paths["/pets/{PetName}"].patch.parameters[0].schema.default = '{"name": "Fluffy", "type": "cat"}';
 
-      swagger(api, (err, middleware) => {
+      createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
@@ -668,7 +668,7 @@ describe("ParamParser middleware", () => {
     });
 
     it("should throw an error if the body param is invalid", (done) => {
-      swagger(fixtures.data.petStore, (err, middleware) => {
+      createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)

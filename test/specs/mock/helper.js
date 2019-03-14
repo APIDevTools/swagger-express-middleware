@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../../");
+const { createMiddleware, DataStore } = require("../../../");
 const helper = require("../../utils/helper");
 const util = require("../../../lib/helpers/util");
 
@@ -28,7 +28,7 @@ exports.initTest = function (express, dataStore, fns, api, test) {
     case 3:
       test = arguments[2];
       api = arguments[1];
-      if (arguments[0] instanceof swagger.DataStore) {
+      if (arguments[0] instanceof DataStore) {
         dataStore = arguments[0];
         fns = undefined;
         express = undefined;
@@ -55,7 +55,7 @@ exports.initTest = function (express, dataStore, fns, api, test) {
   express = express || helper.express();
   let supertest = helper.supertest(express.app || express);
 
-  swagger(api, express, (err, middleware) => {
+  createMiddleware(api, express, (err, middleware) => {
     express.use(
       middleware.metadata(),
       middleware.CORS(),

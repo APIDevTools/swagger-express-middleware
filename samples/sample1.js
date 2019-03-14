@@ -3,17 +3,17 @@
  * It simply creates a new Express Application and adds all of the Swagger middleware
  * without changing any options, and without adding any custom middleware.
  **************************************************************************************************/
-'use strict';
+"use strict";
 
-const createMiddleware = require('swagger-express-middleware');
-const path = require('path');
-const express = require('express');
+const createMiddleware = require("swagger-express-middleware");
+const path = require("path");
+const express = require("express");
 
 // Create an Express app
 const app = express();
 
 // Initialize Swagger Express Middleware with our Swagger file
-let swaggerFile = path.join(__dirname, 'PetStore.yaml');
+let swaggerFile = path.join(__dirname, "PetStore.yaml");
 createMiddleware(swaggerFile, app, (err, middleware) => {
 
   // Add all the Swagger Express Middleware, or just the ones you need.
@@ -29,6 +29,6 @@ createMiddleware(swaggerFile, app, (err, middleware) => {
 
   // Start the app
   app.listen(8000, () => {
-    console.log('The Swagger Pet Store is now running at http://localhost:8000');
+    console.log("The Swagger Pet Store is now running at http://localhost:8000");
   });
 });

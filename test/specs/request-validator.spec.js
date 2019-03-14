@@ -2,7 +2,7 @@
 
 const _ = require("lodash");
 const sinon = require("sinon");
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -15,7 +15,7 @@ describe("RequestValidator middleware", () => {
   });
 
   function initTest (callback) {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       express = helper.express(middleware.metadata(), middleware.parseRequest(), middleware.validateRequest());
       supertest = helper.supertest(express);
       callback(err, middleware);
@@ -23,7 +23,7 @@ describe("RequestValidator middleware", () => {
   }
 
   it("all validations should pass if no other middleware is used", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       express = helper.express(middleware.validateRequest());
 
       helper.supertest(express)
@@ -85,7 +85,7 @@ describe("RequestValidator middleware", () => {
 
   describe("http500", () => {
     it("should throw an error if a parsing error occurs", (done) => {
-      swagger(fixtures.paths.blank, (err, middleware) => {
+      createMiddleware(fixtures.paths.blank, (err, middleware) => {
         express = helper.express(middleware.metadata(), middleware.parseRequest(), middleware.validateRequest());
         supertest = helper.supertest(express);
 

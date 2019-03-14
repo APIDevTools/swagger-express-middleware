@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
@@ -9,7 +9,7 @@ const helper = require("../utils/helper");
 describe("PathParser middleware", () => {
 
   it("should not parse path params if the metadata middleware is not used", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.parseRequest(express));
 
@@ -28,7 +28,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should parse path params", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express, {}));
@@ -50,7 +50,7 @@ describe("PathParser middleware", () => {
   it("should parse path params using the Express app of the Middleware class", (done) => {
     // The Express app is passed to the Middleware class
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(middleware.metadata());          // <--- The Express app is NOT passed to the Metadata class
       express.use(middleware.parseRequest({}));    // <--- The Express app is NOT passed to the PathParser class
 
@@ -71,7 +71,7 @@ describe("PathParser middleware", () => {
   it("should parse path params using the Express app of the Middleware class, even if routing options are specified", (done) => {
     // The Express app is passed to the Middleware class
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(middleware.metadata());                                 // <--- The Express app is NOT passed to the Metadata class
       express.use(middleware.parseRequest({ caseSensitive: true }, {}));    // <--- The Express app is NOT passed to the PathParser class
 
@@ -100,7 +100,7 @@ describe("PathParser middleware", () => {
       }
     ];
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express, {}));
@@ -120,7 +120,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should decode encoded path params", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express, {}));
@@ -164,7 +164,7 @@ describe("PathParser middleware", () => {
       }
     };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));
@@ -190,7 +190,7 @@ describe("PathParser middleware", () => {
   it("should parse path params of nested Routers that use the `parseRequest` middleware", (done) => {
     // The Express app is passed to the Middleware class
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       let router1 = helper.router();
       let router2 = helper.router();
       let router3 = helper.router();
@@ -260,7 +260,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should not set req.params properties if the path is not parameterized", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));
@@ -278,7 +278,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should not parse path params if the middleware is not parameterized", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));
@@ -303,7 +303,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should not parse path params if param names don't match", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));
@@ -337,7 +337,7 @@ describe("PathParser middleware", () => {
       type: "string"
     });
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express, {}));
@@ -359,7 +359,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should throw an error if path params are invalid", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));
@@ -393,7 +393,7 @@ describe("PathParser middleware", () => {
     let supertest = helper.supertest(express);
 
     // Load an invalid (blank) API
-    swagger(fixtures.data.blank, express, (err, middleware) => {
+    createMiddleware(fixtures.data.blank, express, (err, middleware) => {
       express.use(middleware.metadata());
       express.use(middleware.parseRequest());
       let counter = 0;
@@ -435,7 +435,7 @@ describe("PathParser middleware", () => {
   it("should detect changes to existing path params when the API changes", (done) => {
     let express = helper.express();
     let supertest = helper.supertest(express);
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(middleware.metadata());
       express.use(middleware.parseRequest());
       let counter = 0;
@@ -478,7 +478,7 @@ describe("PathParser middleware", () => {
   });
 
   it("should stop parsing path params that no longer exist after the API changes", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express));

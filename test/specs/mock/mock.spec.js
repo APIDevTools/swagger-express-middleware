@@ -1,6 +1,6 @@
 "use strict";
 
-const swagger = require("../../../");
+const { createMiddleware, Resource, MemoryDataStore } = require("../../../");
 const { expect } = require("chai");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
@@ -8,7 +8,7 @@ const helper = require("./helper");
 describe("Mock middleware", () => {
 
   it("should do nothing if no other middleware is used", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.mock());
 
       helper.supertest(express)
@@ -23,7 +23,7 @@ describe("Mock middleware", () => {
   });
 
   it("should do nothing if the Metadata middleware is not used", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(
         middleware.CORS(), middleware.parseRequest(), middleware.validateRequest(), middleware.mock()
       );
@@ -40,7 +40,7 @@ describe("Mock middleware", () => {
   });
 
   it("should do nothing if the API is not valid", (done) => {
-    swagger(fixtures.data.blank, (err, middleware) => {
+    createMiddleware(fixtures.data.blank, (err, middleware) => {
       let express = helper.express(
         middleware.metadata(), middleware.CORS(), middleware.parseRequest(), middleware.mock()
       );
@@ -72,7 +72,7 @@ describe("Mock middleware", () => {
 
   it('should do nothing if "mock" is disabled in Express', (done) => {
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(
         middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
         middleware.validateRequest(), middleware.mock()
@@ -100,7 +100,7 @@ describe("Mock middleware", () => {
   });
 
   it("can be passed an Express Application", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       let supertest = helper.supertest(express);
 
@@ -129,10 +129,10 @@ describe("Mock middleware", () => {
   });
 
   it("can be passed a data store", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
 
       express.use(
         middleware.metadata(), middleware.CORS(), middleware.parseRequest(),
@@ -145,7 +145,7 @@ describe("Mock middleware", () => {
         .expect(201, "")
         .end(helper.checkResults(done, () => {
           // Remove the item from the data store
-          dataStore.delete(new swagger.Resource("/api/pets/fido"), () => {
+          dataStore.delete(new Resource("/api/pets/fido"), () => {
             // Now this request will return nothing, because the resource is no longer in the data store
             supertest
               .get("/API/PETS")
@@ -157,10 +157,10 @@ describe("Mock middleware", () => {
   });
 
   it("can be passed an Express App and a data store", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       let supertest = helper.supertest(express);
-      let dataStore = new swagger.MemoryDataStore();
+      let dataStore = new MemoryDataStore();
 
       // NOTE: Only passing the Express App to the mock middleware
       // All other middleware will always default to case-insensitive
@@ -183,7 +183,7 @@ describe("Mock middleware", () => {
             .expect(200, [])
             .end(helper.checkResults(done, () => {
               // Remove the item from the data store
-              dataStore.delete(new swagger.Resource("/api/pets/Fido"), () => {
+              dataStore.delete(new Resource("/api/pets/Fido"), () => {
                 // Now this request will return nothing, because the resource is no longer in the data store
                 supertest
                   .get("/api/pets")
@@ -198,8 +198,8 @@ describe("Mock middleware", () => {
   it("should get the data store from the Express App", (done) => {
     let express = helper.express();
     let supertest = helper.supertest(express);
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
-      let dataStore = new swagger.MemoryDataStore();
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
+      let dataStore = new MemoryDataStore();
 
       // Setting the "mock data store" on the Express App
       express.set("mock data store", dataStore);
@@ -210,7 +210,7 @@ describe("Mock middleware", () => {
       );
 
       // Add a resource to the data store
-      let resource = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
         // Make sure the Mock middleware is using the data store
@@ -225,9 +225,9 @@ describe("Mock middleware", () => {
   it("should get the data store from the Express App instead of the param", (done) => {
     let express = helper.express();
     let supertest = helper.supertest(express);
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
-      let dataStore1 = new swagger.MemoryDataStore();
-      let dataStore2 = new swagger.MemoryDataStore();
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
+      let dataStore1 = new MemoryDataStore();
+      let dataStore2 = new MemoryDataStore();
 
       // Set the "mock data store" to data store #1
       express.set("mock data store", dataStore1);
@@ -241,9 +241,9 @@ describe("Mock middleware", () => {
       );
 
       // Add different resources to each data store
-      let resource1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let resource1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore1.save(resource1, () => {
-        let resource2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+        let resource2 = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
         dataStore2.save(resource2, () => {
 
           // Make sure the Mock middleware is using data store #1
@@ -259,9 +259,9 @@ describe("Mock middleware", () => {
   it("should detect changes to the data store from the Express App", (done) => {
     let express = helper.express();
     let supertest = helper.supertest(express);
-    swagger(fixtures.data.petStore, express, (err, middleware) => {
-      let dataStore1 = new swagger.MemoryDataStore();
-      let dataStore2 = new swagger.MemoryDataStore();
+    createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
+      let dataStore1 = new MemoryDataStore();
+      let dataStore2 = new MemoryDataStore();
 
       express.use(
         middleware.metadata(), middleware.CORS(),
@@ -272,9 +272,9 @@ describe("Mock middleware", () => {
       );
 
       // Add different resources to each data store
-      let resource1 = new swagger.Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
+      let resource1 = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore1.save(resource1, () => {
-        let resource2 = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
+        let resource2 = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
         dataStore2.save(resource2, () => {
 
           // Switch to data store #2

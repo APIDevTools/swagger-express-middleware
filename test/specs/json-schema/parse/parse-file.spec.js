@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../../../");
+const createMiddleware = require("../../../../");
 const { expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
 const helper = require("./helper");
@@ -19,7 +19,7 @@ describe("JSON Schema - parse file params", () => {
   });
 
   it("should parse a valid file param", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -36,7 +36,7 @@ describe("JSON Schema - parse file params", () => {
   it("should parse large file params if there is no maxLength", (done) => {
     photoParam.maxLength = undefined;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -53,7 +53,7 @@ describe("JSON Schema - parse file params", () => {
   it("should parse empty file params if there is no minLength", (done) => {
     photoParam.minLength = undefined;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -70,7 +70,7 @@ describe("JSON Schema - parse file params", () => {
   it("should parse an optional, unspecified file param", (done) => {
     photoParam.required = false;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -87,7 +87,7 @@ describe("JSON Schema - parse file params", () => {
     photoParam.required = false;
     photoParam.default = { path: "/", size: 100 };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -103,7 +103,7 @@ describe("JSON Schema - parse file params", () => {
   it("should throw an error if the file is smaller than the minLength", (done) => {
     photoParam.minLength = 2000000;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -120,7 +120,7 @@ describe("JSON Schema - parse file params", () => {
   });
 
   it("should throw an HTTP 413 error if the file is larger than the maxLength", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -139,7 +139,7 @@ describe("JSON Schema - parse file params", () => {
   it("should throw an error if the minLength is invalid", (done) => {
     photoParam.minLength = "hello world";
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -158,7 +158,7 @@ describe("JSON Schema - parse file params", () => {
   it("should throw an error if the maxLength is invalid", (done) => {
     photoParam.maxLength = "hello world";
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -175,7 +175,7 @@ describe("JSON Schema - parse file params", () => {
   });
 
   it("should throw an error if required and not specified", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -194,7 +194,7 @@ describe("JSON Schema - parse file params", () => {
     photoParam.required = false;
     photoParam.default = {};
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)

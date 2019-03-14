@@ -1,38 +1,35 @@
-'use strict';
+"use strict";
 /**************************************************************************************************
  * This sample demonstrates a few more advanced features of Swagger-Express-Middleware,
  * such as setting a few options, initializing the mock data store, and adding custom middleware logic.
  **************************************************************************************************/
 
-const util = require('util');
-const path = require('path');
-const express = require('express');
-const swagger = require('swagger-express-middleware');
-const Middleware = swagger.Middleware;
-const MemoryDataStore = swagger.MemoryDataStore;
-const Resource = swagger.Resource;
+const util = require("util");
+const path = require("path");
+const express = require("express");
+const { Middleware, MemoryDataStore, Resource } = require("swagger-express-middleware");
 
 let app = express();
 let middleware = new Middleware(app);
 
 // Initialize Swagger Express Middleware with our Swagger file
-let swaggerFile = path.join(__dirname, 'PetStore.yaml');
+let swaggerFile = path.join(__dirname, "PetStore.yaml");
 middleware.init(swaggerFile, (err) => {
 
   // Create a custom data store with some initial mock data
   let myDB = new MemoryDataStore();
   myDB.save(
-    new Resource('/pets/Lassie', { name: 'Lassie', type: 'dog', tags: ['brown', 'white']}),
-    new Resource('/pets/Clifford', { name: 'Clifford', type: 'dog', tags: ['red', 'big']}),
-    new Resource('/pets/Garfield', { name: 'Garfield', type: 'cat', tags: ['orange']}),
-    new Resource('/pets/Snoopy', { name: 'Snoopy', type: 'dog', tags: ['black', 'white']}),
-    new Resource('/pets/Hello%20Kitty', { name: 'Hello Kitty', type: 'cat', tags: ['white']})
+    new Resource("/pets/Lassie", { name: "Lassie", type: "dog", tags: ["brown", "white"]}),
+    new Resource("/pets/Clifford", { name: "Clifford", type: "dog", tags: ["red", "big"]}),
+    new Resource("/pets/Garfield", { name: "Garfield", type: "cat", tags: ["orange"]}),
+    new Resource("/pets/Snoopy", { name: "Snoopy", type: "dog", tags: ["black", "white"]}),
+    new Resource("/pets/Hello%20Kitty", { name: "Hello Kitty", type: "cat", tags: ["white"]})
   );
 
   // Enable Express' case-sensitive and strict options
   // (so "/pets/Fido", "/pets/fido", and "/pets/fido/" are all different)
-  app.enable('case sensitive routing');
-  app.enable('strict routing');
+  app.enable("case sensitive routing");
+  app.enable("strict routing");
 
   app.use(middleware.metadata());
   app.use(middleware.files(
@@ -44,7 +41,7 @@ middleware.init(swaggerFile, (err) => {
     },
     {
       // Serve the OpenAPI definition from "/swagger/api" instead of "/api-docs"
-      apiPath: '/swagger/api',
+      apiPath: "/swagger/api",
 
       // Disable serving the "PetStore.yaml" file
       rawFilesPath: false
@@ -55,17 +52,17 @@ middleware.init(swaggerFile, (err) => {
     {
       // Configure the cookie parser to use secure cookies
       cookie: {
-        secret: 'MySuperSecureSecretKey'
+        secret: "MySuperSecureSecretKey"
       },
 
       // Don't allow JSON content over 100kb (default is 1mb)
       json: {
-        limit: '100kb'
+        limit: "100kb"
       },
 
       // Change the location for uploaded pet photos (default is the system's temp directory)
       multipart: {
-        dest: path.join(__dirname, 'photos')
+        dest: path.join(__dirname, "photos")
       }
     }
   ));
@@ -77,7 +74,7 @@ middleware.init(swaggerFile, (err) => {
   );
 
   // Add custom middleware
-  app.patch('/pets/:petName', (req, res, next) => {
+  app.patch("/pets/:petName", (req, res, next) => {
     if (req.body.name !== req.params.petName) {
       // The pet's name has changed, so change its URL.
       // Start by deleting the old resource
@@ -91,7 +88,7 @@ middleware.init(swaggerFile, (err) => {
         }
 
         // Save the pet with the new URL
-        myDB.save(new Resource('/pets', req.body.name, pet), (err, pet) => {
+        myDB.save(new Resource("/pets", req.body.name, pet), (err, pet) => {
           // Send the response
           res.json(pet.data);
         });
@@ -109,11 +106,11 @@ middleware.init(swaggerFile, (err) => {
   // Add a custom error handler that returns errors as HTML
   app.use((err, req, res, next) => {
     res.status(err.status);
-    res.type('html');
-    res.send(util.format('<html><body><h1>%d Error!</h1><p>%s</p></body></html>', err.status, err.message));
+    res.type("html");
+    res.send(util.format("<html><body><h1>%d Error!</h1><p>%s</p></body></html>", err.status, err.message));
   });
 
   app.listen(8000, () => {
-    console.log('The Swagger Pet Store is now running at http://localhost:8000');
+    console.log("The Swagger Pet Store is now running at http://localhost:8000");
   });
 });

@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../../../");
+const createMiddleware = require("../../../../");
 const fixtures = require("../../../utils/fixtures");
 const { expect } = require("chai");
 const helper = require("./helper");
@@ -16,7 +16,7 @@ describe("JSON Schema - parse object params", () => {
   });
 
   it("should parse a valid object param", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -36,7 +36,7 @@ describe("JSON Schema - parse object params", () => {
   it("should parse an optional, unspecified object param", (done) => {
     petParam.required = false;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -53,7 +53,7 @@ describe("JSON Schema - parse object params", () => {
     petParam.required = false;
     petParam.schema.default = { Name: "Fido", Type: "dog" };
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -73,7 +73,7 @@ describe("JSON Schema - parse object params", () => {
     petParam.required = false;
     petParam.schema.default = '{"Name": "Fido", "Type": "dog"}';
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -93,7 +93,7 @@ describe("JSON Schema - parse object params", () => {
     petParam.required = false;
     petParam.schema.default = '{"Name": "Fido", "Type": "dog"}';
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -112,7 +112,7 @@ describe("JSON Schema - parse object params", () => {
   });
 
   it("should throw an error if the value is blank", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -130,7 +130,7 @@ describe("JSON Schema - parse object params", () => {
   });
 
   it("should throw an error if schema validation fails", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
@@ -147,7 +147,7 @@ describe("JSON Schema - parse object params", () => {
   });
 
   it("should throw an error if required and not specified", (done) => {
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)

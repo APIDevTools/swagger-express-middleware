@@ -1,15 +1,15 @@
 "use strict";
 
 const _ = require("lodash");
-const swagger = require("../../");
+const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 
-describe.only("RequestMetadata middleware", () => {
+describe("RequestMetadata middleware", () => {
 
   it("should set all req.openapi properties for a parameterless path", (done) => {
-    swagger(fixtures.paths.petStore, (err, middleware) => {
+    createMiddleware(fixtures.paths.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)
@@ -30,7 +30,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set all req.openapi properties for a parameterized path", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
       let counter = 0;
 
@@ -59,7 +59,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set all req.openapi properties when the API has no basePath", (done) => {
-    swagger(fixtures.data.petStoreNoBasePath, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoBasePath, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)
@@ -80,7 +80,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should not set any req.openapi properties if the API was not parsed successfully", (done) => {
-    swagger(fixtures.paths.blank, (err, middleware) => {
+    createMiddleware(fixtures.paths.blank, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // Doesn't matter what path we browse to
@@ -102,7 +102,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should not set any req.openapi properties if the request isn't under the basePath", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // "/pets" isn't under the "/api" basePath
@@ -124,7 +124,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set req.openapi.api, even if the Paths object is empty", (done) => {
-    swagger(fixtures.data.petStoreNoPaths, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoPaths, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)
@@ -150,7 +150,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set req.openapi.api, even if the path isn't matched", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)
@@ -176,7 +176,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set req.openapi.api and req.openapi.path, even if the Path Item has no operations", (done) => {
-    swagger(fixtures.data.petStoreNoOperations, (err, middleware) => {
+    createMiddleware(fixtures.data.petStoreNoOperations, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // The path IS defined in the OpenAPI definition, but there's no POST operation
@@ -205,7 +205,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it("should set req.openapi.api and req.openapi.path, even if the operation isn't matched", (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       // The path IS defined in the OpenAPI definition, but there's no POST operation
@@ -234,7 +234,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use case-insensitive matching if "case sensitive routing" is disabled', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
       let counter = 0;
 
@@ -267,7 +267,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use case-sensitive matching if "case sensitive routing" is enabled', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.enable("case sensitive routing");
       express.use(middleware.metadata(express));
@@ -302,7 +302,7 @@ describe.only("RequestMetadata middleware", () => {
 
   it('should use case-sensitive matching if "case sensitive routing" is enabled on the Middleware class', (done) => {
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+    createMiddleware(fixtures.data.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
       express.enable("case sensitive routing");
       express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
@@ -335,7 +335,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use case-sensitive matching if "caseSensitive" is set', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata({ caseSensitive: true }));
       let counter = 0;
 
@@ -373,7 +373,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use loose matching if "strict routing" is disabled', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata());
       let counter = 0;
 
@@ -405,7 +405,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use strict matching if "strict routing" is enabled', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.enable("strict routing");
       express.use(middleware.metadata(express));
@@ -440,7 +440,7 @@ describe.only("RequestMetadata middleware", () => {
 
   it('should use strict matching if "strict routing" is enabled on the Middleware class', (done) => {
     let express = helper.express();
-    swagger(fixtures.data.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+    createMiddleware(fixtures.data.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
       express.enable("strict routing");
       express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
@@ -473,7 +473,7 @@ describe.only("RequestMetadata middleware", () => {
   });
 
   it('should use strict matching if "strict" is set', (done) => {
-    swagger(fixtures.data.petStore, (err, middleware) => {
+    createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata({ strict: true }));
       let counter = 0;
 
@@ -514,7 +514,7 @@ describe.only("RequestMetadata middleware", () => {
     let express = helper.express();
 
     // Load an invalid (blank) API
-    swagger(fixtures.data.blank, express, (err, middleware) => {
+    createMiddleware(fixtures.data.blank, express, (err, middleware) => {
       express.use(middleware.metadata(express));
       let supertest = helper.supertest(express);
       let counter = 0;
@@ -571,7 +571,7 @@ describe.only("RequestMetadata middleware", () => {
     delete api.security;
     delete api.paths["/pets"].post.security;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)
@@ -588,7 +588,7 @@ describe.only("RequestMetadata middleware", () => {
     let api = _.cloneDeep(fixtures.data.petStore);
     delete api.security;
 
-    swagger(api, (err, middleware) => {
+    createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata());
 
       helper.supertest(express)

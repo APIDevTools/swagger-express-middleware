@@ -23,12 +23,12 @@ But any of the examples or samples could be rewritten to use the [Middleware cla
 
 ```javascript
 const express = require('express');
-const swagger = require('swagger-express-middleware');
+const { Middleware } = require('swagger-express-middleware');
 
 let app = express();
 
 // Create a Middleware object
-let middleware = new swagger.Middleware(app);
+let middleware = new Middleware(app);
 
 // Call its init method
 middleware.init('PetStore.yaml', function(err) {
