@@ -7,7 +7,7 @@ const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Query Collection Mock", () => {
+describe.skip("Query Collection Mock", () => {
   let availableContentTypes = _.intersection(fixtures.data.petStore.consumes, fixtures.data.petStore.produces);
 
   availableContentTypes.forEach((contentType) => {

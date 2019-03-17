@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 
-describe("RequestMetadata middleware", () => {
+describe.skip("RequestMetadata middleware", () => {
 
   it("should set all req.openapi properties for a parameterless path", (done) => {
     createMiddleware(fixtures.paths.petStore, (err, middleware) => {

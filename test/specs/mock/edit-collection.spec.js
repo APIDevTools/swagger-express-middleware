@@ -6,7 +6,7 @@ const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Edit Collection Mock", () => {
+describe.skip("Edit Collection Mock", () => {
   ["patch", "put", "post"].forEach((method) => {
     describe(method.toUpperCase(), () => {
 

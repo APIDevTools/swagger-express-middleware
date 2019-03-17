@@ -5,7 +5,7 @@ const { expect } = require("chai");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Mock middleware", () => {
+describe.skip("Mock middleware", () => {
 
   it("should do nothing if no other middleware is used", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {

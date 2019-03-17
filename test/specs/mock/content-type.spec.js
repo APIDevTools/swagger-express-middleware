@@ -6,7 +6,7 @@ const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Mock Content-Type header", () => {
+describe.skip("Mock Content-Type header", () => {
 
   let api;
   beforeEach(() => {

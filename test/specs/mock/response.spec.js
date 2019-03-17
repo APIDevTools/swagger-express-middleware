@@ -4,7 +4,7 @@ const _ = require("lodash");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Mock Response", () => {
+describe.skip("Mock Response", () => {
 
   let api;
   beforeEach(() => {

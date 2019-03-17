@@ -8,7 +8,7 @@ const helper = require("./helper");
 
 let api, photoParam;
 
-describe("JSON Schema - parse file params", () => {
+describe.skip("JSON Schema - parse file params", () => {
 
   beforeEach(() => {
     api = _.cloneDeep(fixtures.data.petStore);

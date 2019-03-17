@@ -3,7 +3,7 @@
 const { expect } = require("chai");
 const helper = require("./helper");
 
-describe("JSON Schema - parse date-time params", () => {
+describe.skip("JSON Schema - parse date-time params", () => {
 
   it("should parse a valid date-time param", (done) => {
     let schema = {

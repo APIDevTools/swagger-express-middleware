@@ -3,7 +3,7 @@
 const { expect } = require("chai");
 const helper = require("./helper");
 
-describe("JSON Schema - parse integer params", () => {
+describe.skip("JSON Schema - parse integer params", () => {
 
   it("should parse a valid integer param", (done) => {
     let schema = {

@@ -9,7 +9,7 @@ const { Resource, FileDataStore } = require("../../../");
 
 let tempDir;
 
-describe("FileDataStore", () => {
+describe.skip("FileDataStore", () => {
   beforeEach((done) => {
     createTempDir((temp) => {
       tempDir = temp;

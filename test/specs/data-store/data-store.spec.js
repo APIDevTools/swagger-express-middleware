@@ -5,7 +5,7 @@ const helper = require("../../utils/helper");
 const createTempDir = require("../../utils/create-temp-dir");
 const { Resource, DataStore, MemoryDataStore, FileDataStore } = require("../../../");
 
-describe("DataStore", () => {
+describe.skip("DataStore", () => {
   // All of these tests should pass for all DataStore classes
   [FileDataStore, MemoryDataStore].forEach((DataStoreClass) => {
     describe(DataStoreClass.name, () => {

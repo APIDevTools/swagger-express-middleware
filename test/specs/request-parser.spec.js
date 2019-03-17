@@ -6,7 +6,7 @@ const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 const fs = require("fs");
 
-describe("RequestParser middleware", () => {
+describe.skip("RequestParser middleware", () => {
 
   describe("method signatures", () => {
     it("can be called without any params", (done) => {

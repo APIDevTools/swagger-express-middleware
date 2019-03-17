@@ -7,7 +7,7 @@ const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Query Resource Mock", () => {
+describe.skip("Query Resource Mock", () => {
   ["head", "options", "get"].forEach((method) => {
     describe(method.toUpperCase(), () => {
 

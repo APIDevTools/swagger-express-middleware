@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const { Resource } = require("../../../");
 const helper = require("../../utils/helper");
 
-describe("Resource class", () => {
+describe.skip("Resource class", () => {
   describe("constructor", () => {
     it("can be called without any params", () => {
       let resource = new Resource();

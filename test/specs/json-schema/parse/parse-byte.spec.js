@@ -3,7 +3,7 @@
 const { expect } = require("chai");
 const helper = require("./helper");
 
-describe("JSON Schema - parse byte params", () => {
+describe.skip("JSON Schema - parse byte params", () => {
 
   it("should parse a valid byte param", (done) => {
     let schema = {

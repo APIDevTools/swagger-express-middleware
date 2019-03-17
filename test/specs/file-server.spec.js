@@ -6,7 +6,7 @@ const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 const fs = require("fs");
 
-describe("FileServer middleware", () => {
+describe.skip("FileServer middleware", () => {
   ["head", "get"].forEach((method) => {
     describe(method.toUpperCase(), () => {
       let isHead;

@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 
-describe("PathParser middleware", () => {
+describe.skip("PathParser middleware", () => {
 
   it("should not parse path params if the metadata middleware is not used", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {

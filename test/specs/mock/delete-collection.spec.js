@@ -6,7 +6,7 @@ const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
 const helper = require("./helper");
 
-describe("Query Collection Mock", () => {
+describe.skip("Query Collection Mock", () => {
   describe("DELETE", () => {
 
     let api;
