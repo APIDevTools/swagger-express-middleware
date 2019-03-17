@@ -55,14 +55,14 @@
     "chai": "^4.2.0",
     "chai-datetime": "^1.4.0",
     "coveralls": "^3.0.3",
-    "eslint": "^5.15.1",
+    "eslint": "^5.15.2",
     "eslint-config-modular": "^7.0.0",
     "express": "^4.16.4",
     "mocha": "^6.0.2",
     "npm-check": "^5.9.0",
     "nyc": "^13.3.0",
     "sinon": "^7.2.7",
-    "supertest": "^4.0.0",
+    "supertest": "^4.0.2",
     "version-bump-prompt": "^5.0.0"
   },
   "dependencies": {
