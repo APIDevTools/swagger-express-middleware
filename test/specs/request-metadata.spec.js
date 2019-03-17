@@ -4,9 +4,9 @@ const _ = require("lodash");
 const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
-const { helper } = require("../utils");
+const { helper, deepCompare } = require("../utils");
 
-describe.skip("RequestMetadata middleware", () => {
+describe.only("RequestMetadata middleware", () => {
 
   it("should set all req.openapi properties for a parameterless path", (done) => {
     createMiddleware(fixtures.paths.petStore, (err, middleware) => {
@@ -17,7 +17,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: fixtures.data.petStore,
           pathName: "/pets",
           path: fixtures.data.petsPath,
@@ -39,7 +39,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -67,7 +67,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.patch("/pets/fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: fixtures.data.petStoreNoBasePath,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -89,7 +89,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/foo", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: null,
           pathName: "",
           path: null,
@@ -111,7 +111,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/pets", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: null,
           pathName: "",
           path: null,
@@ -132,7 +132,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.patch("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi should be set, even though the path is invalid
           api: fixtures.data.petStoreNoPaths,
 
@@ -158,7 +158,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.get("/api/foo", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi should be set, even though the path is invalid
           api: fixtures.data.petStore,
 
@@ -185,7 +185,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api and req.openapi.path should be set, even though the operation is not valid
           api: fixtures.data.petStoreNoOperations,
           pathName: "/pets/{PetName}",
@@ -214,7 +214,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api and req.openapi.path should be set, even though the operation is not valid
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
@@ -245,7 +245,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -283,7 +283,7 @@ describe.skip("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -317,7 +317,7 @@ describe.skip("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/PeTs/Fido", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -347,7 +347,7 @@ describe.skip("RequestMetadata middleware", () => {
       // Even though Express is case-insensitive, the metadata middleware IS case-sensitive,
       // so `req.openapi.path` and `req.openapi.operation` will be null both times.
       let handler = helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -384,7 +384,7 @@ describe.skip("RequestMetadata middleware", () => {
         .end(helper.checkSpyResults(done));
 
       let handler = helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           api: fixtures.data.petStore,
           pathName: "/pets/{PetName}",
           path: fixtures.data.petPath,
@@ -421,7 +421,7 @@ describe.skip("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -455,7 +455,7 @@ describe.skip("RequestMetadata middleware", () => {
       }));
 
       express.patch("/api/pets/fido/", helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -485,7 +485,7 @@ describe.skip("RequestMetadata middleware", () => {
       // Even though Express is using loose routing, the metadata middleware is using strict routing,
       // so `req.openapi.path` and `req.openapi.operation` will be null both times.
       let handler = helper.spy((req, res, next) => {
-        expect(req.openapi).to.deep.equal({
+        deepCompare(req.openapi, {
           // req.openapi.api should be set because the basePath matches
           api: fixtures.data.petStore,
 
@@ -535,7 +535,7 @@ describe.skip("RequestMetadata middleware", () => {
       express.patch("/api/pets/:name", helper.spy((req, res, next) => {
         if (++counter === 1) {
           // req.openapi doesn't get populated on the first request, because the API is invalid
-          expect(req.openapi).to.deep.equal({
+          deepCompare(req.openapi, {
             api: {
               swagger: "2.0",
               info: {
@@ -553,7 +553,7 @@ describe.skip("RequestMetadata middleware", () => {
         }
         else {
           // req.openapi DOES get populated on the second request, because the API is now valid
-          expect(req.openapi).to.deep.equal({
+          deepCompare(req.openapi, {
             api: fixtures.data.petStore,
             pathName: "/pets/{PetName}",
             path: fixtures.data.petPath,
