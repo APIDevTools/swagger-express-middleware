@@ -1,7 +1,8 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 describe.skip("JSON Schema - parse byte params", () => {
 
@@ -16,7 +17,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       exclusiveMaximum: false
     };
 
-    let express = helper.parse(schema, 45, done);
+    let express = testParseRequestMiddleware(schema, 45, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(45);
@@ -29,7 +30,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       format: "byte"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.be.undefined;
@@ -43,7 +44,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       default: 255
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(255);
@@ -57,7 +58,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       default: 1
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(1);
@@ -70,7 +71,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       format: "byte"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -85,7 +86,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       format: "byte"
     };
 
-    let express = helper.parse(schema, "hello world", done);
+    let express = testParseRequestMiddleware(schema, "hello world", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -101,7 +102,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       multipleOf: 3
     };
 
-    let express = helper.parse(schema, "14", done);
+    let express = testParseRequestMiddleware(schema, "14", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -116,7 +117,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       format: "byte"
     };
 
-    let express = helper.parse(schema, "256", done);
+    let express = testParseRequestMiddleware(schema, "256", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -131,7 +132,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       format: "byte"
     };
 
-    let express = helper.parse(schema, "-5", done);
+    let express = testParseRequestMiddleware(schema, "-5", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -147,7 +148,7 @@ describe.skip("JSON Schema - parse byte params", () => {
       required: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);

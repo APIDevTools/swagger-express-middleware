@@ -4,7 +4,8 @@ const _ = require("lodash");
 const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Edit Resource Mock", () => {
   ["put", "patch", "post"].forEach((method) => {
@@ -25,7 +26,7 @@ describe.skip("Edit Resource Mock", () => {
 
       describe("Shared tests", () => {
         it("should create a new resource", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog", Tags: ["fluffy", "brown"]})
@@ -40,7 +41,7 @@ describe.skip("Edit Resource Mock", () => {
         });
 
         it("should create a new resource at the specified URL, even if the primary key is different", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")              // <-- The URL is "Fido"
               .send({ Name: "Fluffy", Type: "cat" })    // <-- The pet name is "Fluffy"
@@ -68,7 +69,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.required = false;
           petParam.schema.default = { Name: "Fido", Type: "dog" };
           petParam.schema.properties.Tags.default = "fluffy,brown";
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "application/json; charset=utf-8")
@@ -88,7 +89,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema.properties.Name.default = "Fido";
           petParam.schema.properties.Type.default = "dog";
           petParam.schema.properties.Tags.default = "fluffy,brown";
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Age: 4 })
@@ -113,7 +114,7 @@ describe.skip("Edit Resource Mock", () => {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, (supertest) => {
+          initTest(messWithTheBody, api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "application/json; charset=utf-8")
@@ -136,7 +137,7 @@ describe.skip("Edit Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
           dataStore.save(resource, () => {
-            helper.initTest(api, (supertest) => {
+            initTest(api, (supertest) => {
               // Create another pet at the URL "/api/pets/Fido"
               supertest
                 [method]("/api/pets/Fido")
@@ -156,7 +157,7 @@ describe.skip("Edit Resource Mock", () => {
 
         it("should not return data if not specified in the OpenAPI definition", (done) => {
           delete api.paths["/pets/{PetName}"][method].responses[200].schema;
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -166,7 +167,7 @@ describe.skip("Edit Resource Mock", () => {
         });
 
         it("should return the saved resource if the OpenAPI definition schema is an object", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -181,7 +182,7 @@ describe.skip("Edit Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
@@ -202,7 +203,7 @@ describe.skip("Edit Resource Mock", () => {
             }
           };
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -225,7 +226,7 @@ describe.skip("Edit Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
@@ -248,7 +249,7 @@ describe.skip("Edit Resource Mock", () => {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, (supertest) => {
+          initTest(messWithTheBody, api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -263,7 +264,7 @@ describe.skip("Edit Resource Mock", () => {
             setImmediate(callback, new Error("Test Error"));
           };
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -285,7 +286,7 @@ describe.skip("Edit Resource Mock", () => {
 
           let petParam = _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" });
           petParam.schema = {};
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -302,7 +303,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema = { type: "string" };
           api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "text/plain")
@@ -320,7 +321,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema = { type: "string" };
           api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "text/plain")
@@ -338,7 +339,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema = { type: "number" };
           api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "text/plain")
@@ -357,7 +358,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema = { type: "string", format: "date-time" };
           api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "text/plain")
@@ -375,7 +376,7 @@ describe.skip("Edit Resource Mock", () => {
           petParam.schema = {};
           api.paths["/pets/{PetName}"][method].consumes = ["application/octet-stream"];
           api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "application/octet-stream")
@@ -392,7 +393,7 @@ describe.skip("Edit Resource Mock", () => {
           let petParam = _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" });
           petParam.schema = {};
           api.paths["/pets/{PetName}"][method].consumes = ["application/octet-stream"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "application/octet-stream")
@@ -412,7 +413,7 @@ describe.skip("Edit Resource Mock", () => {
           let petParam = _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" });
           petParam.schema = {};
           petParam.required = false;
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .set("Content-Type", "application/json; charset=utf-8")
@@ -424,7 +425,7 @@ describe.skip("Edit Resource Mock", () => {
 
         it("should return multipart/form-data", (done) => {
           api.paths["/pets/{PetName}/photos/{ID}"][method].responses[201].schema = {};
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos/12345")
               .field("Label", "Photo 1")
@@ -456,7 +457,7 @@ describe.skip("Edit Resource Mock", () => {
 
         it("should return a file", (done) => {
           api.paths["/pets/{PetName}/photos/{ID}"][method].responses[201].schema = { type: "file" };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos/12345")
               .field("Label", "Photo 1")
@@ -483,7 +484,7 @@ describe.skip("Edit Resource Mock", () => {
               type: "string"
             }
           };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos/Photo%20Of%20Fido.jpg")
               .field("Label", "Photo 1")
@@ -512,7 +513,7 @@ describe.skip("Edit Resource Mock", () => {
 
         it("should overwrite the existing resource rather than merging it", (done) => {
           _.find(api.paths["/pets/{PetName}"].put.parameters, { name: "PetData" }).schema.properties.Vet.required = [];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               .put("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog", Tags: ["fluffy", "brown"], Vet: { Name: "Vet Name" }})
@@ -564,7 +565,7 @@ describe.skip("Edit Resource Mock", () => {
             setImmediate(callback, new Error("Test Error"));
           };
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             supertest
               .put("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog" })
@@ -588,7 +589,7 @@ describe.skip("Edit Resource Mock", () => {
         it("should merge the new resource with the existing resource", (done) => {
           _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" }).schema.properties.Vet.required = [];
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido")
               .send({ Name: "Fido", Type: "dog", Tags: ["fluffy", "brown"], Vet: { Name: "Vet Name" }})

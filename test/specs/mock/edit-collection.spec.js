@@ -4,7 +4,8 @@ const _ = require("lodash");
 const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Edit Collection Mock", () => {
   ["patch", "put", "post"].forEach((method) => {
@@ -28,7 +29,7 @@ describe.skip("Edit Collection Mock", () => {
 
       describe("Shared tests", () => {
         it("should add a new resource to the collection", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             // Create a new pet
             supertest
               [method]("/api/pets")
@@ -46,7 +47,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it("should add multiple resources to the collection", (done) => {
           arrayify();
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             // Create some new pets
             supertest
               [method]("/api/pets")
@@ -74,7 +75,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it("should add zero resources to the collection", (done) => {
           arrayify();
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             // Save zero pets
             supertest
               [method]("/api/pets")
@@ -92,7 +93,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it("should not return data if not specified in the OpenAPI definition", (done) => {
           delete api.paths["/pets"][method].responses[201].schema;
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -107,7 +108,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send({ Name: "Fido", Type: "dog" })
@@ -124,7 +125,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send([{ Name: "Fido", Type: "dog" }, { Name: "Polly", Type: "bird" }])
@@ -149,7 +150,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send([{ Name: "Fido", Type: "dog" }, { Name: "Polly", Type: "bird" }])
@@ -165,7 +166,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send({ Name: "Fido", Type: "dog" })
@@ -182,7 +183,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send([{ Name: "Fido", Type: "dog" }, { Name: "Polly", Type: "bird" }])
@@ -207,7 +208,7 @@ describe.skip("Edit Collection Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               supertest
                 [method]("/api/pets")
                 .send([{ Name: "Fido", Type: "dog" }, { Name: "Polly", Type: "bird" }])
@@ -233,7 +234,7 @@ describe.skip("Edit Collection Mock", () => {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, (supertest) => {
+          initTest(messWithTheBody, api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -243,7 +244,7 @@ describe.skip("Edit Collection Mock", () => {
         });
 
         it('should set the "Location" HTTP header to new resource\'s URL', (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -255,7 +256,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it('should set the "Location" HTTP header to the collection URL', (done) => {
           arrayify();
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send([{ Name: "Fido", Type: "dog" }, { Name: "Fluffy", Type: "cat" }, { Name: "Polly", Type: "bird" }])
@@ -267,7 +268,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it('should set the "Location" HTTP header to the collection URL, even though it\'s empty', (done) => {
           arrayify();
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send([])
@@ -279,7 +280,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it('should not set the "Location" HTTP header if not specified in the OpenAPI definition (single object)', (done) => {
           delete api.paths["/pets"][method].responses[201].headers;
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -294,7 +295,7 @@ describe.skip("Edit Collection Mock", () => {
         it('should not set the "Location" HTTP header if not specified in the OpenAPI definition (array)', (done) => {
           delete api.paths["/pets"][method].responses[201].headers;
           arrayify();
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send([{ Name: "Fido", Type: "dog" }, { Name: "Fluffy", Type: "cat" }, { Name: "Polly", Type: "bird" }])
@@ -312,7 +313,7 @@ describe.skip("Edit Collection Mock", () => {
             setImmediate(callback, new Error("Test Error"));
           };
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -333,7 +334,7 @@ describe.skip("Edit Collection Mock", () => {
             setImmediate(callback, new Error("Test Error"));
           };
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -355,7 +356,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "string" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -371,7 +372,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "string" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -389,7 +390,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
           api.paths["/pets/{PetName}"].get.produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             let veryLongString = _.repeat("abcdefghijklmnopqrstuvwxyz", 5000);
 
             supertest
@@ -418,7 +419,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "number" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -434,7 +435,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "string", format: "date" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -450,7 +451,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "string", format: "date-time" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -466,7 +467,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = { type: "string" };
           api.paths["/pets"][method].consumes = ["text/plain"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -482,7 +483,7 @@ describe.skip("Edit Collection Mock", () => {
           api.paths["/pets"][method].responses[201].schema = {};
           api.paths["/pets"][method].consumes = ["application/octet-stream"];
           api.paths["/pets"][method].produces = ["text/plain"];
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "application/octet-stream")
@@ -505,7 +506,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema = {};
           petParam.required = false;
           api.paths["/pets"][method].responses[201].schema = {};
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .set("Content-Type", "text/plain")
@@ -519,7 +520,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it("should support multipart/form-data", (done) => {
           api.paths["/pets/{PetName}/photos"][method].responses[201].schema = {};
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -552,7 +553,7 @@ describe.skip("Edit Collection Mock", () => {
 
         it("should support files", (done) => {
           api.paths["/pets/{PetName}/photos"][method].responses[201].schema = { type: "file" };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -571,7 +572,7 @@ describe.skip("Edit Collection Mock", () => {
 
       describe("Determining resource names (by property names)", () => {
         it('should determine the resource name from "Name" properties in its schema', (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -588,7 +589,7 @@ describe.skip("Edit Collection Mock", () => {
         it('should determine the resource name from "Name" properties in its schema, even if they\'re not present in the data', (done) => {
           let schemaProps = _.find(api.paths["/pets"][method].parameters, { name: "PetData" }).schema.properties;
           schemaProps.ID = { type: "integer" };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -611,7 +612,7 @@ describe.skip("Edit Collection Mock", () => {
         });
 
         it('should determine the resource name from "Name" properties in its data, even if they\'re not in the schema', (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ ID: 12345, Name: "Fido", Type: "dog" })   // <--- "ID" is not in the schema. "Name" is.
@@ -628,7 +629,7 @@ describe.skip("Edit Collection Mock", () => {
         it('should use a "byte" property in the schema as the resource name', (done) => {
           let schemaProps = _.find(api.paths["/pets"][method].parameters, { name: "PetData" }).schema.properties;
           schemaProps.ID = { type: "string", format: "byte" };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -653,7 +654,7 @@ describe.skip("Edit Collection Mock", () => {
         it('should use a "boolean" property in the schema as the resource name', (done) => {
           let schemaProps = _.find(api.paths["/pets"][method].parameters, { name: "PetData" }).schema.properties;
           schemaProps.ID = { type: "boolean" };
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -674,7 +675,7 @@ describe.skip("Edit Collection Mock", () => {
         });
 
         it('should use a "boolean" property in the data as the resource name', (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ ID: false, Name: "Fido", Type: "dog" })
@@ -696,7 +697,7 @@ describe.skip("Edit Collection Mock", () => {
           };
           api.paths["/pets/{PetName}"].get.responses[200].schema.properties = schemaProps;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Key: "2005-11-09", Name: "Fido", Type: "dog" })
@@ -717,7 +718,7 @@ describe.skip("Edit Collection Mock", () => {
             format: "date-time"
           };
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ key: "2005-11-09T08:07:06.005Z", Name: "Fido", Type: "dog" })
@@ -732,7 +733,7 @@ describe.skip("Edit Collection Mock", () => {
         });
 
         it("should use a Date property in the data as the resource name", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ code: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)), Name: "Fido", Type: "dog" })
@@ -754,7 +755,7 @@ describe.skip("Edit Collection Mock", () => {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, (supertest) => {
+          initTest(messWithTheBody, api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Name: "Fido", Type: "dog" })
@@ -774,7 +775,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema.required = ["Name"];
           api.paths["/pets"].get.responses[200].schema.items = petParam.schema;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ ID: [1, 2, 3], Name: { fido: true }, Type: "dog" })   // <-- Neither "ID" nor "Name" is a valid resource name
@@ -797,7 +798,7 @@ describe.skip("Edit Collection Mock", () => {
           _.remove(api.paths["/pets/{PetName}/photos"][method].parameters, { name: "ID" });
           _.find(api.paths["/pets/{PetName}/photos/{ID}"].parameters, { name: "ID" }).type = "string";
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -825,7 +826,7 @@ describe.skip("Edit Collection Mock", () => {
             type: "string"
           };
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "a, b, c")
@@ -851,7 +852,7 @@ describe.skip("Edit Collection Mock", () => {
           _.find(api.paths["/pets/{PetName}/photos"][method].parameters, { name: "Label" }).required = false;
           _.find(api.paths["/pets/{PetName}/photos/{ID}"].parameters, { name: "ID" }).type = "string";
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -883,7 +884,7 @@ describe.skip("Edit Collection Mock", () => {
             next();
           }
 
-          helper.initTest(messWithTheBody, api, (supertest) => {
+          initTest(messWithTheBody, api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -910,7 +911,7 @@ describe.skip("Edit Collection Mock", () => {
           _.find(params, { name: "Label" }).required = false;
           _.find(params, { name: "Photo" }).required = false;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -933,7 +934,7 @@ describe.skip("Edit Collection Mock", () => {
           _.find(params, { name: "Photo" }).required = false;
           api.paths["/pets/{PetName}/photos"][method].consumes = ["text/plain", "multipart/form-data"];
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .set("Content-Type", "text/plain")
@@ -961,7 +962,7 @@ describe.skip("Edit Collection Mock", () => {
             type: "file"
           });
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -988,7 +989,7 @@ describe.skip("Edit Collection Mock", () => {
           // The schema is an empty object (no "name" properties)
           _.find(api.paths["/pets"][method].parameters, { name: "PetData" }).schema = {};
           api.paths["/pets"][method].responses[201].schema = {};
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ age: 42, dob: new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)) })  // <--- No "name" properties
@@ -1006,7 +1007,7 @@ describe.skip("Edit Collection Mock", () => {
           let petParam = _.find(api.paths["/pets"][method].parameters, { name: "PetData" });
           petParam.schema.required = [];
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Type: "dog", Age: 4 })    // <--- The "Name" property isn't set
@@ -1036,7 +1037,7 @@ describe.skip("Edit Collection Mock", () => {
           // Make all data optional
           let petParam = _.find(api.paths["/pets"][method].parameters, { name: "PetData" });
           petParam.required = false;
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")      // <--- No data was sent at all
               .end(helper.checkResults(done, (res) => {
@@ -1066,7 +1067,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema.properties.Name.type = "integer";
           api.paths["/pets/{PetName}"].get.responses[200].schema = petParam.schema;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Type: "dog", Age: 4 })    // <--- The "Name" property isn't set
@@ -1103,7 +1104,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema.properties.Name.format = "date";
           api.paths["/pets/{PetName}"].get.responses[200].schema = petParam.schema;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Type: "dog", Age: 4 })    // <--- The "Name" property isn't set
@@ -1140,7 +1141,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema.properties.Name.format = "date-time";
           api.paths["/pets/{PetName}"].get.responses[200].schema = petParam.schema;
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Type: "dog", Age: 4 })    // <--- The "Name" property isn't set
@@ -1176,7 +1177,7 @@ describe.skip("Edit Collection Mock", () => {
           petParam.schema.properties.Name.type = "array";
           petParam.schema.properties.Name.items = { type: "string" };
 
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               [method]("/api/pets")
               .send({ Type: "dog", Age: 4 })    // <--- The "Name" property isn't set

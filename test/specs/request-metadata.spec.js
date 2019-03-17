@@ -4,7 +4,7 @@ const _ = require("lodash");
 const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
-const helper = require("../utils/helper");
+const { helper } = require("../utils");
 
 describe.skip("RequestMetadata middleware", () => {
 

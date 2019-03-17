@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const sinon = require("sinon");
 const { expect } = require("chai");
-const createTempDir = require("../../utils/create-temp-dir");
+const { createTempDir } = require("../../utils");
 const { Resource, FileDataStore } = require("../../../");
 
 let tempDir;

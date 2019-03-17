@@ -4,7 +4,8 @@ const _ = require("lodash");
 const createMiddleware = require("../../../../");
 const { expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 let api, photoParam;
 

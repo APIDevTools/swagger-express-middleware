@@ -5,7 +5,8 @@ const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Query Resource Mock", () => {
   ["head", "options", "get"].forEach((method) => {
@@ -35,7 +36,7 @@ describe.skip("Query Resource Mock", () => {
         let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
         dataStore.save(res1, res2, res3, () => {
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fluffy");
             noHeaders || request.expect("Content-Length", "30");
             helper.processMethod(request, method, { Name: "Fluffy", Type: "cat" });
@@ -62,7 +63,7 @@ describe.skip("Query Resource Mock", () => {
         let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
 
         dataStore.save(res1, res2, res3, () => {
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fluffy");
             noHeaders || request.expect("Content-Length", "75");
             helper.processMethod(request, method, { code: 42, message: "hello world", result: { Name: "Fluffy", Type: "cat" }});
@@ -76,7 +77,7 @@ describe.skip("Query Resource Mock", () => {
         let dataStore = new MemoryDataStore();
         let resource = new Resource("/api/pets/Fido", "I am Fido");
         dataStore.save(resource, () => {
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             helper.processMethod(request, method, "");
 
@@ -100,7 +101,7 @@ describe.skip("Query Resource Mock", () => {
             next();
           }
 
-          helper.initTest(dataStore, messWithTheBody, api, (supertest) => {
+          initTest(dataStore, messWithTheBody, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             noHeaders || request.expect("Content-Length", "41");
             helper.processMethod(request, method, ["Not", "the", "response", "you", "expected"]);
@@ -119,7 +120,7 @@ describe.skip("Query Resource Mock", () => {
           next();
         }
 
-        helper.initTest(messWithTheBody, api, (supertest) => {
+        initTest(messWithTheBody, api, (supertest) => {
           let request = supertest[method]("/api/pets/Fido");
           noHeaders || request.expect("Content-Length", "41");
           helper.processMethod(request, method, ["Not", "the", "response", "you", "expected"]);
@@ -132,7 +133,7 @@ describe.skip("Query Resource Mock", () => {
         api.paths["/pets/{PetName}"][method].responses[200].schema.default = { default: "The default value" };
         api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           let request = supertest[method]("/api/pets/Fido");
           noHeaders || request.expect("Content-Length", "31");
           helper.processMethod(request, method, { default: "The default value" });
@@ -144,7 +145,7 @@ describe.skip("Query Resource Mock", () => {
       it("should return the example value instead of a 404", (done) => {
         api.paths["/pets/{PetName}"][method].responses[200].schema.example = { example: "The example value" };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           let request = supertest[method]("/api/pets/Fido");
           noHeaders || request.expect("Content-Length", "31");
           helper.processMethod(request, method, { example: "The example value" });
@@ -161,7 +162,7 @@ describe.skip("Query Resource Mock", () => {
         let dataStore = new MemoryDataStore();
         let resource = new Resource("/api/pets/Fido", "I am fido");
         dataStore.save(resource, () => {
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Wait 1 second, since the "Last-Modified" header is only precise to the second
             setTimeout(() => {
               let request = supertest[method]("/api/pets/Fido");
@@ -175,7 +176,7 @@ describe.skip("Query Resource Mock", () => {
 
       if (method !== "options") {
         it("should throw a 404 if the resource does not exist", (done) => {
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             request.expect(404);
             request.end((err, res) => {
@@ -196,7 +197,7 @@ describe.skip("Query Resource Mock", () => {
             setImmediate(callback, new Error("Test Error"));
           };
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             let request = supertest[method]("/api/pets/Fido");
             request.expect(500);
             request.end((err, res) => {
@@ -224,7 +225,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               noHeaders || request.expect("Content-Length", "28");
@@ -242,7 +243,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", "I am Fido");
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
               noHeaders || request.expect("Content-Length", "9");
@@ -259,7 +260,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", "");
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
               noHeaders || request.expect("Content-Length", "0");
@@ -276,7 +277,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", 42.999);
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
               noHeaders || request.expect("Content-Length", "6");
@@ -294,7 +295,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
               noHeaders || request.expect("Content-Length", "24");
@@ -311,7 +312,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
               noHeaders || request.expect("Content-Length", "11");
@@ -327,7 +328,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               noHeaders || request.expect("Content-Length", "69");
@@ -346,7 +347,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               helper.processMethod(request, method, "");
@@ -369,7 +370,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               noHeaders || request.expect("Content-Length", "31");
@@ -386,7 +387,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido");
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               noHeaders || request.expect("Content-Length", "31");
@@ -402,7 +403,7 @@ describe.skip("Query Resource Mock", () => {
           let dataStore = new MemoryDataStore();
           let resource = new Resource("/api/pets/Fido", null);
           dataStore.save(resource, () => {
-            helper.initTest(dataStore, api, (supertest) => {
+            initTest(dataStore, api, (supertest) => {
               let request = supertest[method]("/api/pets/Fido");
               noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
               noHeaders || request.expect("Content-Length", "4");
@@ -416,7 +417,7 @@ describe.skip("Query Resource Mock", () => {
           // Set the response schemas to return the full multipart/form-data object
           api.paths["/pets/{PetName}/photos"].post.responses[201].schema = { type: "object" };
           api.paths["/pets/{PetName}/photos/{ID}"][method].responses[200].schema.type = "object";
-          helper.initTest(api, (supertest) => {
+          initTest(api, (supertest) => {
             supertest
               .post("/api/pets/Fido/photos")
               .field("Label", "Photo 1")
@@ -467,7 +468,7 @@ describe.skip("Query Resource Mock", () => {
         }
         else {
           it("should return a file", (done) => {
-            helper.initTest(api, (supertest) => {
+            initTest(api, (supertest) => {
               supertest
                 .post("/api/pets/Fido/photos")
                 .field("Label", "Photo 1")
@@ -508,7 +509,7 @@ describe.skip("Query Resource Mock", () => {
               }
             };
 
-            helper.initTest(api, (supertest) => {
+            initTest(api, (supertest) => {
               supertest
                 .post("/api/pets/Fido/photos")
                 .field("Label", "Photo 1")
@@ -551,7 +552,7 @@ describe.skip("Query Resource Mock", () => {
               }
             };
 
-            helper.initTest(api, (supertest) => {
+            initTest(api, (supertest) => {
               supertest
                 .post("/api/pets/Fido/photos")
                 .field("Label", "Photo 1")
@@ -592,7 +593,7 @@ describe.skip("Query Resource Mock", () => {
               }
             };
 
-            helper.initTest(api, (supertest) => {
+            initTest(api, (supertest) => {
               supertest
                 .post("/api/pets/Fido/photos")
                 .field("Label", "Photo 1")

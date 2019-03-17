@@ -1,7 +1,8 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 describe.skip("JSON Schema - parse integer params", () => {
 
@@ -15,7 +16,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       exclusiveMaximum: false
     };
 
-    let express = helper.parse(schema, 45, done);
+    let express = testParseRequestMiddleware(schema, 45, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(45);
@@ -27,7 +28,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       type: "integer"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.be.undefined;
@@ -40,7 +41,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       default: 9223372036854775807
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(9223372036854775807);
@@ -53,7 +54,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       default: 1
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equal(1);
@@ -65,7 +66,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       type: "integer"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -79,7 +80,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       type: "integer"
     };
 
-    let express = helper.parse(schema, "hello world", done);
+    let express = testParseRequestMiddleware(schema, "hello world", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -93,7 +94,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       type: "integer"
     };
 
-    let express = helper.parse(schema, "3.5", done);
+    let express = testParseRequestMiddleware(schema, "3.5", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -108,7 +109,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       multipleOf: 3
     };
 
-    let express = helper.parse(schema, "14", done);
+    let express = testParseRequestMiddleware(schema, "14", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -123,7 +124,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       format: "int32"
     };
 
-    let express = helper.parse(schema, "2147483648", done);
+    let express = testParseRequestMiddleware(schema, "2147483648", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -138,7 +139,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       format: "int32"
     };
 
-    let express = helper.parse(schema, "-2147483649", done);
+    let express = testParseRequestMiddleware(schema, "-2147483649", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -153,7 +154,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       format: "int64"
     };
 
-    let express = helper.parse(schema, "9223372036854779999", done);
+    let express = testParseRequestMiddleware(schema, "9223372036854779999", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -168,7 +169,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       format: "int64"
     };
 
-    let express = helper.parse(schema, "-9223372036854779999", done);
+    let express = testParseRequestMiddleware(schema, "-9223372036854779999", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -183,7 +184,7 @@ describe.skip("JSON Schema - parse integer params", () => {
       required: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);

@@ -4,7 +4,8 @@ const _ = require("lodash");
 const fs = require("fs");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Mock Content-Type header", () => {
 
@@ -22,7 +23,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/json; charset=utf-8")
@@ -39,7 +40,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/json; charset=utf-8")
@@ -56,7 +57,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/json; charset=utf-8")
@@ -73,7 +74,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/json; charset=utf-8")
@@ -90,7 +91,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/json; charset=utf-8")
@@ -107,7 +108,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/json; charset=utf-8")
@@ -124,7 +125,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/calendar+json; charset=utf-8")
@@ -145,7 +146,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/plain; charset=utf-8")
@@ -163,7 +164,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/plain; charset=utf-8")
@@ -181,7 +182,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/plain; charset=utf-8")
@@ -199,7 +200,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/plain; charset=utf-8")
@@ -217,7 +218,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/cache-manifest; charset=utf-8")
@@ -235,7 +236,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/html; charset=utf-8")
@@ -253,7 +254,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "text/xml; charset=utf-8")
@@ -271,7 +272,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido")
             .expect("Content-Type", "application/xml; charset=utf-8")
@@ -307,7 +308,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido/photos/12345")
             .expect("Content-Type", "application/octet-stream")
@@ -325,7 +326,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido/photos/12345")
             .expect("Content-Type", "application/octet-stream")
@@ -343,7 +344,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido/photos/12345")
             .expect("Content-Type", "text/plain; charset=utf-8")
@@ -361,7 +362,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido/photos/12345")
             .expect("Content-Type", "application/octet-stream")
@@ -379,7 +380,7 @@ describe.skip("Mock Content-Type header", () => {
       let resource = new Resource("/api/pets/Fido/photos", "/12345", photoBuffer);
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .get("/api/pets/Fido/photos/12345")
             .expect("Content-Type", "image/jpeg")

@@ -3,7 +3,7 @@
 const createMiddleware = require("../../");
 const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
-const helper = require("../utils/helper");
+const { helper } = require("../utils");
 const fs = require("fs");
 
 describe.skip("RequestParser middleware", () => {

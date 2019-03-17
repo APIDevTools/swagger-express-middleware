@@ -1,7 +1,8 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 describe.skip("JSON Schema - parse date-time params", () => {
 
@@ -15,7 +16,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       exclusiveMaximum: false
     };
 
-    let express = helper.parse(schema, "2010-12-31T23:59:59.999Z", done);
+    let express = testParseRequestMiddleware(schema, "2010-12-31T23:59:59.999Z", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("2010-12-31T23:59:59.999Z"));
@@ -28,7 +29,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       format: "date-time"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.be.undefined;
@@ -42,7 +43,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       default: "1990-09-13T12:00:00Z"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("1990-09-13T12:00:00Z"));
@@ -56,7 +57,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       default: new Date("1995-08-24T15:30:45-06:30")
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("1995-08-24T15:30:45-06:30"));
@@ -70,7 +71,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       default: "2020-01-31T05:05:05-05:05"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("2020-01-31T05:05:05-05:05"));
@@ -83,7 +84,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       format: "date-time"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -98,7 +99,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       format: "date-time"
     };
 
-    let express = helper.parse(schema, "hello world", done);
+    let express = testParseRequestMiddleware(schema, "hello world", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -113,7 +114,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       format: "date-time"
     };
 
-    let express = helper.parse(schema, "2000-11-16T25:75:23Z", done);
+    let express = testParseRequestMiddleware(schema, "2000-11-16T25:75:23Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -128,7 +129,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       format: "date-time"
     };
 
-    let express = helper.parse(schema, "2015-05-05", done);
+    let express = testParseRequestMiddleware(schema, "2015-05-05", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -144,7 +145,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       maxLength: 15
     };
 
-    let express = helper.parse(schema, "2014-10-15T14:22:59.123-05:00", done);
+    let express = testParseRequestMiddleware(schema, "2014-10-15T14:22:59.123-05:00", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -160,7 +161,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       maximum: "2009-08-12"
     };
 
-    let express = helper.parse(schema, "2009-08-12T00:00:00.001Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-12T00:00:00.001Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -176,7 +177,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       maximum: "2009-08-12"
     };
 
-    let express = helper.parse(schema, "2009-08-12T00:00:00.000Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-12T00:00:00.000Z", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("2009-08-12T00:00:00.000Z"));
@@ -191,7 +192,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       exclusiveMaximum: true
     };
 
-    let express = helper.parse(schema, "2009-08-12T20:00:00-08:30", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-12T20:00:00-08:30", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -207,7 +208,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       maximum: "2009-12-27T19:20:76Z"
     };
 
-    let express = helper.parse(schema, "2009-12-27T19:20:06Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-12-27T19:20:06Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -223,7 +224,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       minimum: "2009-08-12"
     };
 
-    let express = helper.parse(schema, "2009-08-11T23:59:59.999Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-11T23:59:59.999Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -239,7 +240,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       minimum: "2009-08-12"
     };
 
-    let express = helper.parse(schema, "2009-08-12T00:00:00.000Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-12T00:00:00.000Z", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.equalTime(new Date("2009-08-12"));
@@ -254,7 +255,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       exclusiveMinimum: true
     };
 
-    let express = helper.parse(schema, "2009-08-12T00:00:00.000Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-08-12T00:00:00.000Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -270,7 +271,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       minimum: "2009-11-27T19:05:80Z"
     };
 
-    let express = helper.parse(schema, "2009-11-27T19:05:08Z", done);
+    let express = testParseRequestMiddleware(schema, "2009-11-27T19:05:08Z", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -286,7 +287,7 @@ describe.skip("JSON Schema - parse date-time params", () => {
       required: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);

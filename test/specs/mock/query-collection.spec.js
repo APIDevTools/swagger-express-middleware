@@ -5,7 +5,8 @@ const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const util = require("../../../lib/helpers/util");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Query Collection Mock", () => {
   let availableContentTypes = _.intersection(fixtures.data.petStore.consumes, fixtures.data.petStore.produces);
@@ -44,7 +45,7 @@ function testCases (contentType, method) {
   });
 
   it("should return an empty array if there is no data in the collection", (done) => {
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
       noHeaders || request.expect("Content-Length", "2");
       noBody || request.expect("Content-Type", contentTypePattern);
@@ -57,7 +58,7 @@ function testCases (contentType, method) {
     let dataStore = new MemoryDataStore();
     let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
     dataStore.save(resource, () => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "30");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -71,7 +72,7 @@ function testCases (contentType, method) {
     let dataStore = new MemoryDataStore();
     let resource = new Resource("/api/pets", "/", "This is the root resource");
     dataStore.save(resource, () => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "29");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -87,7 +88,7 @@ function testCases (contentType, method) {
     let res2 = new Resource("/api/pets/String", "I am Fido");
     let res3 = new Resource("/api/pets/Buffer", new Buffer("hello world"));
     dataStore.save(res1, res2, res3, () => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "112");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -120,7 +121,7 @@ function testCases (contentType, method) {
     let res2 = new Resource("/api/pets/String", "I am Fido");
     let res3 = new Resource("/api/pets/Buffer", new Buffer("hello world"));
     dataStore.save(res1, res2, res3, () => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "157");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -148,7 +149,7 @@ function testCases (contentType, method) {
     let res2 = new Resource("/api/pets", "/", "This is the root resource");
     let res3 = new Resource("/api/pets/Polly", { Name: "Polly", Type: "bird" });
     dataStore.save(res1, res2, res3, () => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "89");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -164,7 +165,7 @@ function testCases (contentType, method) {
 
   it("should not return anything if no response schema is specified in the OpenAPI definition", (done) => {
     delete api.paths["/pets"][method].responses[200].schema;
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
       helper.processMethod(request, method, "");
       request.end(helper.checkResults(done, (res) => {
@@ -183,7 +184,7 @@ function testCases (contentType, method) {
       next();
     }
 
-    helper.initTest(messWithTheBody, api, (supertest) => {
+    initTest(messWithTheBody, api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
       noHeaders || request.expect("Content-Length", "43");
       noBody || request.expect("Content-Type", contentTypePattern);
@@ -195,7 +196,7 @@ function testCases (contentType, method) {
   it("should return the default value instead of an empty array", (done) => {
     api.paths["/pets"][method].responses[200].schema.default = ["The default value"];
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
       noHeaders || request.expect("Content-Length", "21");
       noBody || request.expect("Content-Type", contentTypePattern);
@@ -207,7 +208,7 @@ function testCases (contentType, method) {
   it("should return the example value instead of an empty array", (done) => {
     api.paths["/pets"][method].responses[200].schema.example = ["The example value"];
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       let request = supertest[method]("/api/pets").set("Accept", contentType);
       noHeaders || request.expect("Content-Length", "21");
       noBody || request.expect("Content-Type", contentTypePattern);
@@ -222,7 +223,7 @@ function testCases (contentType, method) {
       "Last-Modified": { type: "string" }
     };
 
-    helper.initTest(api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
+    initTest(api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
       setTimeout(() => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "2");
@@ -246,7 +247,7 @@ function testCases (contentType, method) {
     let dataStore = new MemoryDataStore();
     let resource = new Resource("/api/pets", "/", "This is the root resource");
     dataStore.save(resource, () => {
-      helper.initTest(dataStore, api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
+      initTest(dataStore, api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
         setTimeout(() => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Length", "29");
@@ -276,7 +277,7 @@ function testCases (contentType, method) {
             // Update resource1
             resource1.data.foo = "bar";
             dataStore.save(resource1, () => {
-              helper.initTest(dataStore, api, (supertest) => {
+              initTest(dataStore, api, (supertest) => {
                 setTimeout(() => {
                   let request = supertest[method]("/api/pets").set("Accept", contentType);
                   noHeaders || request.expect("Content-Length", "73");
@@ -299,7 +300,7 @@ function testCases (contentType, method) {
         setImmediate(callback, new Error("Test Error"));
       };
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         request.expect(500);
         request.end((err, res) => {
@@ -326,7 +327,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", "I am Fido");
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "13");
@@ -343,7 +344,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", "");
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "4");
@@ -360,7 +361,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", 42.999);
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "8");
@@ -377,7 +378,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "14");
@@ -394,7 +395,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "28");
@@ -411,7 +412,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "15");
@@ -428,7 +429,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "71");
@@ -450,7 +451,7 @@ function testCases (contentType, method) {
       let dataStore = new MemoryDataStore();
       let resource = new Resource("/api/pets/Fido");
       dataStore.save(resource, () => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Type", "application/json; charset=utf-8");
           noHeaders || request.expect("Content-Length", "6");
@@ -462,7 +463,7 @@ function testCases (contentType, method) {
     });
 
     it("should return multipart/form-data", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
@@ -515,7 +516,7 @@ function testCases (contentType, method) {
 
     it("should return a file", (done) => {
       api.paths["/pets/{PetName}/photos"][method].responses[200].schema.items = { type: "file" };
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
@@ -575,7 +576,7 @@ function testCases (contentType, method) {
           type: "string"
         }
       };
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets/Fido/photos")
           .field("Label", "Photo 1")
@@ -665,7 +666,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by a string property", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Type=cat").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "350");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -675,7 +676,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by a numeric property", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Age=4").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "336");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -685,7 +686,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by an array property (single value)", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Tags=big").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "514");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -695,7 +696,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by an array property (multiple values, comma-separated)", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Tags=big,brown").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "346");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -707,7 +708,7 @@ function testCases (contentType, method) {
     it("should filter by an array property (multiple values, pipe-separated)", (done) => {
       _.find(api.paths["/pets"][method].parameters, { name: "Tags" }).collectionFormat = "pipes";
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Tags=big|brown").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "346");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -719,7 +720,7 @@ function testCases (contentType, method) {
     it("should filter by an array property (multiple values, space-separated)", (done) => {
       _.find(api.paths["/pets"][method].parameters, { name: "Tags" }).collectionFormat = "ssv";
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Tags=big%20brown").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "346");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -729,7 +730,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by an array property (multiple values, repeated)", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Tags=big&Tags=brown").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "346");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -739,7 +740,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by multiple properties", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Age=7&Type=cat&Tags=orange").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "172");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -749,7 +750,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by a deep property", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Vet.Address.State=NY").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "687");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -759,7 +760,7 @@ function testCases (contentType, method) {
     });
 
     it("should filter by multiple deep properties", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Vet.Address.State=NY&Vet.Address.City=New%20York").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "509");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -769,7 +770,7 @@ function testCases (contentType, method) {
     });
 
     it("should not filter by properties that aren't defined in the OpenAPI definition", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Name=Lassie&Vet.Address.Street=123%20First%20St.").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "1033");
         noBody || request.expect("Content-Type", contentTypePattern);
@@ -779,7 +780,7 @@ function testCases (contentType, method) {
     });
 
     it("should only filter by properties that are defined in the OpenAPI definition", (done) => {
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let request = supertest[method]("/api/pets?Age=4&Name=Lassie&Vet.Name=Vet%202&Vet.Address.Street=123%20First%20St.").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "169");
         noBody || request.expect("Content-Type", contentTypePattern);

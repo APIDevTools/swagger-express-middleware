@@ -4,7 +4,8 @@ const _ = require("lodash");
 const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Mock response headers", () => {
 
@@ -41,7 +42,7 @@ describe.skip("Mock response headers", () => {
       }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect("Location", "hello world")
@@ -93,7 +94,7 @@ describe.skip("Mock response headers", () => {
       next();
     });
 
-    helper.initTest(express, api, (supertest) => {
+    initTest(express, api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect("Location", "foo")
@@ -127,7 +128,7 @@ describe.skip("Mock response headers", () => {
       }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .end(helper.checkResults(done, (res) => {
@@ -148,7 +149,7 @@ describe.skip("Mock response headers", () => {
 
   describe("Location header", () => {
     it("should set the Location header to the newly-created resource", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
@@ -164,7 +165,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect("Location", "/api/pets")
@@ -180,7 +181,7 @@ describe.skip("Mock response headers", () => {
       router1.use("/deeply/nested/path", router2);
       router2.app = app;
 
-      helper.initTest(router2, api, (supertest) => {
+      initTest(router2, api, (supertest) => {
         supertest
           .post("/nested/path/deeply/nested/path/api/pets")
           .send({ Name: "Fido", Type: "dog" })
@@ -203,7 +204,7 @@ describe.skip("Mock response headers", () => {
       router1.use("/deeply/nested/path", router2);
       router2.app = app;
 
-      helper.initTest(router2, api, (supertest) => {
+      initTest(router2, api, (supertest) => {
         supertest
           .get("/nested/path/deeply/nested/path/api/pets")
           .expect("Location", "/nested/path/deeply/nested/path/api/pets")
@@ -213,7 +214,7 @@ describe.skip("Mock response headers", () => {
 
     it("should not set the Location header if not specified in the OpenAPI definition", (done) => {
       delete api.paths["/pets"].post.responses[201].headers;
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
@@ -235,7 +236,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .end(helper.checkResults(done, (res) => {
@@ -259,7 +260,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
@@ -290,7 +291,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
         dataStore.save(resource, (err) => {
           if (err) {
@@ -316,7 +317,7 @@ describe.skip("Mock response headers", () => {
     });
 
     it("should not set the Last-Modified header if not specified in the OpenAPI definition", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .end(helper.checkResults(done, (res) => {
@@ -334,7 +335,7 @@ describe.skip("Mock response headers", () => {
           type: "string"
         }
       };
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .post("/api/pets")
           .send({ Name: "Fido", Type: "dog" })
@@ -349,7 +350,7 @@ describe.skip("Mock response headers", () => {
           type: "string"
         }
       };
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect("Content-Disposition", 'attachment; filename="pets"')
@@ -371,7 +372,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(router2, api, (supertest) => {
+      initTest(router2, api, (supertest) => {
         supertest
           .get("/nested/path/deeply/nested/path/api/pets")
           .expect("Content-Disposition", 'attachment; filename="pets"')
@@ -380,7 +381,7 @@ describe.skip("Mock response headers", () => {
     });
 
     it("should not set the Content-Disposition header if not specified in the OpenAPI definition", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .end(helper.checkResults(done, (res) => {
@@ -399,7 +400,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .end(helper.checkResults(done, (res) => {
@@ -417,7 +418,7 @@ describe.skip("Mock response headers", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .set("Cookie", "swagger=foo")
@@ -439,7 +440,7 @@ describe.skip("Mock response headers", () => {
         next();
       });
 
-      helper.initTest(express, api, (supertest) => {
+      initTest(express, api, (supertest) => {
         supertest
           .get("/api/pets")
           .expect("Set-Cookie", "myCookie=some%20value; Path=/")
@@ -448,7 +449,7 @@ describe.skip("Mock response headers", () => {
     });
 
     it("should not set the Set-Cookie header if not specified in the OpenAPI definition", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .get("/api/pets")
           .end((err, res) => {

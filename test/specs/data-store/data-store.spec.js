@@ -1,8 +1,7 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("../../utils/helper");
-const createTempDir = require("../../utils/create-temp-dir");
+const { helper, createTempDir } = require("../../utils");
 const { Resource, DataStore, MemoryDataStore, FileDataStore } = require("../../../");
 
 describe.skip("DataStore", () => {

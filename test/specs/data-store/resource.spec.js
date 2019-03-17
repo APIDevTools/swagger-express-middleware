@@ -2,7 +2,7 @@
 
 const { expect } = require("chai");
 const { Resource } = require("../../../");
-const helper = require("../../utils/helper");
+const { helper } = require("../../utils");
 
 describe.skip("Resource class", () => {
   describe("constructor", () => {

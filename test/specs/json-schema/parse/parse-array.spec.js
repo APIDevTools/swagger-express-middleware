@@ -1,7 +1,8 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 describe.skip("JSON Schema - parse array params", () => {
 
@@ -17,7 +18,7 @@ describe.skip("JSON Schema - parse array params", () => {
       collectionFormat: "pipes"
     };
 
-    let express = helper.parse(schema, "John Doe|Bob Smith|Sarah Connor", done);
+    let express = testParseRequestMiddleware(schema, "John Doe|Bob Smith|Sarah Connor", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["John Doe", "Bob Smith", "Sarah Connor"]);
@@ -33,7 +34,7 @@ describe.skip("JSON Schema - parse array params", () => {
       collectionFormat: "ssv"
     };
 
-    let express = helper.parse(schema, "Hello World", done);
+    let express = testParseRequestMiddleware(schema, "Hello World", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["Hello", "World"]);
@@ -50,7 +51,7 @@ describe.skip("JSON Schema - parse array params", () => {
       collectionFormat: "tsv"
     };
 
-    let express = helper.parse(schema, "42\t-987\t9000", done);
+    let express = testParseRequestMiddleware(schema, "42\t-987\t9000", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members([42, -987, 9000]);
@@ -67,7 +68,7 @@ describe.skip("JSON Schema - parse array params", () => {
       collectionFormat: "pipes"
     };
 
-    let express = helper.parse(schema, "1999-12-31|2000-04-22", done);
+    let express = testParseRequestMiddleware(schema, "1999-12-31|2000-04-22", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.lengthOf(2);
@@ -85,7 +86,7 @@ describe.skip("JSON Schema - parse array params", () => {
       collectionFormat: "csv"
     };
 
-    let express = helper.parse(schema, ",,A,", done);
+    let express = testParseRequestMiddleware(schema, ",,A,", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["", "", "A", ""]);
@@ -101,7 +102,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "+42,-999999999,0xFFA9B", done);
+    let express = testParseRequestMiddleware(schema, "+42,-999999999,0xFFA9B", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members([42.0, -999999999, 1047195]);
@@ -117,7 +118,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "42,-9.87e20,0.5", done);
+    let express = testParseRequestMiddleware(schema, "42,-9.87e20,0.5", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members([42.0, -9.87e20, 0.5]);
@@ -133,7 +134,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "42,0,255", done);
+    let express = testParseRequestMiddleware(schema, "42,0,255", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members([42, 0, 255]);
@@ -149,7 +150,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "2008-06-30T13:40:50Z,1990-01-01T00:00:00-15:45", done);
+    let express = testParseRequestMiddleware(schema, "2008-06-30T13:40:50Z,1990-01-01T00:00:00-15:45", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.lengthOf(2);
@@ -170,7 +171,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "42 0,-99999,0 5 4", done);
+    let express = testParseRequestMiddleware(schema, "42 0,-99999,0 5 4", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.deep.members(
@@ -187,7 +188,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.be.undefined;
@@ -203,7 +204,7 @@ describe.skip("JSON Schema - parse array params", () => {
       default: ["A", "B", "C"]
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["A", "B", "C"]);
@@ -219,7 +220,7 @@ describe.skip("JSON Schema - parse array params", () => {
       default: "A,B,C"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["A", "B", "C"]);
@@ -235,7 +236,7 @@ describe.skip("JSON Schema - parse array params", () => {
       default: "hello world"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.members(["hello world"]);
@@ -250,7 +251,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -267,7 +268,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "1,2,3.5", done);
+    let express = testParseRequestMiddleware(schema, "1,2,3.5", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -285,7 +286,7 @@ describe.skip("JSON Schema - parse array params", () => {
       minItems: 3
     };
 
-    let express = helper.parse(schema, "A,B", done);
+    let express = testParseRequestMiddleware(schema, "A,B", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -303,7 +304,7 @@ describe.skip("JSON Schema - parse array params", () => {
       minItems: 3
     };
 
-    let express = helper.parse(schema, "1,2", done);
+    let express = testParseRequestMiddleware(schema, "1,2", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -321,7 +322,7 @@ describe.skip("JSON Schema - parse array params", () => {
       }
     };
 
-    let express = helper.parse(schema, "3,6,9,10,15", done);
+    let express = testParseRequestMiddleware(schema, "3,6,9,10,15", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -339,7 +340,7 @@ describe.skip("JSON Schema - parse array params", () => {
       required: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);

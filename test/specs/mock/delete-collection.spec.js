@@ -4,7 +4,8 @@ const _ = require("lodash");
 const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Query Collection Mock", () => {
   describe("DELETE", () => {
@@ -25,7 +26,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(200)
@@ -44,7 +45,7 @@ describe.skip("Query Collection Mock", () => {
     });
 
     it("should delete an empty collection", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .delete("/api/pets")
           .expect(200)
@@ -61,7 +62,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(200, [
@@ -85,7 +86,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(200, { Name: "Fido", Type: "dog" })
@@ -122,7 +123,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(200, {
@@ -158,7 +159,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(200, { code: 42, message: "hello world", result: { Name: "Fido", Type: "dog" }})
@@ -188,7 +189,7 @@ describe.skip("Query Collection Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(204, "")
@@ -207,7 +208,7 @@ describe.skip("Query Collection Mock", () => {
     });
 
     it("should return an empty array if nothing was deleted", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .delete("/api/pets")
           .expect(200, [])
@@ -218,7 +219,7 @@ describe.skip("Query Collection Mock", () => {
     it("should return nothing if nothing was deleted and the OpenAPI definition schema is an object", (done) => {
       api.paths["/pets"].delete.responses[200].schema = {};
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         supertest
           .delete("/api/pets")
           .expect(200, "")
@@ -232,7 +233,7 @@ describe.skip("Query Collection Mock", () => {
         next();
       }
 
-      helper.initTest(messWithTheBody, api, (supertest) => {
+      initTest(messWithTheBody, api, (supertest) => {
         supertest
           .delete("/api/pets")
           .expect(200, { message: "Not the response you expected" })
@@ -246,7 +247,7 @@ describe.skip("Query Collection Mock", () => {
         setImmediate(callback, new Error("Test Error"));
       };
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         supertest
           .delete("/api/pets")
           .expect(500)
@@ -269,7 +270,7 @@ describe.skip("Query Collection Mock", () => {
       let resource = new Resource("/api/pets/Fido", { Name: "Fido", Type: "dog" });
       dataStore.save(resource, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets")
             .expect(500)
@@ -302,7 +303,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", "I am Fido");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the string resource
             supertest
               .delete("/api/pets")
@@ -330,7 +331,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", "");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the string resource
             supertest
               .delete("/api/pets")
@@ -358,7 +359,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", 42.999);
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the number resource
             supertest
               .delete("/api/pets")
@@ -387,7 +388,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the date resource
             supertest
               .delete("/api/pets")
@@ -415,7 +416,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the Buffer resource
             supertest
               .delete("/api/pets")
@@ -441,7 +442,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the Buffer resource
             supertest
               .delete("/api/pets")
@@ -472,7 +473,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the undefined resource
             supertest
               .delete("/api/pets")
@@ -498,7 +499,7 @@ describe.skip("Query Collection Mock", () => {
         let resource = new Resource("/api/pets/Fido", null);
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the null resource
             supertest
               .delete("/api/pets")
@@ -519,7 +520,7 @@ describe.skip("Query Collection Mock", () => {
           }
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")
@@ -571,7 +572,7 @@ describe.skip("Query Collection Mock", () => {
           }
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")
@@ -631,7 +632,7 @@ describe.skip("Query Collection Mock", () => {
           }
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")
@@ -710,7 +711,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by a string property", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Type=cat")
             .expect(200, [Fluffy, Garfield])
@@ -725,7 +726,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by a numeric property", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Age=4")
             .expect(200, [Fido, Spot])
@@ -740,7 +741,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by an array property (single value)", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Tags=big")
             .expect(200, [Fido, Lassie, Spot])
@@ -755,7 +756,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by an array property (multiple values, comma-separated)", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Tags=big,brown")
             .expect(200, [Fido, Lassie])
@@ -772,7 +773,7 @@ describe.skip("Query Collection Mock", () => {
       it("should filter by an array property (multiple values, pipe-separated)", (done) => {
         _.find(api.paths["/pets"].delete.parameters, { name: "Tags" }).collectionFormat = "pipes";
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Tags=big|brown")
             .expect(200, [Fido, Lassie])
@@ -789,7 +790,7 @@ describe.skip("Query Collection Mock", () => {
       it("should filter by an array property (multiple values, space-separated)", (done) => {
         _.find(api.paths["/pets"].delete.parameters, { name: "Tags" }).collectionFormat = "ssv";
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Tags=big%20brown")
             .expect(200, [Fido, Lassie])
@@ -804,7 +805,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by an array property (multiple values, repeated)", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Tags=big&Tags=brown")
             .expect(200, [Fido, Lassie])
@@ -819,7 +820,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by multiple properties", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Age=7&Type=cat&Tags=orange")
             .expect(200, [Garfield])
@@ -834,7 +835,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by a deep property", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Vet.Address.State=NY")
             .expect(200, [Fido, Polly, Lassie, Garfield])
@@ -849,7 +850,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should filter by multiple deep properties", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Vet.Address.State=NY&Vet.Address.City=New%20York")
             .expect(200, [Fido, Polly, Garfield])
@@ -864,7 +865,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should not filter by properties that aren't defined in the OpenAPI definition", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Name=Lassie&Vet.Address.Street=123%20First%20St.")
             .expect(200, allPets)
@@ -879,7 +880,7 @@ describe.skip("Query Collection Mock", () => {
       });
 
       it("should only filter by properties that are defined in the OpenAPI definition", (done) => {
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           supertest
             .delete("/api/pets?Age=4&Name=Lassie&Vet.Name=Vet%202&Vet.Address.Street=123%20First%20St.")
             .expect(200, [Spot])

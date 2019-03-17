@@ -4,7 +4,8 @@ const _ = require("lodash");
 const { expect } = require("chai");
 const { Resource, MemoryDataStore } = require("../../../");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Edit Resource Mock", () => {
   describe("DELETE", () => {
@@ -15,7 +16,7 @@ describe.skip("Edit Resource Mock", () => {
     });
 
     it("should delete a resource", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Create a new pet
         supertest
           .post("/api/pets")
@@ -39,7 +40,7 @@ describe.skip("Edit Resource Mock", () => {
     });
 
     it("should delete a non-existent resource", (done) => {
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Delete a pet that doesn't exist
         supertest
           .delete("/api/pets/Fido")
@@ -55,7 +56,7 @@ describe.skip("Edit Resource Mock", () => {
         schema: {}
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Create a new pet
         supertest
           .post("/api/pets")
@@ -87,7 +88,7 @@ describe.skip("Edit Resource Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           // Delete one of the pets
           supertest
             .delete("/api/pets/Fido")
@@ -115,7 +116,7 @@ describe.skip("Edit Resource Mock", () => {
         }
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Create a new pet
         supertest
           .post("/api/pets")
@@ -154,7 +155,7 @@ describe.skip("Edit Resource Mock", () => {
       ];
       dataStore.save(resources, () => {
 
-        helper.initTest(dataStore, api, (supertest) => {
+        initTest(dataStore, api, (supertest) => {
           // Delete one of the pets
           supertest
             .delete("/api/pets/Fido")
@@ -176,7 +177,7 @@ describe.skip("Edit Resource Mock", () => {
       // 204 responses cannot return data
       api.paths["/pets/{PetName}"].delete.responses["204"].schema = {};
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Create a new pet
         supertest
           .post("/api/pets")
@@ -199,7 +200,7 @@ describe.skip("Edit Resource Mock", () => {
         schema: {}
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Delete a non-existent pet
         supertest
           .delete("/api/pets/Fido")
@@ -215,7 +216,7 @@ describe.skip("Edit Resource Mock", () => {
         schema: { type: "array", items: {}}
       };
 
-      helper.initTest(api, (supertest) => {
+      initTest(api, (supertest) => {
         // Delete a non-existent pet from an empty collection
         supertest
           .delete("/api/pets/Fido")
@@ -236,7 +237,7 @@ describe.skip("Edit Resource Mock", () => {
         next();
       }
 
-      helper.initTest(messWithTheBody, api, (supertest) => {
+      initTest(messWithTheBody, api, (supertest) => {
         supertest
           .delete("/api/pets/Fido")
           .expect(200, ["Not", "the", "response", "you", "expected"])
@@ -250,7 +251,7 @@ describe.skip("Edit Resource Mock", () => {
         setImmediate(callback, new Error("Test Error"));
       };
 
-      helper.initTest(dataStore, api, (supertest) => {
+      initTest(dataStore, api, (supertest) => {
         supertest
           .delete("/api/pets/Fido")
           .expect(500)
@@ -278,7 +279,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", "I am Fido");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the string resource
             supertest
               .delete("/api/pets/Fido")
@@ -302,7 +303,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", "");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the string resource
             supertest
               .delete("/api/pets/Fido")
@@ -326,7 +327,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", 42.999);
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the number resource
             supertest
               .delete("/api/pets/Fido")
@@ -350,7 +351,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Date(Date.UTC(2000, 1, 2, 3, 4, 5, 6)));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the date resource
             supertest
               .delete("/api/pets/Fido")
@@ -374,7 +375,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the Buffer resource
             supertest
               .delete("/api/pets/Fido")
@@ -397,7 +398,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", new Buffer("hello world"));
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the Buffer resource
             supertest
               .delete("/api/pets/Fido")
@@ -423,7 +424,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido");
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the undefined resource
             supertest
               .delete("/api/pets/Fido")
@@ -446,7 +447,7 @@ describe.skip("Edit Resource Mock", () => {
         let resource = new Resource("/api/pets/Fido", null);
         dataStore.save(resource, () => {
 
-          helper.initTest(dataStore, api, (supertest) => {
+          initTest(dataStore, api, (supertest) => {
             // Delete the null resource
             supertest
               .delete("/api/pets/Fido")
@@ -464,7 +465,7 @@ describe.skip("Edit Resource Mock", () => {
           schema: {}
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")
@@ -510,7 +511,7 @@ describe.skip("Edit Resource Mock", () => {
           schema: { type: "file" }
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")
@@ -553,7 +554,7 @@ describe.skip("Edit Resource Mock", () => {
           }
         };
 
-        helper.initTest(api, (supertest) => {
+        initTest(api, (supertest) => {
           // Save a pet photo (multipart/form-data)
           supertest
             .post("/api/pets/Fido/photos")

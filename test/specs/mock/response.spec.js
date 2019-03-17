@@ -2,7 +2,8 @@
 
 const _ = require("lodash");
 const fixtures = require("../../utils/fixtures");
-const helper = require("./helper");
+const { helper } = require("../../utils");
+const { initTest } = require("./mock-utils");
 
 describe.skip("Mock Response", () => {
 
@@ -21,7 +22,7 @@ describe.skip("Mock Response", () => {
       400: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect(200)
@@ -39,7 +40,7 @@ describe.skip("Mock Response", () => {
       404: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect(201)
@@ -57,7 +58,7 @@ describe.skip("Mock Response", () => {
       400: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect(302)
@@ -75,7 +76,7 @@ describe.skip("Mock Response", () => {
       504: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect(201)
@@ -92,7 +93,7 @@ describe.skip("Mock Response", () => {
       500: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .get("/api/pets")
         .expect(200)
@@ -110,7 +111,7 @@ describe.skip("Mock Response", () => {
       201: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .post("/api/pets")
         .send({ Name: "Fido", Type: "dog" })
@@ -127,7 +128,7 @@ describe.skip("Mock Response", () => {
       201: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .post("/api/pets")
         .send({ Name: "Fido", Type: "dog" })
@@ -147,7 +148,7 @@ describe.skip("Mock Response", () => {
       201: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .put("/api/pets")
         .send({ Name: "Fido", Type: "dog" })
@@ -166,7 +167,7 @@ describe.skip("Mock Response", () => {
       201: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .put("/api/pets")
         .send({ Name: "Fido", Type: "dog" })
@@ -184,7 +185,7 @@ describe.skip("Mock Response", () => {
       500: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .delete("/api/pets/Fido")
         .expect(204)
@@ -201,7 +202,7 @@ describe.skip("Mock Response", () => {
       204: { description: "" }
     };
 
-    helper.initTest(api, (supertest) => {
+    initTest(api, (supertest) => {
       supertest
         .delete("/api/pets/Fido")
         .expect(204)

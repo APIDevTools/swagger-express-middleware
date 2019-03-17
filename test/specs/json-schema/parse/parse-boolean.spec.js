@@ -1,7 +1,8 @@
 "use strict";
 
 const { expect } = require("chai");
-const helper = require("./helper");
+const { helper } = require("../../../utils");
+const { testParseRequestMiddleware } = require("./parse-utils");
 
 describe.skip("JSON Schema - parse boolean params", () => {
   it("should parse a valid boolean param", (done) => {
@@ -9,7 +10,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       type: "boolean"
     };
 
-    let express = helper.parse(schema, "true", done);
+    let express = testParseRequestMiddleware(schema, "true", done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
       expect(req.header("Test")).to.be.true;
@@ -21,7 +22,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       type: "boolean"
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
       expect(req.header("Test")).to.be.undefined;
@@ -34,7 +35,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       default: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
       expect(req.header("Test")).to.be.true;
@@ -47,7 +48,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       default: false
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
       expect(req.header("Test")).to.be.false;
@@ -59,7 +60,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       type: "boolean"
     };
 
-    let express = helper.parse(schema, "", done);
+    let express = testParseRequestMiddleware(schema, "", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -73,7 +74,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       type: "boolean"
     };
 
-    let express = helper.parse(schema, "hello world", done);
+    let express = testParseRequestMiddleware(schema, "hello world", done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
@@ -88,7 +89,7 @@ describe.skip("JSON Schema - parse boolean params", () => {
       required: true
     };
 
-    let express = helper.parse(schema, undefined, done);
+    let express = testParseRequestMiddleware(schema, undefined, done);
 
     express.use("/api/test", helper.spy((err, req, res, next) => {
       expect(err).to.be.an.instanceOf(Error);
