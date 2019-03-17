@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const helper = require("../utils/helper");
 
-describe.only("Package exports", () => {
+describe("Package exports", () => {
 
   it('should export the "createMiddleware" function as the default export', () => {
     expect(defaultExport).to.be.a("function");
@@ -163,7 +163,7 @@ describe.only("Package exports", () => {
           createMiddleware(function () {});
         }
 
-        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+        expect(notGonnaWork).to.throw(Error, "Expected an OpenAPI 3.0 file or object");
       });
 
       it("should throw an error if called with an empty object", () => {
@@ -171,7 +171,7 @@ describe.only("Package exports", () => {
           createMiddleware({});
         }
 
-        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+        expect(notGonnaWork).to.throw(Error, "Expected an OpenAPI 3.0 file or object");
       });
 
       it("should throw an error if called with a new Object", () => {
@@ -179,7 +179,7 @@ describe.only("Package exports", () => {
           createMiddleware(new Object());  // eslint-disable-line no-new-object
         }
 
-        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+        expect(notGonnaWork).to.throw(Error, "Expected an OpenAPI 3.0 file or object");
       });
 
       it("should throw an error if called with a Date object", () => {
@@ -187,7 +187,7 @@ describe.only("Package exports", () => {
           createMiddleware(new Date());
         }
 
-        expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
+        expect(notGonnaWork).to.throw(Error, "Expected an OpenAPI 3.0 file or object");
       });
 
       it("should return an error if parsing fails", (done) => {
@@ -210,8 +210,11 @@ describe.only("Package exports", () => {
     });
 
     it('should NOT work without the "new" operator', () => {
-      let middleware = Middleware();
-      expect(middleware).to.be.undefined;
+      function notGonnaWork () {
+        Middleware();
+      }
+
+      expect(notGonnaWork).to.throw();
     });
   });
 
@@ -222,11 +225,11 @@ describe.only("Package exports", () => {
     });
 
     it('should NOT work without the "new" operator', () => {
-      function throws () {
+      function notGonnaWork () {
         Resource("/users", "jdoe", { name: "John Doe" });
       }
 
-      expect(throws).to.throw(Error);
+      expect(notGonnaWork).to.throw();
     });
   });
 
@@ -238,8 +241,11 @@ describe.only("Package exports", () => {
     });
 
     it('should NOT work without the "new" operator', () => {
-      let dataStore = MemoryDataStore();
-      expect(dataStore).to.be.undefined;
+      function notGonnaWork () {
+        MemoryDataStore();
+      }
+
+      expect(notGonnaWork).to.throw();
     });
   });
 
@@ -251,8 +257,11 @@ describe.only("Package exports", () => {
     });
 
     it('should NOT work without the "new" operator', () => {
-      let dataStore = FileDataStore();
-      expect(dataStore).to.be.undefined;
+      function notGonnaWork () {
+        FileDataStore();
+      }
+
+      expect(notGonnaWork).to.throw();
     });
   });
 });
