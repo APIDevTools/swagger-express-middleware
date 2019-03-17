@@ -35,6 +35,7 @@ jobs:
         email: $NPM_EMAIL
         api_key: $NPM_API_KEY
         skip_cleanup: true
+        tag: next
         on:
           tags: true
           branch: master
