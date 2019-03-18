@@ -2,8 +2,8 @@ openapi: 3.0.0
 info:
   version: 1.0.0
   title: Swagger Petstore
-  description: A sample API that uses a petstore as an example to demonstrate features in
-    the OpenAPI 3.0 specification
+  description:
+    A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification
   termsOfService: http://helloreverb.com/terms/
   contact:
     name: Wordnik API Team

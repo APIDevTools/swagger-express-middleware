@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "Swagger Petstore",
-    "description": "A sample API that uses a petstore as an example to demonstrate features in\nthe OpenAPI 3.0 specification",
+    "description": "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
     "termsOfService": "http://helloreverb.com/terms/",
     "contact": {
       "name": "Wordnik API Team",
@@ -167,7 +167,108 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/pet"
+                    "required": [
+                      "Name",
+                      "Type"
+                    ],
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "minLength": 2,
+                        "pattern": "^[a-zA-Z0-9- ]+$"
+                      },
+                      "Age": {
+                        "type": "integer"
+                      },
+                      "DOB": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "Type": {
+                        "type": "string",
+                        "enum": [
+                          "cat",
+                          "dog",
+                          "bird"
+                        ]
+                      },
+                      "Address": {
+                        "required": [
+                          "Street",
+                          "City",
+                          "State",
+                          "ZipCode"
+                        ],
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
+                        }
+                      },
+                      "Vet": {
+                        "required": [
+                          "Name"
+                        ],
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "required": [
+                              "Street",
+                              "City",
+                              "State",
+                              "ZipCode"
+                            ],
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
                   }
                 }
               },
@@ -175,7 +276,108 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/pet"
+                    "required": [
+                      "Name",
+                      "Type"
+                    ],
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "minLength": 2,
+                        "pattern": "^[a-zA-Z0-9- ]+$"
+                      },
+                      "Age": {
+                        "type": "integer"
+                      },
+                      "DOB": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "Type": {
+                        "type": "string",
+                        "enum": [
+                          "cat",
+                          "dog",
+                          "bird"
+                        ]
+                      },
+                      "Address": {
+                        "required": [
+                          "Street",
+                          "City",
+                          "State",
+                          "ZipCode"
+                        ],
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
+                        }
+                      },
+                      "Vet": {
+                        "required": [
+                          "Name"
+                        ],
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "required": [
+                              "Street",
+                              "City",
+                              "State",
+                              "ZipCode"
+                            ],
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
                   }
                 }
               },
@@ -183,7 +385,108 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/pet"
+                    "required": [
+                      "Name",
+                      "Type"
+                    ],
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "minLength": 2,
+                        "pattern": "^[a-zA-Z0-9- ]+$"
+                      },
+                      "Age": {
+                        "type": "integer"
+                      },
+                      "DOB": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "Type": {
+                        "type": "string",
+                        "enum": [
+                          "cat",
+                          "dog",
+                          "bird"
+                        ]
+                      },
+                      "Address": {
+                        "required": [
+                          "Street",
+                          "City",
+                          "State",
+                          "ZipCode"
+                        ],
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
+                        }
+                      },
+                      "Vet": {
+                        "required": [
+                          "Name"
+                        ],
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "required": [
+                              "Street",
+                              "City",
+                              "State",
+                              "ZipCode"
+                            ],
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "Tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
                   }
                 }
               },
@@ -199,17 +502,365 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/html": {
@@ -241,7 +892,108 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/pet"
+                "required": [
+                  "Name",
+                  "Type"
+                ],
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "pattern": "^[a-zA-Z0-9- ]+$"
+                  },
+                  "Age": {
+                    "type": "integer"
+                  },
+                  "DOB": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "Type": {
+                    "type": "string",
+                    "enum": [
+                      "cat",
+                      "dog",
+                      "bird"
+                    ]
+                  },
+                  "Address": {
+                    "required": [
+                      "Street",
+                      "City",
+                      "State",
+                      "ZipCode"
+                    ],
+                    "properties": {
+                      "Street": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "City": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "State": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 2,
+                        "pattern": "^[A-Z]+$"
+                      },
+                      "ZipCode": {
+                        "type": "integer",
+                        "minimum": 10000,
+                        "maximum": 99999
+                      }
+                    }
+                  },
+                  "Vet": {
+                    "required": [
+                      "Name"
+                    ],
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "Address": {
+                        "required": [
+                          "Street",
+                          "City",
+                          "State",
+                          "ZipCode"
+                        ],
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "Tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
               }
             }
           },
@@ -253,7 +1005,7 @@
             "description": "pet response",
             "headers": {
               "Location": {
-                "description": "Swagger-Express-Middleware will automatically set this header\nappropriately",
+                "description": "Swagger-Express-Middleware will automatically set this header appropriately",
                 "schema": {
                   "type": "string"
                 }
@@ -268,7 +1020,123 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -279,7 +1147,13 @@
     "/pets/{PetName}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/petName"
+          "name": "PetName",
+          "in": "path",
+          "description": "name of the pet",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -291,17 +1165,320 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "text/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "text/html": {
@@ -316,17 +1493,365 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/html": {
@@ -356,7 +1881,108 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/pet"
+                "required": [
+                  "Name",
+                  "Type"
+                ],
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "minLength": 2,
+                    "pattern": "^[a-zA-Z0-9- ]+$"
+                  },
+                  "Age": {
+                    "type": "integer"
+                  },
+                  "DOB": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "Type": {
+                    "type": "string",
+                    "enum": [
+                      "cat",
+                      "dog",
+                      "bird"
+                    ]
+                  },
+                  "Address": {
+                    "required": [
+                      "Street",
+                      "City",
+                      "State",
+                      "ZipCode"
+                    ],
+                    "properties": {
+                      "Street": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "City": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "State": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 2,
+                        "pattern": "^[A-Z]+$"
+                      },
+                      "ZipCode": {
+                        "type": "integer",
+                        "minimum": 10000,
+                        "maximum": 99999
+                      }
+                    }
+                  },
+                  "Vet": {
+                    "required": [
+                      "Name"
+                    ],
+                    "properties": {
+                      "Name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "Address": {
+                        "required": [
+                          "Street",
+                          "City",
+                          "State",
+                          "ZipCode"
+                        ],
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "Tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
               }
             }
           },
@@ -369,17 +1995,320 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "text/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/pet"
+                  "required": [
+                    "Name",
+                    "Type"
+                  ],
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 2,
+                      "pattern": "^[a-zA-Z0-9- ]+$"
+                    },
+                    "Age": {
+                      "type": "integer"
+                    },
+                    "DOB": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "Type": {
+                      "type": "string",
+                      "enum": [
+                        "cat",
+                        "dog",
+                        "bird"
+                      ]
+                    },
+                    "Address": {
+                      "required": [
+                        "Street",
+                        "City",
+                        "State",
+                        "ZipCode"
+                      ],
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
+                      }
+                    },
+                    "Vet": {
+                      "required": [
+                        "Name"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "Tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
                 }
               },
               "text/html": {
@@ -394,17 +2323,365 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "text/html": {
@@ -441,7 +2718,123 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/error"
+                  "required": [
+                    "Code",
+                    "Message"
+                  ],
+                  "properties": {
+                    "Code": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "Message": {
+                      "type": "string"
+                    },
+                    "Pet": {
+                      "required": [
+                        "Name",
+                        "Type"
+                      ],
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "pattern": "^[a-zA-Z0-9- ]+$"
+                        },
+                        "Age": {
+                          "type": "integer"
+                        },
+                        "DOB": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "Type": {
+                          "type": "string",
+                          "enum": [
+                            "cat",
+                            "dog",
+                            "bird"
+                          ]
+                        },
+                        "Address": {
+                          "required": [
+                            "Street",
+                            "City",
+                            "State",
+                            "ZipCode"
+                          ],
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
+                          }
+                        },
+                        "Vet": {
+                          "required": [
+                            "Name"
+                          ],
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "required": [
+                                "Street",
+                                "City",
+                                "State",
+                                "ZipCode"
+                              ],
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -452,7 +2845,13 @@
     "/pets/{PetName}/photos": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/petName"
+          "name": "PetName",
+          "in": "path",
+          "description": "name of the pet",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         }
       ],
       "get": {
@@ -544,7 +2943,7 @@
             "description": "the photo was saved",
             "headers": {
               "Location": {
-                "description": "Swagger-Express-Middleware will automatically set this header\nappropriately",
+                "description": "Swagger-Express-Middleware will automatically set this header appropriately",
                 "schema": {
                   "type": "string"
                 }
@@ -557,7 +2956,13 @@
     "/pets/{PetName}/photos/{ID}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/petName"
+          "name": "PetName",
+          "in": "path",
+          "description": "name of the pet",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
         },
         {
           "name": "ID",
@@ -677,10 +3082,73 @@
             ]
           },
           "Address": {
-            "$ref": "#/components/schemas/address"
+            "required": [
+              "Street",
+              "City",
+              "State",
+              "ZipCode"
+            ],
+            "properties": {
+              "Street": {
+                "type": "string",
+                "minLength": 1
+              },
+              "City": {
+                "type": "string",
+                "minLength": 1
+              },
+              "State": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2,
+                "pattern": "^[A-Z]+$"
+              },
+              "ZipCode": {
+                "type": "integer",
+                "minimum": 10000,
+                "maximum": 99999
+              }
+            }
           },
           "Vet": {
-            "$ref": "#/components/schemas/veterinarian"
+            "required": [
+              "Name"
+            ],
+            "properties": {
+              "Name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "Address": {
+                "required": [
+                  "Street",
+                  "City",
+                  "State",
+                  "ZipCode"
+                ],
+                "properties": {
+                  "Street": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "City": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "State": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[A-Z]+$"
+                  },
+                  "ZipCode": {
+                    "type": "integer",
+                    "minimum": 10000,
+                    "maximum": 99999
+                  }
+                }
+              }
+            }
           },
           "Tags": {
             "type": "array",
@@ -701,7 +3169,33 @@
             "minLength": 1
           },
           "Address": {
-            "$ref": "#/components/schemas/address"
+            "required": [
+              "Street",
+              "City",
+              "State",
+              "ZipCode"
+            ],
+            "properties": {
+              "Street": {
+                "type": "string",
+                "minLength": 1
+              },
+              "City": {
+                "type": "string",
+                "minLength": 1
+              },
+              "State": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 2,
+                "pattern": "^[A-Z]+$"
+              },
+              "ZipCode": {
+                "type": "integer",
+                "minimum": 10000,
+                "maximum": 99999
+              }
+            }
           }
         }
       },
@@ -748,7 +3242,108 @@
             "type": "string"
           },
           "Pet": {
-            "$ref": "#/components/schemas/pet"
+            "required": [
+              "Name",
+              "Type"
+            ],
+            "properties": {
+              "Name": {
+                "type": "string",
+                "minLength": 2,
+                "pattern": "^[a-zA-Z0-9- ]+$"
+              },
+              "Age": {
+                "type": "integer"
+              },
+              "DOB": {
+                "type": "string",
+                "format": "date"
+              },
+              "Type": {
+                "type": "string",
+                "enum": [
+                  "cat",
+                  "dog",
+                  "bird"
+                ]
+              },
+              "Address": {
+                "required": [
+                  "Street",
+                  "City",
+                  "State",
+                  "ZipCode"
+                ],
+                "properties": {
+                  "Street": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "City": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "State": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[A-Z]+$"
+                  },
+                  "ZipCode": {
+                    "type": "integer",
+                    "minimum": 10000,
+                    "maximum": 99999
+                  }
+                }
+              },
+              "Vet": {
+                "required": [
+                  "Name"
+                ],
+                "properties": {
+                  "Name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "Address": {
+                    "required": [
+                      "Street",
+                      "City",
+                      "State",
+                      "ZipCode"
+                    ],
+                    "properties": {
+                      "Street": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "City": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "State": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 2,
+                        "pattern": "^[A-Z]+$"
+                      },
+                      "ZipCode": {
+                        "type": "integer",
+                        "minimum": 10000,
+                        "maximum": 99999
+                      }
+                    }
+                  }
+                }
+              },
+              "Tags": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
           }
         }
       }
