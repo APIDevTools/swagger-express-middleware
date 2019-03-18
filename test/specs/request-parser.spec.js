@@ -6,7 +6,7 @@ const fixtures = require("../utils/fixtures");
 const { helper } = require("../utils");
 const fs = require("fs");
 
-describe.skip("RequestParser middleware", () => {
+describe("RequestParser middleware", () => {
 
   describe("method signatures", () => {
     it("can be called without any params", (done) => {
@@ -652,7 +652,7 @@ describe.skip("RequestParser middleware", () => {
     });
   });
 
-  describe("Multipart form data parser", () => {
+  describe.skip("Multipart form data parser", () => {
     it("should parse simple fields", (done) => {
       createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
