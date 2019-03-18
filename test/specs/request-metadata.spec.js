@@ -22,7 +22,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "/pets",
           path: fixtures.data.petsPath,
           operation: fixtures.data.petsPostOperation,
-          params: fixtures.data.petsPostParams,
+          params: [],
+          requestBody: fixtures.data.petsPostRequestBody,
           security: fixtures.data.petsPostSecurity
         });
       }));
@@ -45,6 +46,7 @@ describe("RequestMetadata middleware", () => {
           path: fixtures.data.petPath,
           operation: fixtures.data.petPatchOperation,
           params: fixtures.data.petPatchParams,
+          requestBody: fixtures.data.petsPatchRequestBody,
           security: fixtures.data.petPatchSecurity
         });
 
@@ -73,6 +75,7 @@ describe("RequestMetadata middleware", () => {
           path: fixtures.data.petPath,
           operation: fixtures.data.petPatchOperation,
           params: fixtures.data.petPatchParams,
+          requestBody: fixtures.data.petsPatchRequestBody,
           security: fixtures.data.petPatchSecurity
         });
       }));
@@ -95,6 +98,7 @@ describe("RequestMetadata middleware", () => {
           path: null,
           operation: null,
           params: [],
+          requestBody: null,
           security: []
         });
       }));
@@ -117,6 +121,7 @@ describe("RequestMetadata middleware", () => {
           path: null,
           operation: null,
           params: [],
+          requestBody: null,
           security: []
         });
       }));
@@ -143,7 +148,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -169,7 +175,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -196,6 +203,8 @@ describe("RequestMetadata middleware", () => {
 
           // Only the path parameter should be set
           params: [fixtures.data.petPatchParams[0]],
+
+          requestBody: null,
 
           // The default API security should be set
           security: fixtures.data.petStoreSecurity
@@ -226,6 +235,8 @@ describe("RequestMetadata middleware", () => {
           // Only the path parameter should be set
           params: [fixtures.data.petPatchParams[0]],
 
+          requestBody: null,
+
           // The default API security should be set
           security: fixtures.data.petStoreSecurity
         });
@@ -251,6 +262,7 @@ describe("RequestMetadata middleware", () => {
           path: fixtures.data.petPath,
           operation: fixtures.data.petPatchOperation,
           params: fixtures.data.petPatchParams,
+          requestBody: fixtures.data.petsPatchRequestBody,
           security: fixtures.data.petPatchSecurity
         });
 
@@ -294,7 +306,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -328,7 +341,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -358,7 +372,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
 
         if (++counter !== 2) {
@@ -390,6 +405,7 @@ describe("RequestMetadata middleware", () => {
           path: fixtures.data.petPath,
           operation: fixtures.data.petPatchOperation,
           params: fixtures.data.petPatchParams,
+          requestBody: fixtures.data.petsPatchRequestBody,
           security: fixtures.data.petPatchSecurity
         });
 
@@ -432,7 +448,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -466,7 +483,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
       }));
     });
@@ -496,7 +514,8 @@ describe("RequestMetadata middleware", () => {
           pathName: "",
           path: null,
           operation: null,
-          params: []
+          params: [],
+          requestBody: null,
         });
 
         if (++counter !== 2) {
@@ -548,6 +567,7 @@ describe("RequestMetadata middleware", () => {
             path: null,
             operation: null,
             params: [],
+            requestBody: null,
             security: []
           });
         }
@@ -559,6 +579,7 @@ describe("RequestMetadata middleware", () => {
             path: fixtures.data.petPath,
             operation: fixtures.data.petPatchOperation,
             params: fixtures.data.petPatchParams,
+            requestBody: fixtures.data.petsPatchRequestBody,
             security: fixtures.data.petPatchSecurity
           });
         }

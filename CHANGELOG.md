@@ -11,6 +11,8 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
 
 - The `req.swagger` property has been renamed to `req.openapi`.
 
+- Added `req.openapi.requestBody`, which is the [Request Body Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#request-body-object) for the request
+
 [Full Changelog](https://github.com/APIDevTools/swagger-express-middleware/compare/v2.0.2...v3.0.0)
 
 

@@ -37,14 +37,13 @@ module.exports = {
     petsGetOperation: petstore.paths["/pets"].get,
     petsPostOperation: petstore.paths["/pets"].post,
     petsGetParams: petstore.paths["/pets"].get.parameters,
-    petsPostParams: [],
+    petsPostRequestBody: petstore.paths["/pets"].post.requestBody,
     petsPostSecurity: petstore.paths["/pets"].post.security,
     petPath: petstore.paths["/pets/{PetName}"],
     petPathNoOperations: omitOperationsFromPath(petstore.paths["/pets/{PetName}"]),
     petPatchOperation: petstore.paths["/pets/{PetName}"].patch,
-    petPatchParams: [
-      petstore.paths["/pets/{PetName}"].parameters[0]
-    ],
+    petPatchParams: petstore.paths["/pets/{PetName}"].parameters,
+    petsPatchRequestBody: petstore.paths["/pets/{PetName}"].patch.requestBody,
     petPatchSecurity: petstore.paths["/pets/{PetName}"].patch.security
   },
 };
