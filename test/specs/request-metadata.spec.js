@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const { helper, deepCompare } = require("../utils");
 
-describe.only("RequestMetadata middleware", () => {
+describe("RequestMetadata middleware", () => {
 
   it("should set all req.openapi properties for a parameterless path", (done) => {
     createMiddleware(fixtures.paths.petStore, (err, middleware) => {
@@ -195,7 +195,7 @@ describe.only("RequestMetadata middleware", () => {
           operation: null,
 
           // Only the path parameter should be set
-          params: [fixtures.data.petPatchParams[1]],
+          params: [fixtures.data.petPatchParams[0]],
 
           // The default API security should be set
           security: fixtures.data.petStoreSecurity
@@ -224,7 +224,7 @@ describe.only("RequestMetadata middleware", () => {
           operation: null,
 
           // Only the path parameter should be set
-          params: [fixtures.data.petPatchParams[1]],
+          params: [fixtures.data.petPatchParams[0]],
 
           // The default API security should be set
           security: fixtures.data.petStoreSecurity
