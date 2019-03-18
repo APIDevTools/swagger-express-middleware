@@ -10,10 +10,12 @@ module.exports = deepCompare;
 function deepCompare (actual, expected) {
   expect(actual).not.to.be.null;
   expect(typeof actual).to.equal(typeof expected);
-  expect(actual).to.have.same.keys(Object.keys(expected));
+
+  let expectedKeys = Object.keys(expected);
+  expect(actual).to.have.same.keys(expectedKeys);
 
   try {
-    for (let key of Object.keys(expected)) {
+    for (let key of expectedKeys) {
       deepComparePath(key, actual[key], expected[key]);
     }
   }
@@ -32,7 +34,13 @@ ${error.message}
 function deepComparePath (path, actual, expected) {
   try {
     if (actual && expected && typeof actual === "object" && typeof expected === "object") {
-      for (let key of Object.keys(expected)) {
+      let expectedKeys = Object.keys(expected);
+
+      if (expectedKeys.length > 0) {
+        expect(actual).to.have.same.keys(expectedKeys);
+      }
+
+      for (let key of expectedKeys) {
         deepComparePath(`${path}.${key}`, actual[key], expected[key]);
       }
     }
