@@ -21,7 +21,7 @@ npm install swagger-express-middleware@2
 
 
 
-👷🚧 OpenAPI 3.0 Support 🚧👷‍
+👷🚧 OpenAPI 3.0 Support 🚧👷
 ---------------------------------
 Swagger Express Middleware v3 will support OpenAPI 3.0, but it is still a **work in progress**.  This branch is the latest code for what will eventually be version 3.
 
