@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "OpenAPI 3.0 and Swagger 2.0 middleware for Express",
   "keywords": [
     "express",
