@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.1",
   "description": "OpenAPI 3.0 and Swagger 2.0 middleware for Express",
   "keywords": [
     "express",
@@ -46,7 +46,7 @@
     "test": "mocha && npm run lint",
     "coverage": "nyc --reporter=text --reporter=lcov mocha",
     "upgrade": "npm-check -u",
-    "bump": "bump --prerelease --preid alpha --tag --push --all",
+    "bump": "bump prerelease --preid alpha --tag --push --all",
     "release": "npm run upgrade && npm test && npm run bump",
     "start": "cd samples && node sample1.js"
   },
