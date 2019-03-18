@@ -4,7 +4,6 @@ const { createMiddleware, Resource, MemoryDataStore } = require("../../../");
 const { expect } = require("chai");
 const fixtures = require("../../utils/fixtures");
 const { helper } = require("../../utils");
-const { initTest } = require("./mock-utils");
 
 describe.skip("Mock middleware", () => {
 

@@ -5,7 +5,6 @@ const createMiddleware = require("../../../../");
 const fixtures = require("../../../utils/fixtures");
 const { expect } = require("chai");
 const { helper } = require("../../../utils");
-const { testParseRequestMiddleware } = require("./parse-utils");
 
 let api, petParam;
 
