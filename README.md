@@ -1,6 +1,6 @@
 Swagger Express Middleware
 ============================
-#### Swagger middleware and mocks for Express.js
+### Swagger 2.0 middleware and mocks for Express.js
 
 [![Cross-Platform Compatibility](https://apidevtools.org/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=master)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
@@ -10,6 +10,12 @@ Swagger Express Middleware
 [![npm](https://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
 [![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 [![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
+
+
+
+OpenAPI 3.0 Support
+--------------------------
+We are currently working on migrating Swagger Express Middleware to OpenAPI 3.0.  You can find the latest information in [**the v3 branch**](https://github.com/APIDevTools/swagger-express-middleware/tree/v3).
 
 
 
