@@ -53,9 +53,9 @@ describe.skip("Mock middleware", () => {
       express.get("/api/pets", helper.spy((req, res, next) => {
         expect(req.openapi).to.deep.equal({
           api: {
-            swagger: "2.0",
+            openapi: "3.0.0",
             info: {
-              title: "Test Swagger",
+              title: "Test OpenAPI",
               version: "1.0"
             },
             paths: {}

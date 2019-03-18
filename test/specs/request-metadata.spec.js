@@ -537,9 +537,9 @@ describe.only("RequestMetadata middleware", () => {
           // req.openapi doesn't get populated on the first request, because the API is invalid
           deepCompare(req.openapi, {
             api: {
-              swagger: "2.0",
+              openapi: "3.0.0",
               info: {
-                title: "Test Swagger",
+                title: "Test OpenAPI",
                 version: "1.0"
               },
               paths: {}
