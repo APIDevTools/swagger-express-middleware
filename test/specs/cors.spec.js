@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const { helper } = require("../utils");
 
-describe.skip("CORS middleware", () => {
+describe("CORS middleware", () => {
   let api;
 
   beforeEach(() => {
