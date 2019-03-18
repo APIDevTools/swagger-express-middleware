@@ -1,9 +1,9 @@
 Swagger 2.0 and OpenAPI 3.0 middleware
-============================
+=========================================
 
 [![Cross-Platform Compatibility](https://apidevtools.org/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
-[![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=master)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
-[![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
+[![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=v3)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
+[![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=v3)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
 
 [![npm](https://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
@@ -11,124 +11,59 @@ Swagger 2.0 and OpenAPI 3.0 middleware
 [![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
 
 
+Swagger 2.0 Support
+---------------------------------
+If your API definition is in Swagger 2.0 format, then you should use [Swagger Express Middleware v2](https://github.com/APIDevTools/swagger-express-middleware/tree/v2#readme). You can install version 2 using npm:
 
-Features
---------------------------
-- **Supports JSON and YAML** <br>
-Write your API definitions in either format - or a mix of both!  You can use `$ref` pointers to reference JSON files from YAML and vice-versa.
-
-- **Full `$ref` Support** <br>
-Split your API definition into multiple files for easier management, collaboration, and version control.  Use whatever folder structure and naming convention you want.  You can even reference URLs.
-
-- **Thoroughly tested**<br>
-Over 2,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 2,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
-
-- [**Mock middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/mock.html)<br>
-**Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
-
-- [**Metadata middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/metadata.html)<br>
-Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.openapi`.
-
-- [**Parse Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/parseRequest.html)<br>
-Parses incoming requests and converts everything into the correct data types, according to your OpenAPI definition definition.
-
-- [**Validate Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/validateRequest.html)<br>
-Ensures that every request complies with your OpenAPI definition definition, or returns the appropriate HTTP error codes if needed.  Of course, you can catch any validation errors and handle them however you want.
-
-- [**CORS middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/CORS.html)<br>
-Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your OpenAPI definition definition.
-
-- [**Files middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)<br>
-Serves the OpenAPI definition file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
-
-
-
-Related Projects
---------------------------
-- [Swagger CLI](https://apidevtools.org/swagger-cli)
-- [Swagger Parser](https://apidevtools.org/swagger-parser)
-
-
-
-Installation and Use
---------------------------
-Install using [npm](https://docs.npmjs.com/about-npm/).
-
-```bash
-npm install swagger-express-middleware
 ```
-Then use it in your [Node.js](http://nodejs.org/) script like this:
-
-```javascript
-const express = require('express');
-const createMiddleware = require('swagger-express-middleware');
-
-let app = express();
-
-createMiddleware('PetStore.yaml', app, function(err, middleware) {
-    // Add all the Swagger Express Middleware, or just the ones you need.
-    // NOTE: Some of these accept optional options (omitted here for brevity)
-    app.use(
-        middleware.metadata(),
-        middleware.CORS(),
-        middleware.files(),
-        middleware.parseRequest(),
-        middleware.validateRequest(),
-        middleware.mock()
-    );
-
-    app.listen(8000, function() {
-        console.log('The PetStore sample is now running at http://localhost:8000');
-    });
-});
+npm install swagger-express-middleware@2
 ```
 
-Samples & Walkthroughs
---------------------------
-Swagger Express Middleware comes two samples that use the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).
+
+
+👷🚧 OpenAPI 3.0 Support 🚧👷‍
+---------------------------------
+Swagger Express Middleware v3 will support OpenAPI 3.0, but it is still a **work in progress**.  This branch is the latest code for what will eventually be version 3.
+
+You can install the **alpha** of version 3.0.0 using npm:
+
+```
+npm install swagger-express-middleware@next
+```
+
+Please note that the alpha version is **not yet supported**, is missing some functionality, definitely contains some bugs, and may have breaking changes at any time until the final release of v3.0.0.
+
+
+
+Documentation
+---------------------------------
+There is **no documentation for version 3 yet**.  Our goal is to keep things as close as possible to version 2, to simplify the migration path.  Here are the docs for version 2:
+
+
+### Middleware
+* [Mock middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/mock.html)
+* [Metadata middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/metadata.html)
+* [Parse Request middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/parseRequest.html)
+* [Validate Request middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/validateRequest.html)
+* [CORS middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/CORS.html)
+* [Files middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)
+
+
+### API
+* [`createMiddleware` function](https://apidevtools.org/swagger-express-middleware/docs/exports/createMiddleware.html)
+* [`Middleware` class](https://apidevtools.org/swagger-express-middleware/docs/exports/Middleware.html)
+* [`DataStore` abstract class](https://apidevtools.org/swagger-express-middleware/docs/exports/DataStore.html)
+* [`MemoryDataStore` class](https://apidevtools.org/swagger-express-middleware/docs/exports/MemoryDataStore.html)
+* [`FileDataStore` class](https://apidevtools.org/swagger-express-middleware/docs/exports/FileDataStore.html)
+* [`Resource` class](https://apidevtools.org/swagger-express-middleware/docs/exports/Resource.html)
+
+### Samples & Walkthroughs
 
 #### Sample 1
-This sample demonstrates the most simplistic usage of Swagger Express Middleware. It simply creates a new Express Application and adds all of the Swagger middleware without changing any options, and without adding any custom middleware.
-
-* [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js)
-* [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/running.html)
+- [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js)
+- [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/running.html)
 
 
 #### Sample 2
-This sample demonstrates a few more advanced features of Swagger Express Middleware, such as setting a few options, initializing the mock data store, and adding custom middleware logic.
-
-* [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
-* [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
-
-
-Contributing
---------------------------
-I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/APIDevTools/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/APIDevTools/swagger-express-middleware/pulls).
-
-#### Building/Testing
-To build/test the project locally on your computer:
-
-1. **Clone this repo**<br>
-`git clone https://github.com/APIDevTools/swagger-express-middleware.git`
-
-2. **Install dependencies**<br>
-`npm install`
-
-3. **Run the tests**<br>
-`npm test`
-
-4. **Run the sample app**<br>
-`npm start`
-
-
-License
---------------------------
-Swagger Express Middleware is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
-
-Big Thanks To
---------------------------
-Thanks to these awesome companies for their support of Open Source developers ❤
-
-[![Travis CI](https://jsdevtools.org/img/badges/travis-ci.svg)](https://travis-ci.com)
-[![SauceLabs](https://jsdevtools.org/img/badges/sauce-labs.svg)](https://saucelabs.com)
-[![Coveralls](https://jsdevtools.org/img/badges/coveralls.svg)](https://coveralls.io)
+- [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
+- [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
