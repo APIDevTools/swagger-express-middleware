@@ -11,7 +11,7 @@ let MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
 let MIN_VALUE = Number.MIN_VALUE || 5e-324;
 let MAX_VALUE = Number.MAX_VALUE || 1.7976931348623157e+308;
 
-describe.skip("JSON Schema sample data", () => {
+describe("JSON Schema sample data", () => {
 
   describe("sampleNumber", () => {
     it("should generate a valid number", () => {

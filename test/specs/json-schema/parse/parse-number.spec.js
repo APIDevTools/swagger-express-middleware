@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const { helper } = require("../../../utils");
 const { testParseRequestMiddleware } = require("./parse-utils");
 
-describe.skip("JSON Schema - parse number params", () => {
+describe("JSON Schema - parse number params", () => {
 
   it("should parse a valid number param", (done) => {
     let schema = {

@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const { helper } = require("../../../utils");
 const { testParseRequestMiddleware } = require("./parse-utils");
 
-describe.skip("JSON Schema - parse boolean params", () => {
+describe("JSON Schema - parse boolean params", () => {
   it("should parse a valid boolean param", (done) => {
     let schema = {
       type: "boolean"

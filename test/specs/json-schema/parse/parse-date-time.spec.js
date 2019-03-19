@@ -4,7 +4,7 @@ const { expect } = require("chai");
 const { helper } = require("../../../utils");
 const { testParseRequestMiddleware } = require("./parse-utils");
 
-describe.skip("JSON Schema - parse date-time params", () => {
+describe("JSON Schema - parse date-time params", () => {
 
   it("should parse a valid date-time param", (done) => {
     let schema = {
