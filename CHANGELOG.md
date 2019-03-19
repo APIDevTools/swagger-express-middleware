@@ -13,6 +13,8 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
 
 - Added `req.openapi.requestBody`, which is the [Request Body Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md#request-body-object) for the request
 
+- Upgraded to the latest version of [Multer](https://www.npmjs.com/package/multer) for parsing `multipart/form-data` request bodies. There are some minor but breaking changes.  See [the Multer docs](https://github.com/expressjs/multer#readme) for details.
+
 [Full Changelog](https://github.com/APIDevTools/swagger-express-middleware/compare/v2.0.2...v3.0.0)
 
 
