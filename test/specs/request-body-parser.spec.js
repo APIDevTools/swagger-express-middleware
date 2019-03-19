@@ -499,7 +499,7 @@ describe("RequestBodyParser middleware", () => {
     });
   });
 
-  describe.skip("Multipart form data parser", () => {
+  describe("Multipart form data parser", () => {
     it("should parse simple fields", (done) => {
       createMiddleware(fixtures.data.petStore, (err, middleware) => {
         let express = helper.express(middleware.parseRequest());
@@ -522,7 +522,7 @@ describe("RequestBodyParser middleware", () => {
           expect(req.body).to.deep.equal({
             foo: "bar",
             biz: ["42", "43", "44"],
-            baz: ["B", "C", "A"],
+            baz: ["B", undefined, "C", undefined, undefined, "A"],
             bob: {
               name: "bob",
               age: "42"
@@ -546,30 +546,26 @@ describe("RequestBodyParser middleware", () => {
         express.post("/foo", helper.spy((req, res, next) => {
           expect(req.body).to.deep.equal({});
           expect(req.files).to.deep.equal({
-            file1: {
-              buffer: null,
+            file1: [{
               encoding: "7bit",
-              extension: "jpg",
               fieldname: "file1",
               mimetype: "image/jpeg",
-              name: req.files.file1.name,
+              filename: req.files.file1[0].filename,
               originalname: "1MB.jpg",
-              path: req.files.file1.path,
+              path: req.files.file1[0].path,
+              destination: req.files.file1[0].destination,
               size: 683709,
-              truncated: false
-            },
-            file2: {
-              buffer: null,
+            }],
+            file2: [{
               encoding: "7bit",
-              extension: "foobar",
               fieldname: "file2",
               mimetype: "image/jpeg",
-              name: req.files.file2.name,
+              filename: req.files.file2[0].filename,
               originalname: "MyFile.foobar",
-              path: req.files.file2.path,
+              path: req.files.file2[0].path,
+              destination: req.files.file2[0].destination,
               size: 683709,
-              truncated: false
-            }
+            }]
           });
         }));
       });
@@ -584,52 +580,36 @@ describe("RequestBodyParser middleware", () => {
           .set("Content-Type", "multipart/form-data")
           .attach("file1", fixtures.paths.oneMB, "1MB.jpg")
           .field("foo", "bar")
-          .field("biz", "42")
-          .field("biz", "43")
-          .field("biz", "44")
           .attach("file2", fixtures.paths.oneMB, "MyFile.foobar")
-          .field("baz[5]", "A")
-          .field("baz[0]", "B")
-          .field("baz[2]", "C")
-          .field("bob[name]", "bob")
-          .field("bob[age]", "42")
+          .field("biz", "42")
           .end(helper.checkSpyResults(done));
 
         express.post("/foo", helper.spy((req, res, next) => {
           expect(req.body).to.deep.equal({
             foo: "bar",
-            biz: ["42", "43", "44"],
-            baz: ["B", "C", "A"],
-            bob: {
-              name: "bob",
-              age: "42"
-            }
+            biz: "42"
           });
           expect(req.files).to.deep.equal({
-            file1: {
-              buffer: null,
+            file1: [{
               encoding: "7bit",
-              extension: "jpg",
               fieldname: "file1",
               mimetype: "image/jpeg",
-              name: req.files.file1.name,
+              filename: req.files.file1[0].filename,
               originalname: "1MB.jpg",
-              path: req.files.file1.path,
+              path: req.files.file1[0].path,
+              destination: req.files.file1[0].destination,
               size: 683709,
-              truncated: false
-            },
-            file2: {
-              buffer: null,
+            }],
+            file2: [{
               encoding: "7bit",
-              extension: "foobar",
               fieldname: "file2",
               mimetype: "image/jpeg",
-              name: req.files.file2.name,
+              filename: req.files.file2[0].filename,
               originalname: "MyFile.foobar",
-              path: req.files.file2.path,
+              path: req.files.file2[0].path,
+              destination: req.files.file2[0].destination,
               size: 683709,
-              truncated: false
-            }
+            }]
           });
         }));
       });
@@ -650,42 +630,36 @@ describe("RequestBodyParser middleware", () => {
         express.post("/foo", helper.spy((req, res, next) => {
           expect(req.body).to.deep.equal({});
           expect(req.files).to.deep.equal({
-            file1: {
-              buffer: null,
+            file1: [{
               encoding: "7bit",
-              extension: "jpg",
               fieldname: "file1",
               mimetype: "image/jpeg",
-              name: req.files.file1.name,
+              filename: req.files.file1[0].filename,
               originalname: "1MB.jpg",
-              path: req.files.file1.path,
+              path: req.files.file1[0].path,
+              destination: req.files.file1[0].destination,
               size: 683709,
-              truncated: false
-            },
-            file2: {
-              buffer: null,
+            }],
+            file2: [{
               encoding: "7bit",
-              extension: "jpg",
               fieldname: "file2",
               mimetype: "image/jpeg",
-              name: req.files.file2.name,
+              filename: req.files.file2[0].filename,
               originalname: "5MB.jpg",
-              path: req.files.file2.path,
+              path: req.files.file2[0].path,
+              destination: req.files.file2[0].destination,
               size: 4573123,
-              truncated: false
-            },
-            file3: {
-              buffer: null,
+            }],
+            file3: [{
               encoding: "7bit",
-              extension: "jpg",
               fieldname: "file3",
               mimetype: "image/jpeg",
-              name: req.files.file3.name,
+              filename: req.files.file3[0].filename,
               originalname: "6MB.jpg",
-              path: req.files.file3.path,
+              path: req.files.file3[0].path,
+              destination: req.files.file3[0].destination,
               size: 5595095,
-              truncated: false
-            }
+            }]
           });
         }));
       });
