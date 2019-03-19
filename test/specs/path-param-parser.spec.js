@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../utils/fixtures");
 const { helper } = require("../utils");
 
-describe.skip("PathParser middleware", () => {
+describe.skip("PathParamParser middleware", () => {
 
   it("should not parse path params if the metadata middleware is not used", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {
@@ -52,7 +52,7 @@ describe.skip("PathParser middleware", () => {
     let express = helper.express();
     createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(middleware.metadata());          // <--- The Express app is NOT passed to the Metadata class
-      express.use(middleware.parseRequest({}));    // <--- The Express app is NOT passed to the PathParser class
+      express.use(middleware.parseRequest({}));    // <--- The Express app is NOT passed to the PathParamParser class
 
       helper.supertest(express)
         .get("/api/pets/Fido/photos/12345")
@@ -73,7 +73,7 @@ describe.skip("PathParser middleware", () => {
     let express = helper.express();
     createMiddleware(fixtures.data.petStore, express, (err, middleware) => {
       express.use(middleware.metadata());                                 // <--- The Express app is NOT passed to the Metadata class
-      express.use(middleware.parseRequest({ caseSensitive: true }, {}));    // <--- The Express app is NOT passed to the PathParser class
+      express.use(middleware.parseRequest({ caseSensitive: true }, {}));    // <--- The Express app is NOT passed to the PathParamParser class
 
       helper.supertest(express)
         .get("/api/pets/Fido/photos/12345")
@@ -199,9 +199,9 @@ describe.skip("PathParser middleware", () => {
       express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
       // The parseRequest middleware needs to be loaded per-router.
-      express.use(middleware.parseRequest());                         // <--- The Express app is NOT passed to the PathParser class
-      router2.use(middleware.parseRequest(router2));                  // <--- The Express router is passed to the PathParser class
-      router3.use(middleware.parseRequest(router3));                  // <--- The Express router is passed to the PathParser class
+      express.use(middleware.parseRequest());                         // <--- The Express app is NOT passed to the PathParamParser class
+      router2.use(middleware.parseRequest(router2));                  // <--- The Express router is passed to the PathParamParser class
+      router3.use(middleware.parseRequest(router3));                  // <--- The Express router is passed to the PathParamParser class
 
       express.use(router1);
       express.use(router3);
