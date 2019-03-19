@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "description": "OpenAPI 3.0 and Swagger 2.0 middleware for Express",
   "keywords": [
     "express",
@@ -55,7 +55,7 @@
     "chai": "^4.2.0",
     "chai-datetime": "^1.4.0",
     "coveralls": "^3.0.3",
-    "eslint": "^5.15.2",
+    "eslint": "^5.15.3",
     "eslint-config-modular": "^7.0.0",
     "express": "^4.16.4",
     "mocha": "^6.0.2",
