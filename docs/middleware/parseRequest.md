@@ -2,7 +2,7 @@ Parse Request middleware
 ============================
 Parses incoming requests and converts everything into the correct data types, according to your OpenAPI definition definition.  It'll even use the `default` values specified in your API for any missing parameters.
 
-You can access the parsed request using the standard Express properties and methods, such as [req.body](http://expressjs.com/4x/api.html#req.body), [req.params](http://expressjs.com/4x/api.html#req.params), [req.query](http://expressjs.com/4x/api.html#req.query), [req.get()](http://expressjs.com/4x/api.html#req.get), [req.files](http://expressjs.com/4x/api.html#req.files), [req.cookies](http://expressjs.com/4x/api.html#req.cookies), and [req.signedCookies](http://expressjs.com/4x/api.html#req.signedCookies).
+You can access the parsed request using the standard Express properties and methods, such as [req.body](http://expressjs.com/4x/api.html#req.body), [req.params](http://expressjs.com/4x/api.html#req.params), [req.query](http://expressjs.com/4x/api.html#req.query), [req.header()](http://expressjs.com/4x/api.html#req.get), [req.files](http://expressjs.com/4x/api.html#req.files), [req.cookies](http://expressjs.com/4x/api.html#req.cookies), and [req.signedCookies](http://expressjs.com/4x/api.html#req.signedCookies).
 
 
 Example
