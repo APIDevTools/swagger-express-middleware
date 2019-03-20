@@ -31,7 +31,7 @@ describe.skip("ParamParser middleware", () => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
-          .get("/api/pets?Age=4&Tags=big,brown")
+          .get("/api/pets?Age=4&Tags=big,brown&DOB=&Address.City=")
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req, res, next) => {
