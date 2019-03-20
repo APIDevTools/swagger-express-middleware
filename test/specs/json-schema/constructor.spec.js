@@ -3,7 +3,7 @@
 const { expect } = require("chai");
 const JsonSchema = require("../../../lib/helpers/json-schema");
 
-describe.skip("JSON Schema constructor", () => {
+describe("JSON Schema constructor", () => {
 
   it("should throw an error if the schema is missing", () => {
     function createMissingSchema () {
