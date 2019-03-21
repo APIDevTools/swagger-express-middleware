@@ -2,10 +2,10 @@
 
 const _ = require("lodash");
 const { expect } = require("chai");
-const { Resource, MemoryDataStore } = require("../../../");
-const fixtures = require("../../utils/fixtures");
-const { helper } = require("../../utils");
-const { initTest } = require("./mock-utils");
+const { Resource, MemoryDataStore } = require("../../../../");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
+const { initTest } = require("./utils");
 
 describe.skip("Edit Collection Mock", () => {
   ["patch", "put", "post"].forEach((method) => {

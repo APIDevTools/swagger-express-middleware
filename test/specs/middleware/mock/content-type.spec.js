@@ -2,10 +2,10 @@
 
 const _ = require("lodash");
 const fs = require("fs");
-const { Resource, MemoryDataStore } = require("../../../");
-const fixtures = require("../../utils/fixtures");
-const { helper } = require("../../utils");
-const { initTest } = require("./mock-utils");
+const { Resource, MemoryDataStore } = require("../../../../");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
+const { initTest } = require("./utils");
 
 describe.skip("Mock Content-Type header", () => {
 

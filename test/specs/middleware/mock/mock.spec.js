@@ -1,9 +1,9 @@
 "use strict";
 
-const { createMiddleware, Resource, MemoryDataStore } = require("../../../");
+const { createMiddleware, Resource, MemoryDataStore } = require("../../../../");
 const { expect } = require("chai");
-const fixtures = require("../../utils/fixtures");
-const { helper } = require("../../utils");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
 
 describe.skip("Mock middleware", () => {
 

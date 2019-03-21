@@ -2,11 +2,11 @@
 
 const _ = require("lodash");
 const { expect } = require("chai");
-const { Resource, MemoryDataStore } = require("../../../");
-const util = require("../../../lib/helpers/util");
-const fixtures = require("../../utils/fixtures");
-const { helper } = require("../../utils");
-const { initTest } = require("./mock-utils");
+const { Resource, MemoryDataStore } = require("../../../../");
+const util = require("../../../../lib/helpers/util");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
+const { initTest } = require("./utils");
 
 describe.skip("Query Resource Mock", () => {
   ["head", "options", "get"].forEach((method) => {

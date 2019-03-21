@@ -1,12 +1,12 @@
 "use strict";
 
 const _ = require("lodash");
-const createMiddleware = require("../../");
+const createMiddleware = require("../../../lib");
 const { assert, expect } = require("chai");
-const fixtures = require("../utils/fixtures");
-const { helper, deepCompare } = require("../utils");
+const fixtures = require("../../utils/fixtures");
+const { helper, deepCompare } = require("../../utils");
 
-describe("RequestMetadata middleware", () => {
+describe("Metadata middleware", () => {
 
   it("should set all req.openapi properties for a parameterless path", (done) => {
     createMiddleware(fixtures.paths.petStore, (err, middleware) => {

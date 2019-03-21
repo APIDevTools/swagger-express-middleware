@@ -1,9 +1,9 @@
 "use strict";
 
 const _ = require("lodash");
-const fixtures = require("../../utils/fixtures");
-const { helper } = require("../../utils");
-const { initTest } = require("./mock-utils");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
+const { initTest } = require("./utils");
 
 describe.skip("Mock Response", () => {
 

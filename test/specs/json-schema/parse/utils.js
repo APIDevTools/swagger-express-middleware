@@ -2,7 +2,7 @@
 
 const _ = require("lodash");
 const fixtures = require("../../../utils/fixtures");
-const createMiddleware = require("../../../../");
+const createMiddleware = require("../../../../lib");
 const { helper } = require("../../../utils");
 
 module.exports = {

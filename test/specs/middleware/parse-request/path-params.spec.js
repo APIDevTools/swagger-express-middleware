@@ -1,12 +1,12 @@
 "use strict";
 
 const _ = require("lodash");
-const createMiddleware = require("../../");
+const createMiddleware = require("../../../../lib");
 const { assert, expect } = require("chai");
-const fixtures = require("../utils/fixtures");
-const { helper } = require("../utils");
+const fixtures = require("../../../utils/fixtures");
+const { helper } = require("../../../utils");
 
-describe.skip("PathParamParser middleware", () => {
+describe.skip("Parse Request middleware - path params", () => {
 
   it("should not parse path params if the metadata middleware is not used", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {

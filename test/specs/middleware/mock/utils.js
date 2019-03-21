@@ -1,8 +1,8 @@
 "use strict";
 
-const { createMiddleware, DataStore } = require("../../../");
-const { helper } = require("../../utils");
-const util = require("../../../lib/helpers/util");
+const { createMiddleware, DataStore } = require("../../../../");
+const { helper } = require("../../../utils");
+const util = require("../../../../lib/helpers/util");
 
 
 module.exports = {

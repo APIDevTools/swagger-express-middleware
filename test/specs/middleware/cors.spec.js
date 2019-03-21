@@ -1,10 +1,10 @@
 "use strict";
 
 const _ = require("lodash");
-const createMiddleware = require("../../");
+const createMiddleware = require("../../../lib");
 const { assert, expect } = require("chai");
-const fixtures = require("../utils/fixtures");
-const { helper } = require("../utils");
+const fixtures = require("../../utils/fixtures");
+const { helper } = require("../../utils");
 
 describe("CORS middleware", () => {
   let api;
