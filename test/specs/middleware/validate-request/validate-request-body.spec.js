@@ -67,21 +67,21 @@ describe.skip("Validate Request middleware - 400 (Bad Request)", () => {
       });
     });
 
-    it("should decode encoded formData params", (done) => {
+    it("should parse formData params with special characters", (done) => {
       createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
         helper.supertest(express)
           .put("/api/pets")
           .field("Age", "4")
-          .field("Tags", 'big,Fido the "wonder" dog,brown')
+          .field("Tags", "big,`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?],brown")
           .end(helper.checkSpyResults(done));
 
         express.put("/api/pets", helper.spy((req, res, next) => {
           expect(req.body).to.deep.equal({
             Age: 4,
             DOB: undefined,
-            Tags: ["big", 'Fido the "wonder" dog', "brown"],
+            Tags: ["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"],
             Type: undefined,
             "Address.City": undefined,
             "Address.State": undefined,

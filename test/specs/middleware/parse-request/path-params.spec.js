@@ -119,23 +119,23 @@ describe.skip("Parse Request middleware - path params", () => {
     });
   });
 
-  it("should decode encoded path params", (done) => {
+  it("should parse path params with special characters", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express();
       express.use(middleware.metadata(express));
       express.use(middleware.parseRequest(express, {}));
 
       helper.supertest(express)
-        .get("/api/pets/Fido%20the%20%22wonder%22%20dog/photos/12345")
+        .get("/api/pets/%60~!%40%23%24%25%5E%26*()-_%3D%2B%5B%7B%5D%7D%7C%3B%3A'%22%2C%3C.%3E%2F%3F%5D/photos/12345")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets/:PetName/photos/:ID", helper.spy((req, res, next) => {
         // The path itself is not decoded
-        expect(req.path).to.equal("/api/pets/Fido%20the%20%22wonder%22%20dog/photos/12345");
+        expect(req.path).to.equal("/api/pets/%60~!%40%23%24%25%5E%26*()-_%3D%2B%5B%7B%5D%7D%7C%3B%3A'%22%2C%3C.%3E%2F%3F%5D/photos/12345");
 
         // But the path params ARE decoded
         expect(req.params).to.deep.equal({
-          PetName: 'Fido the "wonder" dog',
+          PetName: "`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?]",
           ID: 12345
         });
         expect(req.pathParams).to.deep.equal(req.params);
@@ -376,14 +376,14 @@ describe.skip("Parse Request middleware - path params", () => {
       // This is path-specific error-handler middleware, so it catches the error
       express.use("/api/pets/:PetName/photos/:ID", helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(Error);
-        expect(err.message).to.contain('"52.5" is not a properly-formatted whole number');
+        expect(err.message).to.equal('"52.5" is not a properly-formatted whole number');
         next(err);
       }));
 
       // This is catch-all error-handler middleware, so it catches the error
       express.use(helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(Error);
-        expect(err.message).to.contain('"52.5" is not a properly-formatted whole number');
+        expect(err.message).to.equal('"52.5" is not a properly-formatted whole number');
       }));
     });
   });

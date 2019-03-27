@@ -50,19 +50,19 @@ describe.skip("Parse Request middleware - query params", () => {
     });
   });
 
-  it("should decode encoded query params", (done) => {
+  it("should parse query params with special characters", (done) => {
     createMiddleware(fixtures.data.petStore, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?Age=4&Tags=big,Fido%20the%20%22wonder%22%20dog,brown")
+        .get("/api/pets?Age=4&Tags=big,%60~!%40%23%24%25%5E%26*()-_%3D%2B%5B%7B%5D%7D%7C%3B%3A'%22%2C%3C.%3E%2F%3F%5D,brown")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         expect(req.query).to.deep.equal({
           Age: 4,
           DOB: undefined,
-          Tags: ["big", 'Fido the "wonder" dog', "brown"],
+          Tags: ["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"],
           Type: undefined,
           "Address.City": undefined,
           "Address.State": undefined,
@@ -147,7 +147,7 @@ describe.skip("Parse Request middleware - query params", () => {
 
       express.use("/api/pets", helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(Error);
-        expect(err.message).to.contain('The "Age" query parameter is invalid ("big,brown")');
+        expect(err.message).to.equal('The "Age" query parameter is invalid ("big,brown")');
       }));
     });
   });

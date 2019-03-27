@@ -59,21 +59,21 @@ describe("Parse Request middleware - header params", () => {
     });
   });
 
-  it("should decode encoded header params", (done) => {
+  it("should parse header params with special characters", (done) => {
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
         .set("Age", "4")
-        .set("Tags", 'big,Fido the "wonder" dog,brown')
+        .set("Tags", "big,`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?],brown")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         expect(req.headers.age).to.equal(4);
         expect(req.header("Age")).to.equal(4);
-        expect(req.headers.tags).to.deep.equal(["big", 'Fido the "wonder" dog', "brown"]);
-        expect(req.header("Tags")).to.deep.equal(["big", 'Fido the "wonder" dog', "brown"]);
+        expect(req.headers.tags).to.deep.equal(["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"]);
+        expect(req.header("Tags")).to.deep.equal(["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"]);
         expect(req.headers.type).to.be.undefined;
         expect(req.header("Type")).to.be.undefined;
       }));
