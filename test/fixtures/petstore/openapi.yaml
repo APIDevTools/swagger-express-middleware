@@ -41,8 +41,6 @@ paths:
           in: query
           description: Filters pets by one or more tags
           required: false
-          style: form
-          explode: false
           schema:
             type: array
             items:
