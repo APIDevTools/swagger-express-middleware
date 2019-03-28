@@ -42,70 +42,37 @@ paths:
           description: Filters pets by one or more tags
           required: false
           schema:
-            type: array
-            items:
-              type: string
+            $ref: "#/components/schemas/pet/properties/Tags"
         - name: Type
           in: query
           description: Filters pets by type (dog, cat, or bird)
           required: false
           schema:
-            type: string
+            $ref: "#/components/schemas/pet/properties/Type"
         - name: Age
           in: query
           description: Filters pets by age
           required: false
           schema:
-            type: integer
+            $ref: "#/components/schemas/pet/properties/Age"
         - name: DOB
           in: query
           description: Filters pets by date of birth
           required: false
           schema:
-            type: string
-            format: date
-        - name: Address.City
+            $ref: "#/components/schemas/pet/properties/DOB"
+        - name: Address
           in: query
           description: Filters pets by city
           required: false
           schema:
-            type: string
-        - name: Address.State
-          in: query
-          description: Filters pets by state
-          required: false
-          schema:
-            type: string
-        - name: Address.ZipCode
-          in: query
-          description: Filters pets by zip code
-          required: false
-          schema:
-            type: integer
-        - name: Vet.Name
+            $ref: "#/components/schemas/partial_address"
+        - name: Vet
           in: query
           description: Filters pets by veterinarian name
           required: false
           schema:
-            type: string
-        - name: Vet.Address.City
-          in: query
-          description: Filters pets by veterinarian city
-          required: false
-          schema:
-            type: string
-        - name: Vet.Address.State
-          in: query
-          description: Filters pets by veterinarian state
-          required: false
-          schema:
-            type: string
-        - name: Vet.Address.ZipCode
-          in: query
-          description: Filters pets by veterinarian zip code
-          required: false
-          schema:
-            type: integer
+            $ref: "#/components/schemas/partial_veterinarian"
       responses:
         "200":
           description: pet response
@@ -436,6 +403,8 @@ components:
           pattern: ^[a-zA-Z0-9- ]+$
         Age:
           type: integer
+          minimum: 1
+          maximum: 150
         DOB:
           type: string
           format: date
@@ -455,22 +424,21 @@ components:
             type: string
             minLength: 1
 
-    veterinarian:
-      required:
-        - Name
+    partial_veterinarian:
       properties:
         Name:
           type: string
           minLength: 1
         Address:
-          $ref: "#/components/schemas/address"
+          $ref: "#/components/schemas/partial_address"
 
-    address:
+    veterinarian:
       required:
-        - Street
-        - City
-        - State
-        - ZipCode
+        - Name
+      allOf:
+        $ref: "#/components/schemas/partial_veterinarian"
+
+    partial_address:
       properties:
         Street:
           type: string
@@ -487,6 +455,15 @@ components:
           type: integer
           minimum: 10000
           maximum: 99999
+
+    address:
+      required:
+        - Street
+        - City
+        - State
+        - ZipCode
+      allOf:
+        $ref: "#/components/schemas/partial_address"
 
     error:
       required:

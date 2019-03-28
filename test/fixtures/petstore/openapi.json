@@ -61,7 +61,8 @@
             "schema": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               }
             }
           },
@@ -71,7 +72,12 @@
             "description": "Filters pets by type (dog, cat, or bird)",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "cat",
+                "dog",
+                "bird"
+              ]
             }
           },
           {
@@ -80,7 +86,9 @@
             "description": "Filters pets by age",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 150
             }
           },
           {
@@ -94,66 +102,69 @@
             }
           },
           {
-            "name": "Address.City",
+            "name": "Address",
             "in": "query",
             "description": "Filters pets by city",
             "required": false,
             "schema": {
-              "type": "string"
+              "properties": {
+                "Street": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "City": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "State": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2,
+                  "pattern": "^[A-Z]+$"
+                },
+                "ZipCode": {
+                  "type": "integer",
+                  "minimum": 10000,
+                  "maximum": 99999
+                }
+              }
             }
           },
           {
-            "name": "Address.State",
-            "in": "query",
-            "description": "Filters pets by state",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Address.ZipCode",
-            "in": "query",
-            "description": "Filters pets by zip code",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "Vet.Name",
+            "name": "Vet",
             "in": "query",
             "description": "Filters pets by veterinarian name",
             "required": false,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Vet.Address.City",
-            "in": "query",
-            "description": "Filters pets by veterinarian city",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Vet.Address.State",
-            "in": "query",
-            "description": "Filters pets by veterinarian state",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Vet.Address.ZipCode",
-            "in": "query",
-            "description": "Filters pets by veterinarian zip code",
-            "required": false,
-            "schema": {
-              "type": "integer"
+              "properties": {
+                "Name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "Address": {
+                  "properties": {
+                    "Street": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "City": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "State": {
+                      "type": "string",
+                      "minLength": 2,
+                      "maxLength": 2,
+                      "pattern": "^[A-Z]+$"
+                    },
+                    "ZipCode": {
+                      "type": "integer",
+                      "minimum": 10000,
+                      "maximum": 99999
+                    }
+                  }
+                }
+              }
             }
           }
         ],
@@ -176,7 +187,9 @@
                         "pattern": "^[a-zA-Z0-9- ]+$"
                       },
                       "Age": {
-                        "type": "integer"
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 150
                       },
                       "DOB": {
                         "type": "string",
@@ -197,25 +210,27 @@
                           "State",
                           "ZipCode"
                         ],
-                        "properties": {
-                          "Street": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "City": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "State": {
-                            "type": "string",
-                            "minLength": 2,
-                            "maxLength": 2,
-                            "pattern": "^[A-Z]+$"
-                          },
-                          "ZipCode": {
-                            "type": "integer",
-                            "minimum": 10000,
-                            "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
                           }
                         }
                       },
@@ -223,37 +238,33 @@
                         "required": [
                           "Name"
                         ],
-                        "properties": {
-                          "Name": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "Address": {
-                            "required": [
-                              "Street",
-                              "City",
-                              "State",
-                              "ZipCode"
-                            ],
-                            "properties": {
-                              "Street": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "City": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "State": {
-                                "type": "string",
-                                "minLength": 2,
-                                "maxLength": 2,
-                                "pattern": "^[A-Z]+$"
-                              },
-                              "ZipCode": {
-                                "type": "integer",
-                                "minimum": 10000,
-                                "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
                               }
                             }
                           }
@@ -285,7 +296,9 @@
                         "pattern": "^[a-zA-Z0-9- ]+$"
                       },
                       "Age": {
-                        "type": "integer"
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 150
                       },
                       "DOB": {
                         "type": "string",
@@ -306,25 +319,27 @@
                           "State",
                           "ZipCode"
                         ],
-                        "properties": {
-                          "Street": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "City": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "State": {
-                            "type": "string",
-                            "minLength": 2,
-                            "maxLength": 2,
-                            "pattern": "^[A-Z]+$"
-                          },
-                          "ZipCode": {
-                            "type": "integer",
-                            "minimum": 10000,
-                            "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
                           }
                         }
                       },
@@ -332,37 +347,33 @@
                         "required": [
                           "Name"
                         ],
-                        "properties": {
-                          "Name": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "Address": {
-                            "required": [
-                              "Street",
-                              "City",
-                              "State",
-                              "ZipCode"
-                            ],
-                            "properties": {
-                              "Street": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "City": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "State": {
-                                "type": "string",
-                                "minLength": 2,
-                                "maxLength": 2,
-                                "pattern": "^[A-Z]+$"
-                              },
-                              "ZipCode": {
-                                "type": "integer",
-                                "minimum": 10000,
-                                "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
                               }
                             }
                           }
@@ -394,7 +405,9 @@
                         "pattern": "^[a-zA-Z0-9- ]+$"
                       },
                       "Age": {
-                        "type": "integer"
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 150
                       },
                       "DOB": {
                         "type": "string",
@@ -415,25 +428,27 @@
                           "State",
                           "ZipCode"
                         ],
-                        "properties": {
-                          "Street": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "City": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "State": {
-                            "type": "string",
-                            "minLength": 2,
-                            "maxLength": 2,
-                            "pattern": "^[A-Z]+$"
-                          },
-                          "ZipCode": {
-                            "type": "integer",
-                            "minimum": 10000,
-                            "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
                           }
                         }
                       },
@@ -441,37 +456,33 @@
                         "required": [
                           "Name"
                         ],
-                        "properties": {
-                          "Name": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "Address": {
-                            "required": [
-                              "Street",
-                              "City",
-                              "State",
-                              "ZipCode"
-                            ],
-                            "properties": {
-                              "Street": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "City": {
-                                "type": "string",
-                                "minLength": 1
-                              },
-                              "State": {
-                                "type": "string",
-                                "minLength": 2,
-                                "maxLength": 2,
-                                "pattern": "^[A-Z]+$"
-                              },
-                              "ZipCode": {
-                                "type": "integer",
-                                "minimum": 10000,
-                                "maximum": 99999
+                        "allOf": {
+                          "properties": {
+                            "Name": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "Address": {
+                              "properties": {
+                                "Street": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "City": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "State": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "pattern": "^[A-Z]+$"
+                                },
+                                "ZipCode": {
+                                  "type": "integer",
+                                  "minimum": 10000,
+                                  "maximum": 99999
+                                }
                               }
                             }
                           }
@@ -524,7 +535,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -545,25 +558,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -571,37 +586,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -645,7 +656,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -666,25 +679,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -692,37 +707,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -766,7 +777,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -787,25 +800,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -813,37 +828,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -901,7 +912,9 @@
                     "pattern": "^[a-zA-Z0-9- ]+$"
                   },
                   "Age": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 150
                   },
                   "DOB": {
                     "type": "string",
@@ -922,25 +935,27 @@
                       "State",
                       "ZipCode"
                     ],
-                    "properties": {
-                      "Street": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "City": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "State": {
-                        "type": "string",
-                        "minLength": 2,
-                        "maxLength": 2,
-                        "pattern": "^[A-Z]+$"
-                      },
-                      "ZipCode": {
-                        "type": "integer",
-                        "minimum": 10000,
-                        "maximum": 99999
+                    "allOf": {
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
                       }
                     }
                   },
@@ -948,37 +963,33 @@
                     "required": [
                       "Name"
                     ],
-                    "properties": {
-                      "Name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "Address": {
-                        "required": [
-                          "Street",
-                          "City",
-                          "State",
-                          "ZipCode"
-                        ],
-                        "properties": {
-                          "Street": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "City": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "State": {
-                            "type": "string",
-                            "minLength": 2,
-                            "maxLength": 2,
-                            "pattern": "^[A-Z]+$"
-                          },
-                          "ZipCode": {
-                            "type": "integer",
-                            "minimum": 10000,
-                            "maximum": 99999
+                    "allOf": {
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
                           }
                         }
                       }
@@ -1042,7 +1053,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -1063,25 +1076,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -1089,37 +1104,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -1174,7 +1185,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -1195,25 +1208,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -1221,37 +1236,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -1280,7 +1291,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -1301,25 +1314,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -1327,37 +1342,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -1386,7 +1397,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -1407,25 +1420,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -1433,37 +1448,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -1515,7 +1526,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -1536,25 +1549,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -1562,37 +1577,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -1636,7 +1647,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -1657,25 +1670,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -1683,37 +1698,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -1757,7 +1768,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -1778,25 +1791,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -1804,37 +1819,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -1890,7 +1901,9 @@
                     "pattern": "^[a-zA-Z0-9- ]+$"
                   },
                   "Age": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 150
                   },
                   "DOB": {
                     "type": "string",
@@ -1911,25 +1924,27 @@
                       "State",
                       "ZipCode"
                     ],
-                    "properties": {
-                      "Street": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "City": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "State": {
-                        "type": "string",
-                        "minLength": 2,
-                        "maxLength": 2,
-                        "pattern": "^[A-Z]+$"
-                      },
-                      "ZipCode": {
-                        "type": "integer",
-                        "minimum": 10000,
-                        "maximum": 99999
+                    "allOf": {
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
                       }
                     }
                   },
@@ -1937,37 +1952,33 @@
                     "required": [
                       "Name"
                     ],
-                    "properties": {
-                      "Name": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "Address": {
-                        "required": [
-                          "Street",
-                          "City",
-                          "State",
-                          "ZipCode"
-                        ],
-                        "properties": {
-                          "Street": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "City": {
-                            "type": "string",
-                            "minLength": 1
-                          },
-                          "State": {
-                            "type": "string",
-                            "minLength": 2,
-                            "maxLength": 2,
-                            "pattern": "^[A-Z]+$"
-                          },
-                          "ZipCode": {
-                            "type": "integer",
-                            "minimum": 10000,
-                            "maximum": 99999
+                    "allOf": {
+                      "properties": {
+                        "Name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "Address": {
+                          "properties": {
+                            "Street": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "City": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "State": {
+                              "type": "string",
+                              "minLength": 2,
+                              "maxLength": 2,
+                              "pattern": "^[A-Z]+$"
+                            },
+                            "ZipCode": {
+                              "type": "integer",
+                              "minimum": 10000,
+                              "maximum": 99999
+                            }
                           }
                         }
                       }
@@ -2004,7 +2015,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -2025,25 +2038,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -2051,37 +2066,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -2110,7 +2121,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -2131,25 +2144,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -2157,37 +2172,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -2216,7 +2227,9 @@
                       "pattern": "^[a-zA-Z0-9- ]+$"
                     },
                     "Age": {
-                      "type": "integer"
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 150
                     },
                     "DOB": {
                       "type": "string",
@@ -2237,25 +2250,27 @@
                         "State",
                         "ZipCode"
                       ],
-                      "properties": {
-                        "Street": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "City": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "State": {
-                          "type": "string",
-                          "minLength": 2,
-                          "maxLength": 2,
-                          "pattern": "^[A-Z]+$"
-                        },
-                        "ZipCode": {
-                          "type": "integer",
-                          "minimum": 10000,
-                          "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Street": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "City": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "State": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2,
+                            "pattern": "^[A-Z]+$"
+                          },
+                          "ZipCode": {
+                            "type": "integer",
+                            "minimum": 10000,
+                            "maximum": 99999
+                          }
                         }
                       }
                     },
@@ -2263,37 +2278,33 @@
                       "required": [
                         "Name"
                       ],
-                      "properties": {
-                        "Name": {
-                          "type": "string",
-                          "minLength": 1
-                        },
-                        "Address": {
-                          "required": [
-                            "Street",
-                            "City",
-                            "State",
-                            "ZipCode"
-                          ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                      "allOf": {
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "Address": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         }
@@ -2345,7 +2356,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -2366,25 +2379,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -2392,37 +2407,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -2466,7 +2477,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -2487,25 +2500,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -2513,37 +2528,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -2587,7 +2598,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -2608,25 +2621,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -2634,37 +2649,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -2740,7 +2751,9 @@
                           "pattern": "^[a-zA-Z0-9- ]+$"
                         },
                         "Age": {
-                          "type": "integer"
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 150
                         },
                         "DOB": {
                           "type": "string",
@@ -2761,25 +2774,27 @@
                             "State",
                             "ZipCode"
                           ],
-                          "properties": {
-                            "Street": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "City": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "State": {
-                              "type": "string",
-                              "minLength": 2,
-                              "maxLength": 2,
-                              "pattern": "^[A-Z]+$"
-                            },
-                            "ZipCode": {
-                              "type": "integer",
-                              "minimum": 10000,
-                              "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Street": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "City": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "State": {
+                                "type": "string",
+                                "minLength": 2,
+                                "maxLength": 2,
+                                "pattern": "^[A-Z]+$"
+                              },
+                              "ZipCode": {
+                                "type": "integer",
+                                "minimum": 10000,
+                                "maximum": 99999
+                              }
                             }
                           }
                         },
@@ -2787,37 +2802,33 @@
                           "required": [
                             "Name"
                           ],
-                          "properties": {
-                            "Name": {
-                              "type": "string",
-                              "minLength": 1
-                            },
-                            "Address": {
-                              "required": [
-                                "Street",
-                                "City",
-                                "State",
-                                "ZipCode"
-                              ],
-                              "properties": {
-                                "Street": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "City": {
-                                  "type": "string",
-                                  "minLength": 1
-                                },
-                                "State": {
-                                  "type": "string",
-                                  "minLength": 2,
-                                  "maxLength": 2,
-                                  "pattern": "^[A-Z]+$"
-                                },
-                                "ZipCode": {
-                                  "type": "integer",
-                                  "minimum": 10000,
-                                  "maximum": 99999
+                          "allOf": {
+                            "properties": {
+                              "Name": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "Address": {
+                                "properties": {
+                                  "Street": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "City": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "State": {
+                                    "type": "string",
+                                    "minLength": 2,
+                                    "maxLength": 2,
+                                    "pattern": "^[A-Z]+$"
+                                  },
+                                  "ZipCode": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 99999
+                                  }
                                 }
                               }
                             }
@@ -3065,7 +3076,9 @@
             "pattern": "^[a-zA-Z0-9- ]+$"
           },
           "Age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 150
           },
           "DOB": {
             "type": "string",
@@ -3086,25 +3099,27 @@
               "State",
               "ZipCode"
             ],
-            "properties": {
-              "Street": {
-                "type": "string",
-                "minLength": 1
-              },
-              "City": {
-                "type": "string",
-                "minLength": 1
-              },
-              "State": {
-                "type": "string",
-                "minLength": 2,
-                "maxLength": 2,
-                "pattern": "^[A-Z]+$"
-              },
-              "ZipCode": {
-                "type": "integer",
-                "minimum": 10000,
-                "maximum": 99999
+            "allOf": {
+              "properties": {
+                "Street": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "City": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "State": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2,
+                  "pattern": "^[A-Z]+$"
+                },
+                "ZipCode": {
+                  "type": "integer",
+                  "minimum": 10000,
+                  "maximum": 99999
+                }
               }
             }
           },
@@ -3112,37 +3127,33 @@
             "required": [
               "Name"
             ],
-            "properties": {
-              "Name": {
-                "type": "string",
-                "minLength": 1
-              },
-              "Address": {
-                "required": [
-                  "Street",
-                  "City",
-                  "State",
-                  "ZipCode"
-                ],
-                "properties": {
-                  "Street": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "City": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "State": {
-                    "type": "string",
-                    "minLength": 2,
-                    "maxLength": 2,
-                    "pattern": "^[A-Z]+$"
-                  },
-                  "ZipCode": {
-                    "type": "integer",
-                    "minimum": 10000,
-                    "maximum": 99999
+            "allOf": {
+              "properties": {
+                "Name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "Address": {
+                  "properties": {
+                    "Street": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "City": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "State": {
+                      "type": "string",
+                      "minLength": 2,
+                      "maxLength": 2,
+                      "pattern": "^[A-Z]+$"
+                    },
+                    "ZipCode": {
+                      "type": "integer",
+                      "minimum": 10000,
+                      "maximum": 99999
+                    }
                   }
                 }
               }
@@ -3157,22 +3168,13 @@
           }
         }
       },
-      "veterinarian": {
-        "required": [
-          "Name"
-        ],
+      "partial_veterinarian": {
         "properties": {
           "Name": {
             "type": "string",
             "minLength": 1
           },
           "Address": {
-            "required": [
-              "Street",
-              "City",
-              "State",
-              "ZipCode"
-            ],
             "properties": {
               "Street": {
                 "type": "string",
@@ -3197,13 +3199,43 @@
           }
         }
       },
-      "address": {
+      "veterinarian": {
         "required": [
-          "Street",
-          "City",
-          "State",
-          "ZipCode"
+          "Name"
         ],
+        "allOf": {
+          "properties": {
+            "Name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Address": {
+              "properties": {
+                "Street": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "City": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "State": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2,
+                  "pattern": "^[A-Z]+$"
+                },
+                "ZipCode": {
+                  "type": "integer",
+                  "minimum": 10000,
+                  "maximum": 99999
+                }
+              }
+            }
+          }
+        }
+      },
+      "partial_address": {
         "properties": {
           "Street": {
             "type": "string",
@@ -3223,6 +3255,37 @@
             "type": "integer",
             "minimum": 10000,
             "maximum": 99999
+          }
+        }
+      },
+      "address": {
+        "required": [
+          "Street",
+          "City",
+          "State",
+          "ZipCode"
+        ],
+        "allOf": {
+          "properties": {
+            "Street": {
+              "type": "string",
+              "minLength": 1
+            },
+            "City": {
+              "type": "string",
+              "minLength": 1
+            },
+            "State": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2,
+              "pattern": "^[A-Z]+$"
+            },
+            "ZipCode": {
+              "type": "integer",
+              "minimum": 10000,
+              "maximum": 99999
+            }
           }
         }
       },
@@ -3251,7 +3314,9 @@
                 "pattern": "^[a-zA-Z0-9- ]+$"
               },
               "Age": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 150
               },
               "DOB": {
                 "type": "string",
@@ -3272,25 +3337,27 @@
                   "State",
                   "ZipCode"
                 ],
-                "properties": {
-                  "Street": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "City": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "State": {
-                    "type": "string",
-                    "minLength": 2,
-                    "maxLength": 2,
-                    "pattern": "^[A-Z]+$"
-                  },
-                  "ZipCode": {
-                    "type": "integer",
-                    "minimum": 10000,
-                    "maximum": 99999
+                "allOf": {
+                  "properties": {
+                    "Street": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "City": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "State": {
+                      "type": "string",
+                      "minLength": 2,
+                      "maxLength": 2,
+                      "pattern": "^[A-Z]+$"
+                    },
+                    "ZipCode": {
+                      "type": "integer",
+                      "minimum": 10000,
+                      "maximum": 99999
+                    }
                   }
                 }
               },
@@ -3298,37 +3365,33 @@
                 "required": [
                   "Name"
                 ],
-                "properties": {
-                  "Name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "Address": {
-                    "required": [
-                      "Street",
-                      "City",
-                      "State",
-                      "ZipCode"
-                    ],
-                    "properties": {
-                      "Street": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "City": {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      "State": {
-                        "type": "string",
-                        "minLength": 2,
-                        "maxLength": 2,
-                        "pattern": "^[A-Z]+$"
-                      },
-                      "ZipCode": {
-                        "type": "integer",
-                        "minimum": 10000,
-                        "maximum": 99999
+                "allOf": {
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "Address": {
+                      "properties": {
+                        "Street": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "City": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "State": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 2,
+                          "pattern": "^[A-Z]+$"
+                        },
+                        "ZipCode": {
+                          "type": "integer",
+                          "minimum": 10000,
+                          "maximum": 99999
+                        }
                       }
                     }
                   }
