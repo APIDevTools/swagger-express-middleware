@@ -37,12 +37,6 @@ paths:
       security:
         []
       parameters:
-        - name: Tags
-          in: query
-          description: Filters pets by one or more tags
-          required: false
-          schema:
-            $ref: "#/components/schemas/pet/properties/Tags"
         - name: Type
           in: query
           description: Filters pets by type (dog, cat, or bird)
@@ -61,6 +55,12 @@ paths:
           required: false
           schema:
             $ref: "#/components/schemas/pet/properties/DOB"
+        - name: Tags
+          in: query
+          description: Filters pets by one or more tags
+          required: false
+          schema:
+            $ref: "#/components/schemas/pet/properties/Tags"
         - name: Address
           in: query
           description: Filters pets by city

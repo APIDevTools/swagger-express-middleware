@@ -2,9 +2,9 @@
 
 const _ = require("lodash");
 const createMiddleware = require("../../../../lib");
-const { assert, expect } = require("chai");
+const { expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
-const { helper } = require("../../../utils");
+const { helper, deepCompare } = require("../../../utils");
 
 describe("Parse Request middleware - header params", () => {
   let api;
@@ -24,7 +24,7 @@ describe("Parse Request middleware - header params", () => {
     // Exclude the headers that are set by Supertest
     let headers = _.omit(req.headers, ["accept-encoding", "connection", "host", "user-agent"]);
 
-    expect(headers).to.deep.equal(expected);
+    deepCompare(headers, expected);
 
     for (let [key, value] of Object.entries(expected)) {
       expect(req.header(key)).to.deep.equal(value);
@@ -42,6 +42,7 @@ describe("Parse Request middleware - header params", () => {
         .set("Dob", "1995-05-15")
         .set("Tags", "big,brown")
         .set("Address", "City,Orlando,State,FL,ZipCode,12345")
+        .set("Vet", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -51,6 +52,7 @@ describe("Parse Request middleware - header params", () => {
           dob: "1995-05-15",
           tags: "big,brown",
           address: "City,Orlando,State,FL,ZipCode,12345",
+          vet: "",
         });
       }));
     });
@@ -67,6 +69,7 @@ describe("Parse Request middleware - header params", () => {
         .set("Dob", "1995-05-15")
         .set("Tags", "big,brown")
         .set("Address", "City,Orlando,State,FL,ZipCode,12345")
+        .set("Vet", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -86,6 +89,57 @@ describe("Parse Request middleware - header params", () => {
     });
   });
 
+  it("should parse header params of all types", (done) => {
+    api.paths["/pets"].get.parameters = [
+      { name: "Integer", in: "header", schema: { type: "integer" }},
+      { name: "Number", in: "header", schema: { type: "number" }},
+      { name: "BooleanTrue", in: "header", schema: { type: "boolean" }},
+      { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
+      { name: "Bytes", in: "header", schema: { type: "string", format: "byte" }},
+      { name: "Binary", in: "header", schema: { type: "string", format: "binary" }},
+      { name: "Date", in: "header", schema: { type: "string", format: "date" }},
+      { name: "DateTime", in: "header", schema: { type: "string", format: "date-time" }},
+      { name: "Password", in: "header", schema: { type: "string", format: "password" }},
+      { name: "Array", in: "header", schema: { type: "array", items: { type: "string" }}},
+      { name: "Object", in: "header", schema: { type: "object" }},
+    ];
+
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("Integer", "-99")
+        .set("Number", "-9.9")
+        .set("BooleanTrue", "true")
+        .set("BooleanFalse", "false")
+        .set("Bytes", "aGVsbG8sIHdvcmxk")
+        .set("Binary", "hello, world")
+        .set("Date", "1995-05-15")
+        .set("DateTime", "1995-05-15T05:15:25.555Z")
+        .set("Password", "p@ssw0rd")
+        .set("Array", "a,b,c")
+        .set("Object", "a,b,c")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          integer: -99,
+          number: -9.9,
+          booleantrue: true,
+          booleanfalse: false,
+          bytes: Buffer.from("hello, world"),
+          binary: Buffer.from("hello, world"),
+          date: new Date(Date.UTC(1995, 4, 15)),
+          datetime: new Date(Date.UTC(1995, 4, 15, 5, 15, 25, 555)),
+          password: "p@ssw0rd",
+          array: ["a", "b", "c"],
+          object: { a: "b", c: undefined },
+        });
+      }));
+    });
+  });
+
   it("should not be case sensitive", (done) => {
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
@@ -97,6 +151,7 @@ describe("Parse Request middleware - header params", () => {
         .set("DoB", "1995-05-15")
         .set("TaGs", "big,brown")
         .set("ADdreSS", "City,Orlando,State,FL,ZipCode,12345")
+        .set("VEt", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -144,33 +199,76 @@ describe("Parse Request middleware - header params", () => {
     });
   });
 
-  it("should parse binary and Base64 header params as buffers", (done) => {
-    _.find(api.paths["/pets"].get.parameters, { name: "Type" }).schema.format = "byte";
-    _.find(api.paths["/pets"].get.parameters, { name: "DOB" }).schema.format = "binary";
+  it("should parse exploded header params", (done) => {
+    _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).explode = true;
+    _.find(api.paths["/pets"].get.parameters, { name: "Address" }).explode = true;
+    _.find(api.paths["/pets"].get.parameters, { name: "Vet" }).explode = true;
 
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
-        .set("Type", "aGVsbG8sIHdvcmxk")
-        .set("DOB", "hello, world")
+        .set("Tags", "big,brown")
+        .set("Address", "City=Orlando,State=FL,ZipCode=12345")
+        .set("Vet", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         compareHeaders(req, {
-          type: Buffer.from("hello, world"),
-          dob: Buffer.from("hello, world"),
-          age: undefined,
-          tags: undefined,
-          address: undefined,
+          tags: ["big", "brown"],
+          address: {
+            City: "Orlando",
+            State: "FL",
+            ZipCode: 12345,
+          },
           vet: undefined,
+          age: undefined,
+          type: undefined,
+          dob: undefined,
         });
       }));
     });
   });
 
-  it("should set header params to undefined if optional and unspecified", (done) => {
+  it("should parse JSON header params", (done) => {
+    api.paths["/pets"].get.parameters.forEach((param) => {
+      param.content = {
+        "application/json": {
+          schema: param.schema
+        }
+      };
+      param.schema = undefined;
+    });
+
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("Tags", '["big", "brown"]')
+        .set("Address", '{"City": "Orlando", "State":"FL", "ZipCode":12345}')
+        .set("Vet", "null")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          type: undefined,
+          age: undefined,
+          dob: undefined,
+          tags: ["big", "brown"],
+          address: {
+            City: "Orlando",
+            State: "FL",
+            ZipCode: 12345,
+          },
+          vet: null,
+        });
+      }));
+    });
+  });
+
+  it("should set header params to undefined if unspecified", (done) => {
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
@@ -191,87 +289,19 @@ describe("Parse Request middleware - header params", () => {
     });
   });
 
-  it("should set header params to their defaults if unspecified", (done) => {
-    _.find(api.paths["/pets"].get.parameters, { name: "Age" }).schema.default = 99;
-    _.find(api.paths["/pets"].get.parameters, { name: "Type" }).schema.default = "hello, world";
-    _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).schema.default = ["hello", "world"];
-    _.find(api.paths["/pets"].get.parameters, { name: "DOB" }).schema.default = "1995-05-15";
-    _.find(api.paths["/pets"].get.parameters, { name: "Address" }).schema.default = {
-      City: "Orlando",
-      State: "FL",
-      ZipCode: 12345
-    };
-
-    createMiddleware(api, (err, middleware) => {
-      let express = helper.express(middleware.metadata(), middleware.parseRequest());
-
-      helper.supertest(express)
-        .get("/api/pets")
-        .end(helper.checkSpyResults(done));
-
-      express.get("/api/pets", helper.spy((req, res, next) => {
-        compareHeaders(req, {
-          age: 99,
-          type: "hello, world",
-          tags: ["hello", "world"],
-          dob: new Date(Date.UTC(1995, 4, 15)),
-          address: {
-            City: "Orlando",
-            State: "FL",
-            ZipCode: 12345
-          },
-          vet: undefined,
-        });
-      }));
-    });
-  });
-
-  it("should parse the default values of complex header params if unspecified", (done) => {
+  it("should set header params to undefined if empty", (done) => {
     api.paths["/pets"].get.parameters = [
-      // Test parsing default values in an array
-      {
-        name: "ArrayOfDates",
-        in: "header",
-        schema: {
-          type: "array",
-          items: {
-            type: "string",
-            format: "date",
-          },
-          default: "1995-05-15",
-        },
-      },
-
-      // Test parsing default values in an object
-      {
-        name: "ObjectWithDefaults",
-        in: "header",
-        schema: {
-          properties: {
-            Number: {
-              type: "integer"
-            },
-            DateTime: {
-              type: "string",
-              format: "date-time",
-            },
-            Base64: {
-              type: "string",
-              format: "byte",
-            },
-            Binary: {
-              type: "string",
-              format: "binary"
-            }
-          },
-          default: {
-            Number: 99,
-            DateTime: "1995-05-15T05:15:25.555Z",
-            Base64: "aGVsbG8sIHdvcmxk",
-            Binary: "hello, world"
-          }
-        },
-      },
+      { name: "Integer", in: "header", schema: { type: "integer" }},
+      { name: "Number", in: "header", schema: { type: "number" }},
+      { name: "BooleanTrue", in: "header", schema: { type: "boolean" }},
+      { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
+      { name: "Bytes", in: "header", schema: { type: "string", format: "byte" }},
+      { name: "Binary", in: "header", schema: { type: "string", format: "binary" }},
+      { name: "Date", in: "header", schema: { type: "string", format: "date" }},
+      { name: "DateTime", in: "header", schema: { type: "string", format: "date-time" }},
+      { name: "Password", in: "header", schema: { type: "string", format: "password" }},
+      { name: "Array", in: "header", schema: { type: "array", items: { type: "string" }}},
+      { name: "Object", in: "header", schema: { type: "object" }},
     ];
 
     createMiddleware(api, (err, middleware) => {
@@ -279,63 +309,74 @@ describe("Parse Request middleware - header params", () => {
 
       helper.supertest(express)
         .get("/api/pets")
+        .set("Integer", "")
+        .set("Number", "")
+        .set("BooleanTrue", "")
+        .set("BooleanFalse", "")
+        .set("Bytes", "")
+        .set("Binary", "")
+        .set("Date", "")
+        .set("DateTime", "")
+        .set("Password", "")
+        .set("Array", "")
+        .set("Object", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         compareHeaders(req, {
-          arrayofdates: [new Date(Date.UTC(1995, 4, 15))],
-          objectwithdefaults: {
-            Number: 99,
-            DateTime: new Date(Date.UTC(1995, 4, 15, 5, 15, 25, 555)),
-            Base64: Buffer.from("hello, world"),
-            Binary: Buffer.from("hello, world"),
-          },
+          integer: undefined,
+          number: undefined,
+          booleantrue: undefined,
+          booleanfalse: undefined,
+          bytes: undefined,
+          binary: undefined,
+          date: undefined,
+          datetime: undefined,
+          password: undefined,
+          array: undefined,
+          object: undefined,
         });
       }));
     });
   });
 
-  it("should throw an HTTP 400 error if header params are invalid", (done) => {
+  it("should set header params to their defaults if unspecified or empty", (done) => {
+    _.find(api.paths["/pets"].get.parameters, { name: "Age" }).schema.default = 99;
+    _.find(api.paths["/pets"].get.parameters, { name: "Type" }).schema.default = "dog, cat";
+    _.find(api.paths["/pets"].get.parameters, { name: "Tags" }).schema.default = ["big", "brown"];
+    _.find(api.paths["/pets"].get.parameters, { name: "DOB" }).schema.default = "1995-05-15";
+    _.find(api.paths["/pets"].get.parameters, { name: "Address" }).schema.default = {
+      City: "Orlando",
+      State: "FL",
+      ZipCode: 12345
+    };
+    _.find(api.paths["/pets"].get.parameters, { name: "Vet" }).schema.default = {};
+
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
-        .set("Age", "big,brown")
+        .set("Age", "")
+        .set("Tags", "")
+        .set("Address", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
-        assert(false, "This middleware should NOT get called");
-      }));
-
-      express.use("/api/pets", helper.spy((err, req, res, next) => {
-        expect(err).to.be.an.instanceOf(SyntaxError);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
+        compareHeaders(req, {
+          age: 99,
+          type: "dog, cat",
+          tags: ["big", "brown"],
+          dob: new Date(Date.UTC(1995, 4, 15)),
+          address: {
+            City: "Orlando",
+            State: "FL",
+            ZipCode: 12345
+          },
+          vet: {},
+        });
       }));
     });
   });
 
-  it("should throw an HTTP 400 error if a header param's default value cannot be parsed", (done) => {
-    createMiddleware(api, (err, middleware) => {
-      let express = helper.express(middleware.metadata(), middleware.parseRequest());
-
-      helper.supertest(express)
-        .get("/api/pets")
-        .set("Age", "big,brown")
-        .end(helper.checkSpyResults(done));
-
-      express.get("/api/pets", helper.spy((req, res, next) => {
-        assert(false, "This middleware should NOT get called");
-      }));
-
-      express.use("/api/pets", helper.spy((err, req, res, next) => {
-        expect(err).to.be.an.instanceOf(SyntaxError);
-        expect(err.status).to.equal(400);
-        expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
-      }));
-    });
-  });
 });

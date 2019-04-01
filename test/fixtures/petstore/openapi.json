@@ -54,19 +54,6 @@
         "security": [],
         "parameters": [
           {
-            "name": "Tags",
-            "in": "query",
-            "description": "Filters pets by one or more tags",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "minLength": 1
-              }
-            }
-          },
-          {
             "name": "Type",
             "in": "query",
             "description": "Filters pets by type (dog, cat, or bird)",
@@ -99,6 +86,19 @@
             "schema": {
               "type": "string",
               "format": "date"
+            }
+          },
+          {
+            "name": "Tags",
+            "in": "query",
+            "description": "Filters pets by one or more tags",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
             }
           },
           {
