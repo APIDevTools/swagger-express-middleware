@@ -77,7 +77,7 @@
     "swagger-parser": "^6.0.5",
     "tmp": "0.0.33",
     "tv4": "^1.2.5",
-    "type-is": "^1.6.8"
+    "type-is": "^1.6.16"
   },
   "peerDependencies": {
     "express": "4.x"
