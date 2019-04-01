@@ -6,7 +6,7 @@ const { assert, expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
 const { helper } = require("../../../utils");
 
-describe.skip("Parse Request middleware - header params", () => {
+describe("Parse Request middleware - header params", () => {
   let api;
 
   beforeEach(() => {
@@ -38,13 +38,133 @@ describe.skip("Parse Request middleware - header params", () => {
       helper.supertest(express)
         .get("/api/pets")
         .set("Age", "4")
+        .set("Type", "dog")
+        .set("Dob", "1995-05-15")
         .set("Tags", "big,brown")
+        .set("Address", "City,Orlando,State,FL,ZipCode,12345")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         compareHeaders(req, {
           age: "4",
+          type: "dog",
+          dob: "1995-05-15",
           tags: "big,brown",
+          address: "City,Orlando,State,FL,ZipCode,12345",
+        });
+      }));
+    });
+  });
+
+  it("should parse header params", (done) => {
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("Age", "4")
+        .set("Type", "dog")
+        .set("Dob", "1995-05-15")
+        .set("Tags", "big,brown")
+        .set("Address", "City,Orlando,State,FL,ZipCode,12345")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          age: 4,
+          type: "dog",
+          tags: ["big", "brown"],
+          dob: new Date(Date.UTC(1995, 4, 15)),
+          address: {
+            City: "Orlando",
+            State: "FL",
+            ZipCode: 12345,
+          },
+          vet: undefined,
+        });
+      }));
+    });
+  });
+
+  it("should not be case sensitive", (done) => {
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("AGE", "4")
+        .set("type", "dog")
+        .set("DoB", "1995-05-15")
+        .set("TaGs", "big,brown")
+        .set("ADdreSS", "City,Orlando,State,FL,ZipCode,12345")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          age: 4,
+          type: "dog",
+          tags: ["big", "brown"],
+          dob: new Date(Date.UTC(1995, 4, 15)),
+          address: {
+            City: "Orlando",
+            State: "FL",
+            ZipCode: 12345,
+          },
+          vet: undefined,
+        });
+      }));
+    });
+  });
+
+  it("should parse header params with special characters", (done) => {
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("Type", "`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?]")
+        .set("Tags", "big,`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?],brown")
+        .set("ADdreSS", "City,`~!@#$%^&*()-_=+[{]}\|;:'\"<.>/?],State,`~!@#$%^&*()-_=+[{]}\|;:'\"<.>/?],ZipCode,12345")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          type: "`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?]",
+          tags: ["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"],
+          address: {
+            City: "`~!@#$%^&*()-_=+[{]}\|;:'\"<.>/?]",
+            State: "`~!@#$%^&*()-_=+[{]}\|;:'\"<.>/?]",
+            ZipCode: 12345
+          },
+          age: undefined,
+          dob: undefined,
+          vet: undefined,
+        });
+      }));
+    });
+  });
+
+  it("should parse binary and Base64 header params as buffers", (done) => {
+    _.find(api.paths["/pets"].get.parameters, { name: "Type" }).schema.format = "byte";
+    _.find(api.paths["/pets"].get.parameters, { name: "DOB" }).schema.format = "binary";
+
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets")
+        .set("Type", "aGVsbG8sIHdvcmxk")
+        .set("DOB", "hello, world")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        compareHeaders(req, {
+          type: Buffer.from("hello, world"),
+          dob: Buffer.from("hello, world"),
+          age: undefined,
+          tags: undefined,
+          address: undefined,
+          vet: undefined,
         });
       }));
     });
@@ -106,7 +226,7 @@ describe.skip("Parse Request middleware - header params", () => {
     });
   });
 
-  it("should set complex header params to their defaults if unspecified", (done) => {
+  it("should parse the default values of complex header params if unspecified", (done) => {
     api.paths["/pets"].get.parameters = [
       // Test parsing default values in an array
       {
@@ -175,102 +295,6 @@ describe.skip("Parse Request middleware - header params", () => {
     });
   });
 
-  it("should parse header params", (done) => {
-    createMiddleware(api, (err, middleware) => {
-      let express = helper.express(middleware.metadata(), middleware.parseRequest());
-
-      helper.supertest(express)
-        .get("/api/pets")
-        .set("Age", "4")
-        .set("Type", "dog")
-        .set("Tags", "big,brown")
-        .set("Address", "City=Orlando,State=FL,ZipCode=12345")
-        .end(helper.checkSpyResults(done));
-
-      express.get("/api/pets", helper.spy((req, res, next) => {
-        compareHeaders(req, {
-          age: 4,
-          tags: ["big", "brown"],
-          type: "dog",
-          address: {
-            City: "Orlando",
-            State: "FL",
-            ZipCode: 12345,
-          },
-          vet: undefined,
-        });
-      }));
-    });
-  });
-
-  it("should not be case sensitive", (done) => {
-    createMiddleware(api, (err, middleware) => {
-      let express = helper.express(middleware.metadata(), middleware.parseRequest());
-
-      helper.supertest(express)
-        .get("/api/pets")
-        .set("age", "4")
-        .set("TAGS", "big,brown")
-        .set("TyPe", "dog")
-        .set("ADdreSS", "City=Orlando,State=FL,ZipCode=12345")
-        .end(helper.checkSpyResults(done));
-
-      express.get("/api/pets", helper.spy((req, res, next) => {
-        compareHeaders(req, {
-          age: 4,
-          tags: ["big", "brown"],
-          type: "dog",
-          address: {
-            City: "Orlando",
-            State: "FL",
-            ZipCode: 12345,
-          },
-          vet: undefined,
-        });
-      }));
-    });
-  });
-
-  it("should parse header params with special characters", (done) => {
-    createMiddleware(api, (err, middleware) => {
-      let express = helper.express(middleware.metadata(), middleware.parseRequest());
-
-      helper.supertest(express)
-        .get("/api/pets")
-        .set("Age", "4")
-        .set("Tags", "big,`~!@#$%^&*()-_=+[{]}\|;:'\",<.>/?],brown")
-        .end(helper.checkSpyResults(done));
-
-      express.get("/api/pets", helper.spy((req, res, next) => {
-        compareHeaders(req, {
-          age: 4,
-          tags: ["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"],
-          type: "XXXXXXXXXXX",
-          address: {
-            City: "XXXXXXXX",
-            State: "XXXXXX"
-          },
-          vet: undefined,
-        });
-
-        expect(req.headers.age).to.equal(4);
-        expect(req.header("Age")).to.equal(4);
-        expect(req.headers.tags).to.deep.equal(["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"]);
-        expect(req.header("Tags")).to.deep.equal(["big", "`~!@#$%^&*()-_=+[{]}\|;:'\"", "<.>/?]", "brown"]);
-        expect(req.headers.type).to.be.undefined;
-        expect(req.header("Type")).to.be.undefined;
-      }));
-    });
-  });
-
-  it("should parse Base64 header params as buffers", (done) => {
-    throw new Error("fail");
-  });
-
-  it("should parse binary header params as buffers", (done) => {
-    throw new Error("fail");
-  });
-
   it("should throw an HTTP 400 error if header params are invalid", (done) => {
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
@@ -288,12 +312,12 @@ describe.skip("Parse Request middleware - header params", () => {
         expect(err).to.be.an.instanceOf(SyntaxError);
         expect(err.status).to.equal(400);
         expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. "big,brown" is not a valid numeric value');
+          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
       }));
     });
   });
 
-  it("should throw an HTTP 500 error if a header param's default value cannot be parsed", (done) => {
+  it("should throw an HTTP 400 error if a header param's default value cannot be parsed", (done) => {
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
@@ -308,9 +332,9 @@ describe.skip("Parse Request middleware - header params", () => {
 
       express.use("/api/pets", helper.spy((err, req, res, next) => {
         expect(err).to.be.an.instanceOf(SyntaxError);
-        expect(err.status).to.equal(500);
+        expect(err.status).to.equal(400);
         expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. "big,brown" is not a valid numeric value');
+          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
       }));
     });
   });
