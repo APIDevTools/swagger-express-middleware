@@ -1,6 +1,6 @@
 {
   "name": "swagger-express-middleware",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "OpenAPI 3.0 and Swagger 2.0 middleware for Express",
   "keywords": [
     "express",
@@ -55,15 +55,15 @@
     "chai": "^4.2.0",
     "chai-datetime": "^1.4.0",
     "coveralls": "^3.0.3",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-modular": "^7.0.0",
     "express": "^4.16.4",
     "mocha": "^6.0.2",
     "npm-check": "^5.9.0",
     "nyc": "^13.3.0",
-    "sinon": "^7.2.7",
+    "sinon": "^7.3.1",
     "supertest": "^4.0.2",
-    "version-bump-prompt": "^5.0.0"
+    "version-bump-prompt": "^5.0.1"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -75,7 +75,7 @@
     "ono": "^5.0.1",
     "swagger-methods": "^1.0.8",
     "swagger-parser": "^6.0.5",
-    "tmp": "0.0.33",
+    "tmp": "^0.1.0",
     "tv4": "^1.2.5",
     "type-is": "^1.6.16"
   },
