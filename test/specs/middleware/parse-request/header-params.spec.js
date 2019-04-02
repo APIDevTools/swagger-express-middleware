@@ -95,6 +95,7 @@ describe("Parse Request middleware - header params", () => {
       { name: "Number", in: "header", schema: { type: "number" }},
       { name: "BooleanTrue", in: "header", schema: { type: "boolean" }},
       { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
+      { name: "String", in: "header", schema: { type: "string" }},
       { name: "Bytes", in: "header", schema: { type: "string", format: "byte" }},
       { name: "Binary", in: "header", schema: { type: "string", format: "binary" }},
       { name: "Date", in: "header", schema: { type: "string", format: "date" }},
@@ -113,6 +114,7 @@ describe("Parse Request middleware - header params", () => {
         .set("Number", "-9.9")
         .set("BooleanTrue", "true")
         .set("BooleanFalse", "false")
+        .set("String", "hello, world")
         .set("Bytes", "aGVsbG8sIHdvcmxk")
         .set("Binary", "hello, world")
         .set("Date", "1995-05-15")
@@ -128,6 +130,7 @@ describe("Parse Request middleware - header params", () => {
           number: -9.9,
           booleantrue: true,
           booleanfalse: false,
+          string: "hello, world",
           bytes: Buffer.from("hello, world"),
           binary: Buffer.from("hello, world"),
           date: new Date(Date.UTC(1995, 4, 15)),
@@ -290,51 +293,27 @@ describe("Parse Request middleware - header params", () => {
   });
 
   it("should set header params to undefined if empty", (done) => {
-    api.paths["/pets"].get.parameters = [
-      { name: "Integer", in: "header", schema: { type: "integer" }},
-      { name: "Number", in: "header", schema: { type: "number" }},
-      { name: "BooleanTrue", in: "header", schema: { type: "boolean" }},
-      { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
-      { name: "Bytes", in: "header", schema: { type: "string", format: "byte" }},
-      { name: "Binary", in: "header", schema: { type: "string", format: "binary" }},
-      { name: "Date", in: "header", schema: { type: "string", format: "date" }},
-      { name: "DateTime", in: "header", schema: { type: "string", format: "date-time" }},
-      { name: "Password", in: "header", schema: { type: "string", format: "password" }},
-      { name: "Array", in: "header", schema: { type: "array", items: { type: "string" }}},
-      { name: "Object", in: "header", schema: { type: "object" }},
-    ];
-
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
-        .set("Integer", "")
-        .set("Number", "")
-        .set("BooleanTrue", "")
-        .set("BooleanFalse", "")
-        .set("Bytes", "")
-        .set("Binary", "")
-        .set("Date", "")
-        .set("DateTime", "")
-        .set("Password", "")
-        .set("Array", "")
-        .set("Object", "")
+        .set("Age", "")
+        .set("Type", "")
+        .set("Tags", "")
+        .set("DOB", "")
+        .set("Address", "")
+        .set("Vet", "")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         compareHeaders(req, {
-          integer: undefined,
-          number: undefined,
-          booleantrue: undefined,
-          booleanfalse: undefined,
-          bytes: undefined,
-          binary: undefined,
-          date: undefined,
-          datetime: undefined,
-          password: undefined,
-          array: undefined,
-          object: undefined,
+          age: undefined,
+          type: "",
+          tags: undefined,
+          dob: undefined,
+          address: undefined,
+          vet: undefined,
         });
       }));
     });
