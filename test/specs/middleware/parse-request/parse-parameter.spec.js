@@ -6,27 +6,36 @@ const { assert, expect } = require("chai");
 const fixtures = require("../../../utils/fixtures");
 const { helper } = require("../../../utils");
 
-describe.skip("Parse Request middleware - all params", () => {
-  let api;
+describe("Parse Request middleware", () => {
+  let api, typeParams;
 
   beforeEach(() => {
     api = _.cloneDeep(fixtures.data.petStore);
+    typeParams = createTypeParams();
   });
 
-  it("should parse params of all types", (done) => {
-    api.paths["/pets"].get.parameters = [
-      { name: "Integer", in: "header", schema: { type: "integer" }},
-      { name: "Number", in: "header", schema: { type: "number" }},
-      { name: "BooleanTrue", in: "header", schema: { type: "boolean" }},
-      { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
-      { name: "Bytes", in: "header", schema: { type: "string", format: "byte" }},
-      { name: "Binary", in: "header", schema: { type: "string", format: "binary" }},
-      { name: "Date", in: "header", schema: { type: "string", format: "date" }},
-      { name: "DateTime", in: "header", schema: { type: "string", format: "date-time" }},
-      { name: "Password", in: "header", schema: { type: "string", format: "password" }},
-      { name: "Array", in: "header", schema: { type: "array", items: { type: "string" }}},
-      { name: "Object", in: "header", schema: { type: "object" }},
+  function createTypeParams () {
+    return [
+      { name: "Integer", in: "query", schema: { type: "integer" }},
+      { name: "Number", in: "query", schema: { type: "number" }},
+      { name: "Boolean", in: "query", schema: { type: "boolean" }},
+      { name: "String", in: "query", schema: { type: "string" }},
+      { name: "Bytes", in: "query", schema: { type: "string", format: "byte" }},
+      { name: "Binary", in: "query", schema: { type: "string", format: "binary" }},
+      { name: "Date", in: "query", schema: { type: "string", format: "date" }},
+      { name: "DateTime", in: "query", schema: { type: "string", format: "date-time" }},
+      { name: "Password", in: "query", schema: { type: "string", format: "password" }},
+      { name: "Array", in: "query", schema: { type: "array", items: { type: "string" }}},
+      { name: "Object", in: "query", schema: { type: "object" }},
     ];
+  }
+
+  it("should parse params of all types", (done) => {
+    api.paths["/pets"].get.parameters = typeParams
+      .map((param) => { param.in = "header"; return param; })
+      .concat(
+        { name: "BooleanFalse", in: "header", schema: { type: "boolean" }},
+      );
 
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
@@ -35,8 +44,9 @@ describe.skip("Parse Request middleware - all params", () => {
         .get("/api/pets")
         .set("Integer", "-99")
         .set("Number", "-9.9")
-        .set("BooleanTrue", "true")
+        .set("Boolean", "true")
         .set("BooleanFalse", "false")
+        .set("String", "hello, world")
         .set("Bytes", "aGVsbG8sIHdvcmxk")
         .set("Binary", "hello, world")
         .set("Date", "1995-05-15")
@@ -49,8 +59,9 @@ describe.skip("Parse Request middleware - all params", () => {
       express.get("/api/pets", helper.spy((req, res, next) => {
         expect(req.header("Integer")).to.equal(-99);
         expect(req.header("Number")).to.equal(-9.9);
-        expect(req.header("Booleantrue")).to.equal(true);
-        expect(req.header("Booleanfalse")).to.equal(false);
+        expect(req.header("Boolean")).to.equal(true);
+        expect(req.header("BooleanFalse")).to.equal(false);
+        expect(req.header("String")).to.equal("hello, world");
         expect(req.header("Bytes")).to.deep.equal(Buffer.from("hello, world"));
         expect(req.header("Binary")).to.deep.equal(Buffer.from("hello, world"));
         expect(req.header("Date")).to.deep.equal(new Date(Date.UTC(1995, 4, 15)));
@@ -63,18 +74,7 @@ describe.skip("Parse Request middleware - all params", () => {
   });
 
   it("should set params to undefined if not specified", (done) => {
-    api.paths["/pets"].get.parameters = [
-      { name: "Integer", in: "query", schema: { type: "integer" }},
-      { name: "Number", in: "query", schema: { type: "number" }},
-      { name: "Boolean", in: "query", schema: { type: "boolean" }},
-      { name: "Bytes", in: "query", schema: { type: "string", format: "byte" }},
-      { name: "Binary", in: "query", schema: { type: "string", format: "binary" }},
-      { name: "Date", in: "query", schema: { type: "string", format: "date" }},
-      { name: "DateTime", in: "query", schema: { type: "string", format: "date-time" }},
-      { name: "Password", in: "query", schema: { type: "string", format: "password" }},
-      { name: "Array", in: "query", schema: { type: "array", items: { type: "string" }}},
-      { name: "Object", in: "query", schema: { type: "object" }},
-    ];
+    api.paths["/pets"].get.parameters = typeParams;
 
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
@@ -88,6 +88,7 @@ describe.skip("Parse Request middleware - all params", () => {
           Integer: undefined,
           Number: undefined,
           Boolean: undefined,
+          String: undefined,
           Bytes: undefined,
           Binary: undefined,
           Date: undefined,
@@ -100,25 +101,14 @@ describe.skip("Parse Request middleware - all params", () => {
     });
   });
 
-  it("should set params to undefined if empty", (done) => {
-    api.paths["/pets"].get.parameters = [
-      { name: "Integer", in: "query", schema: { type: "integer" }},
-      { name: "Number", in: "query", schema: { type: "number" }},
-      { name: "Boolean", in: "query", schema: { type: "boolean" }},
-      { name: "Bytes", in: "query", schema: { type: "string", format: "byte" }},
-      { name: "Binary", in: "query", schema: { type: "string", format: "binary" }},
-      { name: "Date", in: "query", schema: { type: "string", format: "date" }},
-      { name: "DateTime", in: "query", schema: { type: "string", format: "date-time" }},
-      { name: "Password", in: "query", schema: { type: "string", format: "password" }},
-      { name: "Array", in: "query", schema: { type: "array", items: { type: "string" }}},
-      { name: "Object", in: "query", schema: { type: "object" }},
-    ];
+  it("should set params to undefined if specified with no value", (done) => {
+    api.paths["/pets"].get.parameters = typeParams;
 
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?&Integer=&Number&Boolean=&Bytes&Binary=&Date=&DateTime=&Password=&Array=&Object=")
+        .get("/api/pets?Integer&Number&Boolean&String&Bytes&Binary&Date&DateTime&Password&Array&Object")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -126,11 +116,40 @@ describe.skip("Parse Request middleware - all params", () => {
           Integer: undefined,
           Number: undefined,
           Boolean: undefined,
+          String: "",
           Bytes: undefined,
           Binary: undefined,
           Date: undefined,
-          Datetime: undefined,
-          Password: undefined,
+          DateTime: undefined,
+          Password: "",
+          Array: undefined,
+          Object: undefined,
+        });
+      }));
+    });
+  });
+
+  it("should set params to undefined if empty", (done) => {
+    api.paths["/pets"].get.parameters = typeParams;
+
+    createMiddleware(api, (err, middleware) => {
+      let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+      helper.supertest(express)
+        .get("/api/pets?Integer=&Number=&Boolean=&String=&Bytes=&Binary=&Date=&DateTime=&Password=&Array=&Object=")
+        .end(helper.checkSpyResults(done));
+
+      express.get("/api/pets", helper.spy((req, res, next) => {
+        expect(req.query).to.deep.equal({
+          Integer: undefined,
+          Number: undefined,
+          Boolean: undefined,
+          String: "",
+          Bytes: undefined,
+          Binary: undefined,
+          Date: undefined,
+          DateTime: undefined,
+          Password: "",
           Array: undefined,
           Object: undefined,
         });
@@ -159,16 +178,16 @@ describe.skip("Parse Request middleware - all params", () => {
 
       express.get("/api/pets", helper.spy((req, res, next) => {
         expect(req.query).to.deep.equal({
-          age: 99,
-          type: "dog, cat",
-          tags: ["big", "brown"],
-          dob: new Date(Date.UTC(1995, 4, 15)),
-          address: {
+          Age: 99,
+          Type: "dog, cat",
+          Tags: ["big", "brown"],
+          DOB: new Date(Date.UTC(1995, 4, 15)),
+          Address: {
             City: "Orlando",
             State: "FL",
             ZipCode: 12345
           },
-          vet: {},
+          Vet: {},
         });
       }));
     });
@@ -179,7 +198,7 @@ describe.skip("Parse Request middleware - all params", () => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?Address=Province,Orlando,Country,US,PostalCode,12345")
+        .get("/api/pets?Address=Province=Orlando%26Country=US%26PostalCode=12345")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -188,7 +207,12 @@ describe.skip("Parse Request middleware - all params", () => {
             Province: "Orlando",
             Country: "US",
             PostalCode: "12345",
-          }
+          },
+          Age: undefined,
+          Type: undefined,
+          Tags: undefined,
+          DOB: undefined,
+          Vet: undefined,
         });
       }));
     });
@@ -325,13 +349,47 @@ describe.skip("Parse Request middleware - all params", () => {
     });
   });
 
-  it("should throw an HTTP 400 error if params are invalid", (done) => {
+  function testParsingError (paramName, paramValue, errorMesage) {
+    it(`should throw an error if a ${paramName} param is invalid`, (done) => {
+      api.paths["/pets"].get.parameters = typeParams;
+
+      createMiddleware(api, (err, middleware) => {
+        let express = helper.express(middleware.metadata(), middleware.parseRequest());
+
+        helper.supertest(express)
+          .get(`/api/pets?${paramName}=${paramValue}`)
+          .end(helper.checkSpyResults(done));
+
+        express.get("/api/pets", helper.spy((req, res, next) => {
+          assert(false, "This middleware should NOT get called");
+        }));
+
+        express.use("/api/pets", helper.spy((err, req, res, next) => {
+          expect(err).to.be.an.instanceOf(SyntaxError);
+          expect(err.status).to.equal(400);
+          expect(err.message).to.equal(
+            `The "${paramName}" query parameter is invalid. \n${errorMesage}`);
+        }));
+      });
+    });
+  }
+
+  testParsingError("Integer", "3.14159", '"3.14159" is not a whole number.');
+  testParsingError("Number", "hello%20world", '"hello world" is not a valid numeric value.');
+  testParsingError("Boolean", "hello%20world", '"hello world" is not a valid boolean value.');
+  testParsingError("Date", "hello%20world", '"hello world" is not a valid date format.');
+  testParsingError("Date", "9999-99-99", '"9999-99-99" is not a valid date.');
+  testParsingError("DateTime", "hello%20world", '"hello world" is not a valid date & time format.');
+  testParsingError("DateTime", "9999-99-99T99:99:99.999Z", '"9999-99-99T99:99:99.999Z" is not a valid date & time.');
+
+  it("should throw an error if a param's type is invalid", (done) => {
+    _.find(api.paths["/pets"].get.parameters, { name: "DOB" }).schema.type = "date";
+
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
-        .set("Age", "big,brown")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -342,18 +400,19 @@ describe.skip("Parse Request middleware - all params", () => {
         expect(err).to.be.an.instanceOf(SyntaxError);
         expect(err.status).to.equal(400);
         expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
+          'The "DOB" query parameter is invalid. \n"date" is not a JSON Schema primitive type.');
       }));
     });
   });
 
-  it("should throw an HTTP 400 error if a param's default value cannot be parsed", (done) => {
+  it("should throw an error if a param's default value cannot be parsed", (done) => {
+    _.find(api.paths["/pets"].get.parameters, { name: "Age" }).schema.default = "hello world";
+
     createMiddleware(api, (err, middleware) => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
         .get("/api/pets")
-        .set("Age", "big,brown")
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -364,7 +423,7 @@ describe.skip("Parse Request middleware - all params", () => {
         expect(err).to.be.an.instanceOf(SyntaxError);
         expect(err.status).to.equal(400);
         expect(err.message).to.equal(
-          'The "Age" header parameter is invalid. \n"big,brown" is not a valid numeric value');
+          'The "Age" query parameter is invalid. \n"hello world" is not a valid numeric value.');
       }));
     });
   });
