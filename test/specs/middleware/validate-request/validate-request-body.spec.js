@@ -95,7 +95,7 @@ describe.skip("Validate Request middleware - 400 (Bad Request)", () => {
       });
     });
 
-    it("should set formData params to undefined if optional and unspecified", (done) => {
+    it("should set formData params to undefined if unspecified", (done) => {
       createMiddleware(api, (err, middleware) => {
         let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
@@ -285,7 +285,7 @@ describe.skip("Validate Request middleware - 400 (Bad Request)", () => {
       });
     });
 
-    it("should set the body to undefined if optional and unspecified", (done) => {
+    it("should set the body to undefined if unspecified", (done) => {
       let api = _.cloneDeep(fixtures.data.petStore);
       api.paths["/pets/{PetName}"].patch.parameters[0].required = false;
 
@@ -302,7 +302,7 @@ describe.skip("Validate Request middleware - 400 (Bad Request)", () => {
       });
     });
 
-    it("should set the body to its default if optional and unspecified", (done) => {
+    it("should set the body to its default if unspecified", (done) => {
       let api = _.cloneDeep(fixtures.data.petStore);
       let petParam = api.paths["/pets/{PetName}"].patch.parameters[0];
       petParam.required = false;
