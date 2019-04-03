@@ -16,7 +16,11 @@ describe("Parse Request middleware - query params", () => {
       let express = helper.express(middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?Age=4&DOB=1995-05-15&Tags=big,brown")
+        .get("/api/pets"
+          + "?Age=4"
+          + "&DOB=1995-05-15"
+          + "&Tags=big,brown"
+        )
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -277,7 +281,14 @@ describe("Parse Request middleware - query params", () => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?Age=&Type=&Tags=&DOB=&Address=&Vet=")
+        .get("/api/pets"
+          + "?Age="
+          + "&Type="
+          + "&Tags="
+          + "&DOB="
+          + "&Address="
+          + "&Vet="
+        )
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
@@ -309,7 +320,12 @@ describe("Parse Request middleware - query params", () => {
       let express = helper.express(middleware.metadata(), middleware.parseRequest());
 
       helper.supertest(express)
-        .get("/api/pets?Age=&Tags&Address=")
+        .get("/api/pets"
+          + "?Age="
+          + "&Tags="
+          + "&Address="
+          + "&Vet"
+        )
         .end(helper.checkSpyResults(done));
 
       express.get("/api/pets", helper.spy((req, res, next) => {
