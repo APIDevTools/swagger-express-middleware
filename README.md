@@ -2,7 +2,7 @@ Swagger Express Middleware
 ============================
 ### Swagger 2.0 middleware and mocks for Express.js
 
-[![Cross-Platform Compatibility](https://apidevtools.org/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
+[![Cross-Platform Compatibility](https://apitools.dev/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=master)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
@@ -27,22 +27,22 @@ Swagger Express Middleware uses [Swagger-Parser](https://github.com/APIDevTools/
 - **Thoroughly tested**<br>
 Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 1,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
 
-- [**Mock middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/mock.html)<br>
+- [**Mock middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/mock.html)<br>
 **Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
 
-- [**Metadata middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/metadata.html)<br>
+- [**Metadata middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/metadata.html)<br>
 Annotates each request with all the relevant information from the Swagger definition.  The path, the operation, the parameters, the security requirements - they're all easily accessible at `req.swagger`.
 
-- [**Parse Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/parseRequest.html)<br>
+- [**Parse Request middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/parseRequest.html)<br>
 Parses incoming requests and converts everything into the correct data types, according to your Swagger API definition.
 
-- [**Validate Request middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/validateRequest.html)<br>
+- [**Validate Request middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/validateRequest.html)<br>
 Ensures that every request complies with your Swagger API definition, or returns the appropriate HTTP error codes if needed.  Of course, you can catch any validation errors and handle them however you want.
 
-- [**CORS middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/CORS.html)<br>
+- [**CORS middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/CORS.html)<br>
 Adds the appropriate CORS headers to each request and automatically responds to CORS preflight requests, all in compliance with your Swagger API definition.
 
-- [**Files middleware**](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)<br>
+- [**Files middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/files.html)<br>
 Serves the Swagger API file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
 
 
@@ -87,14 +87,14 @@ Swagger Express Middleware comes two samples that use the [Swagger Pet Store API
 This sample demonstrates the most simplistic usage of Swagger Express Middleware. It simply creates a new Express Application and adds all of the Swagger middleware without changing any options, and without adding any custom middleware.
 
 * [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js)
-* [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/running.html)
+* [Walkthrough](https://apitools.dev/swagger-express-middleware/docs/walkthroughs/running.html)
 
 
 #### Sample 2
 This sample demonstrates a few more advanced features of Swagger Express Middleware, such as setting a few options, initializing the mock data store, and adding custom middleware logic.
 
 * [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
-* [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
+* [Walkthrough](https://apitools.dev/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
 
 
 Contributing
