@@ -1,7 +1,7 @@
 Swagger 2.0 and OpenAPI 3.0 middleware
 =========================================
 
-[![Cross-Platform Compatibility](https://apidevtools.org/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
+[![Cross-Platform Compatibility](https://apitools.dev/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=v3)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=v3)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
@@ -41,29 +41,29 @@ There is **no documentation for version 3 yet**.  Our goal is to keep things as 
 
 
 ### Middleware
-* [Mock middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/mock.html)
-* [Metadata middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/metadata.html)
-* [Parse Request middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/parseRequest.html)
-* [Validate Request middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/validateRequest.html)
-* [CORS middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/CORS.html)
-* [Files middleware](https://apidevtools.org/swagger-express-middleware/docs/middleware/files.html)
+* [Mock middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/mock.html)
+* [Metadata middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/metadata.html)
+* [Parse Request middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/parseRequest.html)
+* [Validate Request middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/validateRequest.html)
+* [CORS middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/CORS.html)
+* [Files middleware](https://apitools.dev/swagger-express-middleware/docs/middleware/files.html)
 
 
 ### API
-* [`createMiddleware` function](https://apidevtools.org/swagger-express-middleware/docs/exports/createMiddleware.html)
-* [`Middleware` class](https://apidevtools.org/swagger-express-middleware/docs/exports/Middleware.html)
-* [`DataStore` abstract class](https://apidevtools.org/swagger-express-middleware/docs/exports/DataStore.html)
-* [`MemoryDataStore` class](https://apidevtools.org/swagger-express-middleware/docs/exports/MemoryDataStore.html)
-* [`FileDataStore` class](https://apidevtools.org/swagger-express-middleware/docs/exports/FileDataStore.html)
-* [`Resource` class](https://apidevtools.org/swagger-express-middleware/docs/exports/Resource.html)
+* [`createMiddleware` function](https://apitools.dev/swagger-express-middleware/docs/exports/createMiddleware.html)
+* [`Middleware` class](https://apitools.dev/swagger-express-middleware/docs/exports/Middleware.html)
+* [`DataStore` abstract class](https://apitools.dev/swagger-express-middleware/docs/exports/DataStore.html)
+* [`MemoryDataStore` class](https://apitools.dev/swagger-express-middleware/docs/exports/MemoryDataStore.html)
+* [`FileDataStore` class](https://apitools.dev/swagger-express-middleware/docs/exports/FileDataStore.html)
+* [`Resource` class](https://apitools.dev/swagger-express-middleware/docs/exports/Resource.html)
 
 ### Samples & Walkthroughs
 
 #### Sample 1
 - [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample1.js)
-- [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/running.html)
+- [Walkthrough](https://apitools.dev/swagger-express-middleware/docs/walkthroughs/running.html)
 
 
 #### Sample 2
 - [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
-- [Walkthrough](https://apidevtools.org/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
+- [Walkthrough](https://apitools.dev/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
