@@ -83,7 +83,7 @@ The first phase performs basic parsing of the HTTP request using third-party lib
 ### Phase 2 - Swagger parsing
 The second phase performs Swagger-specific parsing.  During this phase, every parameter defined in your Swagger API is checked against the HTTP request.  If a Swagger parameter is missing from the request, and there's a `default` value specified in the Swagger API, then that default value is used, just as if the request contained that value.  If a _required_ Swagger parameter is missing from the request, and there's no `default` value, then an error is thrown.
 
-Any Swagger parameters that _are_ included in the request are parsed and validated according to the [parameter definition](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#parameter-object).  If the value doesn't adhere to the parameter definition for any reason (such as improper data type, min/max length, min/max value, RegEx pattern, etc.), then an error is thrown.
+Any Swagger parameters that _are_ included in the request are parsed and validated according to the [parameter definition](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#parameter-object).  If the value doesn't adhere to the parameter definition for any reason (such as improper data type, min/max length, min/max value, RegEx pattern, etc.), then an error is thrown.
 
 Finally, if everything is valid, then the HTTP request values are converted to the proper JavaScript data types.  For example, if you define a Swagger parameter as `{type: "string", format: "date-time"}`, then it will be converted to a JavaScript `Date` object.  If you define a parameter as `{type: "integer", format: "int32"}`, then it will be converted to a JavaScript `Number` with a whole value.
 

@@ -22,7 +22,7 @@ Methods
 Initializes the middleware with the given Swagger API. This method can be called again to re-initialize with a new or modified API.
 
 * __swagger__ (_optional_) - `string` or `object`<br>
-The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a valid [Swagger object](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md#swagger-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.
+The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a valid [Swagger object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#swagger-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.
 
 * __callback__ (_optional_) - `function(err, middleware)`<br>
 A callback function that will be called once the Swagger API is fully parsed, dereferenced, and validated. The second parameter is the same `Middleware` object.
