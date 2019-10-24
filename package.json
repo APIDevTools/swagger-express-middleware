@@ -35,8 +35,8 @@
   "scripts": {
     "lint": "eslint lib test/fixtures test/specs --fix",
     "test": "mocha && npm run lint",
-    "coverage": "nyc --reporter=text --reporter=lcov mocha",
     "upgrade": "npm-check -u",
+    "coverage": "nyc --reporter=text --reporter=lcov node_modules/mocha/bin/mocha",
     "bump": "bump --tag --push --all",
     "release": "npm run upgrade && npm test && npm run bump",
     "start": "cd samples && node sample1.js"
