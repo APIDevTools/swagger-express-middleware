@@ -86,7 +86,7 @@ app.enable('case sensitive routing');
 app.enable('strict routing');
 ```
 
-In Sample 1, [/pets/Fido](http://localhost:8000/pets/Fido), [/pets/fido](http://localhost:8000/pets/fido), and [/pets/Fido/](http://localhost:8000/pets/Fido/) all pointed to the same pet.  Now, those are treated as three different resources, and you could create a different pet at each one.  If you only create a pet named "_Fido_", then [/pets/fido](http://localhost:8000/pets/fido) and [/pets/Fido/](http://localhost:8000/pets/Fido/) will return HTTP 404 errors.
+In Sample 1, [/pets/Fido](http://localhost:8000/pets/Fido), [/pets/fido](http://localhost:8000/pets/fidO), and [/pets/FidO/](http://localhost:8000/pets/Fido/) all pointed to the same pet.  Now, those are treated as three different resources, and you could create a different pet at each one.  If you only create a pet named "_Fido_", then [/pets/fido](http://localhost:8000/pets/fido) and [/pets/FidO/](http://localhost:8000/pets/FidO/) will return HTTP 404 errors.
 
 All Swagger Express Middleware modules honor Express's case-sensitivity and strict-routing settings.  This is why we passed the [Express App](http://expressjs.com/4x/api.html#app) to the `Middleware` constructor.  Every middleware module will automatically use the Express App (or [Router](http://expressjs.com/4x/api.html#router)) from the `Middleware` object.  But you can override this for any individual middleware if you want.  That's exactly what we've done in Sample 2 with the [Files middleware](../middleware/files.md):
 
