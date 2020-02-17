@@ -13,12 +13,6 @@ Swagger Express Middleware
 
 
 
-OpenAPI 3.0 Support
---------------------------
-We are currently working on migrating Swagger Express Middleware to OpenAPI 3.0.  You can find the latest information in [**the v3 branch**](https://github.com/APIDevTools/swagger-express-middleware/tree/v3).
-
-
-
 Features
 --------------------------
 - **Supports Swagger 2.0 specs in JSON or YAML** <br>
