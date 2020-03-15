@@ -2,8 +2,8 @@ Swagger Express Middleware
 ============================
 ### Swagger 2.0 middleware and mocks for Express.js
 
-[![Cross-Platform Compatibility](https://apitools.dev/img/os-badges.svg)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
-[![Build Status](https://api.travis-ci.com/APIDevTools/swagger-express-middleware.svg?branch=master)](https://travis-ci.com/APIDevTools/swagger-express-middleware)
+[![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
+[![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
 
