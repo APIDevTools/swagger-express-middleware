@@ -32,12 +32,13 @@
     "node": ">=10"
   },
   "scripts": {
-    "lint": "eslint lib test/fixtures test/specs --fix",
+    "clean": "shx rm -rf .nyc_output coverage",
+    "lint": "eslint lib test/fixtures test/specs",
     "test": "mocha && npm run lint",
     "coverage": "nyc node_modules/mocha/bin/mocha",
     "upgrade": "npm-check -u && npm audit fix",
     "bump": "bump --tag --push --all",
-    "release": "npm run upgrade && npm test && npm run bump",
+    "release": "npm run upgrade && npm run clean && npm test && npm run bump",
     "start": "cd samples && node sample1.js"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
     "mocha": "^7.1.0",
     "npm-check": "^5.9.0",
     "nyc": "^15.0.0",
+    "shx": "^0.3.2",
     "sinon": "^9.0.1",
     "supertest": "^4.0.2"
   },
