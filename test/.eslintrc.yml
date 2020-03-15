@@ -3,7 +3,7 @@
 # https://jstools.dev/eslint-config-modular/
 
 extends:
-  - modular/test
+  - "@jsdevtools/modular/test"
 
 # Disable certain rules for tests
 rules:

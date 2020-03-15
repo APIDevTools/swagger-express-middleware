@@ -2,7 +2,7 @@
 
 const _ = require("lodash");
 const files = require("./files");
-const swaggerMethods = require("swagger-methods");
+const swaggerMethods = require("@apidevtools/swagger-methods");
 const swagger2PetStore = require("./files/swagger-2/petstore.json");
 
 const swagger2 = {
