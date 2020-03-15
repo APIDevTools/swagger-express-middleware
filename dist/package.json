@@ -1,0 +1,36 @@
+{
+  "name": "swagger-express-middleware",
+  "version": "X.X.X",
+  "description": "Swagger middleware and mocks for Express",
+  "keywords": [
+    "express",
+    "swagger",
+    "middleware",
+    "mock",
+    "fake",
+    "stub",
+    "rest",
+    "api",
+    "json"
+  ],
+  "author": {
+    "name": "James Messinger",
+    "url": "https://jamesmessinger.com"
+  },
+  "homepage": "https://apitools.dev/swagger-express-middleware/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/APIDevTools/swagger-express-middleware.git"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "@apidevtools/swagger-express-middleware": "X.X.X"
+  }
+}
