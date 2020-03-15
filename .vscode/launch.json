@@ -1,0 +1,62 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "--timeout=600000",
+        "--retries=0",
+      ],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "internalConsole",
+      "sourceMaps": false,
+    },
+    {
+      "name": "Run Sample 1",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/samples/sample1.js",
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "internalConsole",
+      "sourceMaps": false,
+    },
+    {
+      "name": "Run Sample 2",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/samples/sample2.js",
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "internalConsole",
+      "sourceMaps": false,
+    },
+  ]
+}
