@@ -4,12 +4,14 @@ Swagger Express Middleware
 
 [![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
 [![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
+
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
+[![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 
 [![npm](https://img.shields.io/npm/v/@apidevtools/swagger-express-middleware.svg)](https://www.npmjs.com/package/@apidevtools/swagger-express-middleware)
-[![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
 [![License](https://img.shields.io/npm/l/@apidevtools/swagger-express-middleware.svg)](LICENSE)
+[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/APIDevTools/swagger-express-middleware)
 
 
 
@@ -38,6 +40,7 @@ Adds the appropriate CORS headers to each request and automatically responds to 
 
 - [**Files middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/files.html)<br>
 Serves the Swagger API file(s) in JSON or YAML format so they can be used with front-end tools like [Swagger UI](http://www.swagger.io), [Swagger Editor](http://editor.swagger.io), and [Postman](http://getpostman.com).
+
 
 
 Installation and Use
@@ -73,6 +76,8 @@ createMiddleware('PetStore.yaml', app, function(err, middleware) {
 });
 ```
 
+
+
 Samples & Walkthroughs
 --------------------------
 Swagger Express Middleware comes two samples that use the [Swagger Pet Store API](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/PetStore.yaml).
@@ -89,6 +94,7 @@ This sample demonstrates a few more advanced features of Swagger Express Middlew
 
 * [Source Code](https://github.com/APIDevTools/swagger-express-middleware/blob/master/samples/sample2.js)
 * [Walkthrough](https://apitools.dev/swagger-express-middleware/docs/walkthroughs/walkthrough2.html)
+
 
 
 Contributing
@@ -111,9 +117,14 @@ To build/test the project locally on your computer:
 `npm start`
 
 
+
 License
 --------------------------
 Swagger Express Middleware is 100% free and open-source, under the [MIT license](LICENSE). Use it however you want.
+
+This package is [Treeware](http://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/APIDevTools/swagger-express-middleware) to thank us for our work. By contributing to the Treeware forest you’ll be creating employment for local families and restoring wildlife habitats.
+
+
 
 Big Thanks To
 --------------------------
