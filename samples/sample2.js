@@ -1,13 +1,13 @@
 'use strict';
 /**************************************************************************************************
- * This sample demonstrates a few more advanced features of Swagger-Express-Middleware,
+ * This sample demonstrates a few more advanced features of Swagger Express Middleware,
  * such as setting a few options, initializing the mock data store, and adding custom middleware logic.
  **************************************************************************************************/
 
 const util = require('util');
 const path = require('path');
 const express = require('express');
-const swagger = require('swagger-express-middleware');
+const swagger = require('@apidevtools/swagger-express-middleware');
 const Middleware = swagger.Middleware;
 const MemoryDataStore = swagger.MemoryDataStore;
 const Resource = swagger.Resource;

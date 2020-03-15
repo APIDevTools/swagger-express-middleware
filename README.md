@@ -7,9 +7,9 @@ Swagger Express Middleware
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
 
-[![npm](https://img.shields.io/npm/v/swagger-express-middleware.svg)](https://www.npmjs.com/package/swagger-express-middleware)
+[![npm](https://img.shields.io/npm/v/@apidevtools/swagger-express-middleware.svg)](https://www.npmjs.com/package/@apidevtools/swagger-express-middleware)
 [![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
-[![License](https://img.shields.io/npm/l/swagger-express-middleware.svg)](LICENSE)
+[![License](https://img.shields.io/npm/l/@apidevtools/swagger-express-middleware.svg)](LICENSE)
 
 
 
@@ -19,7 +19,7 @@ Features
 Swagger Express Middleware uses [Swagger-Parser](https://github.com/APIDevTools/swagger-parser) to parse, validate, and dereference Swagger files.  You can even split your spec into multiple different files using `$ref` pointers.
 
 - **Thoroughly tested**<br>
-Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 1,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node. But nothing's perfect, so if you find a bug, [please report it](https://github.com/APIDevTools/swagger-express-middleware/issues).
+Over 1,000 unit tests and integration tests with 100% code coverage.  Tested on [**over 1,000 real-world APIs**](https://apis.guru/browse-apis/) from Google, Instagram, Spotify, etc.  All tests are run on Mac, Linux, and Windows using all LTS versions of Node.
 
 - [**Mock middleware**](https://apitools.dev/swagger-express-middleware/docs/middleware/mock.html)<br>
 **Fully-functional mock** implementations for every operation in your API, including data persistence, all with **zero code!**  This is a great way to test-drive your API as you write it, or for quick demos and POCs.  You can even extend the mock middleware with your own logic and data to fill in any gaps.
@@ -45,13 +45,13 @@ Installation and Use
 Install using [npm](https://docs.npmjs.com/about-npm/).
 
 ```bash
-npm install swagger-express-middleware
+npm install @apidevtools/swagger-express-middleware
 ```
 Then use it in your [Node.js](http://nodejs.org/) script like this:
 
 ```javascript
 const express = require('express');
-const createMiddleware = require('swagger-express-middleware');
+const createMiddleware = require('@apidevtools/swagger-express-middleware');
 
 let app = express();
 

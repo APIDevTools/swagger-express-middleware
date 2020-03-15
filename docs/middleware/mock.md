@@ -11,7 +11,7 @@ For some examples (and explanations) of the Mock middleware in action, see the [
 
 ```javascript
 const express = require('express');
-const createMiddleware = require('swagger-express-middleware');
+const createMiddleware = require('@apidevtools/swagger-express-middleware');
 
 let app = express();
 

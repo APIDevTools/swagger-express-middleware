@@ -234,7 +234,7 @@
             headers:
               Location:
                 type: string
-                description: Swagger-Express-Middleware will automatically set this header appropriately
+                description: Swagger Express Middleware will automatically set this header appropriately
           409:
             description: new pet conflicts with an existing pet (i.e. they have the same name)
           default:
@@ -368,7 +368,7 @@
             headers:
               Location:
                 type: string
-                description: Swagger-Express-Middleware will automatically set this header appropriately
+                description: Swagger Express Middleware will automatically set this header appropriately
 
     /pets/{PetName}/photos/{ID}:
       parameters:

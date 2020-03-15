@@ -9,7 +9,7 @@ All of the examples in these docs use the `createMiddleware` function like this:
 
 ```javascript
 const express = require('express');
-const createMiddleware = require('swagger-express-middleware');
+const createMiddleware = require('@apidevtools/swagger-express-middleware');
 
 let app = express();
 
@@ -23,7 +23,7 @@ But any of the examples or samples could be rewritten to use the [Middleware cla
 
 ```javascript
 const express = require('express');
-const swagger = require('swagger-express-middleware');
+const swagger = require('@apidevtools/swagger-express-middleware');
 
 let app = express();
 
@@ -41,7 +41,7 @@ For a complete example of this second pattern, see [Sample 2](https://github.com
 API
 ----------------------
 ### `createMiddleware(swagger, router, callback)`
-The `createMiddleware` function is the main export of Swagger Express Middleware &mdash; it's what you get when you `require('swagger-express-middleware')`.  It's just a convenience function that creates a [Middleware](Middleware.md) object and calls its [init method](Middleware.md#initswagger-callback).
+The `createMiddleware` function is the main export of Swagger Express Middleware &mdash; it's what you get when you `require('@apidevtools/swagger-express-middleware')`.  It's just a convenience function that creates a [Middleware](Middleware.md) object and calls its [init method](Middleware.md#initswagger-callback).
 
 * __swagger__ (_optional_) - `string` or `object`<br>
 The file path or URL of a Swagger 2.0 API spec, in YAML or JSON format. Or a valid [Swagger object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#swagger-object).  Any `$ref` pointers to other files/URLs will be interpreted as relative to the main Swagger file.

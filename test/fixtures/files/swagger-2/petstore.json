@@ -833,7 +833,7 @@
             "headers": {
               "Location": {
                 "type": "string",
-                "description": "Swagger-Express-Middleware will automatically set this header appropriately"
+                "description": "Swagger Express Middleware will automatically set this header appropriately"
               }
             }
           },
@@ -1820,7 +1820,7 @@
             "headers": {
               "Location": {
                 "type": "string",
-                "description": "Swagger-Express-Middleware will automatically set this header appropriately"
+                "description": "Swagger Express Middleware will automatically set this header appropriately"
               }
             }
           }

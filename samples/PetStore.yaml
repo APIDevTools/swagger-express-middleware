@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: 1.0.0
   title: Swagger petstore
-  description: A sample API that demonstrates Swagger-Express-Middleware features
+  description: A sample API that demonstrates Swagger Express Middleware features
 
 consumes:
   - application/json

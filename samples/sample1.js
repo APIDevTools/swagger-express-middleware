@@ -1,11 +1,11 @@
 /**************************************************************************************************
- * This sample demonstrates the most simplistic usage of Swagger-Express-Middleware.
+ * This sample demonstrates the most simplistic usage of Swagger Express Middleware.
  * It simply creates a new Express Application and adds all of the Swagger middleware
  * without changing any options, and without adding any custom middleware.
  **************************************************************************************************/
 'use strict';
 
-const createMiddleware = require('swagger-express-middleware');
+const createMiddleware = require('@apidevtools/swagger-express-middleware');
 const path = require('path');
 const express = require('express');
 

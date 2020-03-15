@@ -1,4 +1,4 @@
-The Swagger-Express-Middleware API
+The Swagger Express Middleware API
 =====================================
 * [`createMiddleware` function](exports/createMiddleware.md)
 * [`Middleware` class](exports/Middleware.md)

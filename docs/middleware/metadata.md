@@ -10,7 +10,7 @@ This example uses the [PetStore.yaml](https://github.com/APIDevTools/swagger-exp
 ```javascript
 const util = require('util');
 const express = require('express');
-const createMiddleware = require('swagger-express-middleware');
+const createMiddleware = require('@apidevtools/swagger-express-middleware');
 
 let app = express();
 
