@@ -551,8 +551,6 @@ for (let spec of specs) {
                           path: res2.body[0].Photo.path,
                           extension: "jpg",
                           size: 683709,
-                          truncated: false,
-                          buffer: null
                         }
                       }
                     ]);
