@@ -488,14 +488,14 @@ for (let spec of specs) {
                       Photo: {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
+                        destination: res2.body.Photo.destination,
+                        filename: res2.body.Photo.filename,
                         name: res2.body.Photo.name,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body.Photo.path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     });
                     done();

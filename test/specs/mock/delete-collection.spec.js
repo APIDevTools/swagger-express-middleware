@@ -596,14 +596,14 @@ for (let spec of specs) {
                       {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
+                        destination: res2.body[0].destination,
                         name: res2.body[0].name,
+                        filename: res2.body[0].name,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body[0].path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     ]);
                     done();
@@ -657,14 +657,14 @@ for (let spec of specs) {
                       {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
+                        destination: res2.body[0].destination,
+                        filename: res2.body[0].filename,
                         name: res2.body[0].name,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body[0].path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     ]);
                     done();
