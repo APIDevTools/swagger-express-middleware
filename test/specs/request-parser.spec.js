@@ -676,7 +676,7 @@ for (let spec of specs) {
             expect(req.body).to.deep.equal({
               foo: "bar",
               biz: ["42", "43", "44"],
-              baz: ["B", "C", "A"],
+              baz: ["B", undefined, "C", undefined, undefined, "A"],
               bob: {
                 name: "bob",
                 age: "42"
@@ -699,32 +699,32 @@ for (let spec of specs) {
 
           express.post("/foo", helper.spy((req, res, next) => {
             expect(req.body).to.deep.equal({});
-            expect(req.files).to.deep.equal({
-              file1: {
+            expect(req.files).to.deep.equal([
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
-                destination: req.files.file1.destination,
-                filename: req.files.file1.filename,
-                name: req.files.file1.name,
+                destination: req.files[0].destination,
+                filename: req.files[0].filename,
+                name: req.files[0].name,
                 originalname: "1MB.jpg",
-                path: req.files.file1.path,
+                path: req.files[0].path,
                 size: 683709
               },
-              file2: {
+              {
                 encoding: "7bit",
                 extension: "foobar",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
-                destination: req.files.file2.destination,
-                filename: req.files.file2.filename,
-                name: req.files.file2.name,
+                destination: req.files[1].destination,
+                filename: req.files[1].filename,
+                name: req.files[1].name,
                 originalname: "MyFile.foobar",
-                path: req.files.file2.path,
+                path: req.files[1].path,
                 size: 683709
               }
-            });
+            ]);
           }));
         });
       });

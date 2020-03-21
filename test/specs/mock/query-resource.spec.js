@@ -520,7 +520,7 @@ for (let spec of specs) {
 
                     let request = supertest[method](res1.headers.location);
                     noHeaders || request.expect("Content-Length", /^(95|87)$/);      // CRLF vs LF
-                    noHeaders || request.expect("Content-Type", "text/plain; charset=UTF-8");
+                    noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
 
                     // The filename is set to the basename of the URL by default
                     noHeaders || request.expect("Content-Disposition", 'attachment; filename="' + photoID + '"');
