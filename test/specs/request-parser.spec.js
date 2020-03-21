@@ -701,28 +701,28 @@ for (let spec of specs) {
             expect(req.body).to.deep.equal({});
             expect(req.files).to.deep.equal({
               file1: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
+                destination: req.files.file1.destination,
+                filename: req.files.file1.filename,
                 name: req.files.file1.name,
                 originalname: "1MB.jpg",
                 path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                size: 683709
               },
               file2: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "foobar",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
+                destination: req.files.file2.destination,
+                filename: req.files.file2.filename,
                 name: req.files.file2.name,
                 originalname: "MyFile.foobar",
                 path: req.files.file2.path,
-                size: 683709,
-                truncated: false
+                size: 683709
               }
             });
           }));
@@ -761,28 +761,28 @@ for (let spec of specs) {
             });
             expect(req.files).to.deep.equal({
               file1: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
+                destination: req.files.file1.destination,
+                filename: req.files.file1.filename,
                 name: req.files.file1.name,
                 originalname: "1MB.jpg",
                 path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                size: 683709
               },
               file2: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "foobar",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
+                destination: req.files.file2.destination,
+                filename: req.files.file2.filename,
                 name: req.files.file2.name,
                 originalname: "MyFile.foobar",
                 path: req.files.file2.path,
-                size: 683709,
-                truncated: false
+                size: 683709
               }
             });
           }));
@@ -805,40 +805,40 @@ for (let spec of specs) {
             expect(req.body).to.deep.equal({});
             expect(req.files).to.deep.equal({
               file1: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
+                destination: req.files.file1.destination,
+                filename: req.files.file1.filename,
                 name: req.files.file1.name,
                 originalname: "1MB.jpg",
                 path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                size: 683709
               },
               file2: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
+                destination: req.files.file2.destination,
+                filename: req.files.file2.filename,
                 name: req.files.file2.name,
                 originalname: "5MB.jpg",
                 path: req.files.file2.path,
-                size: 4573123,
-                truncated: false
+                size: 4573123
               },
               file3: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file3",
                 mimetype: "image/jpeg",
+                destination: req.files.file3.destination,
+                filename: req.files.file3.filename,
                 name: req.files.file3.name,
                 originalname: "6MB.jpg",
                 path: req.files.file3.path,
-                size: 5595095,
-                truncated: false
+                size: 5595095
               }
             });
           }));

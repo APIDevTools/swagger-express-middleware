@@ -496,14 +496,14 @@ function testCases (spec, contentType, method) {
                     Photo: {
                       fieldname: "Photo",
                       originalname: "1MB.jpg",
+                      destination: res.body[0].Photo.destination,
+                      filename: res.body[0].Photo.filename,
                       name: res.body[0].Photo.name,
                       encoding: "7bit",
                       mimetype: "image/jpeg",
                       path: res.body[0].Photo.path,
                       extension: "jpg",
                       size: 683709,
-                      truncated: false,
-                      buffer: null
                     }
                   }
                 ]);
@@ -552,14 +552,14 @@ function testCases (spec, contentType, method) {
                   {
                     fieldname: "Photo",
                     originalname: "1MB.jpg",
+                    destination: res.body[0].destination,
+                    filename: res.body[0].filename,
                     name: res.body[0].name,
                     encoding: "7bit",
                     mimetype: "image/jpeg",
                     path: res.body[0].path,
                     extension: "jpg",
                     size: 683709,
-                    truncated: false,
-                    buffer: null
                   }
                 ]);
               }
@@ -611,14 +611,14 @@ function testCases (spec, contentType, method) {
                   {
                     fieldname: "Photo",
                     originalname: "1MB.jpg",
+                    destination: res.body[0].destination,
+                    filename: res.body[0].filename,
                     name: res.body[0].name,
                     encoding: "7bit",
                     mimetype: "image/jpeg",
                     path: res.body[0].path,
                     extension: "jpg",
                     size: 683709,
-                    truncated: false,
-                    buffer: null
                   }
                 ]);
               }

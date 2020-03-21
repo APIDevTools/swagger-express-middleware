@@ -544,7 +544,7 @@ for (let spec of specs) {
                           fieldname: "Photo",
                           originalname: "1MB.jpg",
                           destination: res2.body[0].Photo.destination,
-                          filename: res2.body[0].Photo.name,
+                          filename: res2.body[0].Photo.filename,
                           name: res2.body[0].Photo.name,
                           encoding: "7bit",
                           mimetype: "image/jpeg",

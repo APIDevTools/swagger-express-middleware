@@ -500,16 +500,16 @@ for (let spec of specs) {
             });
             expect(req.files).to.deep.equal({
               Photo: {
-                buffer: null,
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "Photo",
                 mimetype: "image/jpeg",
+                destination: req.files.Photo.destination,
+                filename: req.files.Photo.filename,
                 name: req.files.Photo.name,
                 originalname: "1MB.jpg",
                 path: req.files.Photo.path,
                 size: 683709,
-                truncated: false
               }
             });
             expect(req.body.photo).to.equal(req.files.photo);
