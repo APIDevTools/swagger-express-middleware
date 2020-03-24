@@ -448,7 +448,6 @@ for (let spec of specs) {
                           originalname: "1MB.jpg",
                           destination: res1.body.Photo.destination,
                           filename: res1.body.Photo.filename,
-                          name: res1.body.Photo.name,
                           encoding: "7bit",
                           mimetype: "image/jpeg",
                           path: res1.body.Photo.path,

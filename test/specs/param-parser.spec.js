@@ -506,7 +506,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files.Photo.destination,
                 filename: req.files.Photo.filename,
-                name: req.files.Photo.name,
                 originalname: "1MB.jpg",
                 path: req.files.Photo.path,
                 size: 683709,

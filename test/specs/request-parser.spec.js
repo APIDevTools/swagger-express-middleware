@@ -707,7 +707,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[0].destination,
                 filename: req.files[0].filename,
-                name: req.files[0].name,
                 originalname: "1MB.jpg",
                 path: req.files[0].path,
                 size: 683709
@@ -719,7 +718,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[1].destination,
                 filename: req.files[1].filename,
-                name: req.files[1].name,
                 originalname: "MyFile.foobar",
                 path: req.files[1].path,
                 size: 683709
@@ -767,7 +765,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[0].destination,
                 filename: req.files[0].filename,
-                name: req.files[0].name,
                 originalname: "1MB.jpg",
                 path: req.files[0].path,
                 size: 683709
@@ -779,7 +776,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[1].destination,
                 filename: req.files[1].filename,
-                name: req.files[1].name,
                 originalname: "MyFile.foobar",
                 path: req.files[1].path,
                 size: 683709
@@ -811,7 +807,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[0].destination,
                 filename: req.files[0].filename,
-                name: req.files[0].name,
                 originalname: "1MB.jpg",
                 path: req.files[0].path,
                 size: 683709
@@ -823,7 +818,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[1].destination,
                 filename: req.files[1].filename,
-                name: req.files[1].name,
                 originalname: "5MB.jpg",
                 path: req.files[1].path,
                 size: 4573123
@@ -835,7 +829,6 @@ for (let spec of specs) {
                 mimetype: "image/jpeg",
                 destination: req.files[2].destination,
                 filename: req.files[2].filename,
-                name: req.files[2].name,
                 originalname: "6MB.jpg",
                 path: req.files[2].path,
                 size: 5595095
