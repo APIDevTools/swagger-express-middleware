@@ -35,8 +35,8 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
     in outside of the swagger routes will be passed through multer. The 413 functionality was recreated
     [like so](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396015249).
   * Indexed params are placed in exactly the index specified so `foo[0]=1&foo[2]=1` results in a param
-    like `foo: [1, undefined, 1]` whereas previously it would have been `[1, 2]`
-
+    like `foo: [1, undefined, 1]` whereas previously it would have been `[1, 2]`,
+    [example here](https://github.com/APIDevTools/swagger-express-middleware/blob/244a1aa05e4bc21ee96b8a7973f98c76406ea4c5/test/specs/request-parser.spec.js#L668-L679)
 
 [Full Changelog](https://github.com/APIDevTools/swagger-express-middleware/compare/v3.0.1...v4.0.0)
 
