@@ -15,8 +15,8 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
   * [CHANGE](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396014909):
     Files downloaded to disk are not saved with the extension in the name so Content-Type may need to
     be set manually or based on the File object since it can not be inferred from the downloaded filename
-  * [CHANGE](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396015355):
-    The File object created from multer is a little different. For compatibility `extension` is backfilled.
+  * The File object created from multer is a little different. For compatibility `extension`
+    [is backfilled](https://github.com/APIDevTools/swagger-express-middleware/pull/165/files#diff-0819ff236dc445648af37b543cd2b958R63).
     - the `name` property on File is now `filename` and doesn't include a file extension
     - the `buffer` property on File is only present if `inMemory` or `storage: memoryStorage` is used.
     - the `truncated` property on File is no longer present. Instead,
@@ -26,7 +26,8 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
     - [Old](https://github.com/expressjs/multer/tree/b3c444728277202d1f5f720cc7269883ff888386#options)
       vs [New](https://github.com/expressjs/multer#multeropts)
     - See [MemoryStorage](https://github.com/expressjs/multer#memorystorage) if you were previously using
-      `inMemory: true`, though `inMemory` option has been recreated, it may be removed in the future.
+      `inMemory: true`, though `inMemory` option [has been recreated](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396015204),
+      it may be removed in the future.
     - See [Error handling](https://github.com/expressjs/multer#error-handling) for more info on how to
     recreate certain functionality.
   * As with previous versions extra files provided to swagger routes will 413 and any files coming
