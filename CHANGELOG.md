@@ -15,8 +15,9 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
   * [CHANGE](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396014909):
     Files downloaded to disk are not saved with the extension in the name so Content-Type may need to
     be set manually or based on the File object since it can not be inferred from the downloaded filename
-  * The File object created from multer is a little different. For compatibility `extension`
-    [is backfilled](https://github.com/APIDevTools/swagger-express-middleware/pull/165/files#diff-0819ff236dc445648af37b543cd2b958R63).
+  * The File object created from multer is a little different:
+    - For compatibility `extension`
+      [is backfilled](https://github.com/APIDevTools/swagger-express-middleware/pull/165/files#diff-0819ff236dc445648af37b543cd2b958R63).
     - the `name` property on File is now `filename` and doesn't include a file extension
     - the `buffer` property on File is only present if `inMemory` or `storage: memoryStorage` is used.
     - the `truncated` property on File is no longer present. Instead,
