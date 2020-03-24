@@ -5,7 +5,7 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
 
 
 
-[v4.0.0](https://github.com/APIDevTools/swagger-express-middleware/tree/v3.0.0) (2020-03-24)
+[v4.0.0](https://github.com/APIDevTools/swagger-express-middleware/tree/v4.0.0) (2020-03-24)
 ----------------------------------------------------------------------------------------------------
 
 - Moved from a [high security risk version](https://www.npmjs.com/package/multer/v/0.1.8) of multer
