@@ -25,7 +25,7 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
       through the `next` function of middleware
   * multipart opts have changed significantly
     - [Old](https://github.com/expressjs/multer/tree/b3c444728277202d1f5f720cc7269883ff888386#options)
-      vs [New](https://github.com/expressjs/multer#multeropts)
+      vs [New](https://github.com/expressjs/multer/tree/v1.4.2#multeropts)
     - See [MemoryStorage](https://github.com/expressjs/multer#memorystorage) if you were previously using
       `inMemory: true`, though `inMemory` option [has been recreated](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396015204),
       it may be removed in the future.
