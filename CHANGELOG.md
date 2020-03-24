@@ -16,12 +16,12 @@ Swagger Express Middleware adheres to [Semantic Versioning](http://semver.org/).
     Files downloaded to disk are not saved with the extension in the name so Content-Type may need to
     be set manually or based on the File object since it can not be inferred from the downloaded filename
   * [CHANGE](https://github.com/APIDevTools/swagger-express-middleware/pull/165#discussion_r396015355):
-    The File object created from multer is a little different. For compatibility some values are backfilled.
-  * the `name` property on File is now `filename` and doesn't include a file extension
-  * the `buffer` property on File is only present if `inMemory` or `storage: memoryStorage` is used.
-  * the `truncated` property on File is no longer present. Instead,
-    [an error is sent](https://github.com/expressjs/multer/blob/805170c61530e1f1cafd818c9b63d16a9dd46c36/lib/make-middleware.js#L84-L85)
-    through the `next` function of middleware
+    The File object created from multer is a little different. For compatibility `extension` is backfilled.
+    - the `name` property on File is now `filename` and doesn't include a file extension
+    - the `buffer` property on File is only present if `inMemory` or `storage: memoryStorage` is used.
+    - the `truncated` property on File is no longer present. Instead,
+      [an error is sent](https://github.com/expressjs/multer/blob/805170c61530e1f1cafd818c9b63d16a9dd46c36/lib/make-middleware.js#L84-L85)
+      through the `next` function of middleware
   * multipart opts have changed significantly
     - [Old](https://github.com/expressjs/multer/tree/b3c444728277202d1f5f720cc7269883ff888386#options)
       vs [New](https://github.com/expressjs/multer#multeropts)
