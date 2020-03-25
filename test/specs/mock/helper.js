@@ -3,7 +3,6 @@
 const swagger = require("../../../");
 const helper = require("../../fixtures/helper");
 const util = require("../../../lib/helpers/util");
-const multer = require("multer");
 const _ = require("lodash");
 
 _.extend(exports, helper);

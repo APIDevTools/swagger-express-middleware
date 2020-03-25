@@ -5,7 +5,6 @@ const expect = require("chai").expect;
 const _ = require("lodash");
 const specs = require("../../fixtures/specs");
 const helper = require("./helper");
-const multer = require("multer");
 
 for (let spec of specs) {
   describe(`Delete Resource (${spec.name})`, () => {
