@@ -446,14 +446,13 @@ for (let spec of specs) {
                         Photo: {
                           fieldname: "Photo",
                           originalname: "1MB.jpg",
-                          name: res1.body.Photo.name,
+                          destination: res1.body.Photo.destination,
+                          filename: res1.body.Photo.filename,
                           encoding: "7bit",
                           mimetype: "image/jpeg",
                           path: res1.body.Photo.path,
                           extension: "jpg",
                           size: 683709,
-                          truncated: false,
-                          buffer: null
                         }
                       });
                     }
@@ -520,7 +519,7 @@ for (let spec of specs) {
 
                     let request = supertest[method](res1.headers.location);
                     noHeaders || request.expect("Content-Length", /^(95|87)$/);      // CRLF vs LF
-                    noHeaders || request.expect("Content-Type", "text/plain; charset=UTF-8");
+                    noHeaders || request.expect("Content-Type", "text/plain; charset=utf-8");
 
                     // The filename is set to the basename of the URL by default
                     noHeaders || request.expect("Content-Disposition", 'attachment; filename="' + photoID + '"');

@@ -676,7 +676,7 @@ for (let spec of specs) {
             expect(req.body).to.deep.equal({
               foo: "bar",
               biz: ["42", "43", "44"],
-              baz: ["B", "C", "A"],
+              baz: ["B", undefined, "C", undefined, undefined, "A"],
               bob: {
                 name: "bob",
                 age: "42"
@@ -699,32 +699,30 @@ for (let spec of specs) {
 
           express.post("/foo", helper.spy((req, res, next) => {
             expect(req.body).to.deep.equal({});
-            expect(req.files).to.deep.equal({
-              file1: {
-                buffer: null,
+            expect(req.files).to.deep.equal([
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
-                name: req.files.file1.name,
+                destination: req.files[0].destination,
+                filename: req.files[0].filename,
                 originalname: "1MB.jpg",
-                path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                path: req.files[0].path,
+                size: 683709
               },
-              file2: {
-                buffer: null,
+              {
                 encoding: "7bit",
                 extension: "foobar",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
-                name: req.files.file2.name,
+                destination: req.files[1].destination,
+                filename: req.files[1].filename,
                 originalname: "MyFile.foobar",
-                path: req.files.file2.path,
-                size: 683709,
-                truncated: false
+                path: req.files[1].path,
+                size: 683709
               }
-            });
+            ]);
           }));
         });
       });
@@ -753,38 +751,36 @@ for (let spec of specs) {
             expect(req.body).to.deep.equal({
               foo: "bar",
               biz: ["42", "43", "44"],
-              baz: ["B", "C", "A"],
+              baz: ["B", undefined, "C", undefined, undefined, "A"],
               bob: {
                 name: "bob",
                 age: "42"
               }
             });
-            expect(req.files).to.deep.equal({
-              file1: {
-                buffer: null,
+            expect(req.files).to.deep.equal([
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
-                name: req.files.file1.name,
+                destination: req.files[0].destination,
+                filename: req.files[0].filename,
                 originalname: "1MB.jpg",
-                path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                path: req.files[0].path,
+                size: 683709
               },
-              file2: {
-                buffer: null,
+              {
                 encoding: "7bit",
                 extension: "foobar",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
-                name: req.files.file2.name,
+                destination: req.files[1].destination,
+                filename: req.files[1].filename,
                 originalname: "MyFile.foobar",
-                path: req.files.file2.path,
-                size: 683709,
-                truncated: false
+                path: req.files[1].path,
+                size: 683709
               }
-            });
+            ]);
           }));
         });
       });
@@ -803,44 +799,41 @@ for (let spec of specs) {
 
           express.post("/foo", helper.spy((req, res, next) => {
             expect(req.body).to.deep.equal({});
-            expect(req.files).to.deep.equal({
-              file1: {
-                buffer: null,
+            expect(req.files).to.deep.equal([
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file1",
                 mimetype: "image/jpeg",
-                name: req.files.file1.name,
+                destination: req.files[0].destination,
+                filename: req.files[0].filename,
                 originalname: "1MB.jpg",
-                path: req.files.file1.path,
-                size: 683709,
-                truncated: false
+                path: req.files[0].path,
+                size: 683709
               },
-              file2: {
-                buffer: null,
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file2",
                 mimetype: "image/jpeg",
-                name: req.files.file2.name,
+                destination: req.files[1].destination,
+                filename: req.files[1].filename,
                 originalname: "5MB.jpg",
-                path: req.files.file2.path,
-                size: 4573123,
-                truncated: false
+                path: req.files[1].path,
+                size: 4573123
               },
-              file3: {
-                buffer: null,
+              {
                 encoding: "7bit",
                 extension: "jpg",
                 fieldname: "file3",
                 mimetype: "image/jpeg",
-                name: req.files.file3.name,
+                destination: req.files[2].destination,
+                filename: req.files[2].filename,
                 originalname: "6MB.jpg",
-                path: req.files.file3.path,
-                size: 5595095,
-                truncated: false
+                path: req.files[2].path,
+                size: 5595095
               }
-            });
+            ]);
           }));
         });
       });

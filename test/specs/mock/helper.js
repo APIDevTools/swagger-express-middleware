@@ -3,6 +3,7 @@
 const swagger = require("../../../");
 const helper = require("../../fixtures/helper");
 const util = require("../../../lib/helpers/util");
+const multer = require("multer");
 const _ = require("lodash");
 
 _.extend(exports, helper);
@@ -50,6 +51,7 @@ exports.initTest = function (express, dataStore, fns, api, test) {
       fns = arguments[1];
       dataStore = arguments[0];
       express = undefined;
+      break;
   }
 
   express = express || helper.express();

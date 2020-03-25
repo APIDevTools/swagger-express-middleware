@@ -536,14 +536,13 @@ for (let spec of specs) {
                     Photo: {
                       fieldname: "Photo",
                       originalname: "1MB.jpg",
-                      name: res.body.Photo.name,
+                      destination: res.body.Photo.destination,
+                      filename: res.body.Photo.filename,
                       encoding: "7bit",
                       mimetype: "image/jpeg",
                       path: res.body.Photo.path,
                       extension: "jpg",
                       size: 683709,
-                      truncated: false,
-                      buffer: null
                     }
                   });
                   done();
@@ -891,7 +890,7 @@ for (let spec of specs) {
                 .attach("Photo", spec.files.oneMB)
                 .end(helper.checkResults(done, (res) => {
                   expect(res.headers.location).not.to.equal("/api/pets/Fido/photos/1MB.jpg");
-                  expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\w+\.jpg$/);
+                  expect(res.headers.location).to.match(/^\/api\/pets\/Fido\/photos\/\w+$/);
 
                   supertest
                     .get(res.headers.location)

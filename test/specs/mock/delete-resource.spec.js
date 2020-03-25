@@ -5,9 +5,10 @@ const expect = require("chai").expect;
 const _ = require("lodash");
 const specs = require("../../fixtures/specs");
 const helper = require("./helper");
+const multer = require("multer");
 
 for (let spec of specs) {
-  describe(`Edit Resource Mock (${spec.name})`, () => {
+  describe(`Delete Resource (${spec.name})`, () => {
     describe("DELETE", () => {
 
       let api;
@@ -488,14 +489,13 @@ for (let spec of specs) {
                       Photo: {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
-                        name: res2.body.Photo.name,
+                        destination: res2.body.Photo.destination,
+                        filename: res2.body.Photo.filename,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body.Photo.path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     });
                     done();

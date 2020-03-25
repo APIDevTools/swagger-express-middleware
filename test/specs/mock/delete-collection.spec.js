@@ -543,14 +543,13 @@ for (let spec of specs) {
                         Photo: {
                           fieldname: "Photo",
                           originalname: "1MB.jpg",
-                          name: res2.body[0].Photo.name,
+                          destination: res2.body[0].Photo.destination,
+                          filename: res2.body[0].Photo.filename,
                           encoding: "7bit",
                           mimetype: "image/jpeg",
                           path: res2.body[0].Photo.path,
                           extension: "jpg",
                           size: 683709,
-                          truncated: false,
-                          buffer: null
                         }
                       }
                     ]);
@@ -596,14 +595,13 @@ for (let spec of specs) {
                       {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
-                        name: res2.body[0].name,
+                        destination: res2.body[0].destination,
+                        filename: res2.body[0].filename,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body[0].path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     ]);
                     done();
@@ -657,14 +655,13 @@ for (let spec of specs) {
                       {
                         fieldname: "Photo",
                         originalname: "1MB.jpg",
-                        name: res2.body[0].name,
+                        destination: res2.body[0].destination,
+                        filename: res2.body[0].filename,
                         encoding: "7bit",
                         mimetype: "image/jpeg",
                         path: res2.body[0].path,
                         extension: "jpg",
                         size: 683709,
-                        truncated: false,
-                        buffer: null
                       }
                     ]);
                     done();
