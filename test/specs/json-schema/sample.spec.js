@@ -548,8 +548,7 @@ describe("JSON Schema sample data", () => {
       });
       for (let i = 0; i < iterations; i++) {
         let obj = schema.sample();
-        expect(obj).to.be.an("object");
-        expect(obj).to.have.lengthOf(0);
+        expect(obj).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
       }
     });
   });
