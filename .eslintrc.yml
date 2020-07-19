@@ -1,23 +1,9 @@
 # ESLint config
 # http://eslint.org/docs/user-guide/configuring
-# https://jstools.dev/eslint-config-modular/
+# https://jstools.dev/eslint-config/
 
 root: true
+extends: "@jsdevtools"
 
-extends:
-  - "@jsdevtools/modular/best-practices"
-  - "@jsdevtools/modular/style"
-  - "@jsdevtools/modular/es6"
-  - "@jsdevtools/modular/node"
-
-rules:
-  # Don't warn about unused "req", "res", and "next" arguments
-  no-unused-vars:
-    - error
-    - args: none
-
-  # Don't warn about shadowed variables like "err"
-  no-shadow: off
-
-  # Don't warn about capitalized functions like middleware.CORS, express.Router, etc.
-  new-cap: off
+env:
+  node: true
