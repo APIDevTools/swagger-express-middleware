@@ -2,8 +2,8 @@ Swagger Express Middleware
 ============================
 ### Swagger 2.0 middleware and mocks for Express.js
 
-[![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
-[![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/blob/master/.github/workflows/CI-CD.yaml)
+[![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/actions)
+[![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/actions)
 
 [![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
 [![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
@@ -99,7 +99,7 @@ This sample demonstrates a few more advanced features of Swagger Express Middlew
 
 Contributing
 --------------------------
-I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/APIDevTools/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/APIDevTools/swagger-express-middleware/pulls).
+I welcome any contributions, enhancements, and bug-fixes.  [Open an issue](https://github.com/APIDevTools/swagger-express-middleware/issues) on GitHub and [submit a pull request](https://github.com/APIDevTools/swagger-express-middleware/pulls).
 
 #### Building/Testing
 To build/test the project locally on your computer:
