@@ -44,7 +44,7 @@ describe("JSON Schema - parse object params", () => {
         .end(helper.checkSpyResults(done));
 
       express.patch("/api/pets/fido", helper.spy((req, res, next) => {
-        expect(req.body || "").to.be.empty;
+        expect(req.body || "").to.have.lengthOf(0);
       }));
     });
   });

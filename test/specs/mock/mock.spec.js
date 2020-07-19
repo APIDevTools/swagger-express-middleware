@@ -17,8 +17,8 @@ for (let spec of specs) {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req, res, next) => {
-          expect(req.swagger).to.be.undefined;
-          expect(res.swagger).to.be.undefined;
+          expect(req.swagger).to.equal(undefined);
+          expect(res.swagger).to.equal(undefined);
         }));
       });
     });
@@ -34,8 +34,8 @@ for (let spec of specs) {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req, res, next) => {
-          expect(req.swagger).to.be.undefined;
-          expect(res.swagger).to.be.undefined;
+          expect(req.swagger).to.equal(undefined);
+          expect(res.swagger).to.equal(undefined);
         }));
       });
     });
@@ -66,7 +66,7 @@ for (let spec of specs) {
             params: [],
             security: []
           });
-          expect(res.swagger).to.be.undefined;
+          expect(res.swagger).to.equal(undefined);
         }));
       });
     });
@@ -95,7 +95,7 @@ for (let spec of specs) {
             params: spec.samples.petsGetParams,
             security: []
           });
-          expect(res.swagger).to.be.undefined;
+          expect(res.swagger).to.equal(undefined);
         }));
       });
     });

@@ -29,7 +29,7 @@ describe("FileDataStore", () => {
       if (err) {
         return done(err);
       }
-      expect(fs.existsSync(file)).to.be.true;
+      expect(fs.existsSync(file)).to.equal(true);
       done();
     });
   });
@@ -43,7 +43,7 @@ describe("FileDataStore", () => {
       if (err) {
         return done(err);
       }
-      expect(fs.existsSync(file)).to.be.true;
+      expect(fs.existsSync(file)).to.equal(true);
       done();
     });
   });
@@ -57,7 +57,7 @@ describe("FileDataStore", () => {
       if (err) {
         return done(err);
       }
-      expect(fs.existsSync(file)).to.be.true;
+      expect(fs.existsSync(file)).to.equal(true);
       done();
     });
   });
@@ -71,7 +71,7 @@ describe("FileDataStore", () => {
       if (err) {
         return done(err);
       }
-      expect(fs.existsSync(file)).to.be.true;
+      expect(fs.existsSync(file)).to.equal(true);
       done();
     });
   });
@@ -85,7 +85,7 @@ describe("FileDataStore", () => {
       if (err) {
         return done(err);
       }
-      expect(fs.existsSync(file)).to.be.true;
+      expect(fs.existsSync(file)).to.equal(true);
       done();
     });
   });
@@ -100,7 +100,7 @@ describe("FileDataStore", () => {
 
     function assert (err, data) {
       expect(err).to.be.an.instanceOf(Error);
-      expect(data).to.be.undefined;
+      expect(data).to.equal(undefined);
     }
 
     dataStore.get(resource, (err, data) => {
@@ -142,7 +142,7 @@ describe("FileDataStore", () => {
 
       function assert (err, data) {
         expect(err).to.be.an.instanceOf(Error);
-        expect(data).to.be.undefined;
+        expect(data).to.equal(undefined);
       }
 
       dataStore.save(resource, (err, data) => {
@@ -181,7 +181,7 @@ describe("FileDataStore", () => {
 
       function assert (err, data) {
         expect(err).to.be.an.instanceOf(Error);
-        expect(data).to.be.undefined;
+        expect(data).to.equal(undefined);
       }
 
       dataStore.save(resource, (err, data) => {

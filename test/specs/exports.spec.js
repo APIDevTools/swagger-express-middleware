@@ -149,7 +149,7 @@ describe("Package exports", () => {
       describe("Failure tests", () => {
         it("should throw an error if called with just a callback", () => {
           function notGonnaWork () {
-            swagger(function () {});
+            swagger(() => {});
           }
 
           expect(notGonnaWork).to.throw(Error, "Expected a Swagger file or object");
@@ -200,7 +200,7 @@ describe("Package exports", () => {
 
       it('should NOT work without the "new" operator', () => {
         let middleware = swagger.Middleware();
-        expect(middleware).to.be.undefined;
+        expect(middleware).to.equal(undefined);
       });
     });
 
@@ -228,7 +228,7 @@ describe("Package exports", () => {
 
       it('should NOT work without the "new" operator', () => {
         let dataStore = swagger.MemoryDataStore();
-        expect(dataStore).to.be.undefined;
+        expect(dataStore).to.equal(undefined);
       });
     });
 
@@ -241,7 +241,7 @@ describe("Package exports", () => {
 
       it('should NOT work without the "new" operator', () => {
         let dataStore = swagger.FileDataStore();
-        expect(dataStore).to.be.undefined;
+        expect(dataStore).to.equal(undefined);
       });
     });
   }

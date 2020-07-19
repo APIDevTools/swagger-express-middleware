@@ -21,8 +21,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs")
+              helper.supertest(express)[method]("/api-docs")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -33,8 +32,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "" }));
 
-              helper.supertest(express)
-                [method]("/")
+              helper.supertest(express)[method]("/")
                 .expect(404)
                 .end(done);
             });
@@ -44,8 +42,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "" }));
 
-              helper.supertest(express)
-                [method]("/")
+              helper.supertest(express)[method]("/")
                 .expect(404)
                 .end(done);
             });
@@ -55,8 +52,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/my/custom/path")
+              helper.supertest(express)[method]("/my/custom/path")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -67,8 +63,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/my/custom/path")
+              helper.supertest(express)[method]("/my/custom/path")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -79,8 +74,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ apiPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/api-docs")
+              helper.supertest(express)[method]("/api-docs")
                 .expect(404, done);
             });
           });
@@ -89,8 +83,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true }));
 
-              helper.supertest(express)
-                [method]("/api/api-docs/")
+              helper.supertest(express)[method]("/api/api-docs/")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -101,8 +94,7 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true, apiPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/api/my/custom/path/")
+              helper.supertest(express)[method]("/api/my/custom/path/")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -113,14 +105,12 @@ for (let spec of specs) {
             swagger(spec.files.petStore, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/")                                          // <-- trailing slash
+              helper.supertest(express)[method]("/api-docs/")                                          // <-- trailing slash
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done, () => {
 
-                  helper.supertest(express)
-                    [method]("/api-docs")                                   // <-- no trailing slash
+                  helper.supertest(express)[method]("/api-docs")                                   // <-- no trailing slash
                     .expect("Content-Type", "application/json; charset=utf-8")
                     .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
@@ -134,8 +124,7 @@ for (let spec of specs) {
               express.use(middleware.files(express));
 
               express.enable("strict routing");
-              helper.supertest(express)
-                [method]("/api-docs")
+              helper.supertest(express)[method]("/api-docs")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -143,8 +132,7 @@ for (let spec of specs) {
                   }
 
                   express.disable("strict routing");
-                  helper.supertest(express)
-                    [method]("/api-docs")
+                  helper.supertest(express)[method]("/api-docs")
                     .expect("Content-Type", "application/json; charset=utf-8")
                     .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
@@ -158,8 +146,7 @@ for (let spec of specs) {
               express.use(middleware.files(express));
 
               express.enable("case sensitive routing");
-              helper.supertest(express)
-                [method]("/API-docs")
+              helper.supertest(express)[method]("/API-docs")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -167,8 +154,7 @@ for (let spec of specs) {
                   }
 
                   express.disable("case sensitive routing");
-                  helper.supertest(express)
-                    [method]("/API-docs")
+                  helper.supertest(express)[method]("/API-docs")
                     .expect("Content-Type", "application/json; charset=utf-8")
                     .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
@@ -184,8 +170,7 @@ for (let spec of specs) {
               express.enable("strict routing");
               express.enable("case sensitive routing");
 
-              helper.supertest(express)
-                [method]("/API/Custom/Path.json/")
+              helper.supertest(express)[method]("/API/Custom/Path.json/")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -194,8 +179,7 @@ for (let spec of specs) {
 
                   express.disable("strict routing");
                   express.disable("case sensitive routing");
-                  helper.supertest(express)
-                    [method]("/API/Custom/Path.json/")
+                  helper.supertest(express)[method]("/API/Custom/Path.json/")
                     .expect("Content-Type", "application/json; charset=utf-8")
                     .expect(isHead ? undefined : spec.samples.petStore)
                     .end(helper.checkResults(done));
@@ -216,8 +200,7 @@ for (let spec of specs) {
               express.enable("strict routing");
               express.enable("case sensitive routing");
 
-              helper.supertest(express)
-                [method]("/API/Custom/Path.json/")
+              helper.supertest(express)[method]("/API/Custom/Path.json/")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(isHead ? undefined : spec.samples.petStore)
                 .end(helper.checkResults(done));
@@ -228,8 +211,7 @@ for (let spec of specs) {
             swagger(spec.files.blank, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs")
+              helper.supertest(express)[method]("/api-docs")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(500, isHead ? undefined : {})
                 .end(done);
@@ -286,12 +268,12 @@ for (let spec of specs) {
             return function (res) {
               if (isHead) {
                 if (res.body instanceof Buffer) {
-                  expect(res.body).to.have.lengthOf(0);
+                  expect(res.body).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
                 }
                 else {
-                  expect(res.body).to.be.empty;
+                  expect(res.body).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
                 }
-                expect(res.text || "").to.be.empty;
+                expect(res.text || "").to.have.lengthOf(0);
               }
               else {
                 let rawFile = fs.readFileSync(file);
@@ -310,8 +292,7 @@ for (let spec of specs) {
 
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/external-refs.yaml")
+              helper.supertest(express)[method]("/api-docs/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.externalRefs))
@@ -323,8 +304,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/error.json")
+              helper.supertest(express)[method]("/api-docs/error.json")
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.error))
@@ -336,8 +316,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/dir/subdir/text.txt")
+              helper.supertest(express)[method]("/api-docs/dir/subdir/text.txt")
                 .expect("Content-Type", "text/plain; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.text))
@@ -349,8 +328,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/../pet")
+              helper.supertest(express)[method]("/api-docs/../pet")
                 .expect("Content-Type", "application/octet-stream")
                 .expect(200)
                 .expect(equalsFile(spec.files.pet))
@@ -362,8 +340,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/../pet")
+              helper.supertest(express)[method]("/api-docs/../pet")
                 .expect("Content-Type", "application/octet-stream")
                 .expect(200)
                 .expect(equalsFile(spec.files.pet))
@@ -375,8 +352,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/../../1MB.jpg")
+              helper.supertest(express)[method]("/api-docs/../../1MB.jpg")
                 .expect("Content-Type", "image/jpeg")
                 .expect(200)
                 .expect(equalsFile(spec.files.oneMB))
@@ -388,8 +364,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "" }));
 
-              helper.supertest(express)
-                [method]("/external-refs.yaml")
+              helper.supertest(express)[method]("/external-refs.yaml")
                 .expect(404)
                 .end(done);
             });
@@ -399,8 +374,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path/" }));
 
-              helper.supertest(express)
-                [method]("/my/custom/path/external-refs.yaml")
+              helper.supertest(express)[method]("/my/custom/path/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.externalRefs))
@@ -412,8 +386,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ rawFilesPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/api-docs/external-refs.yaml")
+              helper.supertest(express)[method]("/api-docs/external-refs.yaml")
                 .expect(404, done);
             });
           });
@@ -422,8 +395,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true }));
 
-              helper.supertest(express)
-                [method]("/api/v2/api-docs/external-refs.yaml")
+              helper.supertest(express)[method]("/api/v2/api-docs/external-refs.yaml")
                 .expect("Content-Type", "text/yaml; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.externalRefs))
@@ -435,8 +407,7 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files({ useBasePath: true, rawFilesPath: "/my/custom/path" }));
 
-              helper.supertest(express)
-                [method]("/api/v2/my/custom/path/error.json")
+              helper.supertest(express)[method]("/api/v2/my/custom/path/error.json")
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.error))
@@ -448,14 +419,12 @@ for (let spec of specs) {
             swagger(spec.files.externalRefs, (err, middleware) => {
               let express = helper.express(middleware.files());
 
-              helper.supertest(express)
-                [method]("/api-docs/error.json/")                               // <-- trailing slash
+              helper.supertest(express)[method]("/api-docs/error.json/")                               // <-- trailing slash
                 .expect("Content-Type", "application/json; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.error))
                 .end(helper.checkResults(done, (res) => {
-                  helper.supertest(express)
-                    [method]("/api-docs/error.json")                        // <-- no trailing slash
+                  helper.supertest(express)[method]("/api-docs/error.json")                        // <-- no trailing slash
                     .expect("Content-Type", "application/json; charset=UTF-8")
                     .expect(200)
                     .expect(equalsFile(spec.files.error))
@@ -470,8 +439,7 @@ for (let spec of specs) {
               express.use(middleware.files(express));
 
               express.enable("strict routing");
-              helper.supertest(express)
-                [method]("/api-docs/external-refs.yaml/")
+              helper.supertest(express)[method]("/api-docs/external-refs.yaml/")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -479,8 +447,7 @@ for (let spec of specs) {
                   }
 
                   express.disable("strict routing");
-                  helper.supertest(express)
-                    [method]("/api-docs/external-refs.yaml/")
+                  helper.supertest(express)[method]("/api-docs/external-refs.yaml/")
                     .expect("Content-Type", "text/yaml; charset=UTF-8")
                     .expect(200)
                     .expect(equalsFile(spec.files.externalRefs))
@@ -495,8 +462,7 @@ for (let spec of specs) {
               express.use(middleware.files(express));
 
               express.enable("case sensitive routing");
-              helper.supertest(express)
-                [method]("/API-Docs/External-REFs.yaml")
+              helper.supertest(express)[method]("/API-Docs/External-REFs.yaml")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -504,8 +470,7 @@ for (let spec of specs) {
                   }
 
                   express.disable("case sensitive routing");
-                  helper.supertest(express)
-                    [method]("/API-Docs/External-REFs.yaml")
+                  helper.supertest(express)[method]("/API-Docs/External-REFs.yaml")
                     .expect("Content-Type", "text/yaml; charset=UTF-8")
                     .expect(200)
                     .expect(equalsFile(spec.files.externalRefs))
@@ -521,8 +486,7 @@ for (let spec of specs) {
 
               express.enable("strict routing");
               express.enable("case sensitive routing");
-              helper.supertest(express)
-                [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
+              helper.supertest(express)[method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                 .expect(404)
                 .end((err) => {
                   if (err) {
@@ -531,8 +495,7 @@ for (let spec of specs) {
 
                   express.disable("strict routing");
                   express.disable("case sensitive routing");
-                  helper.supertest(express)
-                    [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
+                  helper.supertest(express)[method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                     .expect("Content-Type", "text/plain; charset=UTF-8")
                     .expect(200)
                     .expect(equalsFile(spec.files.text))
@@ -554,8 +517,7 @@ for (let spec of specs) {
               express.enable("strict routing");
               express.enable("case sensitive routing");
 
-              helper.supertest(express)
-                [method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
+              helper.supertest(express)[method]("/Api/V2/Custom/Path.json/Dir/SubDir/Text.TXT/")
                 .expect("Content-Type", "text/plain; charset=UTF-8")
                 .expect(200)
                 .expect(equalsFile(spec.files.text))

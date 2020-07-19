@@ -28,7 +28,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -47,7 +47,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -66,7 +66,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -85,7 +85,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -296,7 +296,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -327,7 +327,7 @@ for (let spec of specs) {
           expect(res.get("Access-Control-Allow-Headers")).to.equal("");
           expect(res.get("Access-Control-Allow-Credentials")).to.equal("false");
           expect(res.get("Access-Control-Max-Age")).to.equal("0");
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Vary")).to.equal(undefined);
         }));
       });
     });
@@ -422,12 +422,12 @@ for (let spec of specs) {
 
         // This happens before the CORS middleware, so none of the headers are set
         express.options("/api/pets/:name", (req, res, next) => {
-          expect(res.get("Access-Control-Allow-Origin")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Methods")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Headers")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Credentials")).to.be.undefined;
-          expect(res.get("Access-Control-Max-Age")).to.be.undefined;
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Access-Control-Allow-Origin")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Methods")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Headers")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Credentials")).to.equal(undefined);
+          expect(res.get("Access-Control-Max-Age")).to.equal(undefined);
+          expect(res.get("Vary")).to.equal(undefined);
           next();
         });
 
@@ -457,12 +457,12 @@ for (let spec of specs) {
 
         // This happens before the CORS middleware, so none of the headers are set
         express.options("/api/pets/:name", (req, res, next) => {
-          expect(res.get("Access-Control-Allow-Origin")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Methods")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Headers")).to.be.undefined;
-          expect(res.get("Access-Control-Allow-Credentials")).to.be.undefined;
-          expect(res.get("Access-Control-Max-Age")).to.be.undefined;
-          expect(res.get("Vary")).to.be.undefined;
+          expect(res.get("Access-Control-Allow-Origin")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Methods")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Headers")).to.equal(undefined);
+          expect(res.get("Access-Control-Allow-Credentials")).to.equal(undefined);
+          expect(res.get("Access-Control-Max-Age")).to.equal(undefined);
+          expect(res.get("Vary")).to.equal(undefined);
           next();
         });
 

@@ -107,10 +107,10 @@ for (let spec of specs) {
       api = spec.samples.blank; // <--- Invalid API
       initTest((err, middleware) => {
 
-        let success = sinon.spy(function () {});
+        let success = sinon.spy(() => {});
         express.get("/api/pets", helper.spy(success));
 
-        let error = sinon.spy(function (err, req, res, next) {});
+        let error = sinon.spy((err, req, res, next) => {});
         express.use("/api/pets", helper.spy(error));
 
         supertest.get("/api/pets")
@@ -412,7 +412,7 @@ for (let spec of specs) {
             .end(helper.checkSpyResults(done));
 
           express.get("/api/pets", helper.spy((req) => {
-            expect(req.headers.accept).to.be.undefined;
+            expect(req.headers.accept).to.equal(undefined);
             expect(req.accepts()).to.have.same.members(["*/*"]);
           }));
         });
@@ -623,7 +623,7 @@ for (let spec of specs) {
             .end(helper.checkSpyResults(done));
 
           express.post("/api/pets", helper.spy((req) => {
-            expect(req.body).to.be.undefined;
+            expect(req.body).to.equal(undefined);
           }));
         });
       });

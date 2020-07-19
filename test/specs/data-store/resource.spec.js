@@ -11,9 +11,9 @@ describe("Resource class", () => {
 
       expect(resource.collection).to.equal("");
       expect(resource.name).to.equal("/");
-      expect(resource.data).to.be.undefined;
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.data).to.equal(undefined);
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with just a path", () => {
@@ -21,9 +21,9 @@ describe("Resource class", () => {
 
       expect(resource.collection).to.equal("/users/jdoe");
       expect(resource.name).to.equal("/orders");
-      expect(resource.data).to.be.undefined;
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.data).to.equal(undefined);
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a non-string path", () => {
@@ -31,9 +31,9 @@ describe("Resource class", () => {
 
       expect(resource.collection).to.equal("");
       expect(resource.name).to.equal("/12345");
-      expect(resource.data).to.be.undefined;
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.data).to.equal(undefined);
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with just a single-depth collection path", () => {
@@ -41,9 +41,9 @@ describe("Resource class", () => {
 
       expect(resource.collection).to.equal("");
       expect(resource.name).to.equal("/users");
-      expect(resource.data).to.be.undefined;
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.data).to.equal(undefined);
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with just a single-depth path, with no slash", () => {
@@ -51,9 +51,9 @@ describe("Resource class", () => {
 
       expect(resource.collection).to.equal("");
       expect(resource.name).to.equal("/users");
-      expect(resource.data).to.be.undefined;
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.data).to.equal(undefined);
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with just a path and data", () => {
@@ -63,8 +63,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/users/jdoe/orders");
       expect(resource.name).to.equal("/12345");
       expect(resource.data).to.equal(data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a non-string path and data", () => {
@@ -74,8 +74,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("");
       expect(resource.name).to.equal("/12345");
       expect(resource.data).to.equal(data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with just a path and a Resource", () => {
@@ -85,8 +85,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/users/jdoe/orders");
       expect(resource.name).to.equal("/12345");
       expect(resource.data).to.equal(otherResource.data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a collection path, resource name, and data", () => {
@@ -96,8 +96,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/users/jdoe/orders");
       expect(resource.name).to.equal("/12345");
       expect(resource.data).to.equal(data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a non-string collection path, resource name, and data", () => {
@@ -107,8 +107,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/12345");
       expect(resource.name).to.equal("/67890");
       expect(resource.data).to.equal(data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a non-string collection path, non-string resource name, and data", () => {
@@ -118,8 +118,8 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/12345");
       expect(resource.name).to.equal("/67890");
       expect(resource.data).to.equal(data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("can be called with a collection path, resource name, and a Resource", () => {
@@ -129,12 +129,13 @@ describe("Resource class", () => {
       expect(resource.collection).to.equal("/users/jdoe/orders");
       expect(resource.name).to.equal("/12345");
       expect(resource.data).to.equal(otherResource.data);
-      expect(resource.createdOn).to.be.null;
-      expect(resource.modifiedOn).to.be.null;
+      expect(resource.createdOn).to.equal(null);
+      expect(resource.modifiedOn).to.equal(null);
     });
 
     it("should throw an error if the resource name contains slashes", () => {
       function throws () {
+        // eslint-disable-next-line no-new
         new swagger.Resource("/users", "/jdoe/orders", "foo");
       }
 
@@ -223,7 +224,7 @@ describe("Resource class", () => {
 
       resource.merge();
 
-      expect(resource.data).to.be.undefined;
+      expect(resource.data).to.equal(undefined);
     });
 
     it("replaces the resource's existing data with null", () => {
@@ -233,7 +234,7 @@ describe("Resource class", () => {
 
       resource.merge(null);
 
-      expect(resource.data).to.be.null;
+      expect(resource.data).to.equal(null);
     });
 
     it("replaces undefined resource data with a value", () => {

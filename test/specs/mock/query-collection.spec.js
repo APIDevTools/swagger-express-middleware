@@ -223,7 +223,7 @@ function testCases (spec, contentType, method) {
       "Last-Modified": { type: "string" }
     };
 
-    helper.initTest(api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
+    helper.initTest(api, (supertest) => { // Wait 1 second, since the "Last-Modified" header is only precise to the second
       setTimeout(() => {
         let request = supertest[method]("/api/pets").set("Accept", contentType);
         noHeaders || request.expect("Content-Length", "2");
@@ -247,7 +247,7 @@ function testCases (spec, contentType, method) {
     let dataStore = new swagger.MemoryDataStore();
     let resource = new swagger.Resource("/api/pets", "/", "This is the root resource");
     dataStore.save(resource, () => {
-      helper.initTest(dataStore, api, function (supertest) { // Wait 1 second, since the "Last-Modified" header is only precise to the second
+      helper.initTest(dataStore, api, (supertest) => { // Wait 1 second, since the "Last-Modified" header is only precise to the second
         setTimeout(() => {
           let request = supertest[method]("/api/pets").set("Accept", contentType);
           noHeaders || request.expect("Content-Length", "29");
@@ -480,10 +480,10 @@ function testCases (spec, contentType, method) {
               if (noBody) {
                 helper.processMethod(request, method, "");
                 if (method === "head") {
-                  expect(res.text).to.be.undefined;
+                  expect(res.text).to.equal(undefined);
                 }
                 else {
-                  expect(res.text).to.be.empty;
+                  expect(res.text).to.have.lengthOf(0);
                 }
               }
               else {
@@ -531,16 +531,16 @@ function testCases (spec, contentType, method) {
               noHeaders || expect(res.headers["content-length"]).to.match(/^\d{3}$/);
 
               // It should NOT be an attachment
-              expect(res.headers["content-disposition"]).to.be.undefined;
+              expect(res.headers["content-disposition"]).to.equal(undefined);
 
               if (noBody) {
                 helper.processMethod(request, method, "");
 
                 if (method === "head") {
-                  expect(res.text).to.be.undefined;
+                  expect(res.text).to.equal(undefined);
                 }
                 else {
-                  expect(res.text).to.be.empty;
+                  expect(res.text).to.have.lengthOf(0);
                 }
 
               }
@@ -596,10 +596,10 @@ function testCases (spec, contentType, method) {
                 helper.processMethod(request, method, "");
 
                 if (method === "head") {
-                  expect(res.text).to.be.undefined;
+                  expect(res.text).to.equal(undefined);
                 }
                 else {
-                  expect(res.text).to.be.empty;
+                  expect(res.text).to.have.lengthOf(0);
                 }
               }
               else {

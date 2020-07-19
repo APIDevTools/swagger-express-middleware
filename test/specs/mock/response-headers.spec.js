@@ -137,7 +137,7 @@ for (let spec of specs) {
             let dateTimeRegExp = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/;
             let dateRegExp = /^\w{3}, \d{2} \w{3} \d{4} 00:00:00 GMT/;
 
-            expect(res.headers.pragma).to.be.a("string").and.not.empty;
+            expect(res.headers.pragma).to.be.a("string").with.length.of.at.least(1);
             expect(res.headers.mymadeupheader).to.match(floatRegExp);
             expect(res.headers["content-length"]).to.match(integerRegExp);
             expect(res.headers.expires).to.match(dateTimeRegExp);
@@ -219,7 +219,7 @@ for (let spec of specs) {
             .post("/api/pets")
             .send({ Name: "Fido", Type: "dog" })
             .end(helper.checkResults(done, (res) => {
-              expect(res.headers.location).to.be.undefined;
+              expect(res.headers.location).to.equal(undefined);
               done();
             }));
         });
@@ -321,7 +321,7 @@ for (let spec of specs) {
           supertest
             .get("/api/pets")
             .end(helper.checkResults(done, (res) => {
-              expect(res.headers["last-modified"]).to.be.undefined;
+              expect(res.headers["last-modified"]).to.equal(undefined);
               done();
             }));
         });
@@ -385,7 +385,7 @@ for (let spec of specs) {
           supertest
             .get("/api/pets")
             .end(helper.checkResults(done, (res) => {
-              expect(res.headers["content-disposition"]).to.be.undefined;
+              expect(res.headers["content-disposition"]).to.equal(undefined);
               done();
             }));
         });
@@ -453,7 +453,7 @@ for (let spec of specs) {
           supertest
             .get("/api/pets")
             .end((err, res) => {
-              expect(res.headers["set-cookie"]).to.be.undefined;
+              expect(res.headers["set-cookie"]).to.equal(undefined);
               done(err);
             });
         });

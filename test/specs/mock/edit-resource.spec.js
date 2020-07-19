@@ -27,8 +27,7 @@ for (let spec of specs) {
         describe("Shared tests", () => {
           it("should create a new resource", (done) => {
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog", Tags: ["fluffy", "brown"]})
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
@@ -42,8 +41,7 @@ for (let spec of specs) {
 
           it("should create a new resource at the specified URL, even if the primary key is different", (done) => {
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")              // <-- The URL is "Fido"
+              supertest[method]("/api/pets/Fido")              // <-- The URL is "Fido"
                 .send({ Name: "Fluffy", Type: "cat" })    // <-- The pet name is "Fluffy"
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
@@ -70,8 +68,7 @@ for (let spec of specs) {
             petParam.schema.default = { Name: "Fido", Type: "dog" };
             petParam.schema.properties.Tags.default = "fluffy,brown";
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "application/json; charset=utf-8")
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
@@ -90,8 +87,7 @@ for (let spec of specs) {
             petParam.schema.properties.Type.default = "dog";
             petParam.schema.properties.Tags.default = "fluffy,brown";
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Age: 4 })
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
@@ -115,8 +111,7 @@ for (let spec of specs) {
             }
 
             helper.initTest(messWithTheBody, api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "application/json; charset=utf-8")
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
@@ -139,8 +134,7 @@ for (let spec of specs) {
             dataStore.save(resource, () => {
               helper.initTest(api, (supertest) => {
                 // Create another pet at the URL "/api/pets/Fido"
-                supertest
-                  [method]("/api/pets/Fido")
+                supertest[method]("/api/pets/Fido")
                   .send({ Name: "Fluffy", Type: "cat" })
                   .expect(200)
                   .end(helper.checkResults(done, (res1) => {
@@ -158,8 +152,7 @@ for (let spec of specs) {
           it("should not return data if not specified in the Swagger API", (done) => {
             delete api.paths["/pets/{PetName}"][method].responses[200].schema;
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect(200, "")
                 .end(helper.checkResults(done));
@@ -168,8 +161,7 @@ for (let spec of specs) {
 
           it("should return the saved resource if the Swagger API schema is an object", (done) => {
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect(200, { Name: "Fido", Type: "dog" })
                 .end(helper.checkResults(done));
@@ -183,8 +175,7 @@ for (let spec of specs) {
             let resource = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
             dataStore.save(resource, () => {
               helper.initTest(dataStore, api, (supertest) => {
-                supertest
-                  [method]("/api/pets/Fido")
+                supertest[method]("/api/pets/Fido")
                   .send({ Name: "Fido", Type: "dog" })
                   .expect(200, [{ Name: "Fluffy", Type: "cat" }, { Name: "Fido", Type: "dog" }])
                   .end(helper.checkResults(done));
@@ -204,8 +195,7 @@ for (let spec of specs) {
             };
 
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect(200, { code: 42, message: "hello world", result: { Name: "Fido", Type: "dog" }})
                 .end(helper.checkResults(done));
@@ -227,8 +217,7 @@ for (let spec of specs) {
             let resource = new swagger.Resource("/api/pets/Fluffy", { Name: "Fluffy", Type: "cat" });
             dataStore.save(resource, () => {
               helper.initTest(dataStore, api, (supertest) => {
-                supertest
-                  [method]("/api/pets/Fido")
+                supertest[method]("/api/pets/Fido")
                   .send({ Name: "Fido", Type: "dog" })
                   .expect(200, {
                     code: 42,
@@ -250,8 +239,7 @@ for (let spec of specs) {
             }
 
             helper.initTest(messWithTheBody, api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect(200, ["Not", "the", "response", "you", "expected"])
                 .end(helper.checkResults(done));
@@ -265,8 +253,7 @@ for (let spec of specs) {
             };
 
             helper.initTest(dataStore, api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect(500)
                 .end((err, res) => {
@@ -287,8 +274,7 @@ for (let spec of specs) {
             let petParam = _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" });
             petParam.schema = {};
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog" })
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(200, { Name: "Fido", Type: "dog" })
@@ -304,8 +290,7 @@ for (let spec of specs) {
             api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "text/plain")
                 .send("I am Fido")
                 .expect("Content-Type", "text/plain; charset=utf-8")
@@ -322,8 +307,7 @@ for (let spec of specs) {
             api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "text/plain")
                 .send("")
                 .expect("Content-Type", "text/plain; charset=utf-8")
@@ -340,8 +324,7 @@ for (let spec of specs) {
             api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "text/plain")
                 .send("42.999")
                 .expect("Content-Type", "text/plain; charset=utf-8")
@@ -359,8 +342,7 @@ for (let spec of specs) {
             api.paths["/pets/{PetName}"][method].consumes = ["text/plain"];
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "text/plain")
                 .send("2000-01-02T03:04:05.006Z")
                 .expect("Content-Type", "text/plain; charset=utf-8")
@@ -377,8 +359,7 @@ for (let spec of specs) {
             api.paths["/pets/{PetName}"][method].consumes = ["application/octet-stream"];
             api.paths["/pets/{PetName}"][method].produces = ["text/plain"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "application/octet-stream")
                 .send(new Buffer("hello world").toString())
                 .expect("Content-Type", "text/plain; charset=utf-8")
@@ -394,8 +375,7 @@ for (let spec of specs) {
             petParam.schema = {};
             api.paths["/pets/{PetName}"][method].consumes = ["application/octet-stream"];
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "application/octet-stream")
                 .send(new Buffer("hello world").toString())
                 .expect("Content-Type", "application/json; charset=utf-8")
@@ -414,8 +394,7 @@ for (let spec of specs) {
             petParam.schema = {};
             petParam.required = false;
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .set("Content-Type", "application/json; charset=utf-8")
                 .expect("Content-Type", "application/json; charset=utf-8")
                 .expect(200, "")
@@ -426,8 +405,7 @@ for (let spec of specs) {
           it("should return multipart/form-data", (done) => {
             api.paths["/pets/{PetName}/photos/{ID}"][method].responses[201].schema = {};
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido/photos/12345")
+              supertest[method]("/api/pets/Fido/photos/12345")
                 .field("Label", "Photo 1")
                 .field("Description", "A photo of Fido")
                 .attach("Photo", spec.files.oneMB)
@@ -457,8 +435,7 @@ for (let spec of specs) {
           it("should return a file", (done) => {
             api.paths["/pets/{PetName}/photos/{ID}"][method].responses[201].schema = { type: "file" };
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido/photos/12345")
+              supertest[method]("/api/pets/Fido/photos/12345")
                 .field("Label", "Photo 1")
                 .field("Description", "A photo of Fido")
                 .attach("Photo", spec.files.oneMB)
@@ -466,7 +443,7 @@ for (let spec of specs) {
                 .expect(201)
                 .end(helper.checkResults(done, (res) => {
                   // It should NOT be an attachment
-                  expect(res.headers["content-disposition"]).to.be.undefined;
+                  expect(res.headers["content-disposition"]).to.equal(undefined);
 
                   expect(res.body).to.be.an.instanceOf(Buffer);
                   expect(res.body.length).to.equal(683709);
@@ -484,8 +461,7 @@ for (let spec of specs) {
               }
             };
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido/photos/Photo%20Of%20Fido.jpg")
+              supertest[method]("/api/pets/Fido/photos/Photo%20Of%20Fido.jpg")
                 .field("Label", "Photo 1")
                 .field("Description", "A photo of Fido")
                 .attach("Photo", spec.files.oneMB)
@@ -589,13 +565,11 @@ for (let spec of specs) {
             _.find(api.paths["/pets/{PetName}"][method].parameters, { name: "PetData" }).schema.properties.Vet.required = [];
 
             helper.initTest(api, (supertest) => {
-              supertest
-                [method]("/api/pets/Fido")
+              supertest[method]("/api/pets/Fido")
                 .send({ Name: "Fido", Type: "dog", Tags: ["fluffy", "brown"], Vet: { Name: "Vet Name" }})
                 .expect(200)
                 .end(helper.checkResults(done, (res1) => {
-                  supertest
-                    [method]("/api/pets/Fido")
+                  supertest[method]("/api/pets/Fido")
                     .send({
                       Name: "Fido", Type: "cat", Tags: ["furry"], Vet: {
                         Address: { Street: "123 First St.", City: "New York", State: "NY", ZipCode: 12345 }

@@ -527,7 +527,7 @@ for (let spec of specs) {
                   .expect(200)
                   .end(helper.checkResults(done, (res2) => {
                     // It should NOT be an attachment
-                    expect(res2.headers["content-disposition"]).to.be.undefined;
+                    expect(res2.headers["content-disposition"]).to.equal(undefined);
 
                     expect(res2.body).to.be.an.instanceOf(Buffer);
                     expect(res2.body.length).to.equal(683709);

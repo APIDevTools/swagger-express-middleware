@@ -7,3 +7,13 @@ extends: "@jsdevtools"
 
 env:
   node: true
+
+rules:
+  # Prevent warnings about req, res, next params in middleware
+  no-unused-vars: off
+
+  # Prevent warnings about the CORS() middleware and express.Router()
+  new-cap: off
+
+  # Allow shadowing variables like err and req, res, next
+  no-shadow: off

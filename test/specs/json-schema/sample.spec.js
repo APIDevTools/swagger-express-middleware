@@ -549,7 +549,7 @@ describe("JSON Schema sample data", () => {
       for (let i = 0; i < iterations; i++) {
         let obj = schema.sample();
         expect(obj).to.be.an("object");
-        expect(obj).to.be.empty;
+        expect(obj).to.have.lengthOf(0);
       }
     });
   });

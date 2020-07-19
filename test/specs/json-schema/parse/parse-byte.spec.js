@@ -32,7 +32,7 @@ describe("JSON Schema - parse byte params", () => {
     let express = helper.parse(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req) => {
-      expect(req.header("Test")).to.be.undefined;
+      expect(req.header("Test")).to.equal(undefined);
     }));
   });
 

@@ -432,10 +432,10 @@ for (let spec of specs) {
                     if (noBody) {
                       helper.processMethod(request, method, "");
                       if (method === "head") {
-                        expect(res2.text).to.be.undefined;
+                        expect(res2.text).to.equal(undefined);
                       }
                       else {
-                        expect(res2.text).to.be.empty;
+                        expect(res2.text).to.have.lengthOf(0);
                       }
                     }
                     else {
@@ -479,16 +479,16 @@ for (let spec of specs) {
                     noHeaders || request.expect("Content-Type", "application/pdf");
                     request.end(helper.checkResults(done, (res2) => {
                       // It should NOT be an attachment
-                      expect(res2.headers["content-disposition"]).to.be.undefined;
+                      expect(res2.headers["content-disposition"]).to.equal(undefined);
 
                       if (noBody) {
                         helper.processMethod(request, method, "");
 
                         if (method === "head") {
-                          expect(res2.text).to.be.undefined;
+                          expect(res2.text).to.equal(undefined);
                         }
                         else {
-                          expect(res2.text).to.be.empty;
+                          expect(res2.text).to.have.lengthOf(0);
                         }
 
                       }
@@ -527,14 +527,14 @@ for (let spec of specs) {
                     request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
                         if (method === "head") {
-                          expect(res2.text).to.be.undefined;
+                          expect(res2.text).to.equal(undefined);
                         }
                         else {
-                          expect(res2.text).to.be.empty;
+                          expect(res2.text).to.have.lengthOf(0);
                         }
                       }
                       else {
-                        expect(res2.body).to.be.empty;
+                        expect(res2.body).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
                         expect(res2.text.toString("utf8")).to.have.length.at.least(87).and.at.most(95);  // CRLF vs LF
                       }
                       done();
@@ -568,14 +568,14 @@ for (let spec of specs) {
                     request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
                         if (method === "head") {
-                          expect(res2.text).to.be.undefined;
+                          expect(res2.text).to.equal(undefined);
                         }
                         else {
-                          expect(res2.text).to.be.empty;
+                          expect(res2.text).to.have.lengthOf(0);
                         }
                       }
                       else {
-                        // expect(res2.body).to.be.empty;
+                        // expect(res2.body).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
                         expect(res2.body.toString("utf8")).to.have.length.at.least(255063).and.at.most(258441);  // CRLF vs LF
                       }
                       done();
@@ -610,10 +610,10 @@ for (let spec of specs) {
 
                     request.end(helper.checkResults(done, (res2) => {
                       if (noBody) {
-                        expect(res2.text || "").to.be.empty;
+                        expect(res2.text || "").to.have.lengthOf(0);
 
                         if (method === "options" || method === "head") {
-                          expect(res2.body).to.be.empty;
+                          expect(res2.body).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
                         }
                         else {
                           expect(res2.body).to.be.an.instanceOf(Buffer).with.lengthOf(0);

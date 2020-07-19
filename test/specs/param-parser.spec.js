@@ -183,8 +183,8 @@ for (let spec of specs) {
             expect(req.header("Age")).to.equal("4");
             expect(req.headers.tags).to.equal("big,brown");
             expect(req.header("Tags")).to.equal("big,brown");
-            expect(req.headers.type).to.be.undefined;
-            expect(req.header("Type")).to.be.undefined;
+            expect(req.headers.type).to.equal(undefined);
+            expect(req.header("Type")).to.equal(undefined);
           }));
         });
       });
@@ -204,8 +204,8 @@ for (let spec of specs) {
             expect(req.header("Age")).to.equal(4);
             expect(req.headers.tags).to.have.same.members(["big", "brown"]);
             expect(req.header("Tags")).to.have.same.members(["big", "brown"]);
-            expect(req.headers.type).to.be.undefined;
-            expect(req.header("Type")).to.be.undefined;
+            expect(req.headers.type).to.equal(undefined);
+            expect(req.header("Type")).to.equal(undefined);
           }));
         });
       });
@@ -225,8 +225,8 @@ for (let spec of specs) {
             expect(req.header("Age")).to.equal(4);
             expect(req.headers.tags).to.have.same.members(["big", 'Fido the "wonder" dog', "brown"]);
             expect(req.header("Tags")).to.have.same.members(["big", 'Fido the "wonder" dog', "brown"]);
-            expect(req.headers.type).to.be.undefined;
-            expect(req.header("Type")).to.be.undefined;
+            expect(req.headers.type).to.equal(undefined);
+            expect(req.header("Type")).to.equal(undefined);
           }));
         });
       });
@@ -240,12 +240,12 @@ for (let spec of specs) {
             .end(helper.checkSpyResults(done));
 
           express.get("/api/pets", helper.spy((req, res, next) => {
-            expect(req.headers.age).to.be.undefined;
-            expect(req.header("Age")).to.be.undefined;
-            expect(req.headers.tags).to.be.undefined;
-            expect(req.header("Tags")).to.be.undefined;
-            expect(req.headers.type).to.be.undefined;
-            expect(req.header("Type")).to.be.undefined;
+            expect(req.headers.age).to.equal(undefined);
+            expect(req.header("Age")).to.equal(undefined);
+            expect(req.headers.tags).to.equal(undefined);
+            expect(req.header("Tags")).to.equal(undefined);
+            expect(req.headers.type).to.equal(undefined);
+            expect(req.header("Type")).to.equal(undefined);
           }));
         });
       });
@@ -607,7 +607,7 @@ for (let spec of specs) {
             .end(helper.checkSpyResults(done));
 
           express.patch("/api/pets/fido", helper.spy((req, res, next) => {
-            expect(req.body).to.be.undefined;
+            expect(req.body).to.equal(undefined);
           }));
         });
       });

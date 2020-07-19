@@ -587,7 +587,7 @@ for (let spec of specs) {
                   .expect(200)
                   .end(helper.checkResults(done, (res2) => {
                     // It should NOT be an attachment
-                    expect(res2.headers["content-disposition"]).to.be.undefined;
+                    expect(res2.headers["content-disposition"]).to.equal(undefined);
 
                     // There's no such thing as an "array of files",
                     // so we send back an array of file info

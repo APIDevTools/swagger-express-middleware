@@ -12,7 +12,7 @@ describe("JSON Schema - parse boolean params", () => {
     let express = helper.parse(schema, "true", done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
-      expect(req.header("Test")).to.be.true;
+      expect(req.header("Test")).to.equal(true);
     }));
   });
 
@@ -24,7 +24,7 @@ describe("JSON Schema - parse boolean params", () => {
     let express = helper.parse(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
-      expect(req.header("Test")).to.be.undefined;
+      expect(req.header("Test")).to.equal(undefined);
     }));
   });
 
@@ -37,7 +37,7 @@ describe("JSON Schema - parse boolean params", () => {
     let express = helper.parse(schema, undefined, done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
-      expect(req.header("Test")).to.be.true;
+      expect(req.header("Test")).to.equal(true);
     }));
   });
 
@@ -50,7 +50,7 @@ describe("JSON Schema - parse boolean params", () => {
     let express = helper.parse(schema, "", done);
 
     express.post("/api/test", helper.spy((req, res, next) => {
-      expect(req.header("Test")).to.be.false;
+      expect(req.header("Test")).to.equal(false);
     }));
   });
 

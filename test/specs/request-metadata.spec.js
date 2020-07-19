@@ -303,7 +303,7 @@ for (let spec of specs) {
 
     it('should use case-sensitive matching if "case sensitive routing" is enabled on the Middleware class', (done) => {
       let express = helper.express();
-      swagger(spec.samples.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+      swagger(spec.samples.petStore, express, (err, middleware) => {  // <--- The Express app is passed to the Middleware class
         express.enable("case sensitive routing");
         express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 
@@ -441,7 +441,7 @@ for (let spec of specs) {
 
     it('should use strict matching if "strict routing" is enabled on the Middleware class', (done) => {
       let express = helper.express();
-      swagger(spec.samples.petStore, express, function (err, middleware) {  // <--- The Express app is passed to the Middleware class
+      swagger(spec.samples.petStore, express, (err, middleware) => {  // <--- The Express app is passed to the Middleware class
         express.enable("strict routing");
         express.use(middleware.metadata());                             // <--- The Express app is NOT passed to the Metadata class
 

@@ -14,7 +14,7 @@ describe("JSON Schema - parse file params", () => {
   beforeEach(() => {
     api = _.cloneDeep(specs.swagger2.samples.petStore);
     let parameters = api.paths["/pets/{PetName}/photos"].post.parameters;
-    parameters.forEach(function (param) { param.required = false; });
+    parameters.forEach((param) => { param.required = false; });
     photoParam = _.find(parameters, { name: "Photo" });
     photoParam.required = true;
   });
@@ -79,7 +79,7 @@ describe("JSON Schema - parse file params", () => {
         .end(helper.checkSpyResults(done));
 
       express.post("/api/pets/fido/photos", helper.spy((req, res, next) => {
-        expect(req.files.Photo).to.be.undefined;
+        expect(req.files.Photo).to.equal(undefined);
       }));
     });
   });

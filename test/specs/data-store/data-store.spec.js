@@ -101,7 +101,7 @@ describe("DataStore", () => {
             if (err) {
               return done(err);
             }
-            expect(retrieved).to.be.undefined;
+            expect(retrieved).to.equal(undefined);
             done();
           });
         });
@@ -320,8 +320,8 @@ describe("DataStore", () => {
           let now = new Date(Date.now() - 5); // 5 milliseconds ago
 
           // The timestamps are null to start out with
-          expect(resource.createdOn).to.be.null;
-          expect(resource.modifiedOn).to.be.null;
+          expect(resource.createdOn).to.equal(null);
+          expect(resource.modifiedOn).to.equal(null);
 
           // I can set them if I want
           resource.createdOn = new Date(2010, 5, 8);
@@ -485,7 +485,7 @@ describe("DataStore", () => {
             dataStore.save(updatedResource, () => {
               // The resource should now be empty
               dataStore.get(resource, (err, retrieved) => {
-                expect(retrieved.data).to.be.undefined;
+                expect(retrieved.data).to.equal(undefined);
                 done(err);
               });
             });
@@ -733,7 +733,7 @@ describe("DataStore", () => {
             if (err) {
               return done(err);
             }
-            expect(deleted).to.be.undefined;
+            expect(deleted).to.equal(undefined);
             done();
           });
         });
@@ -756,7 +756,7 @@ describe("DataStore", () => {
                 if (err) {
                   return done(err);
                 }
-                expect(retrieved).to.be.undefined;
+                expect(retrieved).to.equal(undefined);
                 done();
               });
             });
@@ -938,7 +938,7 @@ describe("DataStore", () => {
               if (err) {
                 return done(err);
               }
-              expect(deleted).to.be.undefined;
+              expect(deleted).to.equal(undefined);
               done();
             });
           });

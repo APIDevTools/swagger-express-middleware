@@ -23,7 +23,7 @@ for (let spec of specs) {
             PetName: "Fido",
             ID: "12345"   // <--- Note that this is a string, not a number
           });
-          expect(req.pathParams).to.be.undefined;
+          expect(req.pathParams).to.equal(undefined);
         }));
       });
     });
@@ -272,8 +272,8 @@ for (let spec of specs) {
           .end(helper.checkSpyResults(done));
 
         express.get("/api/pets", helper.spy((req, res, next) => {
-          expect(req.params).to.be.an("object").and.empty;
-          expect(req.pathParams).to.be.an("object").and.empty;
+          expect(req.params).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
+          expect(req.pathParams).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
         }));
       });
     });
@@ -292,7 +292,7 @@ for (let spec of specs) {
         // This middleware is NOT parameterized, so `req.params` will NOT be set
         express.get("/api/pets/Fido/photos/12345", helper.spy((req, res, next) => {
           // req.params is empty, because Express doesn't know about any path parameters
-          expect(req.params).to.be.an("object").and.empty;
+          expect(req.params).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
 
           // req.pathParams is parsed, because Swagger knows about path params
           expect(req.pathParams).to.deep.equal({
@@ -419,7 +419,7 @@ for (let spec of specs) {
               PetName: "Fido",
               ID: "12345"
             });
-            expect(req.pathParams).to.be.undefined;
+            expect(req.pathParams).to.equal(undefined);
           }
           else {
             // Path params DO get parsed on the second request, because the API is now valid
@@ -528,7 +528,7 @@ for (let spec of specs) {
             });
 
             // req.pathParams is empty because there are no longer any Swagger path params
-            expect(req.pathParams).to.be.an("object").and.empty;
+            expect(req.pathParams).to.be.an("object").and.empty;  // eslint-disable-line no-unused-expressions
           }
         }));
       });
