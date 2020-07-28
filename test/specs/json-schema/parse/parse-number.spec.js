@@ -177,4 +177,19 @@ describe("JSON Schema - parse number params", () => {
       expect(err.message).to.contain('Missing required header parameter "Test"');
     }));
   });
+
+  it("should be more strict than parseFloat()", (done) => {
+    let schema = {
+      type: "number",
+      required: true
+    };
+
+    let express = helper.parse(schema, "1z", done);
+
+    express.use("/api/test", helper.spy((err, req, res, next) => {
+      expect(err).to.be.an.instanceOf(Error);
+      expect(err.status).to.equal(400);
+      expect(err.message).to.contain('"1z" is not a valid numeric value');
+    }));
+  });
 });
