@@ -141,7 +141,7 @@ describe("JSON Schema - parse array params", () => {
     }));
   });
 
-  it("should parse array items as dates", (done) => {
+  it("should parse array items as dates (date-time format)", (done) => {
     let schema = {
       type: "array",
       items: {
@@ -156,6 +156,47 @@ describe("JSON Schema - parse array params", () => {
       expect(req.header("Test")).to.have.lengthOf(2);
       expect(req.header("Test")[0]).to.equalTime(new Date("2008-06-30T13:40:50Z"));
       expect(req.header("Test")[1]).to.equalTime(new Date("1990-01-01T00:00:00-15:45"));
+    }));
+  });
+
+  it("should parse array items as dates (date format)", (done) => {
+    let schema = {
+      type: "array",
+      items: {
+        type: "string",
+        format: "date"
+      }
+    };
+
+    let express = helper.parse(schema, "2008-06-30,1990-01-01", done);
+
+    express.post("/api/test", helper.spy((req) => {
+      expect(req.header("Test")).to.have.lengthOf(2);
+      expect(req.header("Test")[0]).to.equalTime(new Date("2008-06-30"));
+      expect(req.header("Test")[1]).to.equalTime(new Date("1990-01-01"));
+    }));
+  });
+
+  it.only("should parse array of object with date properties as object with properties with date values", (done) => {
+    let schema = {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          startDate: {
+            type: "string",
+            format: "date"
+          }
+        }
+      }
+    };
+
+    let express = helper.parse(schema, "{\"startDate\":\"2020-12-01\"},{\"startDate\":\"2020-12-02\"}", done);
+
+    express.post("/api/test", helper.spy((req) => {
+      expect(req.header("Test")).to.have.same.deep.members(
+        [{ startDate: new Date("2020-12-01") }, { startDate: new Date("2020-12-02") }]
+      );
     }));
   });
 
@@ -176,29 +217,6 @@ describe("JSON Schema - parse array params", () => {
     express.post("/api/test", helper.spy((req) => {
       expect(req.header("Test")).to.have.same.deep.members(
         [[42, 0], [-99999], [0, 5, 4]]
-      );
-    }));
-  });
-
-  it("should parse array of object with date properties as object with properties with Date values", (done) => {
-    let schema = {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          startDate: {
-            type: "string",
-            format: "date"
-          }
-        }
-      }
-    };
-
-    let express = helper.parse(schema, "{\"startDate\":\"2020-12-01\"},{\"startDate\":\"2020-12-02\"}", done);
-
-    express.post("/api/test", helper.spy((req) => {
-      expect(req.header("Test")).to.have.same.deep.members(
-        [{ startDate: new Date("2020-12-01") },{ startDate: new Date("2020-12-02") }]
       );
     }));
   });
