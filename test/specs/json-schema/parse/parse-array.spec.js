@@ -177,7 +177,7 @@ describe("JSON Schema - parse array params", () => {
     }));
   });
 
-  it.only("should parse array of object with date properties as object with properties with date values", (done) => {
+  it("should parse array of object with date properties as object with properties with date values", (done) => {
     let schema = {
       type: "array",
       items: {
