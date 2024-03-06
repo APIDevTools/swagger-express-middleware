@@ -5,13 +5,6 @@ Swagger Express Middleware
 > :warning: **No longer maintained**
 > This package has been abandoned for some time, and there are plenty of modern alternatives around which support OpenAPI v3.x listed on [OpenAPI.Tools](https://openapi.tools/) which you can use instead.
 
-[![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/actions)
-[![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/actions)
-
-[![Coverage Status](https://coveralls.io/repos/github/APIDevTools/swagger-express-middleware/badge.svg?branch=master)](https://coveralls.io/github/APIDevTools/swagger-express-middleware)
-[![Tested on APIs.guru](https://api.apis.guru/badges/tested_on.svg)](https://apis.guru/browse-apis/)
-[![Dependencies](https://david-dm.org/APIDevTools/swagger-express-middleware.svg)](https://david-dm.org/APIDevTools/swagger-express-middleware)
-
 [![npm](https://img.shields.io/npm/v/@apidevtools/swagger-express-middleware.svg)](https://www.npmjs.com/package/@apidevtools/swagger-express-middleware)
 [![License](https://img.shields.io/npm/l/@apidevtools/swagger-express-middleware.svg)](LICENSE)
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/APIDevTools/swagger-express-middleware)
