@@ -2,6 +2,9 @@ Swagger Express Middleware
 ============================
 ### Swagger 2.0 middleware and mocks for Express.js
 
+> :warning: **No longer maintained**
+> This package has been abandoned for some time, and there are plenty of modern alternatives around which support OpenAPI v3.x listed on [OpenAPI.Tools](https://openapi.tools/) which you can use instead.
+
 [![Cross-Platform Compatibility](https://apitools.dev/img/badges/os-badges.svg)](https://github.com/APIDevTools/swagger-express-middleware/actions)
 [![Build Status](https://github.com/APIDevTools/swagger-express-middleware/workflows/CI-CD/badge.svg?branch=master)](https://github.com/APIDevTools/swagger-express-middleware/actions)
 
